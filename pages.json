@@ -1,0 +1,42 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "山东海洋预报"
+			}
+		},
+		{
+			"path": "pages/homepage/homepage"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "演示",
+		"navigationBarBackgroundColor": "#8F8F94",
+		"backgroundColor": "#F00"
+	},
+
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007AFF",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/component.png",
+			"selectedIconPath": "static/componentHL.png",
+			"text": "主页"
+		}, {
+			"pagePath": "pages/homepage/homepage",
+			"iconPath": "static/api.png",
+			"selectedIconPath": "static/apiHL.png",
+			"text": "接口"
+		}, {
+			"pagePath": "pages/homepage/homepage",
+			"iconPath": "static/template.png",
+			"selectedIconPath": "static/templateHL.png",
+			"text": "模版"
+		}]
+	}
+}
