@@ -47,9 +47,18 @@
 				</view>
 			</view>
 			<view class="page-section">
-				<view class="chart">
-					<myChart></myChart>
-				</view>
+				<scroll-view class="scroll-view_H" scroll-x="true">
+					<view class="chart">
+						<myChart :option="optionJST"></myChart>
+					</view>
+				</scroll-view>
+			</view>
+			<view class="page-section">
+				<scroll-view class="scroll-view_H" scroll-x="true">
+					<view class="chart">
+						<myChart :option="optionJST"></myChart>
+					</view>
+				</scroll-view>
 			</view>
 		</view>
 	</view>
@@ -69,9 +78,9 @@
 		},
 		data() {
 			return {
-				title: 'Hello',
-				contenttext: 'hello, world.',
+				// 城市列表
 				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
+				// 天气数据
 				weatherData: {
 					temperature: '25',
 					aircondition: '35',
@@ -82,11 +91,14 @@
 					pm25: '8',
 					pm25Style: 'good'
 				},
+				// 警报数据
 				warningData: {
-					// TODO:...
 					typhoonWarning: '',
 					waveWarning: ''
-				}
+				},
+				// 金沙滩和一浴图表数据
+				optionJST: {},
+				optionYY: {}
 			}
 		},
 		computed: {
@@ -292,6 +304,7 @@
 			},
 			// 读取服务器潮汐预报
 			loadAstronomicalTide() {
+				let that = this
 				uni.request({
 					url: 'http://123.234.129.238:8001/MyWebService.asmx/GetAstronomicalTide_QD',
 					data: {
@@ -302,9 +315,90 @@
 					success: function (res) {
 						console.log('成功获取潮汐预报数据')
 						// STATION 101wmt为金沙滩 102xmd为第一海水浴场
-						console.log(res.data.d)
+						let resarr = JSON.parse(res.data.d)
+						let arrJST = []
+						let arrYY = []
+						for (let i = 0; i < 6; i++) {
+							if (resarr[i].STATION === '101wmt') {
+								arrJST.push(resarr[i])
+							} else if (resarr[i].STATION === '102xmd') {
+								arrYY.push(resarr[i])
+							}
+						}
+						that.optionJST = that.setChartOption(arrJST)
+						that.optionYY = that.setChartOption(arrYY)
 					}
 				})
+			},
+			// 由三日数据生成chart option
+			setChartOption(arr) {
+				// 按日期排序
+				function SortByDate(x, y) {
+					let datex = new Date(x.PREDICTIONDATE)
+					let datey = new Date(y.PREDICTIONDATE)
+					return datex - datey
+				}
+				arr.sort(SortByDate)
+				// 提取潮汐数值
+				let tidedata = []
+				for (let i = 0; i < arr.length; i++) {
+					let inittime = new Date(arr[i].PREDICTIONDATE)
+					let datestring = inittime.getFullYear() + '-' + (inittime.getMonth()+1) + '-' + inittime.getDate()
+					// 每小时数值
+					tidedata.push([inittime.setHours(inittime.getHours()), arr[i].H0])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H1])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H2])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H3])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H4])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H5])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H6])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H7])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H8])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H9])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H10])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H11])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H12])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H13])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H14])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H15])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H16])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H17])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H18])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H19])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H20])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H21])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H22])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H23])
+					// 高低潮数值
+					let dateFH = new Date(datestring + ' ' + arr[i].FSTHIGHWIDETIME)
+					tidedata.push([dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT])
+					let dateFL = new Date(datestring + ' ' + arr[i].FSTLOWWIDETIME)
+					tidedata.push([dateFL.setHours(dateFL.getHours()) ,arr[i].FSTLOWWIDEHEIGHT])
+					let dateSH = new Date(datestring + ' ' + arr[i].SCDHIGHWIDETIME)
+					tidedata.push([dateSH.setHours(dateSH.getHours()) ,arr[i].SCDHIGHWIDEHEIGHT])
+					let dateSL = new Date(datestring + ' ' + arr[i].SCDLOWWIDETIME)
+					tidedata.push([dateSL.setHours(dateSL.getHours()) ,arr[i].SCDLOWWIDEHEIGHT])
+				}
+
+				function SortByFirst (x, y) {
+					return x[0] - y[0]
+				}
+				tidedata.sort(SortByFirst)
+
+				return {
+					xAxis: {
+						type: 'time'
+					},
+					yAxis: {
+						show: false
+					},
+					series: [{
+						name: '潮汐',
+						type: 'line',
+						smooth: true,
+						data: tidedata
+					}]
+				}
 			}
 		},
 		onLoad() {
@@ -398,9 +492,9 @@
 	.sev {
 		color: #be0606;
 	}
-	
+
 	.chart {
-		width: 100%;
+		width: 500%;
 		height: 400px;
 	}
 </style>
