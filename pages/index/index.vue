@@ -49,14 +49,15 @@
 			<view class="page-section">
 				<scroll-view class="scroll-view_H" scroll-x="true">
 					<view class="chart">
-						<myChart :option="optionJST"></myChart>
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST"></mpvue-echarts>
 					</view>
 				</scroll-view>
 			</view>
 			<view class="page-section">
+				<text>第二个图表</text>
 				<scroll-view class="scroll-view_H" scroll-x="true">
 					<view class="chart">
-						<myChart :option="optionJST"></myChart>
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
 					</view>
 				</scroll-view>
 			</view>
@@ -69,12 +70,14 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
-	import pageHead from '../../components/page-head.vue'
-	import myChart from '../../components/myChart.vue'
+	import * as echarts from 'echarts'
+	import mpvueEcharts from 'mpvue-echarts'
+	
+	let chartJST, chartYY
+	
 	export default {
 		components: {
-			pageHead,
-			myChart
+			mpvueEcharts
 		},
 		data() {
 			return {
@@ -98,7 +101,8 @@
 				},
 				// 金沙滩和一浴图表数据
 				optionJST: {},
-				optionYY: {}
+				optionYY: {},
+				echarts
 			}
 		},
 		computed: {
@@ -309,7 +313,7 @@
 					url: 'http://123.234.129.238:8001/MyWebService.asmx/GetAstronomicalTide_QD',
 					data: {
 						name: 'admin',
-						areaflg: '青岛'
+						areaflg: '山东'
 					},
 					method: 'POST',
 					success: function (res) {
@@ -341,6 +345,7 @@
 				arr.sort(SortByDate)
 				// 提取潮汐数值
 				let tidedata = []
+				let markdata = []
 				for (let i = 0; i < arr.length; i++) {
 					let inittime = new Date(arr[i].PREDICTIONDATE)
 					let datestring = inittime.getFullYear() + '-' + (inittime.getMonth()+1) + '-' + inittime.getDate()
@@ -372,20 +377,36 @@
 					// 高低潮数值
 					let dateFH = new Date(datestring + ' ' + arr[i].FSTHIGHWIDETIME)
 					tidedata.push([dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT])
+					let fh = [{coord:[dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT]}, {coord:[dateFH.setHours(dateFH.getHours()), 0]}]
+					markdata.push(fh)
 					let dateFL = new Date(datestring + ' ' + arr[i].FSTLOWWIDETIME)
 					tidedata.push([dateFL.setHours(dateFL.getHours()) ,arr[i].FSTLOWWIDEHEIGHT])
+					let fl = [{coord:[dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT]}, {coord:[dateFL.setHours(dateFL.getHours()), 0]}]
+					markdata.push(fl)
 					let dateSH = new Date(datestring + ' ' + arr[i].SCDHIGHWIDETIME)
 					tidedata.push([dateSH.setHours(dateSH.getHours()) ,arr[i].SCDHIGHWIDEHEIGHT])
+					let sh = [{coord:[dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT]}, {coord:[dateSH.setHours(dateSH.getHours()), 0]}]
+					markdata.push(sh)
 					let dateSL = new Date(datestring + ' ' + arr[i].SCDLOWWIDETIME)
 					tidedata.push([dateSL.setHours(dateSL.getHours()) ,arr[i].SCDLOWWIDEHEIGHT])
+					let sl = [{coord:[dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT]}, {coord:[dateSL.setHours(dateSL.getHours()), 0]}]
+					markdata.push(sl)
 				}
 
 				function SortByFirst (x, y) {
 					return x[0] - y[0]
 				}
 				tidedata.sort(SortByFirst)
+				//markdata.sort(SortByFirst)
 
 				return {
+					grid: {
+						top: '4%',
+						left: '0%',
+						right: '2%',
+						bottom: '0%',
+						containLabel: true
+					},
 					xAxis: {
 						type: 'time'
 					},
@@ -396,10 +417,275 @@
 						name: '潮汐',
 						type: 'line',
 						smooth: true,
-						data: tidedata
+						animation: false,
+						symbolSize: 0,
+						itemStyle: {
+							normal: {
+								color: '#1c8d3b',
+								label: {
+									show: true,
+									position: 'top',
+									textStyle: {
+										color: '#000000',
+									}
+								}
+							}
+						},
+						data: tidedata,
+						markLine: {
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								position: 'bottom',
+								formatter: function(param){
+									return param.data.coord[1] + 'cm'
+								},
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'dot'
+							},
+							data: markdata
+						}
+						/*
+						// 第一天
+						markLine: { // 1
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[0][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[0][0], 0] },
+								{ coord: [markdata[0][0], markdata[0][1]] },
+							]]
+						},
+						markLine: { // 2
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[1][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[1][0], 0] },
+								{ coord: [markdata[1][0], markdata[1][1]] },
+							]]
+						},
+						markLine: { // 3
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[2][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[2][0], 0] },
+								{ coord: [markdata[2][0], markdata[2][1]] },
+							]]
+						},
+						markLine: { // 4
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[3][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[3][0], 0] },
+								{ coord: [markdata[3][0], markdata[3][1]] },
+							]]
+						},
+						// 第二天
+						markLine: { // 1
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[4][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[4][0], 0] },
+								{ coord: [markdata[4][0], markdata[4][1]] },
+							]]
+						},
+						markLine: { // 2
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[5][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[5][0], 0] },
+								{ coord: [markdata[5][0], markdata[5][1]] },
+							]]
+						},
+						markLine: { // 3
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[6][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[6][0], 0] },
+								{ coord: [markdata[6][0], markdata[6][1]] },
+							]]
+						},
+						markLine: { // 4
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[7][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[7][0], 0] },
+								{ coord: [markdata[7][0], markdata[7][1]] },
+							]]
+						},
+						// 第三天
+						markLine: { // 1
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[8][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[8][0], 0] },
+								{ coord: [markdata[8][0], markdata[8][1]] },
+							]]
+						},
+						markLine: { // 2
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[9][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[9][0], 0] },
+								{ coord: [markdata[9][0], markdata[9][1]] },
+							]]
+						},
+						markLine: { // 3
+							symbolSize: 0.1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[10][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'solid'
+							},
+							data: [[
+								{ coord: [markdata[10][0], 0] },
+								{ coord: [markdata[10][0], markdata[10][1]] },
+							]]
+						},
+						markLine: { // 4
+							symbolSize: 1,
+							animation: false,
+							label: {
+								show: true,
+								formatter: markdata[11][1] + 'cm',
+								textStyle: {
+									color: '#000000',
+								}
+							},
+							lineStyle: {
+								type: 'dot'
+							},
+							data: [[
+								{ coord: [markdata[11][0], 0] },
+								{ coord: [markdata[11][0], markdata[11][1]] },
+							]]
+						},
+						*/
 					}]
 				}
-			}
+			},
+			handleInitJST (canvas, width, height) {
+				chartJST = echarts.init(canvas, null, { width: width, height: height }),
+				canvas.setChart(chartJST)
+				chartJST.setOption(this.optionJST)
+				return chartJST
+			},
+			handleInitYY (canvas, width, height) {
+				chartYY = echarts.init(canvas, null, { width: width, height: height }),
+				canvas.setChart(chartYY)
+				chartYY.setOption(this.optionYY)
+				return chartYY
+			},
 		},
 		onLoad() {
 			this.loadWeather()
@@ -494,7 +780,8 @@
 	}
 
 	.chart {
-		width: 500%;
-		height: 400px;
+		width: 290%;
+		height: 250px;
+		border: 1px solid #000000;
 	}
 </style>

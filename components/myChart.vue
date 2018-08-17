@@ -1,5 +1,7 @@
 <template>
-	<mpvue-echarts :echarts="echarts" :onInit="handleInit"></mpvue-echarts>
+	<!-- <view :id="id"> -->
+		<mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="id"></mpvue-echarts>
+	<!-- </view> -->
 </template>
 
 <script>
@@ -11,6 +13,9 @@
 	export default {
 		name: 'myChart',
 		props: {
+			id: {
+				type: String
+			},
 			option: {
 				type: Object,
 				default () {
@@ -37,7 +42,7 @@
 		},
 		data() {
 			return {
-				echarts
+				echarts,
 			}
 		},
 		computed: {
@@ -68,13 +73,13 @@
 		},
 		methods: {
 			handleInit(canvas, width, height) {
-				chart = echarts.init(canvas, null, {
+				this.chart = echarts.init(canvas, null, {
 					width: width,
 					height: height
 				})
-				canvas.setChart(chart)
-				chart.setOption(this.option)
-				return chart
+				canvas.setChart(this.chart)
+				this.chart.setOption(this.option)
+				return this.chart
 			}
 		},
 	}
