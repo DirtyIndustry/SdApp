@@ -1,7 +1,19 @@
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
+	
 	export default {
+		computed: {
+			...mapState(['systemInfo'])
+		},
+		methods: {
+			...mapMutations(['setSystemInfo'])
+		},
 		onLaunch: function () {
 			console.log('App Launch')
+			let that = this
 			//#ifdef APP-PLUS
 			/* 5+环境锁定屏幕方向 */
 			plus.screen.lockOrientation('portrait-primary')
@@ -10,7 +22,7 @@
 			uni.getNetworkType({
 				success:function(res){
 					//console.log(res.networkType)
-					if (res.networkType == 'none'){
+					if (res.networkType === 'none'){
 						// 手机无网络，弹出提示框
 						uni.showModal({
 							title: '提示',
@@ -19,6 +31,7 @@
 						})
 						console.log('网络异常,请检查网络设置')
 					} else {
+						// 尝试连接后台服务器
 						uni.request({
 							url:'http://123.234.129.238:8001/MyWebService.asmx/GetAndroidUpgrade',
 							data: {
@@ -28,17 +41,9 @@
 							method: 'POST',
 							success: function(res){
 								console.log('连接服务器成功!')
-								// 成功连接服务器
-								/*
-								uni.showModal({
-									title: '提示',
-									content: '连接服务器成功',
-									showCancel: false
-								})
-								*/
 							},
 							fail: function(res){
-								// 无法成功连接服务器
+								// 无法成功连接服务器 弹出提示
 								console.log('服务器维护中!')
 								uni.showModal({
 									title: '提示',
@@ -46,8 +51,15 @@
 									showCancel: false
 								})
 							}
-						})
-					}
+						}) // end-request
+					} // end-if-else (res.network === 'none')
+				} // end-success-getNetworkType
+			}) // end-uni.getNetworkType
+			// 获取系统信息
+			uni.getSystemInfo({
+				success: function (res) {
+					// 将系统信息存入vuex
+					that.setSystemInfo(res)
 				}
 			})
 		},

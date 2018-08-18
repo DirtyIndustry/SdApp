@@ -5,9 +5,10 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		location: 0,
+		location: 0, // 所选择的城市的index
 		newvalue: '今天天气不错',
 		newValueTwo: '但是明天就不一定了',
+		systemInfo: {},
 		hasLogin: false,
 		loginProvider: "",
 		openid: null
@@ -15,6 +16,9 @@ const store = new Vuex.Store({
 	mutations: {
 		setLocation(state, value) {
 			state.location = value
+		},
+		setSystemInfo (state, value) {
+			state.systemInfo = value
 		},
 		login(state, provider) {
 			state.hasLogin = true;

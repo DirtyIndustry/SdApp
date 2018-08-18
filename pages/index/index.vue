@@ -60,20 +60,27 @@
 			<!-- 潮汐预报模块 -->
 			<view class="page-section">
 				<!-- 金沙滩 -->
-				<scroll-view class="scroll-view_H" scroll-x="true">
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollJST">
 					<view class="chart">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST"></mpvue-echarts>
 					</view>
+					<!-- <view class="slideball" :style="{left: ballLeftJST}">ball</view> -->
+					<view class="slideball" v-if="ballMoveJST">ball</view>
 				</scroll-view>
+				<view class="fixball" :class="{'fixballleft': ballLeftJST}" v-if="!ballMoveJST">ball</view>
 			</view>
 			<!-- 第一海水浴场 -->
 			<view class="page-section">
 				<text>第二个图表</text>
-				<scroll-view class="scroll-view_H" scroll-x="true">
-					<view class="chart">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
-					</view>
-				</scroll-view>
+				<view class="chartcontainer">
+					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
+						<view class="chart">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
+						</view>
+						<!-- 监视scrollLeft切换class设置position为relative和fixed -->
+						<view class="slideball" v-bind:class="[scrollLeftYY > 360 ? 'slideball-fix' : '']">ball</view>
+					</scroll-view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -117,11 +124,22 @@
 				// 金沙滩和一浴图表数据
 				optionJST: {},
 				optionYY: {},
+				// 金沙滩和一浴图表滚动的数值
+				scrollLeftJST: 0,
+				scrollLeftYY: 0,
+				// 金沙滩和一浴日期球到屏幕左边的距离
+				ballLeftJST: 0,
+				ballLeftYY: 0,
+				// 金沙滩和一浴日期球移动
+				ballMoveJST: false,
+				ballLeftJST: false,
+				ballMoveYY: false,
+				ballLeftYY: false,
 				echarts
 			}
 		},
 		computed: {
-			...mapState(['location'])
+			...mapState(['location', 'systemInfo'])
 		},
 		methods: {
 			...mapMutations(['setLocation']),
@@ -504,13 +522,24 @@
 					// 横坐标周
 					xAxis: {
 						type: 'time',
-						axisLabel: { // 不显示横坐标刻度数值
-							show: false
-						}
+						axisLabel: { // 横坐标刻度数值
+							show: true,
+							inside: true,
+							rotate: 90,
+							formatter: function (value, index) {
+								// 格式化为月-日，只在第一个刻度显示年份
+								let date = new Date(value)
+								let texts = [(date.getMonth() + 1), date.getDate()];
+								if (index === 0) {
+									texts.unshift(date.getFullYear())
+								}
+								return '\n' + texts.join('-')
+							} // end-formatter-axisLabel
+						} // end-axisLabel
 					},
 					yAxis: {
 						show: false,
-						boundaryGap: ['20%', '20%']
+						boundaryGap: ['20%', '20%'] // 纵坐标轴的范围，比有效数字上下多出20%
 					},
 					series: [
 						// 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
@@ -628,6 +657,22 @@
 				chartYY.setOption(this.optionYY)
 				return chartYY
 			},
+			// 金沙滩图表滚动事件
+			scrollJST (e) {
+				if ((e.detail.scrollLeft + 50) > this.systemInfo.windowWidth) {
+					this.ballMoveJST = false
+					this.ballLeftJST = true
+				} else if (e.detail.scrollLeft < 40) {
+					this.ballMoveJST = false
+					this.ballLeftJST = false
+				} else {
+					this.ballMoveJST = true
+				}
+			},
+			// 一浴图表滚动事件
+			scrollYY (e) {
+				this.scrollLeftYY = e.detail.scrollLeft
+			},
 		},
 		onLoad() {
 			this.loadWeather()
@@ -722,8 +767,24 @@
 	}
 
 	.chart {
-		width: 290%;
+		width: 2100px;
 		height: 250px;
 		border: 1px solid #000000;
+	}
+	
+	.slideball {
+		position: relative;
+		bottom: 0;
+		left: 700px;
+		width: 20px;
+	}
+	
+	.fixball {
+		position: relative;
+		left: 620px;
+		width: 20px;
+	}
+	.fixballleft {
+		left: 50px;
 	}
 </style>
