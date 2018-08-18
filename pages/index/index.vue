@@ -403,51 +403,63 @@
 					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H22])
 					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H23])
 					// 高低潮数值 加入曲线数值表和垂直标线数值表
-					// 第一次高潮的日期时间
-					let dateFH = new Date(datestring + ' ' + arr[i].FSTHIGHWIDETIME)
-					// 第一次高潮曲线数据
-					tidedata.push([dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT])
-					// 第一次高潮垂直标线数据
-					// 垂直标线数据格式为: [ [{coord: [横坐标1, 纵坐标起始值1]},{coord: [横坐标1, 纵坐标结束值1]}], [{coord: [横坐标2, 纵坐标起始值2]},{coord: [横坐标2, 纵坐标结束值2]}], ... ]
-					let fh = [{
-						coord: [dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT]
-					}, {
-						coord: [dateFH.setHours(dateFH.getHours()), 0]
-					}]
-					markdata.push(fh)
-					// 第一次低潮的日期时间
-					let dateFL = new Date(datestring + ' ' + arr[i].FSTLOWWIDETIME)
-					// 第一次低潮的曲线数据
-					tidedata.push([dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT])
-					// 第一次低潮的垂直标线数据
-					let fl = [{
-						coord: [dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT]
-					}, {
-						coord: [dateFL.setHours(dateFL.getHours()), 0]
-					}]
-					markdata.push(fl)
-					// 第二次高潮的日期时间
-					let dateSH = new Date(datestring + ' ' + arr[i].SCDHIGHWIDETIME)
-					// 第二次高潮的曲线数据
-					tidedata.push([dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT])
-					// 第二次高潮的垂直标线数据
-					let sh = [{
-						coord: [dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT]
-					}, {
-						coord: [dateSH.setHours(dateSH.getHours()), 0]
-					}]
-					markdata.push(sh)
-					// 第二次低潮的日期时间
-					let dateSL = new Date(datestring + ' ' + arr[i].SCDLOWWIDETIME)
-					// 第二次低潮的曲线数据
-					tidedata.push([dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT])
-					// 第二次低潮的垂直标线数据
-					let sl = [{
-						coord: [dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT]
-					}, {
-						coord: [dateSL.setHours(dateSL.getHours()), 0]
-					}]
-					markdata.push(sl)
+					// 第一次高潮
+					if (arr[i].FSTHIGHWIDETIME !== '-') {
+						// 第一次高潮的日期时间
+						let dateFH = new Date(datestring + ' ' + arr[i].FSTHIGHWIDETIME)
+						// 第一次高潮曲线数据
+						tidedata.push([dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT])
+						// 第一次高潮垂直标线数据
+						// 垂直标线数据格式为: [ [{coord: [横坐标1, 纵坐标起始值1]},{coord: [横坐标1, 纵坐标结束值1]}], [{coord: [横坐标2, 纵坐标起始值2]},{coord: [横坐标2, 纵坐标结束值2]}], ... ]
+						let fh = [{
+							coord: [dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT]
+						}, {
+							coord: [dateFH.setHours(dateFH.getHours()), 0]
+						}]
+						markdata.push(fh)
+					}
+					// 第一次低潮
+					if (arr[i].FSTLOWWIDETIME !== '-') {
+						// 第一次低潮的日期时间
+						let dateFL = new Date(datestring + ' ' + arr[i].FSTLOWWIDETIME)
+						// 第一次低潮的曲线数据
+						tidedata.push([dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT])
+						// 第一次低潮的垂直标线数据
+						let fl = [{
+							coord: [dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT]
+						}, {
+							coord: [dateFL.setHours(dateFL.getHours()), 0]
+						}]
+						markdata.push(fl)
+					}
+					// 第二次高潮
+					if (arr[i].SCDHIGHWIDETIME !== '-') {
+						// 第二次高潮的日期时间
+						let dateSH = new Date(datestring + ' ' + arr[i].SCDHIGHWIDETIME)
+						// 第二次高潮的曲线数据
+						tidedata.push([dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT])
+						// 第二次高潮的垂直标线数据
+						let sh = [{
+							coord: [dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT]
+						}, {
+							coord: [dateSH.setHours(dateSH.getHours()), 0]
+						}]
+						markdata.push(sh)
+					}
+					// 第二次低潮
+					if (arr[i].SCDLOWWIDETIME !== '-') {
+						// 第二次低潮的日期时间
+						let dateSL = new Date(datestring + ' ' + arr[i].SCDLOWWIDETIME)
+						// 第二次低潮的曲线数据
+						tidedata.push([dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT])
+						// 第二次低潮的垂直标线数据
+						let sl = [{
+							coord: [dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT]
+						}, {
+							coord: [dateSL.setHours(dateSL.getHours()), 0]
+						}]
+						markdata.push(sl)
+					}
 					// 计算今天的最高潮位 并与已有的max值比较 将最大值存入max用于水平标线
 					let firstH = Number(arr[i].FSTHIGHWIDEHEIGHT)
 					let secondH = Number(arr[i].SCDHIGHWIDEHEIGHT)
@@ -497,7 +509,8 @@
 						}
 					},
 					yAxis: {
-						show: false
+						show: false,
+						boundaryGap: ['20%', '20%']
 					},
 					series: [
 						// 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
