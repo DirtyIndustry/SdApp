@@ -1,4 +1,4 @@
 watch echarts option
-sticky ball
+done...sticky ball
 current time pointer
 修正返回值不是json的接口

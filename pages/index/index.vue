@@ -58,31 +58,58 @@
 				</view>
 			</view>
 			<!-- 潮汐预报模块 -->
+			<!-- 金沙滩 -->
 			<view class="page-section">
-				<!-- 金沙滩 -->
+				<text>金沙滩</text>
 				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollJST">
 					<view class="chart">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST"></mpvue-echarts>
 					</view>
-					<!-- <view class="slideball" :style="{left: ballLeftJST}">ball</view> -->
-					<view class="slideball" v-if="ballMoveJST">ball</view>
+					<!-- 滑动的日期球，Move属性决定球是否显示 -->
+					<view class="balltrack">
+						<view class="dateball slideball-Snd" v-show="ballJST.sndballMove">{{sndballText}}</view>
+						<view class="dateball slideball-Trd" v-show="ballJST.trdballMove">{{trdballText}}</view>
+					</view>
 				</scroll-view>
-				<view class="fixball" :class="{'fixballleft': ballLeftJST}" v-if="!ballMoveJST">ball</view>
+				<!-- 固定在两端的日期球
+				Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
+				特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
+				<view class="balltrack-fix">
+					<view class="dateball fixball-Fst" :class="{'dateball-active': ballJST.fstballActive}">{{fstballText}}</view>
+					<view class="dateball fixball-Snd" :class="{'dateball-active': ballJST.sndballActive, 'fixball-Snd-left': ballJST.sndballLeft}"
+					    v-show="!ballJST.sndballMove">{{sndballText}}</view>
+					<view class="dateball fixball-Trd" :class="{'dateball-active': ballJST.trdballActive, 'fixball-Trd-lone': ballJST.sndballMove, 'fixball-Trd-left': ballJST.trdballLeft}"
+					    v-show="!ballJST.trdballMove">{{trdballText}}</view>
+				</view>
 			</view>
 			<!-- 第一海水浴场 -->
 			<view class="page-section">
-				<text>第二个图表</text>
+				<text>第一海水浴场</text>
 				<view class="chartcontainer">
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
 						<view class="chart">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
 						</view>
-						<!-- 监视scrollLeft切换class设置position为relative和fixed -->
-						<view class="slideball" v-bind:class="[scrollLeftYY > 360 ? 'slideball-fix' : '']">ball</view>
+						<!-- 滑动的日期球，Move属性决定球是否显示 -->
+						<view class="balltrack">
+							<view class="dateball slideball-Snd" v-show="ballYY.sndballMove">{{sndballText}}</view>
+							<view class="dateball slideball-Trd" v-show="ballYY.trdballMove">{{trdballText}}</view>
+						</view>
 					</scroll-view>
+					<!-- 固定在两端的日期球
+					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
+					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
+					<view class="balltrack-fix">
+						<view class="dateball fixball-Fst" :class="{'dateball-active': ballYY.fstballActive}">{{fstballText}}</view>
+						<view class="dateball fixball-Snd" :class="{'dateball-active': ballYY.sndballActive, 'fixball-Snd-left': ballYY.sndballLeft}"
+						    v-show="!ballYY.sndballMove">{{sndballText}}</view>
+						<view class="dateball fixball-Trd" :class="{'dateball-active': ballYY.trdballActive, 'fixball-Trd-lone': ballYY.sndballMove, 'fixball-Trd-left': ballYY.trdballLeft}"
+						    v-show="!ballYY.trdballMove">{{trdballText}}</view>
+					</view>
 				</view>
 			</view>
 		</view>
+	</view>
 	</view>
 </template>
 
@@ -107,13 +134,13 @@
 				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
 				// 天气数据
 				weatherData: {
-					temperature: '25',	// 气温
-					aircondition: '35',	// 空气质量
+					temperature: '25', // 气温
+					aircondition: '35', // 空气质量
 					airconDesc: '优',
 					airconIcon: '../../static/Images/right_leaf_sev.png', // 空气质量绿叶图标
 					weather: '晴',
 					weatherIcon: '../../static/Images/right_weather_fine.png', // 天气图表
-					pm25: '8',					// PM2.5
+					pm25: '8', // PM2.5
 					pm25Style: 'good'
 				},
 				// 警报数据
@@ -124,17 +151,30 @@
 				// 金沙滩和一浴图表数据
 				optionJST: {},
 				optionYY: {},
-				// 金沙滩和一浴图表滚动的数值
-				scrollLeftJST: 0,
-				scrollLeftYY: 0,
-				// 金沙滩和一浴日期球到屏幕左边的距离
-				ballLeftJST: 0,
-				ballLeftYY: 0,
-				// 金沙滩和一浴日期球移动
-				ballMoveJST: false,
-				ballLeftJST: false,
-				ballMoveYY: false,
-				ballLeftYY: false,
+				// 日期球的日期文字
+				fstballText: '1st',
+				sndballText: '2nd',
+				trdballText: '3rd',
+				// 金沙滩日期球控制参数
+				ballJST: {
+					fstballActive: true, // 第一个球是否激活（显示为蓝色）
+					sndballActive: false, // 第二个球是否激活（显示为蓝色）
+					sndballMove: false, // 第二个球是否滑动
+					sndballLeft: false, // 第二个球是否位于左端
+					trdballActive: false, // 第三个球是否激活（显示为蓝色）
+					trdballMove: false, // 第三个球是否滑动
+					trdballLeft: false, // 第三个球是否位于左端
+				},
+				// 一浴日期球控制参数
+				ballYY: {
+					fstballActive: true,
+					sndballActive: false,
+					sndballMove: false,
+					sndballLeft: false,
+					trdballActive: false,
+					trdballMove: false,
+					trdballLeft: false,
+				},
 				echarts
 			}
 		},
@@ -358,8 +398,8 @@
 						console.log('成功获取潮汐预报数据')
 						// STATION 101wmt为金沙滩 102xmd为第一海水浴场
 						let resarr = JSON.parse(res.data.d)
-						let arrJST = []	// 金沙滩三日数据数组
-						let arrYY = []	//一浴三日数据数组
+						let arrJST = [] // 金沙滩三日数据数组
+						let arrYY = [] //一浴三日数据数组
 						// 遍历接口返回值，依据STATION将数据放入以上两个数组中
 						for (let i = 0; i < 6; i++) {
 							if (resarr[i].STATION === '101wmt') {
@@ -386,8 +426,8 @@
 				// 提取潮汐数值
 				let tidedata = [] // 曲线用的数值集
 				let markdata = [] // 最高最低潮竖直标线用的数值集
-				let max = 0			// 三天最高潮位数值
-				let min = 0			// 三天最低潮位数值
+				let max = 0 // 三天最高潮位数值
+				let min = 0 // 三天最低潮位数值
 				for (let i = 0; i < arr.length; i++) {
 					// 一次循环为一天的数据
 					// 初始日期时间
@@ -553,11 +593,11 @@
 							lineStyle: {
 								//type: 'solid',
 								color: '#1c8d3b', // 曲线颜色
-								width: 1					// 曲线粗细
+								width: 1 // 曲线粗细
 							},
 							data: tidedata,
 							markLine: {
-								symbolSize: 0.1,	// 垂直标线一端的箭头 和数据label的大小， 不能设为0否则label不显示
+								symbolSize: 0.1, // 垂直标线一端的箭头 和数据label的大小， 不能设为0否则label不显示
 								silent: true,
 								animation: false,
 								label: {
@@ -580,7 +620,7 @@
 						},
 						// 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
 						{
-							name: '标线日期',
+							name: '标线时间',
 							type: 'line',
 							markLine: {
 								symbolSize: 0.1,
@@ -590,7 +630,7 @@
 								label: {
 									show: true,
 									position: 'end',
-									formatter: function (param) {
+									formatter: function (param) { // 返回mm:ss格式的时间
 										let date = new Date(param.data.coord[0])
 										let hour = date.getHours()
 										if (hour < 10) {
@@ -640,44 +680,112 @@
 			// 初始化金沙滩图表
 			handleInitJST(canvas, width, height) {
 				chartJST = echarts.init(canvas, null, {
-						width: width,
-						height: height
-					}),
-					canvas.setChart(chartJST)
+					width: width,
+					height: height
+				}),
+				canvas.setChart(chartJST)
 				chartJST.setOption(this.optionJST)
 				return chartJST
 			},
 			// 初始化一浴图表
 			handleInitYY(canvas, width, height) {
 				chartYY = echarts.init(canvas, null, {
-						width: width,
-						height: height
-					}),
-					canvas.setChart(chartYY)
+					width: width,
+					height: height
+				}),
+				canvas.setChart(chartYY)
 				chartYY.setOption(this.optionYY)
 				return chartYY
 			},
 			// 金沙滩图表滚动事件
-			scrollJST (e) {
-				if ((e.detail.scrollLeft + 50) > this.systemInfo.windowWidth) {
-					this.ballMoveJST = false
-					this.ballLeftJST = true
-				} else if (e.detail.scrollLeft < 40) {
-					this.ballMoveJST = false
-					this.ballLeftJST = false
-				} else {
-					this.ballMoveJST = true
-				}
+			scrollJST(e) {
+				this.setDateballStatus(e.detail.scrollLeft, this.ballJST)
 			},
 			// 一浴图表滚动事件
-			scrollYY (e) {
-				this.scrollLeftYY = e.detail.scrollLeft
+			scrollYY(e) {
+				this.setDateballStatus(e.detail.scrollLeft, this.ballYY)
 			},
-		},
+			// 设置日期球的状态 scrollLeft为滚动距最左边的距离，ballObj为包含一系列bool值的object
+			setDateballStatus(scrollLeft, ballObj) {
+				//开始滚动 scrollLeft为0
+				if (scrollLeft < 50) { // 刚开始滚动 还不足以让第二个球开始动
+					ballObj.fstballActive = true
+					ballObj.sndballActive = false
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = false
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+				} else if (scrollLeft < this.systemInfo.windowWidth - 45) { // 第二个球开始动
+					ballObj.fstballActive = true
+					ballObj.sndballActive = false
+					ballObj.trdballActive = false
+					ballObj.sndballMove = true
+					ballObj.sndballLeft = false
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+				} else if (scrollLeft < this.systemInfo.windowWidth) { // 第二个球停在最左边 第三个球还没开始动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+				} else if (scrollLeft < this.systemInfo.windowWidth + 9) { // 第三个球开始动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = true
+					ballObj.trdballLeft = false
+				} else if (scrollLeft < (this.systemInfo.windowWidth + 270)) { // 第三个球动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = true
+					ballObj.trdballLeft = false
+				} else { // 第三个球停在最左边
+					ballObj.fstballActive = false
+					ballObj.sndballActive = false
+					ballObj.trdballActive = true
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = true
+				}
+			},
+			// 设置曲线图下方日期球的日期
+			setDateballText() {
+				let now = new Date()
+
+				function formatDate(date) { // 格式化日期为MM-dd
+					let month = date.getMonth() + 1
+					let day = date.getDate()
+					if (month < 10) {
+						month = '0' + month
+					}
+					if (day < 10) {
+						day = '0' + day
+					}
+					return month + '-' + day
+				} // end-function formatDate
+				// 三个球分别显示今天，明天和后天的日期
+				this.fstballText = formatDate(now)
+				now = new Date(now.setDate(now.getDate() + 1))
+				this.sndballText = formatDate(now)
+				now = new Date(now.setDate(now.getDate() + 1))
+				this.trdballText = formatDate(now)
+			},
+		}, // end-methods
 		onLoad() {
 			this.loadWeather()
 			this.loadWarning()
 			this.loadAstronomicalTide()
+			this.setDateballText()
 		}
 	}
 </script>
@@ -765,26 +873,92 @@
 	.sev {
 		color: #be0606;
 	}
-
+	
+	/* 曲线图的容器 必须设置宽度和高度 */
 	.chart {
-		width: 2100px;
+		width: 290%;
 		height: 250px;
 		border: 1px solid #000000;
 	}
 	
-	.slideball {
-		position: relative;
-		bottom: 0;
-		left: 700px;
-		width: 20px;
+	/* 日期球的外观样式 */
+	.dateball {
+		display: flex;
+		width: 62px;
+		height: 62px;
+		background-color: rgba(148, 148, 148, 0.4);
+		border-radius: 62px;
+		font-size: 20px;
+		align-items: center;
+		justify-content: center;
 	}
 	
-	.fixball {
-		position: relative;
-		left: 620px;
-		width: 20px;
+	/* 日期球激活状态时现时为蓝色 */
+	.dateball-active {
+		background-color: rgba(0, 148, 255, 0.5);
 	}
-	.fixballleft {
-		left: 50px;
+	
+	/* 第二个球滑动时的定位 */
+	.slideball-Snd {
+		position: relative;
+		bottom: 0;
+		left: 97%;
+	}
+	
+	/* 第三个球滑动时的定位 */
+	.slideball-Trd {
+		position: relative;
+		bottom: 0;
+		left: 191%;
+	}
+	
+	/* 第一个球固定时的定位 */
+	.fixball-Fst {
+		position: relative;
+		left: 0%;
+	}
+	
+	/* 第二个球固定时的定位 */
+	.fixball-Snd {
+		position: relative;
+		left: 76%;
+	}
+	
+	/* 第二个球固定在左端时的定位 */
+	.fixball-Snd-left {
+		left: 0%;
+	}
+	
+	/* 第三个球固定时的定位 */
+	.fixball-Trd {
+		position: relative;
+		left: 76%;
+	}
+	
+	/* 当第二个球滑动时，第三个球需要调整定位 */
+	.fixball-Trd-lone {
+		left: 84%;
+	}
+	
+	/* 第三个球固定在左端时的定位 */
+	.fixball-Trd-left {
+		left: 0%;
+	}
+	
+	/* 滑动的小球的容器 flex属性能让小球水平排列，height与下面的balltrack-fix中的margin-top一致，能够让两个容器重合 */
+	.balltrack {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		height: 62px;
+	}
+	
+	/* 固定的小球的容器 */
+	.balltrack-fix {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		margin-top: -60px;
 	}
 </style>
