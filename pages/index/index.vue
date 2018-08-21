@@ -30,12 +30,12 @@
 					<view class="uni-flex uni-column" style="flex: 1;justify-content: space-between;">
 						<!-- 城市天气 -->
 						<view class="text" style="height: 120px;text-align: left;padding-left: 20px;padding-top: 10px;">
-							<image :src="weatherData.weatherIcon" style="width: 50px;height: 50px;" /> {{weatherData.weather}}
+							<image :src="weatherData.weatherIcon" mode="widthFix" style="width: 50px;" /> {{weatherData.weather}}
 						</view>
 						<view class="uni-flex uni-row">
 							<!-- 城市空气质量 -->
 							<view class="text" style="flex: 1;">
-								<image :src="weatherData.airconIcon" style="width: 30px;height: 30px;" /> {{weatherData.aircondition}} {{weatherData.airconDesc}}
+								<image :src="weatherData.airconIcon" mode="widthFix" style="width: 30px;" /> {{weatherData.aircondition}} {{weatherData.airconDesc}}
 							</view>
 							<!-- 城市pm2.5 -->
 							<view class="text" style="flex: 1;">
@@ -115,7 +115,7 @@
 						<view class="flex-cell-single">{{item.date}}</view>
 						<view class="flex-cell-single">{{item.weather}}</view>
 						<view class="flex-cell-single">
-							<image :src="item.weatherIcon" style="max-width: 50px;max-height: 50px;" />
+							<image :src="item.weatherIcon" mode="widthFix" class="image-icon" />
 						</view>
 						<view class="flex-cell-quad"> </view>
 						<view class="flex-cell-single">{{item.windDir}}</view>
@@ -1063,5 +1063,9 @@
 	/* 5日天气预报中占四行高度的单元格 */
 	.flex-cell-quad {
 		flex: 4;
+	}
+
+	.image-icon {
+		width: 50px;
 	}
 </style>
