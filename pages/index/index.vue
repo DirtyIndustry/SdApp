@@ -114,7 +114,6 @@
 </template>
 
 <script>
-	//TODO: watch chart option的变化，更新chart
 	import {
 		mapState,
 		mapMutations
@@ -149,342 +148,8 @@
 					waveWarning: ''
 				},
 				// 金沙滩和一浴图表数据
-				optionJST: {
-					tooltip: {},
-					legend: {
-						data:['销量']
-					},
-					xAxis: {
-						data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-					},
-					yAxis: {},
-					series: [{
-						name: '销量',
-						type: 'bar',
-						data: [5, 20, 36, 10, 10, 20]
-					}]
-				},
+				optionJST: {},
 				optionYY: {},
-				optionExp: {
-					grid: {
-						top: '4%',
-						left: '0%',
-						right: '2%',
-						bottom: '20%',
-						containLabel: true
-					},
-					xAxis: {
-						type: 'time',
-						axisLabel: {
-							show: true,
-							inside: true,
-							rotate: 90,
-							formatter: function (value, index) {
-								let date = new Date(value)
-								let texts = [(date.getMonth() + 1), date.getDate()];
-								if (index === 0) {
-									texts.unshift(date.getFullYear())
-								}
-								return '\n' + texts.join('-')
-							}
-						}
-					},
-					yAxis: {
-						show: false,
-						boundaryGap: ['20%', '20%']
-					},
-					series: [{
-							name: '潮汐',
-							type: 'line',
-							smooth: true,
-							silent: true,
-							animation: false,
-							symbolSize: 0,
-							lineStyle: {
-								color: '#1c8d3b',
-								width: 1
-							},
-							data: [
-								[1534780800000, 356],
-								[1534784400000, 372],
-								[1534785120000, 373],
-								[1534788000000, 365],
-								[1534791600000, 340],
-								[1534795200000, 303],
-								[1534798800000, 263],
-								[1534802400000, 228],
-								[1534806000000, 212],
-								[1534806660000, 211],
-								[1534809600000, 220],
-								[1534813200000, 249],
-								[1534816800000, 291],
-								[1534820400000, 330],
-								[1534824000000, 359],
-								[1534827600000, 370],
-								[1534827600000, 370],
-								[1534831200000, 358],
-								[1534834800000, 324],
-								[1534838400000, 278],
-								[1534842000000, 228],
-								[1534845600000, 182],
-								[1534849200000, 148],
-								[1534852320000, 138],
-								[1534852800000, 138],
-								[1534856400000, 157],
-								[1534860000000, 201],
-								[1534863600000, 259],
-								[1534867200000, 318],
-								[1534870800000, 364],
-								[1534874400000, 386],
-								[1534875240000, 387],
-								[1534878000000, 379],
-								[1534881600000, 352],
-								[1534885200000, 314],
-								[1534888800000, 272],
-								[1534892400000, 232],
-								[1534896000000, 210],
-								[1534897320000, 209],
-								[1534899600000, 214],
-								[1534903200000, 242],
-								[1534906800000, 285],
-								[1534910400000, 329],
-								[1534914000000, 364],
-								[1534917540000, 377],
-								[1534917600000, 377],
-								[1534921200000, 362],
-								[1534924800000, 322],
-								[1534928400000, 273],
-								[1534932000000, 222],
-								[1534935600000, 172],
-								[1534939200000, 135],
-								[1534942320000, 123],
-								[1534942800000, 123],
-								[1534946400000, 144],
-								[1534950000000, 195],
-								[1534953600000, 262],
-								[1534957200000, 331],
-								[1534960800000, 383],
-								[1534964400000, 403],
-								[1534964580000, 403],
-								[1534968000000, 390],
-								[1534971600000, 356],
-								[1534975200000, 314],
-								[1534978800000, 266],
-								[1534982400000, 222],
-								[1534986000000, 198],
-								[1534987140000, 196],
-								[1534989600000, 203],
-								[1534993200000, 238],
-								[1534996800000, 288],
-								[1535000400000, 340],
-								[1535004000000, 379],
-								[1535006820000, 390],
-								[1535007600000, 389],
-								[1535011200000, 364],
-								[1535014800000, 315],
-								[1535018400000, 261],
-								[1535022000000, 208],
-								[1535025600000, 155],
-								[1535029200000, 116],
-								[1535031720000, 107],
-								[1535032800000, 109],
-								[1535036400000, 140]
-							],
-							markLine: {
-								symbolSize: 0.1,
-								silent: true,
-								animation: false,
-								label: {
-									show: true,
-									position: 'start',
-									formatter: function (param) {
-										return param.data.coord[1] + 'cm'
-									},
-								},
-								lineStyle: {
-									type: 'dot'
-								},
-								data: [
-									[{
-										coord: [1534785120000, 373]
-									}, {
-										coord: [1534785120000, 0]
-									}],
-									[{
-										coord: [1534806660000, 211]
-									}, {
-										coord: [1534806660000, 0]
-									}],
-									[{
-										coord: [1534827600000, 370]
-									}, {
-										coord: [1534827600000, 0]
-									}],
-									[{
-										coord: [1534852320000, 138]
-									}, {
-										coord: [1534852320000, 0]
-									}],
-									[{
-										coord: [1534875240000, 387]
-									}, {
-										coord: [1534875240000, 0]
-									}],
-									[{
-										coord: [1534897320000, 209]
-									}, {
-										coord: [1534897320000, 0]
-									}],
-									[{
-										coord: [1534917540000, 377]
-									}, {
-										coord: [1534917540000, 0]
-									}],
-									[{
-										coord: [1534942320000, 123]
-									}, {
-										coord: [1534942320000, 0]
-									}],
-									[{
-										coord: [1534964580000, 403]
-									}, {
-										coord: [1534964580000, 0]
-									}],
-									[{
-										coord: [1534987140000, 196]
-									}, {
-										coord: [1534987140000, 0]
-									}],
-									[{
-										coord: [1535006820000, 390]
-									}, {
-										coord: [1535006820000, 0]
-									}],
-									[{
-										coord: [1535031720000, 107]
-									}, {
-										coord: [1535031720000, 0]
-									}],
-								]
-							}
-						},
-						{
-							name: '标线时间',
-							type: 'line',
-							markLine: {
-								symbolSize: 0.1,
-								opacity: 0,
-								silent: true,
-								animation: false,
-								label: {
-									show: true,
-									position: 'end',
-									formatter: function (param) {
-										let date = new Date(param.data.coord[
-											0
-										])
-										let hour = date.getHours()
-										if (hour < 10) {
-											hour = '0' + hour
-										}
-										let minute = date.getMinutes()
-										if (minute < 10) {
-											minute = '0' + minute
-										}
-										return hour + ':' + minute
-									},
-								},
-								lineStyle: {
-									type: 'dot'
-								},
-								data: [
-									[{
-										coord: [1534785120000, 373]
-									}, {
-										coord: [1534785120000, 0]
-									}],
-									[{
-										coord: [1534806660000, 211]
-									}, {
-										coord: [1534806660000, 0]
-									}],
-									[{
-										coord: [1534827600000, 370]
-									}, {
-										coord: [1534827600000, 0]
-									}],
-									[{
-										coord: [1534852320000, 138]
-									}, {
-										coord: [1534852320000, 0]
-									}],
-									[{
-										coord: [1534875240000, 387]
-									}, {
-										coord: [1534875240000, 0]
-									}],
-									[{
-										coord: [1534897320000, 209]
-									}, {
-										coord: [1534897320000, 0]
-									}],
-									[{
-										coord: [1534917540000, 377]
-									}, {
-										coord: [1534917540000, 0]
-									}],
-									[{
-										coord: [1534942320000, 123]
-									}, {
-										coord: [1534942320000, 0]
-									}],
-									[{
-										coord: [1534964580000, 403]
-									}, {
-										coord: [1534964580000, 0]
-									}],
-									[{
-										coord: [1534987140000, 196]
-									}, {
-										coord: [1534987140000, 0]
-									}],
-									[{
-										coord: [1535006820000, 390]
-									}, {
-										coord: [1535006820000, 0]
-									}],
-									[{
-										coord: [1535031720000, 107]
-									}, {
-										coord: [1535031720000, 0]
-									}],
-								]
-							}
-						},
-						{
-							name: '最值横线',
-							type: 'line',
-							markLine: {
-								symbolSize: 0,
-								silent: true,
-								animation: false,
-								lineStyle: {
-									type: 'dot'
-								},
-								label: {
-									show: false
-								},
-								data: [{
-										yAxis: 403
-									},
-									{
-										yAxis: 107
-									}
-								]
-							}
-						}
-					]
-				},
 				// 日期球的日期文字
 				fstballText: '1st',
 				sndballText: '2nd',
@@ -519,7 +184,6 @@
 			...mapMutations(['setLocation']),
 			// 地区选择变化
 			bindPickerChange: function (e) {
-				//console.log('picker changed. value is: ', e.target.value)
 				this.index = e.target.value
 				this.setLocation(e.target.value)
 				this.loadWeather()
@@ -743,35 +407,10 @@
 							}
 						} // end-for
 						// 由数组生成echarts所需的option
-// 						setTimeout(function(){
-// 							console.log('set data to option')
-						if (chartJST !== undefined) {
-							that.optionJST = that.setChartOption(arrJST)
-						} else {
-							console.log('delay option.')
-							setTimeout(function(){that.optionJST=that.setChartOption(arrJST)}.bind(that), 500)
-						}
-							that.optionYY = that.setChartOption(arrYY)
-						// }.bind(that), 5000)
+						that.optionJST = that.setChartOption(arrJST)
+						that.optionYY = that.setChartOption(arrYY)
 					}, // end-success-request
 				}) // end-request
-			},
-			deepEquals (x, y, layer) {
-				if (layer > 6) {
-					return
-				}
-				let head = ''
-				for (let i = 0; i < layer; i++) {
-					head += '  '
-				}
-				for (let attr in x) {
-					if (x.hasOwnProperty(attr) & y.hasOwnProperty(attr)) {
-						console.log(head + attr + ' : ' + x[attr])
-						if (typeof x[attr] != 'string') {
-							this.deepEquals(x[attr], y[attr], layer+1)
-						}
-					}
-				}
 			},
 			// 由三日数据生成chart option
 			setChartOption(arr) {
@@ -795,41 +434,41 @@
 					let datestring = inittime.getFullYear() + '/' + (inittime.getMonth() + 1) + '/' + inittime.getDate()
 					// 每小时数值 加入曲线数值表
 					// 格式为[ [时间1, 数值1], [时间2, 数值2], ... ]
-					tidedata.push([inittime.setHours(inittime.getHours()), Number(arr[i].H0)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H1)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H2)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H3)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H4)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H5)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H6)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H7)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H8)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H9)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H10)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H11)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H12)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H13)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H14)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H15)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H16)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H17)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H18)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H19)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H20)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H21)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H22)])
-					tidedata.push([inittime.setHours(inittime.getHours() + 1), Number(arr[i].H23)])
+					tidedata.push([inittime.setHours(inittime.getHours()), arr[i].H0])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H1])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H2])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H3])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H4])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H5])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H6])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H7])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H8])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H9])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H10])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H11])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H12])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H13])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H14])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H15])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H16])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H17])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H18])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H19])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H20])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H21])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H22])
+					tidedata.push([inittime.setHours(inittime.getHours() + 1), arr[i].H23])
 					// 高低潮数值 加入曲线数值表和垂直标线数值表
 					// 第一次高潮
 					if (arr[i].FSTHIGHWIDETIME !== '-') {
 						// 第一次高潮的日期时间
 						let dateFH = new Date(datestring + ' ' + arr[i].FSTHIGHWIDETIME + ':00')
 						// 第一次高潮曲线数据
-						tidedata.push([dateFH.setHours(dateFH.getHours()), Number(arr[i].FSTHIGHWIDEHEIGHT)])
+						tidedata.push([dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT])
 						// 第一次高潮垂直标线数据
 						// 垂直标线数据格式为: [ [{coord: [横坐标1, 纵坐标起始值1]},{coord: [横坐标1, 纵坐标结束值1]}], [{coord: [横坐标2, 纵坐标起始值2]},{coord: [横坐标2, 纵坐标结束值2]}], ... ]
 						let fh = [{
-							coord: [dateFH.setHours(dateFH.getHours()), Number(arr[i].FSTHIGHWIDEHEIGHT)]
+							coord: [dateFH.setHours(dateFH.getHours()), arr[i].FSTHIGHWIDEHEIGHT]
 						}, {
 							coord: [dateFH.setHours(dateFH.getHours()), 0]
 						}]
@@ -840,10 +479,10 @@
 						// 第一次低潮的日期时间
 						let dateFL = new Date(datestring + ' ' + arr[i].FSTLOWWIDETIME + ':00')
 						// 第一次低潮的曲线数据
-						tidedata.push([dateFL.setHours(dateFL.getHours()), Number(arr[i].FSTLOWWIDEHEIGHT)])
+						tidedata.push([dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT])
 						// 第一次低潮的垂直标线数据
 						let fl = [{
-							coord: [dateFL.setHours(dateFL.getHours()), Number(arr[i].FSTLOWWIDEHEIGHT)]
+							coord: [dateFL.setHours(dateFL.getHours()), arr[i].FSTLOWWIDEHEIGHT]
 						}, {
 							coord: [dateFL.setHours(dateFL.getHours()), 0]
 						}]
@@ -854,10 +493,10 @@
 						// 第二次高潮的日期时间
 						let dateSH = new Date(datestring + ' ' + arr[i].SCDHIGHWIDETIME + ':00')
 						// 第二次高潮的曲线数据
-						tidedata.push([dateSH.setHours(dateSH.getHours()), Number(arr[i].SCDHIGHWIDEHEIGHT)])
+						tidedata.push([dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT])
 						// 第二次高潮的垂直标线数据
 						let sh = [{
-							coord: [dateSH.setHours(dateSH.getHours()), Number(arr[i].SCDHIGHWIDEHEIGHT)]
+							coord: [dateSH.setHours(dateSH.getHours()), arr[i].SCDHIGHWIDEHEIGHT]
 						}, {
 							coord: [dateSH.setHours(dateSH.getHours()), 0]
 						}]
@@ -868,10 +507,10 @@
 						// 第二次低潮的日期时间
 						let dateSL = new Date(datestring + ' ' + arr[i].SCDLOWWIDETIME + ':00')
 						// 第二次低潮的曲线数据
-						tidedata.push([dateSL.setHours(dateSL.getHours()), Number(arr[i].SCDLOWWIDEHEIGHT)])
+						tidedata.push([dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT])
 						// 第二次低潮的垂直标线数据
 						let sl = [{
-							coord: [dateSL.setHours(dateSL.getHours()), Number(arr[i].SCDLOWWIDEHEIGHT)]
+							coord: [dateSL.setHours(dateSL.getHours()), arr[i].SCDLOWWIDEHEIGHT]
 						}, {
 							coord: [dateSL.setHours(dateSL.getHours()), 0]
 						}]
@@ -907,18 +546,10 @@
 					return x[0] - y[0]
 				}
 				tidedata.sort(SortByFirst)
-				
-				function clone (obj) {
-					if (null == obj || "object" != typeof obj) return obj
-					let copy = obj.constructor();
-					for (let attr in obj) {
-						if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
-					}
-					return copy
-				}
-				
+
 				// 数据准备完毕，生成并返回echarts用option
 				let option = {
+					// 图表距离外围div的padding
 					grid: {
 						top: '4%',
 						left: '0%',
@@ -926,41 +557,44 @@
 						bottom: '20%',
 						containLabel: true
 					},
+					// 横坐标轴
 					xAxis: {
 						type: 'time',
-						axisLabel: { 
+						axisLabel: { // 横坐标刻度数值
 							show: true,
 							inside: true,
 							rotate: 90,
 							formatter: function (value, index) {
+								// 格式化为'月-日'，只在第一个刻度显示年份
 								let date = new Date(value)
 								let texts = [(date.getMonth() + 1), date.getDate()];
 								if (index === 0) {
 									texts.unshift(date.getFullYear())
 								}
 								return '\n' + texts.join('-')
-							}
-						}
+							} // end-formatter-axisLabel
+						} // end-axisLabel
 					},
 					yAxis: {
 						show: false,
-						boundaryGap: ['20%', '20%']
+						boundaryGap: ['20%', '20%']	// 纵坐标轴的范围，比有效数字上下多出20%
 					},
 					series: [
+						// 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
 						{
 							name: '潮汐',
 							type: 'line',
 							smooth: true,
 							silent: true,
 							animation: false,
-							symbolSize: 0, 
+							symbolSize: 0,			// 曲线上数据点小圆圈的大小
 							lineStyle: {
-								color: '#1c8d3b', 
-								width: 1 
+								color: '#1c8d3b',	// 曲线颜色
+								width: 1			// 曲线粗细
 							},
 							data: tidedata,
 							markLine: {
-								symbolSize: 0.1, 
+								symbolSize: 0.1,	// 垂直标线一端的箭头 和数据label的大小， 不能设为0否则label不显示
 								silent: true,
 								animation: false,
 								label: {
@@ -969,25 +603,32 @@
 									formatter: function (param) {
 										return param.data.coord[1] + 'cm'
 									},
-								},
+									/*
+									textStyle: {
+										color: '#000000',
+									}
+									*/
+								}, // end-label-markLine
 								lineStyle: {
 									type: 'dot'
 								},
 								data: markdata
 							}
 						},
+						// 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
 						{
 							name: '标线时间',
 							type: 'line',
 							markLine: {
 								symbolSize: 0.1,
-								opacity: 0, 
+								opacity: 0,	// 透明度为0 不渲染这条标线
 								silent: true,
 								animation: false,
 								label: {
 									show: true,
 									position: 'end',
-									formatter: function (param) { 
+									formatter: function (param) {
+										// 返回mm:ss格式的时间
 										let date = new Date(param.data.coord[0])
 										let hour = date.getHours()
 										if (hour < 10) {
@@ -999,13 +640,19 @@
 										}
 										return hour + ':' + minute
 									},
-								}, 
+									/*
+									textStyle: {
+										color: '#000000',
+									}
+									*/
+								}, // end-label-markLine
 								lineStyle: {
 									type: 'dot'
 								},
 								data: markdata
-							} 
+							} // end-markLine
 						},
+						// 第三组series： 两条水平标线 表示三天最高和最低的潮位
 						{
 							name: '最值横线',
 							type: 'line',
@@ -1019,31 +666,34 @@
 								label: {
 									show: false
 								},
-								data: [{yAxis: max}, {yAxis: min}]
-							}
+								data: [
+									{yAxis: max}, 
+									{yAxis: min},
+								]
+							} // end-markLine
 						}
-					]
+					] // end-series
 				} // end-option
 				return option
 			},
 			// 初始化金沙滩图表
 			handleInitJST(canvas, width, height) {
 				chartJST = echarts.init(canvas, null, {
-						width: width,
-						height: height
-					}),
-					canvas.setChart(chartJST)
-				chartJST.setOption(this.optionJST) // TODO: exp
+					width: width,
+					height: height
+				}),
+				canvas.setChart(chartJST)
+				chartJST.setOption(this.optionJST)
 				return chartJST
 			},
 			// 初始化一浴图表
 			handleInitYY(canvas, width, height) {
 				chartYY = echarts.init(canvas, null, {
-						width: width,
-						height: height
-					}),
-					canvas.setChart(chartYY)
-				chartYY.setOption(this.optionExp) //TODO: exp
+					width: width,
+					height: height
+				}),
+				canvas.setChart(chartYY)
+				chartYY.setOption(this.optionYY)
 				return chartYY
 			},
 			// 金沙滩图表滚动事件
@@ -1110,7 +760,6 @@
 			// 设置曲线图下方日期球的日期
 			setDateballText() {
 				let now = new Date()
-
 				function formatDate(date) { // 格式化日期为MM-dd
 					let month = date.getMonth() + 1
 					let day = date.getDate()
@@ -1131,16 +780,23 @@
 			},
 		}, // end-methods
 		watch: {
+			// 金沙滩option
 			optionJST: {
 				handler(newVal, oldVal) {
-					if (chartJST) {
+					if (chartJST !== undefined) {
 						if (newVal) {
 							chartJST.setOption(newVal)
-						} else {
-							chartJST.setOption(oldVal)
 						}
-					} else {
-						this.handleInitJST()
+					}
+				}
+			},
+			// 一浴option
+			optionYY: {
+				handler(newVal, oldVal) {
+					if (chartYY !== undefined) {
+						if (newVal) {
+							chartYY.setOption(newVal)
+						}
 					}
 				}
 			}
@@ -1239,15 +895,15 @@
 	.sev {
 		color: #be0606;
 	}
+	
 	/* 曲线图的容器 必须设置宽度和高度 */
-
 	.chart {
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000000;
 	}
+	
 	/* 日期球的外观样式 */
-
 	.dateball {
 		display: flex;
 		width: 62px;
@@ -1258,68 +914,68 @@
 		align-items: center;
 		justify-content: center;
 	}
+	
 	/* 日期球激活状态时现时为蓝色 */
-
 	.dateball-active {
 		background-color: rgba(0, 148, 255, 0.5);
 	}
+	
 	/* 第二个球滑动时的定位 */
-
 	.slideball-Snd {
 		position: relative;
 		bottom: 0;
 		left: 97%;
 	}
+	
 	/* 第三个球滑动时的定位 */
-
 	.slideball-Trd {
 		position: relative;
 		bottom: 0;
 		left: 191%;
 	}
+	
 	/* 第一个球固定时的定位 */
-
 	.fixball-Fst {
 		position: relative;
 		left: 0%;
 	}
+	
 	/* 第二个球固定时的定位 */
-
 	.fixball-Snd {
 		position: relative;
 		left: 76%;
 	}
+	
 	/* 第二个球固定在左端时的定位 */
-
 	.fixball-Snd-left {
 		left: 0%;
 	}
+	
 	/* 第三个球固定时的定位 */
-
 	.fixball-Trd {
 		position: relative;
 		left: 76%;
 	}
+	
 	/* 当第二个球滑动时，第三个球需要调整定位 */
-
 	.fixball-Trd-lone {
 		left: 84%;
 	}
+	
 	/* 第三个球固定在左端时的定位 */
-
 	.fixball-Trd-left {
 		left: 0%;
 	}
+	
 	/* 滑动的小球的容器 flex属性能让小球水平排列，height与下面的balltrack-fix中的margin-top一致，能够让两个容器重合 */
-
 	.balltrack {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		height: 62px;
 	}
+	
 	/* 固定的小球的容器 */
-
 	.balltrack-fix {
 		width: 100%;
 		display: flex;
