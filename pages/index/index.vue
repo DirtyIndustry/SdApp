@@ -77,39 +77,53 @@
 				<view class="balltrack-fix">
 					<view class="dateball fixball-Fst" :class="{'dateball-active': ballJST.fstballActive}">{{fstballText}}</view>
 					<view class="dateball fixball-Snd" :class="{'dateball-active': ballJST.sndballActive, 'fixball-Snd-left': ballJST.sndballLeft}"
-					    v-show="!ballJST.sndballMove">{{sndballText}}</view>
+					 v-show="!ballJST.sndballMove">{{sndballText}}</view>
 					<view class="dateball fixball-Trd" :class="{'dateball-active': ballJST.trdballActive, 'fixball-Trd-lone': ballJST.sndballMove, 'fixball-Trd-left': ballJST.trdballLeft}"
-					    v-show="!ballJST.trdballMove">{{trdballText}}</view>
+					 v-show="!ballJST.trdballMove">{{trdballText}}</view>
 				</view>
 			</view>
 			<!-- 第一海水浴场 -->
 			<view class="page-section">
 				<text>第一海水浴场</text>
-				<view class="chartcontainer">
-					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
-						<view class="chart">
-							<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
-						</view>
-						<!-- 滑动的日期球，Move属性决定球是否显示 -->
-						<view class="balltrack">
-							<view class="dateball slideball-Snd" v-show="ballYY.sndballMove">{{sndballText}}</view>
-							<view class="dateball slideball-Trd" v-show="ballYY.trdballMove">{{trdballText}}</view>
-						</view>
-					</scroll-view>
-					<!-- 固定在两端的日期球
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
+					<view class="chart">
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
+					</view>
+					<!-- 滑动的日期球，Move属性决定球是否显示 -->
+					<view class="balltrack">
+						<view class="dateball slideball-Snd" v-show="ballYY.sndballMove">{{sndballText}}</view>
+						<view class="dateball slideball-Trd" v-show="ballYY.trdballMove">{{trdballText}}</view>
+					</view>
+				</scroll-view>
+				<!-- 固定在两端的日期球
 					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
-					<view class="balltrack-fix">
-						<view class="dateball fixball-Fst" :class="{'dateball-active': ballYY.fstballActive}">{{fstballText}}</view>
-						<view class="dateball fixball-Snd" :class="{'dateball-active': ballYY.sndballActive, 'fixball-Snd-left': ballYY.sndballLeft}"
-						    v-show="!ballYY.sndballMove">{{sndballText}}</view>
-						<view class="dateball fixball-Trd" :class="{'dateball-active': ballYY.trdballActive, 'fixball-Trd-lone': ballYY.sndballMove, 'fixball-Trd-left': ballYY.trdballLeft}"
-						    v-show="!ballYY.trdballMove">{{trdballText}}</view>
+				<view class="balltrack-fix">
+					<view class="dateball fixball-Fst" :class="{'dateball-active': ballYY.fstballActive}">{{fstballText}}</view>
+					<view class="dateball fixball-Snd" :class="{'dateball-active': ballYY.sndballActive, 'fixball-Snd-left': ballYY.sndballLeft}"
+					 v-show="!ballYY.sndballMove">{{sndballText}}</view>
+					<view class="dateball fixball-Trd" :class="{'dateball-active': ballYY.trdballActive, 'fixball-Trd-lone': ballYY.sndballMove, 'fixball-Trd-left': ballYY.trdballLeft}"
+					 v-show="!ballYY.trdballMove">{{trdballText}}</view>
+				</view>
+			</view>
+			<!-- 五日天气预报 -->
+			<view class="page-section">
+				<view class="uni-flex uni-row">
+					<!-- 依据fivedayWeather生成列 -->
+					<view class="fiveday-column fiveday-column-left uni-flex uni-column" v-for="(item, index) in fivedayWeather" :key="index">
+						<view class="flex-cell-single">{{item.week}}</view>
+						<view class="flex-cell-single">{{item.date}}</view>
+						<view class="flex-cell-single">{{item.weather}}</view>
+						<view class="flex-cell-single">
+							<image :src="item.weatherIcon" style="max-width: 50px;max-height: 50px;" />
+						</view>
+						<view class="flex-cell-quad"> </view>
+						<view class="flex-cell-single">{{item.windDir}}</view>
+						<view class="flex-cell-single">{{item.windLvl}}</view>
 					</view>
 				</view>
 			</view>
 		</view>
-	</view>
 	</view>
 </template>
 
@@ -174,6 +188,9 @@
 					trdballMove: false,
 					trdballLeft: false,
 				},
+				fivedayWeather: [],
+				fivedayHighTemp: [],
+				fivedayLowTemp: [],
 				echarts
 			}
 		},
@@ -199,7 +216,6 @@
 						areaflg: '山东'
 					},
 					method: 'POST',
-					//dataType: 'text',
 					success: function (res) {
 						console.log('成功获取天气数据!')
 						let result = JSON.parse(res.data.d)
@@ -214,9 +230,46 @@
 						that.weatherData.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
 						that.weatherData.weather = result.result.data.realtime.weather.info
-
-						that.setWeatherIcon(that.weatherData.weather)
+						// 天气图标
+						that.weatherData.weatherIcon = that.setWeatherIcon(that.weatherData.weather)
+						// 空气质量图标及pm2.5字体颜色
 						that.setAirconIcon(that.weatherData.airconDesc)
+						// 五日天气预报数组，高低温数组
+						let fivedayarr = result.result.data.weather
+						// 清空数组
+						that.fivedayWeather = []
+						that.fivedayHighTemp = []
+						that.fivedayLowTemp = []
+						for (let i = 0; i < fivedayarr.length; i++) {
+							// 星期 由'一'改为'周一'
+							let week = '周' + fivedayarr[i].week
+							// 日期 由yyyy-MM-dd改为MM-dd
+							let date = fivedayarr[i].date.substr(5)
+							// 天气 取day的天气
+							let weather = fivedayarr[i].info.day[1]
+							// 天气图标
+							let weatherIcon = that.setWeatherIcon(weather)
+							// 风向
+							let windDir = fivedayarr[i].info.day[3]
+							// 风力
+							let windLvl = fivedayarr[i].info.day[4]
+							// 高温
+							let tempHigh = fivedayarr[i].info.day[2]
+							// 低温
+							let tempLow = fivedayarr[i].info.night[2]
+							// 五日天气数组
+							that.fivedayWeather.push({
+								week: week,
+								date: date,
+								weather: weather,
+								weatherIcon: weatherIcon,
+								windDir: windDir,
+								windLvl: windLvl
+							})
+							// 高低温数组
+							that.fivedayHighTemp.push(Number(tempHigh))
+							that.fivedayLowTemp.push(Number(tempLow))
+						} // end-for
 					} // end-success-request
 				}) // end-request
 			},
@@ -224,54 +277,58 @@
 			setWeatherIcon(weather) {
 				switch (weather) {
 					case '晴':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_fine.png'
+					case '晴转多云':
+						return '../../static/Images/right_weather_fine.png'
 						break
 					case '多云':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_cloudy.png'
+					case '多云转晴':
+					case '多云转阵雨':
+					case '多云转阴':
+					case '多云转小雨-中雨':
+						return '../../static/Images/right_weather_cloudy.png'
 						break
 					case '阴':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_sky.png'
+					case '阴转小雨-中雨':
+						return '../../static/Images/right_weather_sky.png'
 						break
 					case '雾':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_fog.png'
+					case '雾转多云':
+						return '../../static/Images/right_weather_fog.png'
 						break
 					case '风':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_wind.png'
+						return '../../static/Images/right_weather_wind.png'
 						break
 					case '小雨':
 					case '中雨':
+					case '中雨-大雨':
 					case '小到中雨':
+					case '小雨转多云':
+					case '小雨-中雨转多云':
+					case '小雨-中雨转小雨':
 					case '大雨':
 					case '暴雨':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_rainy.png'
+					case '中到暴雨':
+					case '小到暴雨':
+						return '../../static/Images/right_weather_rainy.png'
 						break
 					case '阵雨':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_rainysh.png'
+					case '阵雨转多云':
+						return '../../static/Images/right_weather_rainysh.png'
 						break
 					case '大到暴雨':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_rainstorm.png'
+						return '../../static/Images/right_weather_rainstorm.png'
 						break
 					case '雷雨':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_thunder.png'
+					case '雷阵雨':
+						return '../../static/Images/right_weather_thunder.png'
 						break
 					case '雪':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_snow.png'
+						return '../../static/Images/right_weather_snow.png'
 						break
 					case '雨加雪':
-						this.weatherData.weatherIcon =
-							'../../static/Images/right_weather_raisnow.png'
+						return '../../static/Images/right_weather_raisnow.png'
 						break
-				} // end-switch (weather)
+				}
 			},
 			// 根据空气质量设置图标和文字style
 			setAirconIcon(airconDesc) {
@@ -667,8 +724,8 @@
 									show: false
 								},
 								data: [
-									{yAxis: max}, 
-									{yAxis: min},
+									{ yAxis: max },
+									{ yAxis: min },
 								]
 							} // end-markLine
 						}
@@ -682,7 +739,7 @@
 					width: width,
 					height: height
 				}),
-				canvas.setChart(chartJST)
+					canvas.setChart(chartJST)
 				chartJST.setOption(this.optionJST)
 				return chartJST
 			},
@@ -692,7 +749,7 @@
 					width: width,
 					height: height
 				}),
-				canvas.setChart(chartYY)
+					canvas.setChart(chartYY)
 				chartYY.setOption(this.optionYY)
 				return chartYY
 			},
@@ -895,14 +952,14 @@
 	.sev {
 		color: #be0606;
 	}
-	
+
 	/* 曲线图的容器 必须设置宽度和高度 */
 	.chart {
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000000;
 	}
-	
+
 	/* 日期球的外观样式 */
 	.dateball {
 		display: flex;
@@ -914,59 +971,59 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	/* 日期球激活状态时现时为蓝色 */
 	.dateball-active {
 		background-color: rgba(0, 148, 255, 0.5);
 	}
-	
+
 	/* 第二个球滑动时的定位 */
 	.slideball-Snd {
 		position: relative;
 		bottom: 0;
 		left: 97%;
 	}
-	
+
 	/* 第三个球滑动时的定位 */
 	.slideball-Trd {
 		position: relative;
 		bottom: 0;
 		left: 191%;
 	}
-	
+
 	/* 第一个球固定时的定位 */
 	.fixball-Fst {
 		position: relative;
 		left: 0%;
 	}
-	
+
 	/* 第二个球固定时的定位 */
 	.fixball-Snd {
 		position: relative;
 		left: 76%;
 	}
-	
+
 	/* 第二个球固定在左端时的定位 */
 	.fixball-Snd-left {
 		left: 0%;
 	}
-	
+
 	/* 第三个球固定时的定位 */
 	.fixball-Trd {
 		position: relative;
 		left: 76%;
 	}
-	
+
 	/* 当第二个球滑动时，第三个球需要调整定位 */
 	.fixball-Trd-lone {
 		left: 84%;
 	}
-	
+
 	/* 第三个球固定在左端时的定位 */
 	.fixball-Trd-left {
 		left: 0%;
 	}
-	
+
 	/* 滑动的小球的容器 flex属性能让小球水平排列，height与下面的balltrack-fix中的margin-top一致，能够让两个容器重合 */
 	.balltrack {
 		display: flex;
@@ -974,7 +1031,7 @@
 		flex-wrap: nowrap;
 		height: 62px;
 	}
-	
+
 	/* 固定的小球的容器 */
 	.balltrack-fix {
 		width: 100%;
@@ -982,5 +1039,29 @@
 		flex-direction: row;
 		flex-wrap: nowrap;
 		margin-top: -60px;
+	}
+
+	/* 5日天气预报的列 */
+	.fiveday-column {
+		flex: 1;
+		height: 600px;
+	}
+
+	/* 5日天气预报非最右边的列 添加右边框 */
+	.fiveday-column-left {
+		border-right: 1px solid #000000;
+	}
+
+	/* 5日天气预报中每列中的单元格 */
+	.flex-cell-single {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/* 5日天气预报中占四行高度的单元格 */
+	.flex-cell-quad {
+		flex: 4;
 	}
 </style>

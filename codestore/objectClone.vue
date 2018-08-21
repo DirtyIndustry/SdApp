@@ -34,6 +34,11 @@
 				}
 				return copy
 			},
+			delay () {
+				setTimeout(function(){
+					// ...
+				}.bind(this),5000)
+			},
 		}
 	}
 </script>
