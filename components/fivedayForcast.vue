@@ -1,0 +1,67 @@
+<template>
+    <view class="uni-flex uni-row">
+        <!-- 依据fivedayWeather生成列 -->
+        <view class="fiveday-column fiveday-column-left uni-flex uni-column" v-for="(item, index) in fivedayWeather" :key="index">
+            <view class="flex-cell-single">{{item.week}}</view>
+            <view class="flex-cell-single">{{item.date}}</view>
+            <view class="flex-cell-single">{{item.weather}}</view>
+            <view class="flex-cell-single">
+                <image :src="item.weatherIcon" mode="widthFix" style="width: 50px; height: 50px" />
+            </view>
+            <view class="flex-cell-quad"> </view>
+            <view class="flex-cell-single">{{item.windDir}}</view>
+            <view class="flex-cell-single">{{item.windLvl}}</view>
+        </view>
+    </view>
+</template>
+
+<script>
+export default {
+    name: 'fivedayForcast',
+    props: {
+        fivedayWeather: {
+            type: Array,
+            default: [{}, {}, {}, {}, {}]
+        }
+    }
+}
+</script>
+
+<style scoped>
+    .uni-flex {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .uni-row {
+        flex-direction: row;
+    }
+
+    .uni-column {
+        flex-direction: column;
+    }
+
+	/* 5日天气预报的列 */
+	.fiveday-column {
+		flex: 1;
+		height: 600px;
+	}
+
+	/* 5日天气预报非最右边的列 添加右边框 */
+	.fiveday-column-left {
+		border-right: 1px solid #000000;
+	}
+
+	/* 5日天气预报中每列中的单元格 */
+	.flex-cell-single {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/* 5日天气预报中占四行高度的单元格 */
+	.flex-cell-quad {
+		flex: 4;
+	}
+</style>

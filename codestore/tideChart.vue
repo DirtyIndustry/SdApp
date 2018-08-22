@@ -1,23 +1,24 @@
 <template>
 	<view>
-		<scroll-view scroll-x="true" @scroll="handleScroll">
+		<scroll-view scroll-x="true" @scroll="scrollJST">
 			<view class="chart">
-				<mpvue-echarts :echarts="echarts" :onInit="handleInit" canvasId="canvasid"></mpvue-echarts>
+				<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST" ref="echartsJST"></mpvue-echarts>
 			</view>
 			<!-- 滑动的日期球，Move属性决定球是否显示 -->
 			<view class="balltrack">
-				<view class="dateball slideball-Snd" v-show="ballStatus.sndballMove">{{sndballText}}</view>
-				<view class="dateball slideball-Trd" v-show="ballStatus.trdballMove">{{trdballText}}</view>
+				<view class="dateball slideball-Snd" v-show="ballJST.sndballMove">{{sndballText}}</view>
+				<view class="dateball slideball-Trd" v-show="ballJST.trdballMove">{{trdballText}}</view>
 			</view>
 		</scroll-view>
 		<!-- 固定在两端的日期球
 		Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 		特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
 		<view class="balltrack-fix">
-			<view class="dateball fixball-Fst" :class="{'dateball-active': ballStatus.fstballActive}">{{fstballText}}</view>
-			<view class="dateball fixball-Snd" :class="{'dateball-active': ballStatus.sndballActive, 'fixball-Snd-left': ballStatus.sndballLeft}" v-show="!ballStatus.sndballMove">{{sndballText}}</view>
-			<view class="dateball fixball-Trd" :class="{'dateball-active': ballStatus.trdballActive, 'fixball-Trd-lone': ballStatus.sndballMove, 'fixball-Trd-left': ballStatus.trdballLeft}" v-show="!ballStatus.trdballMove">{{trdballText}}</view>
-			</view>
+			<view class="dateball fixball-Fst" :class="{'dateball-active': ballJST.fstballActive}">{{fstballText}}</view>
+			<view class="dateball fixball-Snd" :class="{'dateball-active': ballJST.sndballActive, 'fixball-Snd-left': ballJST.sndballLeft}"
+			 v-show="!ballJST.sndballMove">{{sndballText}}</view>
+			<view class="dateball fixball-Trd" :class="{'dateball-active': ballJST.trdballActive, 'fixball-Trd-lone': ballJST.sndballMove, 'fixball-Trd-left': ballJST.trdballLeft}"
+			 v-show="!ballJST.trdballMove">{{trdballText}}</view>
 		</view>
 	</view>
 </template>
@@ -150,6 +151,18 @@
 				this.trdballText = formatDate(now)
 			}
 		}, // end-methods
+		watch: {
+			// option更新时更新chart
+			option: {
+				handler(newVal, oldVal) {
+					if (chart !== undefined) {
+						if (newVal) {
+							chart.setOption(newVal)
+						}
+					}
+				}
+			}
+		}, // end-watch
 		onLoad () {
 			this.setDateballText()
 		}

@@ -22,29 +22,7 @@
 			</view>
 			<!-- 天气预报模块 -->
 			<view class="page-section">
-				<view class="uni-flex uni-row">
-					<!-- 城市气温 -->
-					<view class="text" style="width: 200px;height: 220px;display: flex; justify-content: center;align-items: center;">
-						{{weatherData.temperature}}℃
-					</view>
-					<view class="uni-flex uni-column" style="flex: 1;justify-content: space-between;">
-						<!-- 城市天气 -->
-						<view class="text" style="height: 120px;text-align: left;padding-left: 20px;padding-top: 10px;">
-							<image :src="weatherData.weatherIcon" mode="widthFix" style="width: 50px;" /> {{weatherData.weather}}
-						</view>
-						<view class="uni-flex uni-row">
-							<!-- 城市空气质量 -->
-							<view class="text" style="flex: 1;">
-								<image :src="weatherData.airconIcon" mode="widthFix" style="width: 30px;" /> {{weatherData.aircondition}} {{weatherData.airconDesc}}
-							</view>
-							<!-- 城市pm2.5 -->
-							<view class="text" style="flex: 1;">
-								<text v-bind:class="weatherData.pm25Style">PM2.5</text>
-								{{weatherData.pm25}}
-							</view>
-						</view>
-					</view>
-				</view>
+				<weatherSection :weatherData="weatherData"/>
 			</view>
 			<!-- 警报模块 -->
 			<view class="page-section">
@@ -61,7 +39,7 @@
 			<!-- 金沙滩 -->
 			<view class="page-section">
 				<text>金沙滩</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollJST">
+				<scroll-view scroll-x="true" @scroll="scrollJST">
 					<view class="chart">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST" ref="echartsJST"></mpvue-echarts>
 					</view>
@@ -85,7 +63,7 @@
 			<!-- 第一海水浴场 -->
 			<view class="page-section">
 				<text>第一海水浴场</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
+				<scroll-view scroll-x="true" @scroll="scrollYY">
 					<view class="chart">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
 					</view>
@@ -108,20 +86,7 @@
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section">
-				<view class="uni-flex uni-row">
-					<!-- 依据fivedayWeather生成列 -->
-					<view class="fiveday-column fiveday-column-left uni-flex uni-column" v-for="(item, index) in fivedayWeather" :key="index">
-						<view class="flex-cell-single">{{item.week}}</view>
-						<view class="flex-cell-single">{{item.date}}</view>
-						<view class="flex-cell-single">{{item.weather}}</view>
-						<view class="flex-cell-single">
-							<image :src="item.weatherIcon" mode="widthFix" class="image-icon" />
-						</view>
-						<view class="flex-cell-quad"> </view>
-						<view class="flex-cell-single">{{item.windDir}}</view>
-						<view class="flex-cell-single">{{item.windLvl}}</view>
-					</view>
-				</view>
+				<fivedayForcast :fivedayWeather="fivedayWeather" />
 			</view>
 		</view>
 	</view>
@@ -131,6 +96,8 @@
 	import { mapState, mapMutations } from 'vuex'
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
+	import weatherSection from '../../components/weatherSection.vue'
+	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -138,7 +105,9 @@
 
 	export default {
 		components: {
-			mpvueEcharts
+			mpvueEcharts,
+			weatherSection,
+			fivedayForcast
 		},
 		data() {
 			return {
@@ -391,90 +360,31 @@
 			},
 			// 初始化金沙滩图表
 			handleInitJST(canvas, width, height) {
-				(chartJST = echarts.init(canvas, null, {
+				chartJST = echarts.init(canvas, null, {
 					width: width,
 					height: height
-				})),
-					canvas.setChart(chartJST)
+				}),
+				canvas.setChart(chartJST)
 				chartJST.setOption(this.optionJST)
 				return chartJST
 			},
 			// 初始化一浴图表
 			handleInitYY(canvas, width, height) {
-				(chartYY = echarts.init(canvas, null, {
+				chartYY = echarts.init(canvas, null, {
 					width: width,
 					height: height
-				})),
-					canvas.setChart(chartYY)
+				}),
+				canvas.setChart(chartYY)
 				chartYY.setOption(this.optionYY)
 				return chartYY
 			},
 			// 金沙滩图表滚动事件
 			scrollJST(e) {
-				this.setDateballStatus(e.detail.scrollLeft, this.ballJST)
+				utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballJST)
 			},
 			// 一浴图表滚动事件
 			scrollYY(e) {
-				this.setDateballStatus(e.detail.scrollLeft, this.ballYY)
-			},
-			// 设置日期球的状态 scrollLeft为滚动距最左边的距离，ballObj为包含一系列bool值的object
-			setDateballStatus(scrollLeft, ballObj) {
-				//开始滚动 scrollLeft为0
-				if (scrollLeft < 50) {
-					// 刚开始滚动 还不足以让第二个球开始动
-					ballObj.fstballActive = true
-					ballObj.sndballActive = false
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = false
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-				} else if (scrollLeft < this.systemInfo.windowWidth - 45) {
-					// 第二个球开始动
-					ballObj.fstballActive = true
-					ballObj.sndballActive = false
-					ballObj.trdballActive = false
-					ballObj.sndballMove = true
-					ballObj.sndballLeft = false
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-				} else if (scrollLeft < this.systemInfo.windowWidth) {
-					// 第二个球停在最左边 第三个球还没开始动
-					ballObj.fstballActive = false
-					ballObj.sndballActive = true
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-				} else if (scrollLeft < this.systemInfo.windowWidth + 9) {
-					// 第三个球开始动
-					ballObj.fstballActive = false
-					ballObj.sndballActive = true
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = true
-					ballObj.trdballLeft = false
-				} else if (scrollLeft < this.systemInfo.windowWidth + 270) {
-					// 第三个球动
-					ballObj.fstballActive = false
-					ballObj.sndballActive = true
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = true
-					ballObj.trdballLeft = false
-				} else {
-					// 第三个球停在最左边
-					ballObj.fstballActive = false
-					ballObj.sndballActive = false
-					ballObj.trdballActive = true
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = true
-				}
+				utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballYY)
 			},
 			// 设置曲线图下方日期球的日期
 			setDateballText() {
@@ -534,45 +444,9 @@
 
 <style>
 	@import "../../common/uni.css";
-	.content {
-		flex: 1;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.title {
-		font-size: 36px;
-		color: #8f8f94;
-	}
-
+	
 	.uni-list-cell {
 		justify-content: flex-start;
-	}
-
-	.uni-list-cell-db,
-	.list-left {
-		padding: 0 24px;
-	}
-
-	.uni-list-cell-db,
-	.list-left {
-		padding: 0 24px;
-	}
-
-	.index {
-		padding-bottom: 1px;
-	}
-
-	.uni-card {
-		box-shadow: none;
-	}
-
-	.uni-list:after {
-		height: 0;
-	}
-
-	.uni-list:before {
-		height: 0;
 	}
 
 	.container {
@@ -598,22 +472,6 @@
 		text-align: center;
 		color: #cfcfcf;
 		font-size: 26px;
-	}
-
-	.excellent {
-		color: #52eb11;
-	}
-
-	.very {
-		color: #267405;
-	}
-
-	.bad {
-		color: #ff0000;
-	}
-
-	.sev {
-		color: #be0606;
 	}
 
 	/* 曲线图的容器 必须设置宽度和高度 */
@@ -702,33 +560,5 @@
 		flex-direction: row;
 		flex-wrap: nowrap;
 		margin-top: -60px;
-	}
-
-	/* 5日天气预报的列 */
-	.fiveday-column {
-		flex: 1;
-		height: 600px;
-	}
-
-	/* 5日天气预报非最右边的列 添加右边框 */
-	.fiveday-column-left {
-		border-right: 1px solid #000000;
-	}
-
-	/* 5日天气预报中每列中的单元格 */
-	.flex-cell-single {
-		flex: 1;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	/* 5日天气预报中占四行高度的单元格 */
-	.flex-cell-quad {
-		flex: 4;
-	}
-
-	.image-icon {
-		width: 50px;
 	}
 </style>

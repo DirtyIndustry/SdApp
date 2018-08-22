@@ -352,8 +352,8 @@ const setChartOption = function (arr) {
     return option
 }
 
-// 设置日期球的状态 scrollLeft为滚动距最左边的距离，ballObj为包含一系列bool值的object
-const setDateballStatus = function (scrollLeft, ballObj) {
+// 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
+const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
     //开始滚动 scrollLeft为0
     if (scrollLeft < 50) {
         // 刚开始滚动 还不足以让第二个球开始动
@@ -364,7 +364,7 @@ const setDateballStatus = function (scrollLeft, ballObj) {
         ballObj.sndballLeft = false;
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
-    } else if (scrollLeft < this.systemInfo.windowWidth - 45) {
+    } else if (scrollLeft < windowWidth - 45) {
         // 第二个球开始动
         ballObj.fstballActive = true;
         ballObj.sndballActive = false;
@@ -373,7 +373,7 @@ const setDateballStatus = function (scrollLeft, ballObj) {
         ballObj.sndballLeft = false;
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
-    } else if (scrollLeft < this.systemInfo.windowWidth) {
+    } else if (scrollLeft < windowWidth) {
         // 第二个球停在最左边 第三个球还没开始动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;
@@ -382,7 +382,7 @@ const setDateballStatus = function (scrollLeft, ballObj) {
         ballObj.sndballLeft = true;
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
-    } else if (scrollLeft < this.systemInfo.windowWidth + 9) {
+    } else if (scrollLeft < windowWidth + 9) {
         // 第三个球开始动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;
@@ -391,7 +391,7 @@ const setDateballStatus = function (scrollLeft, ballObj) {
         ballObj.sndballLeft = true;
         ballObj.trdballMove = true;
         ballObj.trdballLeft = false;
-    } else if (scrollLeft < this.systemInfo.windowWidth + 270) {
+    } else if (scrollLeft < windowWidth + 270) {
         // 第三个球动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;

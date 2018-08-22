@@ -1,11 +1,16 @@
-# TODO List
+ï»¿# TODO List
 done... watch echarts option  
 done... sticky ball  
 current time pointer  
-ÐÞÕý·µ»ØÖµ²»ÊÇjsonµÄ½Ó¿Ú  
+ä¿®æ­£è¿”å›žå€¼ä¸æ˜¯jsonçš„æŽ¥å£  
 fail... ~~import iScroll~~  
 done... appsettings in a file  
 done... general method code in standalone file  
-weather table components *realtime module, 5 day module*  
+done... weather table components *realtime module, 5 day module*  
+fail... ~~static folder~~
+fiveday chart    
+deal with request response error  
+deal with request response fail  
 use local storage to speed up *startup->localstore->netrequest->localstore*  
 auto location, default location setting  
+try sticky on ios
