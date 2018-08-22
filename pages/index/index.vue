@@ -40,7 +40,7 @@
 			<view class="page-section">
 				<text>金沙滩</text>
 				<scroll-view scroll-x="true" @scroll="scrollJST">
-					<view class="chart">
+					<view class="chart-tide">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST" ref="echartsJST"></mpvue-echarts>
 					</view>
 					<!-- 滑动的日期球，Move属性决定球是否显示 -->
@@ -64,7 +64,7 @@
 			<view class="page-section">
 				<text>第一海水浴场</text>
 				<scroll-view scroll-x="true" @scroll="scrollYY">
-					<view class="chart">
+					<view class="chart-tide">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
 					</view>
 					<!-- 滑动的日期球，Move属性决定球是否显示 -->
@@ -87,6 +87,9 @@
 			<!-- 五日天气预报 -->
 			<view class="page-section">
 				<fivedayForcast :fivedayWeather="fivedayWeather" />
+				<view class="chart-fiveday">
+					<mpvue-echarts :echarts="echarts" :onInit="handleInitFiveday" canvasId="canvasFiveday" />
+				</view>
 			</view>
 		</view>
 	</view>
@@ -102,6 +105,7 @@
 	import mpvueEcharts from 'mpvue-echarts'
 
 	let chartJST, chartYY // 金沙滩和一浴的图表
+	let chartFiveday // 五日天气预报图标
 
 	export default {
 		components: {
@@ -156,9 +160,11 @@
 					trdballMove: false,
 					trdballLeft: false
 				},
-				fivedayWeather: [],
-				fivedayHighTemp: [],
-				fivedayLowTemp: [],
+				// 五日天气预报
+				fivedayWeather: [],	// 天气详情
+				fivedayHighTemp: [],// 每日最高温度
+				fivedayLowTemp: [],	// 每日最低温度
+				optionFiveday: {},	// 高低温chart option
 				echarts
 			}
 		},
@@ -241,6 +247,7 @@
 							that.fivedayHighTemp.push(Number(tempHigh))
 							that.fivedayLowTemp.push(Number(tempLow))
 						} // end-for
+						that.optionFiveday = utils.setFivedayChartOption(that.fivedayHighTemp, that.fivedayLowTemp)
 					} // end-success-request
 				}) // end-request
 			},
@@ -353,8 +360,8 @@
 							}
 						} // end-for
 						// 由数组生成echarts所需的option
-						that.optionJST = utils.setChartOption(arrJST)
-						that.optionYY = utils.setChartOption(arrYY)
+						that.optionJST = utils.setTideChartOption(arrJST)
+						that.optionYY = utils.setTideChartOption(arrYY)
 					} // end-success-request
 				}) // end-request
 			},
@@ -363,7 +370,7 @@
 				chartJST = echarts.init(canvas, null, {
 					width: width,
 					height: height
-				}),
+				})
 				canvas.setChart(chartJST)
 				chartJST.setOption(this.optionJST)
 				return chartJST
@@ -373,10 +380,20 @@
 				chartYY = echarts.init(canvas, null, {
 					width: width,
 					height: height
-				}),
+				})
 				canvas.setChart(chartYY)
 				chartYY.setOption(this.optionYY)
 				return chartYY
+			},
+			// 五日天气预报图标
+			handleInitFiveday (canvas, width, height) {
+				chartFiveday = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartFiveday)
+				chartFiveday.setOption(this.optionFiveday)
+				return chartFiveday
 			},
 			// 金沙滩图表滚动事件
 			scrollJST(e) {
@@ -429,6 +446,16 @@
 						}
 					}
 				}
+			},
+			// 五日天气预报option
+			optionFiveday: {
+				handler (newVal, oldVal) {
+					if (chartFiveday !== undefined) {
+						if (newVal) {
+							chartFiveday.setOption(newVal)
+						}
+					}
+				}
 			}
 		},
 		onLoad() {
@@ -475,7 +502,7 @@
 	}
 
 	/* 曲线图的容器 必须设置宽度和高度 */
-	.chart {
+	.chart-tide {
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000000;
@@ -560,5 +587,12 @@
 		flex-direction: row;
 		flex-wrap: nowrap;
 		margin-top: -60px;
+	}
+
+	/* 五日天气预报气温图表 */
+	.chart-fiveday {
+		width: 100%;
+		height: 235px;
+		margin-top: -360px;
 	}
 </style>

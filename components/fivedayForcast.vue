@@ -2,6 +2,7 @@
     <view class="uni-flex uni-row">
         <!-- 依据fivedayWeather生成列 -->
         <view class="fiveday-column fiveday-column-left uni-flex uni-column" v-for="(item, index) in fivedayWeather" :key="index">
+            <!-- 自上而下分别为 周，日期，天气，天气图标，折线空格，风向，风力 -->
             <view class="flex-cell-single">{{item.week}}</view>
             <view class="flex-cell-single">{{item.date}}</view>
             <view class="flex-cell-single">{{item.weather}}</view>
@@ -19,6 +20,7 @@
 export default {
     name: 'fivedayForcast',
     props: {
+        // 五日天气预报数据
         fivedayWeather: {
             type: Array,
             default: [{}, {}, {}, {}, {}]

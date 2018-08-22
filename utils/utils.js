@@ -74,7 +74,7 @@ const setAirconClass = function (airconDesc) {
 }
 
 // 由三日数据生成chart option
-const setChartOption = function (arr) {
+const setTideChartOption = function (arr) {
     // 按日期排序
     function SortByDate (x, y) {
         let datex = new Date(x.PREDICTIONDATE)
@@ -412,11 +412,90 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
     }
 }
 
+// 由高低温数据生成五日预报气温chart option
+const setFivedayChartOption = function (higharr, lowarr) {
+    let low = 100   // 气温最低值
+    let high = -100 // 气温最高值
+    // 获取气温最值
+    for (let i = 0; i < 5; i++) {
+        if (lowarr[i] < low) {
+            low = lowarr[i]
+        }
+        if (higharr[i] > high) {
+            high = higharr[i]
+        }
+    }
+    // 生成option
+    let option = {
+        // chart距离容器边框的距离
+        grid: {
+            top: '4%',
+            left: '0%',
+            right: '1%',
+            bottom: '0%',
+            containLabel: false
+        },
+        xAxis: {
+            show: false,
+            data: ['one', 'two', 'three', 'four', 'five']
+        },
+        yAxis: {
+            show: false,
+            boundaryGap: ['1%', '1%'],
+            max: high + 2,  // 设置纵轴显示范围的上限
+            min: low - 1    // 显示范围的下限
+        },
+        series: [
+            // 高温折线
+            {
+                name: '高温',
+                type: 'line',
+                animation: false,
+                // 折线上方的温度文字
+                label: {
+                    show: true,
+                    formatter: '{c}℃',  // 文字内容
+                    color: '#000000',   // 文字颜色
+                },
+                symbol: 'circle',   // 折线拐点设置为实心圆
+                itemStyle: {
+                    color: '#458B00'    // 拐点颜色
+                },
+                lineStyle: {
+                    color: '#EEC900'    // 折线颜色
+                },
+                data: higharr
+            },
+            // 低温折线
+            {
+                name: '低温',
+                type: 'line',
+                animation: false,
+                // 折线上方的温度文字
+                label: {
+                    show: true,
+                    formatter: '{c}℃',  // 文字内容
+                    color: '#000000',   // 文字颜色
+                },
+                symbol: 'circle',   // 折线拐点设置为实心圆
+                itemStyle: {
+                    color: '#CD2626'    // 拐点颜色
+                },
+                lineStyle: {
+                    color: '#5CACEE'    // 折线颜色
+                },
+                data: lowarr
+            }
+        ] // end-series
+    } // end-option
+    return option
+}
+
 module.exports = {
     setWeatherIcon: setWeatherIcon, // 根据天气设置图标
     setAirconIcon: setAirconIcon,   // 根据空气质量设置图标
     setAirconClass: setAirconClass, // 根据空气质量设置pm2.5 class
-    setChartOption: setChartOption, // 由三日数据生成chart option
+    setTideChartOption: setTideChartOption, // 由三日数据生成chart option
     setDateballStatus: setDateballStatus,   // 设置日期球的状态
-
+    setFivedayChartOption: setFivedayChartOption // 由高低温数据生成chart option
 }
