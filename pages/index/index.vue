@@ -1,7 +1,9 @@
 <template>
+	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
 		<view class="page-body">
-			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed;top:0;left:0%;z-index: -1;" />
+			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
+			/>
 			<!-- 地区选择模块 -->
 			<view class="page-section">
 				<view class="uni-list">
@@ -23,7 +25,7 @@
 			</view>
 			<!-- 天气预报模块 -->
 			<view class="page-section">
-				<weatherSection :weatherData="weatherData"/>
+				<weatherSection :weatherData="weatherData" />
 			</view>
 			<!-- 警报模块 -->
 			<view class="page-section">
@@ -165,10 +167,10 @@
 					trdballLeft: false
 				},
 				// 五日天气预报
-				fivedayWeather: [],	// 天气详情
-				fivedayHighTemp: [],// 每日最高温度
-				fivedayLowTemp: [],	// 每日最低温度
-				optionFiveday: {},	// 高低温chart option
+				fivedayWeather: [], // 天气详情
+				fivedayHighTemp: [], // 每日最高温度
+				fivedayLowTemp: [], // 每日最低温度
+				optionFiveday: {}, // 高低温chart option
 				echarts
 			}
 		},
@@ -179,7 +181,6 @@
 			...mapMutations(['setLocation']),
 			// 地区选择变化
 			bindPickerChange: function (e) {
-				this.index = e.target.value
 				this.setLocation(e.target.value)
 				this.loadWeather()
 			},
@@ -196,6 +197,10 @@
 					method: 'POST',
 					success: function (res) {
 						console.log('成功获取天气数据!')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
 						let result = JSON.parse(res.data.d)
 						// 气温数值
 						that.weatherData.temperature =
@@ -213,8 +218,12 @@
 							that.weatherData.weather
 						)
 						// 空气质量图标及pm2.5字体颜色
-						that.weatherData.airconIcon = utils.setAirconIcon(that.weatherData.airconDesc)
-						that.weatherData.pm25Style = utils.setAirconClass(that.weatherData.airconDesc)
+						that.weatherData.airconIcon = utils.setAirconIcon(
+							that.weatherData.airconDesc
+						)
+						that.weatherData.pm25Style = utils.setAirconClass(
+							that.weatherData.airconDesc
+						)
 						// 五日天气预报数组，高低温数组
 						let fivedayarr = result.result.data.weather
 						// 清空数组
@@ -251,9 +260,17 @@
 							that.fivedayHighTemp.push(Number(tempHigh))
 							that.fivedayLowTemp.push(Number(tempLow))
 						} // end-for
-						that.optionFiveday = utils.setFivedayChartOption(that.fivedayHighTemp, that.fivedayLowTemp)
-					} // end-success-request
+						that.optionFiveday = utils.setFivedayChartOption(
+							that.fivedayHighTemp,
+							that.fivedayLowTemp
+						)
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
 				}) // end-request
+				return true
 			},
 			// 读取服务器台风和海浪警报
 			loadWarning() {
@@ -269,6 +286,10 @@
 					method: 'POST',
 					success: function (res) {
 						console.log('成功获取台风列表')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
 						// TODO： 接口返回值改为json格式
 						// 字符串用#,分割
 						let typhoonlist = res.data.d.toString().split('#,')
@@ -285,6 +306,10 @@
 							method: 'POST',
 							success: function (res2) {
 								console.log('成功获取台风详情')
+								if (!res2.data.d) { // 返回的值为空
+									console.log('返回值为空')
+									return false
+								}
 								// TODO： 接口返回值改为json格式
 								// 字符串用#$分割
 								let datelist = res2.data.d.toString().split('#$')
@@ -304,9 +329,17 @@
 										lasttyphoon[1] +
 										'"正在靠近……'
 								} // end-if (typhoondate > nowdate)
-							} // end-success-request
+							}, // end-success-request
+							fail: function (res) {
+								// 网络请求失败 返回false
+								return false
+							}
 						}) // end-request 请求服务器台风详情
-					} // end-success-request
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
 				}) // end-request 请求服务器台风列表
 				// 请求服务器海浪预警列表
 				uni.request({
@@ -318,6 +351,10 @@
 					method: 'POST',
 					success: function (res) {
 						console.log('成功获取海浪预警列表')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
 						// TODO： 接口返回值改为json格式
 						// 垃圾接口，就懒得写说明了，改了以后在说
 						let warninglist = res.data.d.toString().split('.html')
@@ -336,8 +373,13 @@
 							that.warningData.waveWarning =
 								warningname + ',' + warningdate + '……'
 						} // end-if (warninglist.length > 0)
-					} // end-success-request
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
 				}) // end-request 请求海浪预警
+				return true
 			},
 			// 读取服务器潮汐预报
 			loadAstronomicalTide() {
@@ -351,6 +393,10 @@
 					method: 'POST',
 					success: function (res) {
 						console.log('成功获取潮汐预报数据')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
 						// STATION 101wmt为金沙滩 102xmd为第一海水浴场
 						let resarr = JSON.parse(res.data.d)
 						let arrJST = [] // 金沙滩三日数据数组
@@ -366,8 +412,13 @@
 						// 由数组生成echarts所需的option
 						that.optionJST = utils.setTideChartOption(arrJST)
 						that.optionYY = utils.setTideChartOption(arrYY)
-					} // end-success-request
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
 				}) // end-request
+				return true
 			},
 			// 初始化金沙滩图表
 			handleInitJST(canvas, width, height) {
@@ -390,7 +441,7 @@
 				return chartYY
 			},
 			// 五日天气预报图标
-			handleInitFiveday (canvas, width, height) {
+			handleInitFiveday(canvas, width, height) {
 				chartFiveday = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -401,11 +452,19 @@
 			},
 			// 金沙滩图表滚动事件
 			scrollJST(e) {
-				utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballJST)
+				utils.setDateballStatus(
+					e.detail.scrollLeft,
+					this.systemInfo.windowWidth,
+					this.ballJST
+				)
 			},
 			// 一浴图表滚动事件
 			scrollYY(e) {
-				utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballYY)
+				utils.setDateballStatus(
+					e.detail.scrollLeft,
+					this.systemInfo.windowWidth,
+					this.ballYY
+				)
 			},
 			// 设置曲线图下方日期球的日期
 			setDateballText() {
@@ -453,7 +512,7 @@
 			},
 			// 五日天气预报option
 			optionFiveday: {
-				handler (newVal, oldVal) {
+				handler(newVal, oldVal) {
 					if (chartFiveday !== undefined) {
 						if (newVal) {
 							chartFiveday.setOption(newVal)
@@ -475,19 +534,30 @@
 
 <style>
 	@import "../../common/uni.css";
-	
+
 	.page-body {
 		width: 100%;
 		height: 100%;
 		flex-grow: 1;
 		overflow-x: hidden;
+		/*
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-attachment: fixed;
+		*/
 	}
 
 	.page-section {
-		/* width: 100%; */
+		/* width: 96%; */
+		/* margin: auto; */
 		padding: 5%;
+		/* margin: 5%; */
 		margin-bottom: 60px;
-		/* background-color：rgba(255, 255, 255, 0.5); */
+		background-color: rgba(255, 255, 255, 0.8);
+	}
+
+	.background-panel {
+		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	.uni-list-cell {

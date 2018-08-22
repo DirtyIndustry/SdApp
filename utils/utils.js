@@ -491,11 +491,31 @@ const setFivedayChartOption = function (higharr, lowarr) {
     return option
 }
 
+// 在console显示object内部的属性
+const deepEquals = function (x, y, layer) {
+    if (layer > 6) {
+        return
+    }
+    let head = ''
+    for (let i = 0; i < layer; i++) {
+        head += '  '
+    }
+    for (let attr in x) {
+        if (x.hasOwnProperty(attr) & y.hasOwnProperty(attr)) {
+            console.log(head + attr + ' : ' + x[attr])
+            if (typeof x[attr] != 'string') {
+                this.deepEquals(x[attr], y[attr], layer + 1)
+            }
+        }
+    }
+}
+
 module.exports = {
     setWeatherIcon: setWeatherIcon, // 根据天气设置图标
     setAirconIcon: setAirconIcon,   // 根据空气质量设置图标
     setAirconClass: setAirconClass, // 根据空气质量设置pm2.5 class
     setTideChartOption: setTideChartOption, // 由三日数据生成chart option
     setDateballStatus: setDateballStatus,   // 设置日期球的状态
-    setFivedayChartOption: setFivedayChartOption // 由高低温数据生成chart option
+    setFivedayChartOption: setFivedayChartOption, // 由高低温数据生成chart option
+    deepEquals: deepEquals
 }

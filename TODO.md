@@ -2,7 +2,7 @@
 DONE... watch echarts option  
 DONE... sticky ball  
 current time pointer  
-修正返回值不是json的接口  
+修改返回值不为JSON的接口  
 Fail... ~~import iScroll~~  
 DONE... appsettings in a file  
 DONE... general method code in standalone file  
