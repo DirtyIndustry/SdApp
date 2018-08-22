@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="page-body">
+			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed;top:0;left:0%;z-index: -1;" />
 			<!-- 地区选择模块 -->
 			<view class="page-section">
 				<view class="uni-list">
@@ -39,7 +40,7 @@
 			<!-- 金沙滩 -->
 			<view class="page-section">
 				<text>金沙滩</text>
-				<scroll-view scroll-x="true" @scroll="scrollJST">
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollJST">
 					<view class="chart-tide">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST" ref="echartsJST"></mpvue-echarts>
 					</view>
@@ -63,7 +64,7 @@
 			<!-- 第一海水浴场 -->
 			<view class="page-section">
 				<text>第一海水浴场</text>
-				<scroll-view scroll-x="true" @scroll="scrollYY">
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
 					<view class="chart-tide">
 						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
 					</view>
@@ -91,6 +92,7 @@
 					<mpvue-echarts :echarts="echarts" :onInit="handleInitFiveday" canvasId="canvasFiveday" />
 				</view>
 			</view>
+			<view class="page-section" />
 		</view>
 	</view>
 </template>
@@ -117,6 +119,8 @@
 			return {
 				// 城市列表
 				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
+				// 上一个选择的城市
+				lastSelectedCity: 0,
 				// 天气数据
 				weatherData: {
 					temperature: '25', // 气温
@@ -472,6 +476,20 @@
 <style>
 	@import "../../common/uni.css";
 	
+	.page-body {
+		width: 100%;
+		height: 100%;
+		flex-grow: 1;
+		overflow-x: hidden;
+	}
+
+	.page-section {
+		/* width: 100%; */
+		padding: 5%;
+		margin-bottom: 60px;
+		/* background-color：rgba(255, 255, 255, 0.5); */
+	}
+
 	.uni-list-cell {
 		justify-content: flex-start;
 	}
