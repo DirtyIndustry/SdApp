@@ -1,7 +1,7 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
-		<view class="page-body">
+		<view class="page-body" style="">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
@@ -24,7 +24,8 @@
 					</view>
 				</view>
 			</view>
-			<view style="height: 50px;">
+			<!-- 占位空白模块 -->
+			<view style="height: 60px;">
 
 			</view>
 			<!-- 天气预报模块 -->
@@ -91,14 +92,25 @@
 					 v-show="!ballTideTwo.trdballMove">{{trdballText}}</view>
 				</view>
 			</view>
-			<!-- 五日天气预报 -->
+			<!-- 近海预报 -->
 			<view class="page-section">
+				<view>{{inshoreData.location}}</view>
+				<view class="uni-flex uni-column">
+					<view class="uni-flex uni-row inshore-row" :class="{'inshore-row-bottom': index>inshoreData.data.length-2}" v-for="(item, index) in inshoreData.data" :key="index">
+						<view class="inshore-column">{{inshoreData.data[index].loc}}</view>
+						<view class="inshore-column inshore-column-right">{{inshoreData.data[index].wave}}</view>
+						<view class="inshore-column inshore-column-right">{{inshoreData.data[index].temp}}</view>
+					</view>
+				</view>
+			</view>
+			<!-- 五日天气预报 -->
+			<view class="page-section container-fiveday">
 				<fivedayForcast :fivedayWeather="fivedayWeather" />
 				<view class="chart-fiveday">
 					<mpvue-echarts :echarts="echarts" :onInit="handleInitFiveday" canvasId="canvasFiveday" />
 				</view>
 			</view>
-			<view class="page-section" />
+			<!-- <view class="page-section" /> -->
 		</view>
 	</view>
 </template>
@@ -126,7 +138,7 @@
 				// 城市列表
 				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
 				// 上一个选择的城市
-				lastSelectedCity: 0,
+				lastSelectedCityIndex: 0,
 				// 天气数据
 				weatherData: {
 					temperature: '25', // 气温
@@ -148,14 +160,14 @@
 				chartTideTwoTitle: '',
 				// 潮汐预报第二个图表是否显示
 				chartTideTwoShow: false,
-				// 金沙滩和一浴图表数据
+				// 潮汐预报图表数据
 				optionTideOne: {},
 				optionTideTwo: {},
 				// 日期球的日期文字
 				fstballText: '1st',
 				sndballText: '2nd',
 				trdballText: '3rd',
-				// 金沙滩日期球控制参数
+				// 潮汐预报一号日期球控制参数
 				ballTideOne: {
 					fstballActive: true, // 第一个球是否激活（显示为蓝色）
 					sndballActive: false, // 第二个球是否激活（显示为蓝色）
@@ -165,7 +177,7 @@
 					trdballMove: false, // 第三个球是否滑动
 					trdballLeft: false // 第三个球是否位于左端
 				},
-				// 一浴日期球控制参数
+				// 潮汐预报二号日期球控制参数
 				ballTideTwo: {
 					fstballActive: true,
 					sndballActive: false,
@@ -180,6 +192,8 @@
 				fivedayHighTemp: [], // 每日最高温度
 				fivedayLowTemp: [], // 每日最低温度
 				optionFiveday: {}, // 高低温chart option
+				// 近海预报
+				inshoreData: {},
 				echarts
 			}
 		},
@@ -191,16 +205,18 @@
 			// 地区选择变化
 			bindPickerChange: function (e) {
 				this.setLocation(e.target.value)
-				this.loadWeather()
-				this.loadAstronomicalTide()
+				this.loadWeather(this.array[e.target.value])
+				this.loadAstronomicalTide(this.array[e.target.value])
+				this.loadInshore(this.array[e.target.value])
 			},
 			// 读取服务器天气数据
-			loadWeather() {
+			loadWeather (city) {
 				let that = this
 				uni.request({
 					url: appsettings.hosturl + 'GetCityWeather',
 					data: {
 						weather: that.array[that.location],
+						// weather: city,
 						name: 'admin',
 						areaflg: '山东'
 					},
@@ -283,7 +299,7 @@
 				return true
 			},
 			// 读取服务器台风和海浪警报
-			loadWarning() {
+			loadWarning () {
 				let that = this
 				// 读取台风信息
 				// 请求服务器台风列表
@@ -392,10 +408,11 @@
 				return true
 			},
 			// 读取服务器潮汐预报
-			loadAstronomicalTide() {
+			loadAstronomicalTide (city) {
 				let that = this
 				// 根据城市选择url和data
 				let req = utils.getTideReqData(this.array[this.location])
+				// let req = utils.getTideReqData(city)
 				uni.request({
 					url: appsettings.hosturl + req.url,
 					data: req.data,
@@ -406,13 +423,13 @@
 							console.log('返回值为空')
 							return false
 						}
-						// STATION 101wmt为金沙滩 102xmd为第一海水浴场
 						let resarr = JSON.parse(res.data.d)
 						let arrOne = []		// 第一个图表数据数组
 						let arrTwo = []		// 第二个图表数据数组
 						let StationOne = ''	// 第一组数据的地名
 						let StationTwo = ''	// 第二组数据的地名
 						StationOne = resarr[0].STATION
+						// 按照不同的STATION分组
 						for (let i = 0; i < resarr.length; i++) {
 							if (resarr[i].STATION === StationOne) {
 								arrOne.push(resarr[i])
@@ -430,18 +447,6 @@
 						// 根据STATION代号设置图表标题(地名)
 						that.chartTideOneTitle = utils.getLocName(StationOne)
 						that.chartTideTwoTitle = utils.getLocName(StationTwo)
-						/*
-						let arrJST = [] // 金沙滩三日数据数组
-						let arrYY = [] //一浴三日数据数组
-						// 遍历接口返回值，依据STATION将数据放入以上两个数组中
-						for (let i = 0; i < 6; i++) {
-							if (resarr[i].STATION === '101wmt') {
-								arrJST.push(resarr[i])
-							} else if (resarr[i].STATION === '102xmd') {
-								arrYY.push(resarr[i])
-							}
-						} // end-for
-						*/
 						// 由数组生成echarts所需的option
 						that.optionTideOne = utils.setTideChartOption(arrOne)
 						that.optionTideTwo = utils.setTideChartOption(arrTwo)
@@ -453,8 +458,33 @@
 				}) // end-request
 				return true
 			},
-			// 初始化金沙滩图表
-			handleInitTideOne(canvas, width, height) {
+			// 读取服务器近海预报
+			loadInshore (city) {
+				let that = this
+				let req = utils.getInshoreReqData(this.array[this.location])
+				uni.request({
+					url: appsettings.hosturl + req.url,
+					data: req.data,
+					method: 'POST',
+					success: function (res) {
+						console.log('成功获取近海预报数据')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
+						let resdata = JSON.parse(res.data.d)
+						console.log(resdata.wave[0].SDOSCWAREA)
+						that.inshoreData = utils.setInshoreTableData(resdata.wave)
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
+				}) // end-request
+				return true
+			},
+			// 初始化潮汐预报一号图表
+			handleInitTideOne (canvas, width, height) {
 				chartTideOne = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -463,8 +493,8 @@
 				chartTideOne.setOption(this.optionTideOne)
 				return chartTideOne
 			},
-			// 初始化一浴图表
-			handleInitTideTwo(canvas, width, height) {
+			// 初始化潮汐预报二号图表
+			handleInitTideTwo (canvas, width, height) {
 				chartTideTwo = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -473,8 +503,8 @@
 				chartTideTwo.setOption(this.optionTideTwo)
 				return chartTideTwo
 			},
-			// 五日天气预报图标
-			handleInitFiveday(canvas, width, height) {
+			// 五日天气预报图表
+			handleInitFiveday (canvas, width, height) {
 				chartFiveday = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -483,16 +513,16 @@
 				chartFiveday.setOption(this.optionFiveday)
 				return chartFiveday
 			},
-			// 金沙滩图表滚动事件
-			scrollTideOne(e) {
+			// 潮汐预报一号图表滚动事件
+			scrollTideOne (e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
 					this.ballTideOne
 				)
 			},
-			// 一浴图表滚动事件
-			scrollTideTwo(e) {
+			// 潮汐预报二号图表滚动事件
+			scrollTideTwo (e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
@@ -500,7 +530,7 @@
 				)
 			},
 			// 设置曲线图下方日期球的日期
-			setDateballText() {
+			setDateballText () {
 				let now = new Date()
 				function formatDate(date) {
 					// 格式化日期为MM-dd
@@ -523,9 +553,9 @@
 			}
 		}, // end-methods
 		watch: {
-			// 金沙滩option
+			// 潮汐一option
 			optionTideOne: {
-				handler(newVal, oldVal) {
+				handler (newVal, oldVal) {
 					if (chartTideOne !== undefined) {
 						if (newVal) {
 							chartTideOne.setOption(newVal)
@@ -533,9 +563,9 @@
 					}
 				}
 			},
-			// 一浴option
+			// 潮汐二option
 			optionTideTwo: {
-				handler(newVal, oldVal) {
+				handler (newVal, oldVal) {
 					if (chartTideTwo !== undefined) {
 						if (newVal) {
 							chartTideTwo.setOption(newVal)
@@ -545,7 +575,7 @@
 			},
 			// 五日天气预报option
 			optionFiveday: {
-				handler(newVal, oldVal) {
+				handler (newVal, oldVal) {
 					if (chartFiveday !== undefined) {
 						if (newVal) {
 							chartFiveday.setOption(newVal)
@@ -557,6 +587,7 @@
 		onLoad() {
 			this.loadWeather()
 			this.loadWarning()
+			this.loadInshore()
 			this.setDateballText()
 		},
 		onReady() {
@@ -569,8 +600,9 @@
 	@import "../../common/uni.css";
 
 	.page-body {
-		width: 100%;
+		/* width: 100%; */
 		height: 100%;
+		padding: 0 30px;
 		flex-grow: 1;
 		overflow-x: hidden;
 		/*
@@ -583,7 +615,7 @@
 	.page-section {
 		/* width: 96%; */
 		/* margin: auto; */
-		padding: 5%;
+		/* padding: 5%; */
 		/* margin: 5%; */
 		margin-bottom: 60px;
 		background-color: rgba(255, 255, 255, 0.8);
@@ -710,10 +742,40 @@
 		margin-top: -60px;
 	}
 
+	/* 近海预报表格的行 */
+	.inshore-row {
+		flex: 1; 
+		height: 100px; 
+		border-left: 1px solid #000000;
+		border-right: 1px solid #000000;
+		border-top: 1px solid #000000;
+	}
+
+	/* 近海预报表格的最底行 */
+	.inshore-row-bottom {
+		border-bottom: 1px solid #000000;
+	}
+
+	/* 近海预报表格的列 */
+	.inshore-column {
+		flex: 1;
+	}
+
+	/* 近海预报表格的非首列 */
+	.inshore-column-right {
+		border-left: 1px solid #000000;
+	}
+
+	/* 五日天气预报容器 */
+	.container-fiveday {
+		position: relative;
+	}
 	/* 五日天气预报气温图表 */
 	.chart-fiveday {
 		width: 100%;
 		height: 235px;
-		margin-top: -360px;
+		/* margin-top: -360px; */
+		top: 240px;
+		position: absolute;
 	}
 </style>

@@ -416,7 +416,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
 const setFivedayChartOption = function (higharr, lowarr) {
     let low = 100   // 气温最低值
     let high = -100 // 气温最高值
-    let anim = true // 是否显示动画
+    let anim = false // 是否显示动画
     // 获取气温最值
     for (let i = 0; i < 5; i++) {
         if (lowarr[i] < low) {
@@ -492,23 +492,37 @@ const setFivedayChartOption = function (higharr, lowarr) {
     return option
 }
 
-// 在console显示object内部的属性
-const deepEquals = function (x, y, layer) {
-    if (layer > 6) {
-        return
+// 由数组生成近海预报表格数据
+const setInshoreTableData = function (arr) {
+    let result = {
+        location: '',
+        time: '',
+        data: [],
+        extra: {}
     }
-    let head = ''
-    for (let i = 0; i < layer; i++) {
-        head += '  '
-    }
-    for (let attr in x) {
-        if (x.hasOwnProperty(attr) & y.hasOwnProperty(attr)) {
-            console.log(head + attr + ' : ' + x[attr])
-            if (typeof x[attr] != 'string') {
-                this.deepEquals(x[attr], y[attr], layer + 1)
-            }
+    // 地区时间
+    result.location = arr[0].SDOSCWAREA
+    result.time = arr[0].PUBLISHDATE
+    if (arr.length > 1) // 如果是青岛地区的数据
+    {
+        result.data.push({loc: '海域', wave: '浪高(m)', temp: '表层水温(℃)'})
+        for (let i = 0; i < arr.length; i++) {
+            result.data.push({loc: arr[i].SDOSCWAREA, wave: arr[i].SDOSCWLOWESTWAVEHEIGHT, temp: arr[i].SDOSCWSURFACETEMPERATURE})
         }
-    }
+        // 青岛地区额外表格
+        result.extra = {
+            wave48h: arr[0].SDOSCWESTWAVEHEIGHT48H,
+            temp48h: arr[0].SDOSCWSURFACETEMPERATURE48H,
+            wave72h: arr[0].SDOSCWESTWAVEHEIGHT72H,
+            temp72h: arr[0].SDOSCWSURFACETEMPERATURE72H
+        }
+    } else { // 如果是山东其他城市的数据
+        result.data.push({loc: '时效', wave: '浪高(m)', temp: '表层水温(℃)'})
+        result.data.push({loc: '24h', wave: arr[0].SDOSCWLOWESTWAVEHEIGHT, temp: arr[0].SDOSCWSURFACETEMPERATURE})
+        result.data.push({loc: '48h', wave: arr[0].SDOSCWESTWAVEHEIGHT48H, temp: arr[0].SDOSCWSURFACETEMPERATURE48H})
+        result.data.push({loc: '72h', wave: arr[0].SDOSCWESTWAVEHEIGHT72H, temp: arr[0].SDOSCWSURFACETEMPERATURE72H})
+    } // end-if-else
+    return result
 }
 
 // 根据城市选择潮汐预报request的url和data
@@ -523,6 +537,22 @@ const getTideReqData = function (city) {
     } else {
         result.url = 'GetCityforcast_BH'
         result.data = { name: 'admin', areaflg: '山东',cityname: city }
+    }
+    return result
+}
+
+// 根据城市选择近海预报的request的url和data
+const getInshoreReqData = function (city) {
+    let result = {
+        url: '',
+        data: {}
+    }
+    if (city === '青岛') {
+        result.url = 'GetQDBinhai_0823'
+        result.data = { name: 'admin', areaflg: '山东' }
+    } else {
+        result.url = 'GetSevenCity_1020'
+        result.data = { name: 'admin', areaflg: '山东',city: city }
     }
     return result
 }
@@ -551,14 +581,35 @@ const getLocName = function (STATION) {
     }
 }
 
+// 在console显示object内部的属性
+const deepEquals = function (x, y, layer) {
+    if (layer > 6) {
+        return
+    }
+    let head = ''
+    for (let i = 0; i < layer; i++) {
+        head += '  '
+    }
+    for (let attr in x) {
+        if (x.hasOwnProperty(attr) & y.hasOwnProperty(attr)) {
+            console.log(head + attr + ' : ' + x[attr])
+            if (typeof x[attr] != 'string') {
+                this.deepEquals(x[attr], y[attr], layer + 1)
+            }
+        }
+    }
+}
+
 module.exports = {
-    setWeatherIcon: setWeatherIcon, // 根据天气设置图标
-    setAirconIcon: setAirconIcon,   // 根据空气质量设置图标
-    setAirconClass: setAirconClass, // 根据空气质量设置pm2.5 class
-    setTideChartOption: setTideChartOption, // 由三日数据生成chart option
-    setDateballStatus: setDateballStatus,   // 设置日期球的状态
-    setFivedayChartOption: setFivedayChartOption, // 由高低温数据生成chart option
-    getTideReqData: getTideReqData, // 根据城市返回潮汐预报request的url和data
+    setWeatherIcon: setWeatherIcon, // 天气图标
+    setAirconIcon: setAirconIcon,   // 空气质量图标
+    setAirconClass: setAirconClass, // pm2.5 class
+    setTideChartOption: setTideChartOption, // 潮汐chart option
+    setDateballStatus: setDateballStatus,   // 日期球的状态
+    setFivedayChartOption: setFivedayChartOption, // 五日高低温chart option
+    setInshoreTableData: setInshoreTableData,   // 近海预报数据
+    getTideReqData: getTideReqData, // 潮汐预报request的url和data
+    getInshoreReqData: getInshoreReqData,   // 近海预报的request的url和data
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
     deepEquals: deepEquals
 }
