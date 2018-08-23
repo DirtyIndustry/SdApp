@@ -140,6 +140,8 @@
 				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
 				// 上一个选择的城市
 				lastSelectedCityIndex: 0,
+				// 完成的request计数
+				completedRequestCount: 0,
 				// 天气数据
 				weatherData: {
 					temperature: '25', // 气温
@@ -160,7 +162,7 @@
 				chartTideOneTitle: '',
 				chartTideTwoTitle: '',
 				// 潮汐预报第二个图表是否显示
-				chartTideTwoShow: false,
+				chartTideTwoShow: true,
 				// 潮汐预报图表数据
 				optionTideOne: {},
 				optionTideTwo: {},
@@ -208,11 +210,20 @@
 			...mapMutations(['setLocation']),
 			// 地区选择变化
 			bindPickerChange: function (e) {
+				uni.showLoading(
+					// {title: '加载中'}
+				);
 				this.setLocation(e.target.value)
-				this.loadWeather(this.array[e.target.value])
-				this.loadAstronomicalTide(this.array[e.target.value])
-				this.loadInshore(this.array[e.target.value])
-				this.loadBaths(this.array[e.target.value])
+				this.requestData(this.array[e.target.value])
+			},
+			// 读取服务器数据
+			requestData (city) {
+				this.completedRequestCount = 0
+				this.loadWeather(city)
+				this.loadWarning()
+				this.loadAstronomicalTide(city)
+				this.loadInshore(city)
+				this.loadBaths(city)
 			},
 			// 读取服务器天气数据
 			loadWeather (city) {
@@ -230,6 +241,7 @@
 						console.log('成功获取天气数据!')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.completedRequestCount++
 							return false
 						}
 						let result = JSON.parse(res.data.d)
@@ -295,9 +307,11 @@
 							that.fivedayHighTemp,
 							that.fivedayLowTemp
 						)
+						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request
@@ -319,6 +333,7 @@
 						console.log('成功获取台风列表')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.completedRequestCount++
 							return false
 						}
 						// TODO： 接口返回值改为json格式
@@ -339,6 +354,7 @@
 								console.log('成功获取台风详情')
 								if (!res2.data.d) { // 返回的值为空
 									console.log('返回值为空')
+									that.completedRequestCount++
 									return false
 								}
 								// TODO： 接口返回值改为json格式
@@ -363,12 +379,14 @@
 							}, // end-success-request
 							fail: function (res) {
 								// 网络请求失败 返回false
+								that.completedRequestCount++
 								return false
 							}
 						}) // end-request 请求服务器台风详情
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request 请求服务器台风列表
@@ -384,6 +402,7 @@
 						console.log('成功获取海浪预警列表')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.completedRequestCount++
 							return false
 						}
 						// TODO： 接口返回值改为json格式
@@ -407,9 +426,11 @@
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request 请求海浪预警
+				that.completedRequestCount++
 				return true
 			},
 			// 读取服务器潮汐预报
@@ -426,6 +447,7 @@
 						console.log('成功获取潮汐预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.completedRequestCount++
 							return false
 						}
 						let resarr = JSON.parse(res.data.d)
@@ -455,9 +477,11 @@
 						// 由数组生成echarts所需的option
 						that.optionTideOne = utils.setTideChartOption(arrOne)
 						that.optionTideTwo = utils.setTideChartOption(arrTwo)
+						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request
@@ -475,13 +499,16 @@
 						console.log('成功获取近海预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
 						that.inshoreData = utils.setInshoreTableData(resdata.wave)
+						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request
@@ -492,6 +519,7 @@
 				let that = this
 				if (this.array[this.location] != '青岛') {
 					this.showBaths = false
+					that.completedRequestCount++
 					return true
 				}
 				this.showBaths = true
@@ -503,12 +531,24 @@
 						console.log('成功获取浴场预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('返回值为空')
+							that.showBaths = false
+							that.completedRequestCount++
 							return false
 						}
 						that.bathsData = JSON.parse(res.data.d)
+						that.bathsData.unshift({
+							PublishDate: new Date().toString(),
+							BathsName: '浴场名称',
+							WaveHeight: '浪高(m)',
+							WaterTemp: '水温(℃)',
+							Swimming: '游泳指数'
+						})
+						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+						that.showBaths =  false
+						that.completedRequestCount++
 						return false
 					}
 				}) // end-request
@@ -584,6 +624,15 @@
 			}
 		}, // end-methods
 		watch: {
+			// 完成的request
+			completedRequestCount: {
+				handler (newVal, oldVal) {
+					if (newVal === 5) {
+						uni.hideLoading()
+						uni.stopPullDownRefresh()
+					}
+				}
+			},
 			// 潮汐一option
 			optionTideOne: {
 				handler (newVal, oldVal) {
@@ -616,6 +665,7 @@
 			}
 		},
 		onLoad() {
+			uni.showLoading()
 			this.loadWeather()
 			this.loadWarning()
 			this.loadInshore()
@@ -624,6 +674,10 @@
 		},
 		onReady() {
 			this.loadAstronomicalTide()
+		},
+		onPullDownRefresh() {
+			console.log('refresh')
+			this.requestData(this.array[this.location])
 		}
 	}
 </script>

@@ -1,16 +1,8 @@
 <template>
-    <view>
+    <view v-show="showBaths">
         <view>浴场预报</view>
         <view class="uni-flex uni-column">
-            <view class="uni-flex uni-row baths-row baths-row-top">
-                <view class="baths-cell baths-column-dual">浴场名称</view>
-                <view class="baths-cell baths-column baths-column-right">浪高(m)</view>
-                <view class="baths-cell baths-column baths-column-right">水温(℃)</view>
-                <view class="baths-cell baths-column baths-column-right">游泳指数</view>
-            </view>
-        </view>
-        <view class="uni-flex uni-column">
-            <view class="uni-flex uni-row baths-row" v-for="(item, index) in bathsData" :key="index">
+            <view class="uni-flex uni-row baths-row" :class="{'baths-row-top': index == 0}" v-for="(item, index) in bathsData" :key="index">
                 <view class="baths-cell baths-column-dual">{{bathsData[index].BathsName}}</view>
                 <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaveHeight}}</view>
                 <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaterTemp}}</view>
@@ -33,6 +25,10 @@ export default {
                 WaterTemp: "",
                 Swimming: ""
             }]
+        },
+        showBaths: {
+            type: Boolean,
+            default: true
         }
     }
 }
