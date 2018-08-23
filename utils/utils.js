@@ -498,6 +498,7 @@ const setInshoreTableData = function (arr) {
         location: '',
         time: '',
         data: [],
+        showextra: false,
         extra: {}
     }
     // 地区时间
@@ -510,6 +511,7 @@ const setInshoreTableData = function (arr) {
             result.data.push({loc: arr[i].SDOSCWAREA, wave: arr[i].SDOSCWLOWESTWAVEHEIGHT, temp: arr[i].SDOSCWSURFACETEMPERATURE})
         }
         // 青岛地区额外表格
+        result.showextra = true
         result.extra = {
             wave48h: arr[0].SDOSCWESTWAVEHEIGHT48H,
             temp48h: arr[0].SDOSCWSURFACETEMPERATURE48H,

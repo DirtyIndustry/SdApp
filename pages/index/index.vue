@@ -1,12 +1,12 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
-		<view class="page-body" style="">
+		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
 			<!-- <view class="page-section"> -->
-			<view style="position: fixed; width: 100%; opacity: 0.9; z-index: 9;">
+			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
 				<view class="uni-list">
 					<view class="uni-list-cell">
 						<!-- 布局右侧宽度固定，左侧自适应 -->
@@ -25,7 +25,7 @@
 				</view>
 			</view>
 			<!-- 占位空白模块 -->
-			<view style="height: 60px;">
+			<view style="height: 100px;">
 
 			</view>
 			<!-- 天气预报模块 -->
@@ -94,14 +94,7 @@
 			</view>
 			<!-- 近海预报 -->
 			<view class="page-section">
-				<view>{{inshoreData.location}}</view>
-				<view class="uni-flex uni-column">
-					<view class="uni-flex uni-row inshore-row" :class="{'inshore-row-bottom': index>inshoreData.data.length-2}" v-for="(item, index) in inshoreData.data" :key="index">
-						<view class="inshore-column">{{inshoreData.data[index].loc}}</view>
-						<view class="inshore-column inshore-column-right">{{inshoreData.data[index].wave}}</view>
-						<view class="inshore-column inshore-column-right">{{inshoreData.data[index].temp}}</view>
-					</view>
-				</view>
+				<inshoreTable :inshoreData="inshoreData" />
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section container-fiveday">
@@ -121,6 +114,7 @@
 	import utils from '../../utils/utils.js'
 	import weatherSection from '../../components/weatherSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
+	import inshoreTable from '../../components/inshoreTable.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -131,7 +125,8 @@
 		components: {
 			mpvueEcharts,
 			weatherSection,
-			fivedayForcast
+			fivedayForcast,
+			inshoreTable
 		},
 		data() {
 			return {
@@ -658,7 +653,7 @@
 	.chart-tide {
 		width: 290%;
 		height: 250px;
-		border: 1px solid #000000;
+		border: 1px solid #000;
 	}
 
 	/* 日期球的外观样式 */
@@ -742,28 +737,16 @@
 		margin-top: -60px;
 	}
 
-	/* 近海预报表格的行 */
-	.inshore-row {
-		flex: 1; 
-		height: 100px; 
-		border-left: 1px solid #000000;
-		border-right: 1px solid #000000;
-		border-top: 1px solid #000000;
+	/* 左右边框 */
+	.border-horizontal {
+		border-left: 1px solid #000;
+		border-right: 1px solid #000;
 	}
 
-	/* 近海预报表格的最底行 */
-	.inshore-row-bottom {
-		border-bottom: 1px solid #000000;
-	}
-
-	/* 近海预报表格的列 */
-	.inshore-column {
-		flex: 1;
-	}
-
-	/* 近海预报表格的非首列 */
-	.inshore-column-right {
-		border-left: 1px solid #000000;
+	/* 上下边框 */
+	.border-vertical {
+		border-top: 1px solid #000;
+		border-bottom: 1px solid #000;
 	}
 
 	/* 五日天气预报容器 */
