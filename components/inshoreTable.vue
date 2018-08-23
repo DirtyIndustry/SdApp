@@ -13,7 +13,7 @@
         <!-- 占位 -->
         <view style="height: 60px;" />
         <!-- 地区为青岛时 显示额外表格 -->
-        <view v-show="inshoreData.showextra">
+        <view v-if="inshoreData.showextra">
             <view>青岛海域</view>
             <!-- 表头部分 -->
             <view class="uni-flex uni-column">
@@ -102,6 +102,7 @@
         flex: 1;
     }
 
+    /* 两倍宽的列 */
     .inshore-column-dual {
         flex: 2;
     }

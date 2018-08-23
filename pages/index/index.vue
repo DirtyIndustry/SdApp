@@ -96,6 +96,10 @@
 			<view class="page-section">
 				<inshoreTable :inshoreData="inshoreData" />
 			</view>
+			<!-- 浴场预报 -->
+			<view class="page-section" v-if="showBaths">
+				<bathsTable :bathsData="bathsData" />
+			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section container-fiveday">
 				<fivedayForcast :fivedayWeather="fivedayWeather" />
@@ -115,6 +119,7 @@
 	import weatherSection from '../../components/weatherSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import inshoreTable from '../../components/inshoreTable.vue'
+	import bathsTable from '../../components/bathsTable.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -126,7 +131,8 @@
 			mpvueEcharts,
 			weatherSection,
 			fivedayForcast,
-			inshoreTable
+			inshoreTable,
+			bathsTable
 		},
 		data() {
 			return {
@@ -189,6 +195,9 @@
 				optionFiveday: {}, // 高低温chart option
 				// 近海预报
 				inshoreData: {},
+				// 浴场预报
+				showBaths: true,
+				bathsData: {},
 				echarts
 			}
 		},
@@ -203,6 +212,7 @@
 				this.loadWeather(this.array[e.target.value])
 				this.loadAstronomicalTide(this.array[e.target.value])
 				this.loadInshore(this.array[e.target.value])
+				this.loadBaths(this.array[e.target.value])
 			},
 			// 读取服务器天气数据
 			loadWeather (city) {
@@ -468,8 +478,34 @@
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						console.log(resdata.wave[0].SDOSCWAREA)
 						that.inshoreData = utils.setInshoreTableData(resdata.wave)
+					}, // end-success-request
+					fail: function (res) {
+						// 网络请求失败 返回false
+						return false
+					}
+				}) // end-request
+				return true
+			},
+			// 读取服务器浴场预报
+			loadBaths (city) {
+				let that = this
+				if (this.array[this.location] != '青岛') {
+					this.showBaths = false
+					return true
+				}
+				this.showBaths = true
+				uni.request({
+					url: appsettings.hosturl + 'GetBathsForecast_0823',
+					data: { name: 'admin', areaflg: '青岛' },
+					method: 'POST',
+					success: function (res) {
+						console.log('成功获取浴场预报数据')
+						if (!res.data.d) { // 返回的值为空
+							console.log('返回值为空')
+							return false
+						}
+						that.bathsData = JSON.parse(res.data.d)
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
@@ -583,6 +619,7 @@
 			this.loadWeather()
 			this.loadWarning()
 			this.loadInshore()
+			this.loadBaths()
 			this.setDateballText()
 		},
 		onReady() {
