@@ -416,6 +416,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
 const setFivedayChartOption = function (higharr, lowarr) {
     let low = 100   // 气温最低值
     let high = -100 // 气温最高值
+    let anim = true // 是否显示动画
     // 获取气温最值
     for (let i = 0; i < 5; i++) {
         if (lowarr[i] < low) {
@@ -450,7 +451,7 @@ const setFivedayChartOption = function (higharr, lowarr) {
             {
                 name: '高温',
                 type: 'line',
-                animation: false,
+                animation: anim,
                 // 折线上方的温度文字
                 label: {
                     show: true,
@@ -470,7 +471,7 @@ const setFivedayChartOption = function (higharr, lowarr) {
             {
                 name: '低温',
                 type: 'line',
-                animation: false,
+                animation: anim,
                 // 折线上方的温度文字
                 label: {
                     show: true,
@@ -510,6 +511,46 @@ const deepEquals = function (x, y, layer) {
     }
 }
 
+// 根据城市选择潮汐预报request的url和data
+const getTideReqData = function (city) {
+    let result = {
+        url: '',
+        data: {}
+    }
+    if (city === '青岛') {
+        result.url = 'GetAstronomicalTide_QD'
+        result.data = { name: 'admin', areaflg: '青岛' }
+    } else {
+        result.url = 'GetCityforcast_BH'
+        result.data = { name: 'admin', areaflg: '山东',cityname: city }
+    }
+    return result
+}
+
+// 根据潮汐预报STATIION生成对应的地名
+const getLocName = function (STATION) {
+    switch (STATION) {
+        case '101wmt':
+            return '金沙滩'
+        case '102xmd':
+            return '第一海水浴场'
+        case '111zfd':
+            return '芝罘岛'
+        case '114wfg':
+            return '潍坊港'
+        case '109wh':
+            return '威海'
+        case '104rzh':
+            return '日照'
+        case '119hhg':
+            return '黄河海港'
+        case '125bzg':
+            return '滨州港'
+        default:
+            return ''
+    }
+}
+
 module.exports = {
     setWeatherIcon: setWeatherIcon, // 根据天气设置图标
     setAirconIcon: setAirconIcon,   // 根据空气质量设置图标
@@ -517,5 +558,7 @@ module.exports = {
     setTideChartOption: setTideChartOption, // 由三日数据生成chart option
     setDateballStatus: setDateballStatus,   // 设置日期球的状态
     setFivedayChartOption: setFivedayChartOption, // 由高低温数据生成chart option
+    getTideReqData: getTideReqData, // 根据城市返回潮汐预报request的url和data
+    getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
     deepEquals: deepEquals
 }

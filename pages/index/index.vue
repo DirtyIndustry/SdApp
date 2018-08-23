@@ -5,7 +5,8 @@
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
-			<view class="page-section">
+			<!-- <view class="page-section"> -->
+			<view style="position: fixed; width: 100%; opacity: 0.9; z-index: 9;">
 				<view class="uni-list">
 					<view class="uni-list-cell">
 						<!-- 布局右侧宽度固定，左侧自适应 -->
@@ -23,6 +24,9 @@
 					</view>
 				</view>
 			</view>
+			<view style="height: 50px;">
+
+			</view>
 			<!-- 天气预报模块 -->
 			<view class="page-section">
 				<weatherSection :weatherData="weatherData" />
@@ -39,52 +43,52 @@
 				</view>
 			</view>
 			<!-- 潮汐预报模块 -->
-			<!-- 金沙滩 -->
+			<!-- 第一个图表 -->
 			<view class="page-section">
-				<text>金沙滩</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollJST">
+				<text>{{chartTideOneTitle}}</text>
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideOne">
 					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitJST" canvasId="canvasJST" ref="echartsJST"></mpvue-echarts>
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasTideOne" ref="echartsTideOne"></mpvue-echarts>
 					</view>
 					<!-- 滑动的日期球，Move属性决定球是否显示 -->
 					<view class="balltrack">
-						<view class="dateball slideball-Snd" v-show="ballJST.sndballMove">{{sndballText}}</view>
-						<view class="dateball slideball-Trd" v-show="ballJST.trdballMove">{{trdballText}}</view>
+						<view class="dateball slideball-Snd" v-show="ballTideOne.sndballMove">{{sndballText}}</view>
+						<view class="dateball slideball-Trd" v-show="ballTideOne.trdballMove">{{trdballText}}</view>
 					</view>
 				</scroll-view>
 				<!-- 固定在两端的日期球
 				Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 				特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
 				<view class="balltrack-fix">
-					<view class="dateball fixball-Fst" :class="{'dateball-active': ballJST.fstballActive}">{{fstballText}}</view>
-					<view class="dateball fixball-Snd" :class="{'dateball-active': ballJST.sndballActive, 'fixball-Snd-left': ballJST.sndballLeft}"
-					 v-show="!ballJST.sndballMove">{{sndballText}}</view>
-					<view class="dateball fixball-Trd" :class="{'dateball-active': ballJST.trdballActive, 'fixball-Trd-lone': ballJST.sndballMove, 'fixball-Trd-left': ballJST.trdballLeft}"
-					 v-show="!ballJST.trdballMove">{{trdballText}}</view>
+					<view class="dateball fixball-Fst" :class="{'dateball-active': ballTideOne.fstballActive}">{{fstballText}}</view>
+					<view class="dateball fixball-Snd" :class="{'dateball-active': ballTideOne.sndballActive, 'fixball-Snd-left': ballTideOne.sndballLeft}"
+					 v-show="!ballTideOne.sndballMove">{{sndballText}}</view>
+					<view class="dateball fixball-Trd" :class="{'dateball-active': ballTideOne.trdballActive, 'fixball-Trd-lone': ballTideOne.sndballMove, 'fixball-Trd-left': ballTideOne.trdballLeft}"
+					 v-show="!ballTideOne.trdballMove">{{trdballText}}</view>
 				</view>
 			</view>
-			<!-- 第一海水浴场 -->
-			<view class="page-section">
-				<text>第一海水浴场</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollYY">
+			<!-- 第二个图表 只在青岛地区显示 -->
+			<view class="page-section" v-show="chartTideTwoShow">
+				<text>{{chartTideTwoTitle}}</text>
+				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitYY" canvasId="canvasYY"></mpvue-echarts>
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasTideTwo"></mpvue-echarts>
 					</view>
 					<!-- 滑动的日期球，Move属性决定球是否显示 -->
 					<view class="balltrack">
-						<view class="dateball slideball-Snd" v-show="ballYY.sndballMove">{{sndballText}}</view>
-						<view class="dateball slideball-Trd" v-show="ballYY.trdballMove">{{trdballText}}</view>
+						<view class="dateball slideball-Snd" v-show="ballTideTwo.sndballMove">{{sndballText}}</view>
+						<view class="dateball slideball-Trd" v-show="ballTideTwo.trdballMove">{{trdballText}}</view>
 					</view>
 				</scroll-view>
 				<!-- 固定在两端的日期球
 					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
 				<view class="balltrack-fix">
-					<view class="dateball fixball-Fst" :class="{'dateball-active': ballYY.fstballActive}">{{fstballText}}</view>
-					<view class="dateball fixball-Snd" :class="{'dateball-active': ballYY.sndballActive, 'fixball-Snd-left': ballYY.sndballLeft}"
-					 v-show="!ballYY.sndballMove">{{sndballText}}</view>
-					<view class="dateball fixball-Trd" :class="{'dateball-active': ballYY.trdballActive, 'fixball-Trd-lone': ballYY.sndballMove, 'fixball-Trd-left': ballYY.trdballLeft}"
-					 v-show="!ballYY.trdballMove">{{trdballText}}</view>
+					<view class="dateball fixball-Fst" :class="{'dateball-active': ballTideTwo.fstballActive}">{{fstballText}}</view>
+					<view class="dateball fixball-Snd" :class="{'dateball-active': ballTideTwo.sndballActive, 'fixball-Snd-left': ballTideTwo.sndballLeft}"
+					 v-show="!ballTideTwo.sndballMove">{{sndballText}}</view>
+					<view class="dateball fixball-Trd" :class="{'dateball-active': ballTideTwo.trdballActive, 'fixball-Trd-lone': ballTideTwo.sndballMove, 'fixball-Trd-left': ballTideTwo.trdballLeft}"
+					 v-show="!ballTideTwo.trdballMove">{{trdballText}}</view>
 				</view>
 			</view>
 			<!-- 五日天气预报 -->
@@ -108,7 +112,7 @@
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
-	let chartJST, chartYY // 金沙滩和一浴的图表
+	let chartTideOne, chartTideTwo // 金沙滩和一浴的图表
 	let chartFiveday // 五日天气预报图标
 
 	export default {
@@ -139,15 +143,20 @@
 					typhoonWarning: '',
 					waveWarning: ''
 				},
+				// 潮汐预报两个图表的地区
+				chartTideOneTitle: '',
+				chartTideTwoTitle: '',
+				// 潮汐预报第二个图表是否显示
+				chartTideTwoShow: false,
 				// 金沙滩和一浴图表数据
-				optionJST: {},
-				optionYY: {},
+				optionTideOne: {},
+				optionTideTwo: {},
 				// 日期球的日期文字
 				fstballText: '1st',
 				sndballText: '2nd',
 				trdballText: '3rd',
 				// 金沙滩日期球控制参数
-				ballJST: {
+				ballTideOne: {
 					fstballActive: true, // 第一个球是否激活（显示为蓝色）
 					sndballActive: false, // 第二个球是否激活（显示为蓝色）
 					sndballMove: false, // 第二个球是否滑动
@@ -157,7 +166,7 @@
 					trdballLeft: false // 第三个球是否位于左端
 				},
 				// 一浴日期球控制参数
-				ballYY: {
+				ballTideTwo: {
 					fstballActive: true,
 					sndballActive: false,
 					sndballMove: false,
@@ -183,6 +192,7 @@
 			bindPickerChange: function (e) {
 				this.setLocation(e.target.value)
 				this.loadWeather()
+				this.loadAstronomicalTide()
 			},
 			// 读取服务器天气数据
 			loadWeather() {
@@ -384,12 +394,11 @@
 			// 读取服务器潮汐预报
 			loadAstronomicalTide() {
 				let that = this
+				// 根据城市选择url和data
+				let req = utils.getTideReqData(this.array[this.location])
 				uni.request({
-					url: appsettings.hosturl + 'GetAstronomicalTide_QD',
-					data: {
-						name: 'admin',
-						areaflg: '山东'
-					},
+					url: appsettings.hosturl + req.url,
+					data: req.data,
 					method: 'POST',
 					success: function (res) {
 						console.log('成功获取潮汐预报数据')
@@ -399,6 +408,29 @@
 						}
 						// STATION 101wmt为金沙滩 102xmd为第一海水浴场
 						let resarr = JSON.parse(res.data.d)
+						let arrOne = []		// 第一个图表数据数组
+						let arrTwo = []		// 第二个图表数据数组
+						let StationOne = ''	// 第一组数据的地名
+						let StationTwo = ''	// 第二组数据的地名
+						StationOne = resarr[0].STATION
+						for (let i = 0; i < resarr.length; i++) {
+							if (resarr[i].STATION === StationOne) {
+								arrOne.push(resarr[i])
+							} else {
+								arrTwo.push(resarr[i])
+							}
+						}
+						// 如果第二个数组arrTwo有内容 说明第二个图表需要显示
+						if (arrTwo.length > 0) {
+							that.chartTideTwoShow = true
+							StationTwo = arrTwo[0].STATION
+						} else {
+							that.chartTideTwoShow = false
+						}
+						// 根据STATION代号设置图表标题(地名)
+						that.chartTideOneTitle = utils.getLocName(StationOne)
+						that.chartTideTwoTitle = utils.getLocName(StationTwo)
+						/*
 						let arrJST = [] // 金沙滩三日数据数组
 						let arrYY = [] //一浴三日数据数组
 						// 遍历接口返回值，依据STATION将数据放入以上两个数组中
@@ -409,9 +441,10 @@
 								arrYY.push(resarr[i])
 							}
 						} // end-for
+						*/
 						// 由数组生成echarts所需的option
-						that.optionJST = utils.setTideChartOption(arrJST)
-						that.optionYY = utils.setTideChartOption(arrYY)
+						that.optionTideOne = utils.setTideChartOption(arrOne)
+						that.optionTideTwo = utils.setTideChartOption(arrTwo)
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
@@ -421,24 +454,24 @@
 				return true
 			},
 			// 初始化金沙滩图表
-			handleInitJST(canvas, width, height) {
-				chartJST = echarts.init(canvas, null, {
+			handleInitTideOne(canvas, width, height) {
+				chartTideOne = echarts.init(canvas, null, {
 					width: width,
 					height: height
 				})
-				canvas.setChart(chartJST)
-				chartJST.setOption(this.optionJST)
-				return chartJST
+				canvas.setChart(chartTideOne)
+				chartTideOne.setOption(this.optionTideOne)
+				return chartTideOne
 			},
 			// 初始化一浴图表
-			handleInitYY(canvas, width, height) {
-				chartYY = echarts.init(canvas, null, {
+			handleInitTideTwo(canvas, width, height) {
+				chartTideTwo = echarts.init(canvas, null, {
 					width: width,
 					height: height
 				})
-				canvas.setChart(chartYY)
-				chartYY.setOption(this.optionYY)
-				return chartYY
+				canvas.setChart(chartTideTwo)
+				chartTideTwo.setOption(this.optionTideTwo)
+				return chartTideTwo
 			},
 			// 五日天气预报图标
 			handleInitFiveday(canvas, width, height) {
@@ -451,19 +484,19 @@
 				return chartFiveday
 			},
 			// 金沙滩图表滚动事件
-			scrollJST(e) {
+			scrollTideOne(e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
-					this.ballJST
+					this.ballTideOne
 				)
 			},
 			// 一浴图表滚动事件
-			scrollYY(e) {
+			scrollTideTwo(e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
-					this.ballYY
+					this.ballTideTwo
 				)
 			},
 			// 设置曲线图下方日期球的日期
@@ -491,21 +524,21 @@
 		}, // end-methods
 		watch: {
 			// 金沙滩option
-			optionJST: {
+			optionTideOne: {
 				handler(newVal, oldVal) {
-					if (chartJST !== undefined) {
+					if (chartTideOne !== undefined) {
 						if (newVal) {
-							chartJST.setOption(newVal)
+							chartTideOne.setOption(newVal)
 						}
 					}
 				}
 			},
 			// 一浴option
-			optionYY: {
+			optionTideTwo: {
 				handler(newVal, oldVal) {
-					if (chartYY !== undefined) {
+					if (chartTideTwo !== undefined) {
 						if (newVal) {
-							chartYY.setOption(newVal)
+							chartTideTwo.setOption(newVal)
 						}
 					}
 				}
