@@ -201,66 +201,64 @@ const setTideChartOption = function (arr) {
 // 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
 const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
     //开始滚动 scrollLeft为0
-    if (scrollLeft < 50) {
-        console.log('小于50 '+scrollLeft)
+    if (scrollLeft < 45) {
         // 刚开始滚动 还不足以让第二个球开始动
-        ballObj.fstballActive = true;
-        ballObj.sndballActive = false;
-        ballObj.trdballActive = false;
-        ballObj.sndballMove = false;
-        ballObj.sndballLeft = false;
-        ballObj.trdballMove = false;
-        ballObj.trdballLeft = false;
-    } else if (scrollLeft < windowWidth - 45) {
-        console.log('小于 width - 45 '+scrollLeft)
+        ballObj.fstballActive = true
+        ballObj.sndballActive = false
+        ballObj.trdballActive = false
+        ballObj.sndballMove = false
+        ballObj.sndballLeft = false
+        ballObj.trdballMove = false
+        ballObj.trdballLeft = false
+    // } else if (scrollLeft < windowWidth * 0.966) {  // 290 360*0.805
+    } else if (scrollLeft < windowWidth * 0.80555) {
         // 第二个球开始动
-        ballObj.fstballActive = true;
-        ballObj.sndballActive = false;
-        ballObj.trdballActive = false;
-        ballObj.sndballMove = true;
-        ballObj.sndballLeft = false;
-        ballObj.trdballMove = false;
-        ballObj.trdballLeft = false;
-    } else if (scrollLeft < windowWidth) {
-        console.log('小于 width '+scrollLeft)
+        ballObj.fstballActive = true
+        ballObj.sndballActive = false
+        ballObj.trdballActive = false
+        ballObj.sndballMove = true
+        ballObj.sndballLeft = false
+        ballObj.trdballMove = false
+        ballObj.trdballLeft = false
+    // } else if (scrollLeft < windowWidth * 1.066) {  // 320 360*0.888
+    } else if (scrollLeft < windowWidth * 0.88888) {
         // 第二个球停在最左边 第三个球还没开始动
-        ballObj.fstballActive = false;
-        ballObj.sndballActive = true;
-        ballObj.trdballActive = false;
-        ballObj.sndballMove = false;
-        ballObj.sndballLeft = true;
-        ballObj.trdballMove = false;
-        ballObj.trdballLeft = false;
-    } else if (scrollLeft < windowWidth + 9) {
-        console.log('小于 width + 9 '+scrollLeft)
+        ballObj.fstballActive = false
+        ballObj.sndballActive = true
+        ballObj.trdballActive = false
+        ballObj.sndballMove = false
+        ballObj.sndballLeft = true
+        ballObj.trdballMove = false
+        ballObj.trdballLeft = false
+    // } else if (scrollLeft < windowWidth * 1.166) {  // 350 360*0.972
+    } else if (scrollLeft < windowWidth * 0.97222) {
         // 第三个球开始动
-        ballObj.fstballActive = false;
-        ballObj.sndballActive = true;
-        ballObj.trdballActive = false;
-        ballObj.sndballMove = false;
-        ballObj.sndballLeft = true;
-        ballObj.trdballMove = true;
-        ballObj.trdballLeft = false;
-    } else if (scrollLeft < windowWidth + 270) {
-        console.log('小于 width + 270 '+scrollLeft)
+        ballObj.fstballActive = false
+        ballObj.sndballActive = true
+        ballObj.trdballActive = false
+        ballObj.sndballMove = false
+        ballObj.sndballLeft = true
+        ballObj.trdballMove = true
+        ballObj.trdballLeft = false
+    // } else if (scrollLeft < windowWidth * 1.9) {    // 570 360*1.583
+    } else if (scrollLeft < windowWidth * 1.58333) {
         // 第三个球动
-        ballObj.fstballActive = false;
-        ballObj.sndballActive = true;
-        ballObj.trdballActive = false;
-        ballObj.sndballMove = false;
-        ballObj.sndballLeft = true;
-        ballObj.trdballMove = true;
-        ballObj.trdballLeft = false;
+        ballObj.fstballActive = false
+        ballObj.sndballActive = true
+        ballObj.trdballActive = false
+        ballObj.sndballMove = false
+        ballObj.sndballLeft = true
+        ballObj.trdballMove = true
+        ballObj.trdballLeft = false
     } else {
-        console.log('大于 '+scrollLeft)
         // 第三个球停在最左边
-        ballObj.fstballActive = false;
-        ballObj.sndballActive = false;
-        ballObj.trdballActive = true;
-        ballObj.sndballMove = false;
-        ballObj.sndballLeft = true;
-        ballObj.trdballMove = false;
-        ballObj.trdballLeft = true;
+        ballObj.fstballActive = false
+        ballObj.sndballActive = false
+        ballObj.trdballActive = true
+        ballObj.sndballMove = false
+        ballObj.sndballLeft = true
+        ballObj.trdballMove = false
+        ballObj.trdballLeft = true
     }
 }
 
@@ -548,8 +546,24 @@ const getOption = function (tidedata, markdata) {
     // 获取x轴最大最小值
     let firstrecord = new Date(tidedata[0][0])
     let lastrecord = new Date(tidedata[tidedata.length-1][0])
-    let firstdate = new Date(firstrecord.getFullYear() + '/' + firstrecord.getMonth()+1 + '/' + firstrecord.getDate() + ' 00:00:00')
-    let lastdate = new Date(lastrecord.getFullYear() + '/' + lastrecord.getMonth()+1 + '/' + lastrecord.getDate() + ' 23:59:59')
+    let firstdate = new Date(firstrecord.getFullYear() + '/' + (firstrecord.getMonth() + 1) + '/' + firstrecord.getDate() + ' 00:00:00')
+    let lastdate = new Date(lastrecord.getFullYear() + '/' + (lastrecord.getMonth() + 1) + '/' + lastrecord.getDate() + ' 23:59:59')
+    // 为了让x轴的长度显示完整三天，需要在tidedata首尾添加数据
+    // 如果tidedata和markdata长度相同，则首尾都要添加，数值为所有item数值的平均值
+    // 否则只在结尾添加，数值为tidedata最后一个item的数值
+    if (tidedata.length === markdata.length) {
+        // 计算平均值
+        let sum = 0
+        for (let i = 0; i < tidedata.length; i++) {
+            sum += Number(tidedata[i][1])
+        }
+        // 开头添加
+        tidedata.unshift([firstdate, sum / tidedata.length])
+        // 结尾添加
+        tidedata.push([lastdate, sum / tidedata.length])
+    } else {
+        tidedata.push([lastdate, tidedata[tidedata.length - 1][1]])
+    }
     let option = {
         // 图表距离外围div的padding
         grid: {
@@ -577,8 +591,6 @@ const getOption = function (tidedata, markdata) {
                     return '\n' + texts.join('-')
                 } // end-formatter-axisLabel
             }, // end-axisLabel
-            //min: firstdate,
-            //max: lastdate
         },
         yAxis: {
             show: false,

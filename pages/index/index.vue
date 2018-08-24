@@ -25,9 +25,7 @@
 				</view>
 			</view>
 			<!-- 占位空白模块 -->
-			<view style="height: 100px;">
-
-			</view>
+			<view style="height: 100px;" />
 			<!-- 天气预报模块 -->
 			<view class="page-section">
 				<weatherSection :weatherData="weatherData" />
@@ -101,39 +99,14 @@
 				<bathsTable :bathsData="bathsData" />
 			</view>
 			<!-- 精细化预报 -->
-			<view class="page-section">
-				<view class="page-section" v-show="showRefined">
-					<view>精细化预报</view>
-					<!-- 精细化预报 第一个图表 -->
-					<scroll-view scroll-x="true">
-						<view class="chart-Refined">
-							<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedOne" canvasId="canvasRefinedOne" ref="echartsROne"/>
-						</view>
-						<!-- 滑动的日期球，Move属性决定球是否显示 -->
-						<view class="balltrack">
-							<view class="dateball slideball-Snd">{{sndballText}}</view>
-							<view class="dateball slideball-Trd">{{trdballText}}</view>
-						</view>
-					</scroll-view>
+			<view class="page-section" v-show="showRefined">
+				<view>精细化预报</view>
+				<refinedChart canvasId="canOne" :option="optionRefinedOne" :data="refinedDataOne" />
+				<!-- 两个图表之间的空白 -->
+				<view style="height: 60px" v-if="showRefinedTwo"/>
+				<view v-show="showRefinedTwo">
+					<refinedChart canvasId="canTwo" :option="optionRefinedTwo" :data="refinedDataTwo" />
 				</view>
-				<view class="page-section" v-show="showRefinedTwo">
-					<scroll-view scroll-x="true">
-						<view class="chart-Refined">
-							<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedTwo" canvasId="canvasRefinedTwo" ref="echartsRTwo"/>
-						</view>
-						<!-- 滑动的日期球，Move属性决定球是否显示 -->
-						<view class="balltrack">
-							<view class="dateball slideball-Snd">{{sndballText}}</view>
-							<view class="dateball slideball-Trd">{{trdballText}}</view>
-						</view>
-					</scroll-view>
-				</view>
-			</view>
-			<view class="page-section">
-				<refinedChart canvasId="canOne" :option="optionRefinedOne"/>
-			</view>
-			<view class="page-section">
-				<refinedChart canvasId="canTwo" :option="optionRefinedTwo" />
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section container-fiveday">
@@ -245,8 +218,58 @@
 				optionRefinedTwo: {},
 				showRefined: true,	// 精细化模块是否显示
 				showRefinedTwo: true,	// 第二个图表是否显示
-				refinedDataOne: [],		// 图标周围显示的数据
-				refinedDataTwo: [],
+				refinedDataOne: [	// 图标周围显示的数据
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+				],
+				refinedDataTwo: [	// 图标周围显示的数据
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+					{
+						loc: '',
+						time: '',
+						wave: '',
+						temp: '',
+						windLvl: '',
+						windDir: ''
+					},
+				],
 				echarts
 			}
 		},
@@ -259,7 +282,7 @@
 			bindPickerChange: function (e) {
 				// 弹出loading toast
 				uni.showLoading(
-					{title: '加载中'}
+					{ title: '加载中' }
 				);
 				this.setLocation(e.target.value)
 				this.requestData(this.array[e.target.value])
@@ -269,7 +292,7 @@
 				}.bind(this), 10000)
 			},
 			// 读取服务器数据
-			requestData (city) {
+			requestData(city) {
 				this.completedRequestCount = 0
 				this.loadWeather(city)
 				this.loadWarning()
@@ -279,7 +302,7 @@
 				this.loadRefined(city)
 			},
 			// 读取服务器天气数据
-			loadWeather (city) {
+			loadWeather(city) {
 				let that = this
 				uni.request({
 					url: appsettings.hosturl + 'GetCityWeather',
@@ -298,6 +321,11 @@
 							return false
 						}
 						let result = JSON.parse(res.data.d)
+						if (result.result === null) {
+							console.log('返回值为空')
+							that.completedRequestCount++
+							return false
+						}
 						// 气温数值
 						that.weatherData.temperature =
 							result.result.data.realtime.weather.temperature
@@ -371,7 +399,7 @@
 				return true
 			},
 			// 读取服务器台风和海浪警报
-			loadWarning () {
+			loadWarning() {
 				let that = this
 				// 读取台风信息
 				// 请求服务器台风列表
@@ -487,7 +515,7 @@
 				return true
 			},
 			// 读取服务器潮汐预报
-			loadAstronomicalTide (city) {
+			loadAstronomicalTide(city) {
 				let that = this
 				// 根据城市选择url和data
 				let req = utils.getTideReqData(this.array[this.location])
@@ -521,15 +549,15 @@
 						if (arrTwo.length > 0) {
 							that.chartTideTwoShow = true
 							StationTwo = arrTwo[0].STATION
+							that.chartTideTwoTitle = utils.getLocName(StationTwo)	// 标题地名
+							that.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
 						} else {
 							that.chartTideTwoShow = false
 						}
 						// 根据STATION代号设置图表标题(地名)
 						that.chartTideOneTitle = utils.getLocName(StationOne)
-						that.chartTideTwoTitle = utils.getLocName(StationTwo)
 						// 由数组生成echarts所需的option
 						that.optionTideOne = utils.setTideChartOption(arrOne)
-						that.optionTideTwo = utils.setTideChartOption(arrTwo)
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -541,7 +569,7 @@
 				return true
 			},
 			// 读取服务器近海预报
-			loadInshore (city) {
+			loadInshore(city) {
 				let that = this
 				let req = utils.getInshoreReqData(this.array[this.location])
 				uni.request({
@@ -568,7 +596,7 @@
 				return true
 			},
 			// 读取服务器浴场预报
-			loadBaths (city) {
+			loadBaths(city) {
 				let that = this
 				if (this.array[this.location] != '青岛') {
 					this.showBaths = false
@@ -600,7 +628,7 @@
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
-						that.showBaths =  false
+						that.showBaths = false
 						that.completedRequestCount++
 						return false
 					}
@@ -608,17 +636,13 @@
 				return true
 			},
 			// 读取服务器精细化预报
-			loadRefined (city) {
+			loadRefined(city) {
 				let that = this
 				// 滨州没有精细化预报
 				if (this.array[this.location] === '滨州') {
 					console.log('滨州无精细化预报')
 					this.showRefined = false
-					this.optionRefinedOne = {}	// 两个图表的option
-					this.optionRefinedTwo = {}
 					this.showRefinedTwo = false	// 第二个图表是否显示
-					this.refinedDataOne = {}		// 图标周围显示的数据
-					this.refinedDataTwo = {}
 					this.completedRequestCount++
 					return true
 				}
@@ -643,6 +667,7 @@
 									that.refinedDataOne = utils.setRefinedData(resdata[attr])
 									attrcounter++
 								} else if (attrcounter === 1) {	// 超过一组数据
+									console.log('!!!到了这里!!!')
 									that.optionRefinedTwo = utils.setRefinedChartOption(resdata[attr].tide)
 									that.refinedDataTwo = utils.setRefinedData(resdata[attr])
 									attrcounter++
@@ -656,7 +681,7 @@
 					}, // end-success
 					fail: function (res) {
 						// 网络请求失败 返回false
-						that.showBaths =  false
+						that.showBaths = false
 						that.completedRequestCount++
 						return false
 					}
@@ -665,7 +690,7 @@
 			},
 			/* 初始化图表 */
 			// 初始化潮汐预报一号图表
-			handleInitTideOne (canvas, width, height) {
+			handleInitTideOne(canvas, width, height) {
 				chartTideOne = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -675,7 +700,7 @@
 				return chartTideOne
 			},
 			// 初始化潮汐预报二号图表
-			handleInitTideTwo (canvas, width, height) {
+			handleInitTideTwo(canvas, width, height) {
 				chartTideTwo = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -685,7 +710,7 @@
 				return chartTideTwo
 			},
 			// 五日天气预报图表
-			handleInitFiveday (canvas, width, height) {
+			handleInitFiveday(canvas, width, height) {
 				chartFiveday = echarts.init(canvas, null, {
 					width: width,
 					height: height
@@ -695,27 +720,27 @@
 				return chartFiveday
 			},
 			// 精细化预报一号图表
-			handleInitRefinedOne (canvas, width, height) {
+			handleInitRefinedOne(canvas, width, height) {
 				chartRefinedOne = echarts.init(canvas, null, {
 					width: width,
 					height: height
 				}),
-				canvas.setChart(chartRefinedOne)
+					canvas.setChart(chartRefinedOne)
 				chartRefinedOne.setOption(this.optionRefinedOne)
 				return chartRefinedOne
 			},
 			// 精细化预报二号图表
-			handleInitRefinedTwo (canvas, width, height) {
+			handleInitRefinedTwo(canvas, width, height) {
 				chartRefinedTwo = echarts.init(canvas, null, {
 					width: width,
 					height: height
 				}),
-				canvas.setChart(chartRefinedTwo)
+					canvas.setChart(chartRefinedTwo)
 				chartRefinedTwo.setOption(this.optionRefinedTwo)
 				return chartRefinedTwo
 			},
 			// 潮汐预报一号图表滚动事件
-			scrollTideOne (e) {
+			scrollTideOne(e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
@@ -723,7 +748,7 @@
 				)
 			},
 			// 潮汐预报二号图表滚动事件
-			scrollTideTwo (e) {
+			scrollTideTwo(e) {
 				utils.setDateballStatus(
 					e.detail.scrollLeft,
 					this.systemInfo.windowWidth,
@@ -731,7 +756,7 @@
 				)
 			},
 			// 设置曲线图下方日期球的日期
-			setDateballText () {
+			setDateballText() {
 				let now = new Date()
 				function formatDate(date) {
 					// 格式化日期为MM-dd
@@ -756,7 +781,7 @@
 		watch: {
 			// 完成的request
 			completedRequestCount: {
-				handler (newVal, oldVal) {
+				handler(newVal, oldVal) {
 					if (newVal === 6) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
@@ -765,7 +790,7 @@
 			},
 			// 潮汐一option
 			optionTideOne: {
-				handler (newVal, oldVal) {
+				handler(newVal, oldVal) {
 					if (chartTideOne !== undefined) {
 						if (newVal) {
 							chartTideOne.setOption(newVal)
@@ -775,7 +800,7 @@
 			},
 			// 潮汐二option
 			optionTideTwo: {
-				handler (newVal, oldVal) {
+				handler(newVal, oldVal) {
 					if (chartTideTwo !== undefined) {
 						if (newVal) {
 							chartTideTwo.setOption(newVal)
@@ -785,7 +810,7 @@
 			},
 			// 五日天气预报option
 			optionFiveday: {
-				handler (newVal, oldVal) {
+				handler(newVal, oldVal) {
 					if (chartFiveday !== undefined) {
 						if (newVal) {
 							chartFiveday.setOption(newVal)
@@ -847,7 +872,8 @@
 	.page-body {
 		/* width: 100%; */
 		height: 100%;
-		padding: 0 30px;
+		/* padding: 0 30px; */
+		margin: 0 30px;
 		flex-grow: 1;
 		overflow-x: hidden;
 		/*
@@ -1010,6 +1036,7 @@
 	.container-fiveday {
 		position: relative;
 	}
+
 	/* 五日天气预报气温图表 */
 	.chart-fiveday {
 		width: 100%;

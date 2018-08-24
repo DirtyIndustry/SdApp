@@ -1,22 +1,11 @@
 <template>
     <view>
-        <!-- 地名 -->
-        <view>{{data[0].loc}}</view>
         <scroll-view scroll-x="true" @scroll="handleScroll">
             <myChart :option="option" :canvasId="canvasId" />
             <!-- 滑动的日期球，Move属性决定球是否显示 -->
             <view class="balltrack">
                 <view class="dateball slideball-Snd" v-if="ballStatus.sndballMove">{{sndballText}}</view>
                 <view class="dateball slideball-Trd" v-if="ballStatus.trdballMove">{{trdballText}}</view>
-            </view>
-            <!-- 信息面板 -->
-            <view class="infopanel">
-                <view class="infocolumn infocolumn-left">浪高：{{data[0].wave}}米\n风力：{{data[0].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[0].temp}}℃\n风向：{{data[0].windDir}}</view>
-                <view class="infocolumn infocolumn-left">浪高：{{data[1].wave}}米\n风力：{{data[1].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[1].temp}}℃\n风向：{{data[1].windDir}}</view>
-                <view class="infocolumn infocolumn-left">浪高：{{data[2].wave}}米\n风力：{{data[2].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[2].temp}}℃\n风向：{{data[2].windDir}}</view>
             </view>
         </scroll-view>
         <!-- 固定在两端的日期球
@@ -61,32 +50,7 @@
             // 表格数据
             data: {
                 type: Array,
-                default: [
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                ]
+                default: []
             }
         },
         data() {
@@ -202,7 +166,6 @@
             },
         },
         mounted() {
-            // 加载时根据当前日期设置日期球文字
             this.setDateballText()
         }
     }
@@ -214,7 +177,7 @@
         display: flex;
         width: 62px;
         height: 62px;
-        background-color: rgba(148, 148, 148, 0.8);
+        background-color: rgba(148, 148, 148, 0.4);
         border-radius: 62px;
         font-size: 20px;
         align-items: center;
@@ -223,34 +186,32 @@
 
     /* 日期球激活状态时现时为蓝色 */
     .dateball-active {
-        background-color: rgba(0, 148, 255, 0.8);
+        background-color: rgba(0, 148, 255, 0.5);
     }
 
-    /* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
+    /* 第二个球滑动时的定位 */
     .slideball-Snd {
         position: relative;
-        top: 10px;
+        bottom: 0;
         left: 96%;
     }
 
     /* 第三个球滑动时的定位 */
     .slideball-Trd {
         position: relative;
-        top: 10px;
+        bottom: 0;
         left: 188%;
     }
 
     /* 第一个球固定时的定位 */
     .fixball-Fst {
         position: relative;
-        bottom: 11px;
         left: 0%;
     }
 
     /* 第二个球固定时的定位 */
     .fixball-Snd {
         position: relative;
-        bottom: 11px;
         left: 74%;
     }
 
@@ -262,7 +223,6 @@
     /* 第三个球固定时的定位 */
     .fixball-Trd {
         position: relative;
-        bottom: 11px;
         left: 74%;
     }
 
@@ -276,12 +236,12 @@
         left: 0%;
     }
 
-    /* 滑动的小球的容器 flex属性能让小球水平排列，height为必须 */
+    /* 滑动的小球的容器 flex属性能让小球水平排列，height与下面的balltrack-fix中的margin-top一致，能够让两个容器重合 */
     .balltrack {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        height: 80px;
+        height: 62px;
     }
 
     /* 固定的小球的容器 */
@@ -290,30 +250,6 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+        /* margin-top: -60px; */
     }
-
-    /* 图表下方显示信息的面板 */
-    .infopanel {
-        position: absolute;
-        bottom: 0px;
-        width: 290%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        height: 80px;
-    }
-
-    /* 信息面板的列 */
-    .infocolumn {
-        flex: 1;
-        font-size: 20px;
-        padding: 10px;
-        white-space: pre-wrap;
-    }
-
-    /* 左边的列 文字水平靠右 */
-    .infocolumn-left {
-        text-align: right;
-    }
-
 </style>

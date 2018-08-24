@@ -1,86 +1,68 @@
 <template>
-	<!-- <view :id="id"> -->
-		<mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="id"></mpvue-echarts>
-	<!-- </view> -->
+	<view class="chart">
+		<mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
+	</view>
 </template>
 
 <script>
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
-	let chart = null
+	let chart
 
 	export default {
 		name: 'myChart',
 		props: {
-			id: {
-				type: String
-			},
-			option: {
-				type: Object,
-				default () {
-					return {
-						title: {
-							text: 'ECharts 入门示例'
-						},
-						tooltip: {},
-						legend: {
-							data: ['销量']
-						},
-						xAxis: {
-							data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-						},
-						yAxis: {},
-						series: [{
-							name: '销量',
-							type: 'bar',
-							data: [5, 20, 36, 10, 10, 20]
-						}]
-					}
-				}
-			}
+			// 画布id 在页面中必须唯一
+            canvasId: {
+				type: String,
+				required: true
+            },
+            // 图表数据
+            option: {
+                type: Object,
+				default: {}
+            }
 		},
 		data() {
 			return {
 				echarts,
 			}
 		},
-		computed: {
-			style() {
-				return {
-					height: this.height,
-					width: this.width
-				}
-			}
-		},
 		watch: {
 			option: {
-				handler(newVal, oldVal) {
-					if (this.chart) {
-						if (newVal) {
-							this.chart.setOption(newVal)
-						} else {
-							this.chart.setOption(oldVal)
-						}
-					} else {
-						this.handleInit()
-					}
-				}
-			}
+                handler(newVal, oldVal) {
+                    if (chart !== undefined) {
+                        if (newVal) {
+                            chart.setOption(newVal)
+                        }
+                    }
+                }
+            }
 		},
 		components: {
 			mpvueEcharts
 		},
 		methods: {
-			handleInit(canvas, width, height) {
-				this.chart = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				})
-				canvas.setChart(this.chart)
-				this.chart.setOption(this.option)
-				return this.chart
-			}
+			// 初始化图表
+            handleInit(canvas, width, height) {
+                chart = echarts.init(canvas, null, {
+                    width: width,
+                    height: height
+                })
+                canvas.setChart(chart)
+                chart.setOption(this.option)
+                return chart
+            }
 		},
 	}
 </script>
+
+<style scoped>
+	/* 曲线图的容器 必须设置宽度和高度 */
+    .chart {
+        width: 290%;
+        height: 250px;
+        border: 1px solid #000000;
+    }
+</style>
