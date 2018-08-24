@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <view class="refinedChart-body">
         <!-- 地名 -->
         <view>{{data[0].loc}}</view>
         <scroll-view scroll-x="true" @scroll="handleScroll">
@@ -211,6 +211,11 @@
 </script>
 
 <style scoped>
+    /* 整个组件的容器 */
+    .refinedChart-body {
+        position: relative;
+    }
+
 	/* 曲线图的容器 必须设置宽度和高度 */
     .chart {
         width: 290%;
@@ -299,6 +304,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+        position: absolute;
+        bottom: 0px;
     }
 
     /* 图表下方显示信息的面板 */

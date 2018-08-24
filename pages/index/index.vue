@@ -148,30 +148,6 @@
 				// 潮汐预报图表数据
 				optionTideOne: {},
 				optionTideTwo: {},
-				// 日期球的日期文字
-				fstballText: '1st',
-				sndballText: '2nd',
-				trdballText: '3rd',
-				// 潮汐预报一号日期球控制参数
-				ballTideOne: {
-					fstballActive: true, // 第一个球是否激活（显示为蓝色）
-					sndballActive: false, // 第二个球是否激活（显示为蓝色）
-					sndballMove: false, // 第二个球是否滑动
-					sndballLeft: false, // 第二个球是否位于左端
-					trdballActive: false, // 第三个球是否激活（显示为蓝色）
-					trdballMove: false, // 第三个球是否滑动
-					trdballLeft: false // 第三个球是否位于左端
-				},
-				// 潮汐预报二号日期球控制参数
-				ballTideTwo: {
-					fstballActive: true,
-					sndballActive: false,
-					sndballMove: false,
-					sndballLeft: false,
-					trdballActive: false,
-					trdballMove: false,
-					trdballLeft: false
-				},
 				// 五日天气预报
 				fivedayWeather: [], // 天气详情
 				fivedayHighTemp: [], // 每日最高温度
@@ -238,8 +214,7 @@
 						windLvl: '',
 						windDir: ''
 					},
-				],
-				echarts
+				]
 			}
 		},
 		computed: {
@@ -567,6 +542,7 @@
 			// 读取服务器浴场预报
 			loadBaths(city) {
 				let that = this
+				// 如果不是青岛 直接返回
 				if (this.array[this.location] != '青岛') {
 					this.showBaths = false
 					that.completedRequestCount++
@@ -586,6 +562,7 @@
 							return false
 						}
 						that.bathsData = JSON.parse(res.data.d)
+						// 在数组前端加入表头
 						that.bathsData.unshift({
 							PublishDate: new Date().toString(),
 							BathsName: '浴场名称',
@@ -607,7 +584,7 @@
 			// 读取服务器精细化预报
 			loadRefined(city) {
 				let that = this
-				// 滨州没有精细化预报
+				// 滨州没有精细化预报 设置模块隐藏并返回
 				if (this.array[this.location] === '滨州') {
 					console.log('滨州无精细化预报')
 					this.showRefined = false
@@ -636,7 +613,6 @@
 									that.refinedDataOne = utils.setRefinedData(resdata[attr])
 									attrcounter++
 								} else if (attrcounter === 1) {	// 超过一组数据
-									console.log('!!!到了这里!!!')
 									that.optionRefinedTwo = utils.setRefinedChartOption(resdata[attr].tide)
 									that.refinedDataTwo = utils.setRefinedData(resdata[attr])
 									attrcounter++
@@ -656,95 +632,6 @@
 					}
 				}) // end-request
 				return true
-			},
-			/* 初始化图表 */
-			// 初始化潮汐预报一号图表
-			handleInitTideOne(canvas, width, height) {
-				chartTideOne = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				})
-				canvas.setChart(chartTideOne)
-				chartTideOne.setOption(this.optionTideOne)
-				return chartTideOne
-			},
-			// 初始化潮汐预报二号图表
-			handleInitTideTwo(canvas, width, height) {
-				chartTideTwo = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				})
-				canvas.setChart(chartTideTwo)
-				chartTideTwo.setOption(this.optionTideTwo)
-				return chartTideTwo
-			},
-			// 五日天气预报图表
-			handleInitFiveday(canvas, width, height) {
-				chartFiveday = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				})
-				canvas.setChart(chartFiveday)
-				chartFiveday.setOption(this.optionFiveday)
-				return chartFiveday
-			},
-			// 精细化预报一号图表
-			handleInitRefinedOne(canvas, width, height) {
-				chartRefinedOne = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				}),
-					canvas.setChart(chartRefinedOne)
-				chartRefinedOne.setOption(this.optionRefinedOne)
-				return chartRefinedOne
-			},
-			// 精细化预报二号图表
-			handleInitRefinedTwo(canvas, width, height) {
-				chartRefinedTwo = echarts.init(canvas, null, {
-					width: width,
-					height: height
-				}),
-					canvas.setChart(chartRefinedTwo)
-				chartRefinedTwo.setOption(this.optionRefinedTwo)
-				return chartRefinedTwo
-			},
-			// 潮汐预报一号图表滚动事件
-			scrollTideOne(e) {
-				utils.setDateballStatus(
-					e.detail.scrollLeft,
-					this.systemInfo.windowWidth,
-					this.ballTideOne
-				)
-			},
-			// 潮汐预报二号图表滚动事件
-			scrollTideTwo(e) {
-				utils.setDateballStatus(
-					e.detail.scrollLeft,
-					this.systemInfo.windowWidth,
-					this.ballTideTwo
-				)
-			},
-			// 设置曲线图下方日期球的日期
-			setDateballText() {
-				let now = new Date()
-				function formatDate(date) {
-					// 格式化日期为MM-dd
-					let month = date.getMonth() + 1
-					let day = date.getDate()
-					if (month < 10) {
-						month = '0' + month
-					}
-					if (day < 10) {
-						day = '0' + day
-					}
-					return month + '-' + day
-				} // end-function formatDate
-				// 三个球分别显示今天，明天和后天的日期
-				this.fstballText = formatDate(now)
-				now = new Date(now.setDate(now.getDate() + 1))
-				this.sndballText = formatDate(now)
-				now = new Date(now.setDate(now.getDate() + 1))
-				this.trdballText = formatDate(now)
 			}
 		}, // end-methods
 		watch: {
@@ -756,56 +643,6 @@
 						uni.stopPullDownRefresh()
 					}
 				}
-			},
-			// 潮汐一option
-			optionTideOne: {
-				handler(newVal, oldVal) {
-					if (chartTideOne !== undefined) {
-						if (newVal) {
-							chartTideOne.setOption(newVal)
-						}
-					}
-				}
-			},
-			// 潮汐二option
-			optionTideTwo: {
-				handler(newVal, oldVal) {
-					if (chartTideTwo !== undefined) {
-						if (newVal) {
-							chartTideTwo.setOption(newVal)
-						}
-					}
-				}
-			},
-			// 五日天气预报option
-			optionFiveday: {
-				handler(newVal, oldVal) {
-					if (chartFiveday !== undefined) {
-						if (newVal) {
-							chartFiveday.setOption(newVal)
-						}
-					}
-				}
-			},
-			// 精细化预报一option
-			optionRefinedOne: {
-				handler(newVal, oldVal) {
-					if (chartRefinedOne !== undefined) {
-						if (newVal) {
-							chartRefinedOne.setOption(newVal)
-						}
-					}
-				}
-			},
-			// 精细化预报二option
-			optionRefinedTwo: {
-				handler(newVal, oldVal) {
-					if (chartRefinedTwo !== undefined) {
-						if (newVal) {
-							chartRefinedTwo.setOption(newVal)
-						}
-					}
-				}
 			}
 		},
 		onLoad() {
@@ -814,7 +651,6 @@
 			this.loadWarning()
 			this.loadInshore()
 			this.loadBaths()
-			this.setDateballText()
 		},
 		onReady() {
 			this.loadAstronomicalTide()
@@ -861,10 +697,6 @@
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
-	.background-panel {
-		background-color: rgba(255, 255, 255, 0.8);
-	}
-
 	.uni-list-cell {
 		justify-content: flex-start;
 	}
@@ -894,108 +726,8 @@
 		font-size: 26px;
 	}
 
-	/* 曲线图的容器 必须设置宽度和高度 */
+	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
-		width: 290%;
-		height: 250px;
-		border: 1px solid #000;
-	}
-
-	/* 日期球的外观样式 */
-	.dateball {
-		display: flex;
-		width: 62px;
-		height: 62px;
-		background-color: rgba(148, 148, 148, 0.4);
-		border-radius: 62px;
-		font-size: 20px;
-		align-items: center;
-		justify-content: center;
-	}
-
-	/* 日期球激活状态时现时为蓝色 */
-	.dateball-active {
-		background-color: rgba(0, 148, 255, 0.5);
-	}
-
-	/* 第二个球滑动时的定位 */
-	.slideball-Snd {
-		position: relative;
-		bottom: 0;
-		left: 97%;
-	}
-
-	/* 第三个球滑动时的定位 */
-	.slideball-Trd {
-		position: relative;
-		bottom: 0;
-		left: 191%;
-	}
-
-	/* 第一个球固定时的定位 */
-	.fixball-Fst {
-		position: relative;
-		left: 0%;
-	}
-
-	/* 第二个球固定时的定位 */
-	.fixball-Snd {
-		position: relative;
-		left: 76%;
-	}
-
-	/* 第二个球固定在左端时的定位 */
-	.fixball-Snd-left {
-		left: 0%;
-	}
-
-	/* 第三个球固定时的定位 */
-	.fixball-Trd {
-		position: relative;
-		left: 76%;
-	}
-
-	/* 当第二个球滑动时，第三个球需要调整定位 */
-	.fixball-Trd-lone {
-		left: 84%;
-	}
-
-	/* 第三个球固定在左端时的定位 */
-	.fixball-Trd-left {
-		left: 0%;
-	}
-
-	/* 滑动的小球的容器 flex属性能让小球水平排列，height与下面的balltrack-fix中的margin-top一致，能够让两个容器重合 */
-	.balltrack {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		height: 62px;
-	}
-
-	/* 固定的小球的容器 */
-	.balltrack-fix {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		margin-top: -60px;
-	}
-
-	/* 左右边框 */
-	.border-horizontal {
-		border-left: 1px solid #000;
-		border-right: 1px solid #000;
-	}
-
-	/* 上下边框 */
-	.border-vertical {
-		border-top: 1px solid #000;
-		border-bottom: 1px solid #000;
-	}
-
-	/* 精细化预报曲线图表 */
-	.chart-Refined {
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000;
@@ -1004,14 +736,5 @@
 	/* 五日天气预报容器 */
 	.container-fiveday {
 		position: relative;
-	}
-
-	/* 五日天气预报气温图表 */
-	.chart-fiveday {
-		width: 100%;
-		height: 235px;
-		/* margin-top: -360px; */
-		top: 240px;
-		position: absolute;
 	}
 </style>

@@ -198,70 +198,6 @@ const setTideChartOption = function (arr) {
     return getOption(tidedata, markdata) 
 }
 
-// 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
-const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
-    //开始滚动 scrollLeft为0
-    if (scrollLeft < 45) {
-        // 刚开始滚动 还不足以让第二个球开始动
-        ballObj.fstballActive = true
-        ballObj.sndballActive = false
-        ballObj.trdballActive = false
-        ballObj.sndballMove = false
-        ballObj.sndballLeft = false
-        ballObj.trdballMove = false
-        ballObj.trdballLeft = false
-    // } else if (scrollLeft < windowWidth * 0.966) {  // 290 360*0.805
-    } else if (scrollLeft < windowWidth * 0.80555) {
-        // 第二个球开始动
-        ballObj.fstballActive = true
-        ballObj.sndballActive = false
-        ballObj.trdballActive = false
-        ballObj.sndballMove = true
-        ballObj.sndballLeft = false
-        ballObj.trdballMove = false
-        ballObj.trdballLeft = false
-    // } else if (scrollLeft < windowWidth * 1.066) {  // 320 360*0.888
-    } else if (scrollLeft < windowWidth * 0.88888) {
-        // 第二个球停在最左边 第三个球还没开始动
-        ballObj.fstballActive = false
-        ballObj.sndballActive = true
-        ballObj.trdballActive = false
-        ballObj.sndballMove = false
-        ballObj.sndballLeft = true
-        ballObj.trdballMove = false
-        ballObj.trdballLeft = false
-    // } else if (scrollLeft < windowWidth * 1.166) {  // 350 360*0.972
-    } else if (scrollLeft < windowWidth * 0.97222) {
-        // 第三个球开始动
-        ballObj.fstballActive = false
-        ballObj.sndballActive = true
-        ballObj.trdballActive = false
-        ballObj.sndballMove = false
-        ballObj.sndballLeft = true
-        ballObj.trdballMove = true
-        ballObj.trdballLeft = false
-    // } else if (scrollLeft < windowWidth * 1.9) {    // 570 360*1.583
-    } else if (scrollLeft < windowWidth * 1.58333) {
-        // 第三个球动
-        ballObj.fstballActive = false
-        ballObj.sndballActive = true
-        ballObj.trdballActive = false
-        ballObj.sndballMove = false
-        ballObj.sndballLeft = true
-        ballObj.trdballMove = true
-        ballObj.trdballLeft = false
-    } else {
-        // 第三个球停在最左边
-        ballObj.fstballActive = false
-        ballObj.sndballActive = false
-        ballObj.trdballActive = true
-        ballObj.sndballMove = false
-        ballObj.sndballLeft = true
-        ballObj.trdballMove = false
-        ballObj.trdballLeft = true
-    }
-}
-
 // 由高低温数据生成五日预报气温chart option
 const setFivedayChartOption = function (higharr, lowarr) {
     let low = 100   // 气温最低值
@@ -715,7 +651,6 @@ module.exports = {
     setAirconIcon: setAirconIcon,   // 空气质量图标
     setAirconClass: setAirconClass, // pm2.5 class
     setTideChartOption: setTideChartOption, // 潮汐chart option
-    setDateballStatus: setDateballStatus,   // 日期球的状态
     setFivedayChartOption: setFivedayChartOption, // 五日高低温chart option
     setInshoreTableData: setInshoreTableData,   // 近海预报数据
     setRefinedChartOption: setRefinedChartOption, // 精细化预报chart option
