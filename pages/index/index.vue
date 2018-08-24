@@ -45,50 +45,20 @@
 			<!-- 第一个图表 -->
 			<view class="page-section">
 				<text>{{chartTideOneTitle}}</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideOne">
+				<scroll-view scroll-x="true">
 					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasTideOne" ref="echartsTideOne"></mpvue-echarts>
-					</view>
-					<!-- 滑动的日期球，Move属性决定球是否显示 -->
-					<view class="balltrack">
-						<view class="dateball slideball-Snd" v-show="ballTideOne.sndballMove">{{sndballText}}</view>
-						<view class="dateball slideball-Trd" v-show="ballTideOne.trdballMove">{{trdballText}}</view>
+						<myChart :option="optionTideOne" canvasId="canvasTideOne" />
 					</view>
 				</scroll-view>
-				<!-- 固定在两端的日期球
-				Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
-				特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
-				<view class="balltrack-fix">
-					<view class="dateball fixball-Fst" :class="{'dateball-active': ballTideOne.fstballActive}">{{fstballText}}</view>
-					<view class="dateball fixball-Snd" :class="{'dateball-active': ballTideOne.sndballActive, 'fixball-Snd-left': ballTideOne.sndballLeft}"
-					 v-show="!ballTideOne.sndballMove">{{sndballText}}</view>
-					<view class="dateball fixball-Trd" :class="{'dateball-active': ballTideOne.trdballActive, 'fixball-Trd-lone': ballTideOne.sndballMove, 'fixball-Trd-left': ballTideOne.trdballLeft}"
-					 v-show="!ballTideOne.trdballMove">{{trdballText}}</view>
-				</view>
 			</view>
 			<!-- 第二个图表 只在青岛地区显示 -->
 			<view class="page-section" v-show="chartTideTwoShow">
 				<text>{{chartTideTwoTitle}}</text>
 				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasTideTwo"></mpvue-echarts>
-					</view>
-					<!-- 滑动的日期球，Move属性决定球是否显示 -->
-					<view class="balltrack">
-						<view class="dateball slideball-Snd" v-show="ballTideTwo.sndballMove">{{sndballText}}</view>
-						<view class="dateball slideball-Trd" v-show="ballTideTwo.trdballMove">{{trdballText}}</view>
+						<myChart :option="optionTideTwo" canvasId="canvasTideTwo" />
 					</view>
 				</scroll-view>
-				<!-- 固定在两端的日期球
-					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
-					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
-				<view class="balltrack-fix">
-					<view class="dateball fixball-Fst" :class="{'dateball-active': ballTideTwo.fstballActive}">{{fstballText}}</view>
-					<view class="dateball fixball-Snd" :class="{'dateball-active': ballTideTwo.sndballActive, 'fixball-Snd-left': ballTideTwo.sndballLeft}"
-					 v-show="!ballTideTwo.sndballMove">{{sndballText}}</view>
-					<view class="dateball fixball-Trd" :class="{'dateball-active': ballTideTwo.trdballActive, 'fixball-Trd-lone': ballTideTwo.sndballMove, 'fixball-Trd-left': ballTideTwo.trdballLeft}"
-					 v-show="!ballTideTwo.trdballMove">{{trdballText}}</view>
-				</view>
 			</view>
 			<!-- 近海预报 -->
 			<view class="page-section">
@@ -101,16 +71,16 @@
 			<!-- 精细化预报 -->
 			<view class="page-section" v-show="showRefined">
 				<view>精细化预报</view>
-				<refinedChart canvasId="canOne" :option="optionRefinedOne" :data="refinedDataOne" />
+				<refinedChart :option="optionRefinedOne" :data="refinedDataOne" canvasId="canvasRefinedOne" />
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="showRefinedTwo"/>
 				<view v-show="showRefinedTwo">
-					<refinedChart canvasId="canTwo" :option="optionRefinedTwo" :data="refinedDataTwo" />
+					<refinedChart :option="optionRefinedTwo" :data="refinedDataTwo" canvasId="canvasRefinedTwo" />
 				</view>
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section container-fiveday">
-				<fivedayForcast :fivedayWeather="fivedayWeather" :option="optionFiveday" :canvasId="canvasFiveday"/>
+				<fivedayForcast :fivedayWeather="fivedayWeather" :option="optionFiveday" canvasId="canvasFiveday"/>
 			</view>
 			<!-- <view class="page-section" /> -->
 		</view>
@@ -121,6 +91,7 @@
 	import { mapState, mapMutations } from 'vuex'
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
+	import myChart from '../../components/myChart.vue'
 	import weatherSection from '../../components/weatherSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import inshoreTable from '../../components/inshoreTable.vue'
@@ -138,6 +109,7 @@
 	export default {
 		components: {
 			mpvueEcharts,
+			myChart,
 			weatherSection,
 			fivedayForcast,
 			inshoreTable,
