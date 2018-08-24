@@ -1,4 +1,5 @@
 <template>
+<view>
     <view class="uni-flex uni-row">
         <!-- 依据fivedayWeather生成列 -->
         <view class="fiveday-column uni-flex uni-column" :class="{'fiveday-column-left': index<4}" v-for="(item, index) in fivedayWeather" :key="index">
@@ -14,9 +15,14 @@
             <view class="flex-cell-single">{{item.windLvl}}</view>
         </view>
     </view>
+    <view class="chart-fiveday">
+        <myChart :option="option" :canvasId="canvasId" />
+    </view>
+</view>
 </template>
 
 <script>
+import myChart from './myChart.vue'
 export default {
     name: 'fivedayForcast',
     props: {
@@ -24,8 +30,21 @@ export default {
         fivedayWeather: {
             type: Array,
             default: [{}, {}, {}, {}, {}]
+        },
+        // 画布id 在页面中必须唯一
+        canvasId: {
+            type: String,
+            required: true
+        },
+        // 图表数据
+        option: {
+            type: Object,
+            default: {}
         }
-    }
+    },
+    components: {
+        myChart
+    },
 }
 </script>
 
@@ -65,5 +84,14 @@ export default {
 	/* 5日天气预报中占四行高度的单元格 */
 	.flex-cell-quad {
 		flex: 4;
+	}
+
+	/* 五日天气预报气温图表 */
+	.chart-fiveday {
+		width: 100%;
+		height: 235px;
+		/* margin-top: -360px; */
+		top: 240px;
+		position: absolute;
 	}
 </style>

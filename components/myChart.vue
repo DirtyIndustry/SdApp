@@ -1,7 +1,7 @@
 <template>
-	<view class="chart">
-		<mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
-	</view>
+	<!-- <view class="chart"> -->
+	<mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
+	<!-- </view> -->
 </template>
 
 <script>

@@ -33,11 +33,11 @@
 			<!-- 警报模块 -->
 			<view class="page-section">
 				<!-- 台风警报 -->
-				<view class="text">
+				<view class="text" v-if="warningData.typhoonWarning != ''">
 					{{warningData.typhoonWarning}}
 				</view>
 				<!-- 海浪警报 -->
-				<view class="text">
+				<view class="text" v-if="warningData.waveWarning != ''">
 					{{warningData.waveWarning}}
 				</view>
 			</view>
@@ -110,10 +110,7 @@
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section container-fiveday">
-				<fivedayForcast :fivedayWeather="fivedayWeather" />
-				<view class="chart-fiveday">
-					<mpvue-echarts :echarts="echarts" :onInit="handleInitFiveday" canvasId="canvasFiveday" />
-				</view>
+				<fivedayForcast :fivedayWeather="fivedayWeather" :option="optionFiveday" :canvasId="canvasFiveday"/>
 			</view>
 			<!-- <view class="page-section" /> -->
 		</view>

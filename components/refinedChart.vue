@@ -3,7 +3,9 @@
         <!-- 地名 -->
         <view>{{data[0].loc}}</view>
         <scroll-view scroll-x="true" @scroll="handleScroll">
-            <myChart :option="option" :canvasId="canvasId" />
+            <view class="chart">
+                <myChart :option="option" :canvasId="canvasId" />
+            </view>
             <!-- 滑动的日期球，Move属性决定球是否显示 -->
             <view class="balltrack">
                 <view class="dateball slideball-Snd" v-if="ballStatus.sndballMove">{{sndballText}}</view>
@@ -209,6 +211,13 @@
 </script>
 
 <style scoped>
+	/* 曲线图的容器 必须设置宽度和高度 */
+    .chart {
+        width: 290%;
+        height: 250px;
+        border: 1px solid #000000;
+    }
+
     /* 日期球的外观样式 */
     .dateball {
         display: flex;

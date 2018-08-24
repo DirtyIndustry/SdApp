@@ -19,9 +19,9 @@ DONE... loading toast
 DONE... echart x-axies range  
 DONE... refined section  
 DONE... echarts to component  
-put chart into fiveday component
+DONE... put chart into fiveday component
 deal with request response error  
 deal with request response fail  
 use local storage to speed up *startup->localstore->netrequest->localstore*  
 auto location, default location setting  
-try sticky on ios  
+Fail... try sticky on ios  
