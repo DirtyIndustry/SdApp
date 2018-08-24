@@ -16,6 +16,8 @@ DONE... inshore table
 DONE... baths table  
 DONE... drop down refresh  
 DONE... loading toast
+refined section
+echarts to component
 deal with request response error  
 deal with request response fail  
 use local storage to speed up *startup->localstore->netrequest->localstore*  

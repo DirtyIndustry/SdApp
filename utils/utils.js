@@ -85,8 +85,6 @@ const setTideChartOption = function (arr) {
     // 提取潮汐数值
     let tidedata = [] // 曲线用的数值集
     let markdata = [] // 最高最低潮竖直标线用的数值集
-    let max = 0 // 三天最高潮位数值
-    let min = 0 // 三天最低潮位数值
     for (let i = 0; i < arr.length; i++) {
         // 一次循环为一天的数据
         // 初始日期时间
@@ -189,34 +187,6 @@ const setTideChartOption = function (arr) {
             ]
             markdata.push(sl)
         }
-        // 计算今天的最高潮位 并与已有的max值比较 将最大值存入max用于水平标线
-        let firstH = Number(arr[i].FSTHIGHWIDEHEIGHT)
-        let secondH = Number(arr[i].SCDHIGHWIDEHEIGHT)
-        if (firstH > secondH) {
-            // 如果First比较大
-            if (firstH > max) {
-                max = firstH
-            }
-        } else {
-            // 如果Second比较大
-            if (secondH > max) {
-                max = secondH
-            }
-        }
-        // 计算今天的最低潮位 并于已有的min值比较 将最小值存入min用于水平标线
-        let firstL = Number(arr[i].FSTLOWWIDEHEIGHT)
-        let secondL = Number(arr[i].SCDLOWWIDEHEIGHT)
-        if (firstL < secondL) {
-            // 如果First比较小
-            if (firstL < min || min === 0) {
-                min = firstL
-            }
-        } else {
-            // 如果Second比较小
-            if (secondL < min || min === 0) {
-                min = secondL
-            }
-        }
     } // end-for
     // 排序曲线数据集
     function SortByFirst (x, y) {
@@ -225,137 +195,14 @@ const setTideChartOption = function (arr) {
     tidedata.sort(SortByFirst)
 
     // 数据准备完毕，生成并返回echarts用option
-    let option = {
-        // 图表距离外围div的padding
-        grid: {
-            top: '4%',
-            left: '0%',
-            right: '2%',
-            bottom: '20%',
-            containLabel: true
-        },
-        // 横坐标轴
-        xAxis: {
-            type: 'time',
-            axisLabel: {
-                // 横坐标刻度数值
-                show: true,
-                inside: true,
-                rotate: 90,
-                formatter: function (value, index) {
-                    // 格式化为'月-日'，只在第一个刻度显示年份
-                    let date = new Date(value)
-                    let texts = [date.getMonth() + 1, date.getDate()]
-                    if (index === 0) {
-                        texts.unshift(date.getFullYear())
-                    }
-                    return '\n' + texts.join('-')
-                } // end-formatter-axisLabel
-            } // end-axisLabel
-        },
-        yAxis: {
-            show: false,
-            boundaryGap: ['20%', '20%'] // 纵坐标轴的范围，比有效数字上下多出20%
-        },
-        series: [
-            // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
-            {
-                name: '潮汐',
-                type: 'line',
-                smooth: true,
-                silent: true,
-                animation: false,
-                symbolSize: 0, // 曲线上数据点小圆圈的大小
-                lineStyle: {
-                    color: '#1c8d3b', // 曲线颜色
-                    width: 1 // 曲线粗细
-                },
-                data: tidedata,
-                markLine: {
-                    symbolSize: 0.1, // 垂直标线一端的箭头 和数据label的大小， 不能设为0否则label不显示
-                    silent: true,
-                    animation: false,
-                    label: {
-                        show: true,
-                        position: 'start',
-                        formatter: function (param) {
-                            return param.data.coord[1] + 'cm'
-                        }
-                        /*
-                        textStyle: {
-                            color: '#000000',
-                        }
-                        */
-                    }, // end-label-markLine
-                    lineStyle: {
-                        type: 'dot'
-                    },
-                    data: markdata
-                }
-            },
-            // 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
-            {
-                name: '标线时间',
-                type: 'line',
-                markLine: {
-                    symbolSize: 0.1,
-                    opacity: 0, // 透明度为0 不渲染这条标线
-                    silent: true,
-                    animation: false,
-                    label: {
-                        show: true,
-                        position: 'end',
-                        formatter: function (param) {
-                            // 返回mm:ss格式的时间
-                            let date = new Date(param.data.coord[0])
-                            let hour = date.getHours()
-                            if (hour < 10) {
-                                hour = '0' + hour
-                            }
-                            let minute = date.getMinutes()
-                            if (minute < 10) {
-                                minute = '0' + minute
-                            }
-                            return hour + ':' + minute
-                        }
-                        /*
-                        textStyle: {
-                            color: '#000000',
-                        }
-                        */
-                    }, // end-label-markLine
-                    lineStyle: {
-                        type: 'dot'
-                    },
-                    data: markdata
-                } // end-markLine
-            },
-            // 第三组series： 两条水平标线 表示三天最高和最低的潮位
-            {
-                name: '最值横线',
-                type: 'line',
-                markLine: {
-                    symbolSize: 0,
-                    silent: true,
-                    animation: false,
-                    lineStyle: {
-                        type: 'dot'
-                    },
-                    label: {
-                        show: false
-                    },
-                    data: [{ yAxis: max }, { yAxis: min }]
-                } // end-markLine
-            }
-        ] // end-series
-    } // end-option
-    return option
+    return getOption(tidedata, markdata) 
 }
 
 // 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
 const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
     //开始滚动 scrollLeft为0
     if (scrollLeft < 50) {
+        console.log('小于50 '+scrollLeft)
         // 刚开始滚动 还不足以让第二个球开始动
         ballObj.fstballActive = true;
         ballObj.sndballActive = false;
@@ -365,6 +212,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
     } else if (scrollLeft < windowWidth - 45) {
+        console.log('小于 width - 45 '+scrollLeft)
         // 第二个球开始动
         ballObj.fstballActive = true;
         ballObj.sndballActive = false;
@@ -374,6 +222,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
     } else if (scrollLeft < windowWidth) {
+        console.log('小于 width '+scrollLeft)
         // 第二个球停在最左边 第三个球还没开始动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;
@@ -383,6 +232,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
         ballObj.trdballMove = false;
         ballObj.trdballLeft = false;
     } else if (scrollLeft < windowWidth + 9) {
+        console.log('小于 width + 9 '+scrollLeft)
         // 第三个球开始动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;
@@ -392,6 +242,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
         ballObj.trdballMove = true;
         ballObj.trdballLeft = false;
     } else if (scrollLeft < windowWidth + 270) {
+        console.log('小于 width + 270 '+scrollLeft)
         // 第三个球动
         ballObj.fstballActive = false;
         ballObj.sndballActive = true;
@@ -401,6 +252,7 @@ const setDateballStatus = function (scrollLeft, windowWidth, ballObj) {
         ballObj.trdballMove = true;
         ballObj.trdballLeft = false;
     } else {
+        console.log('大于 '+scrollLeft)
         // 第三个球停在最左边
         ballObj.fstballActive = false;
         ballObj.sndballActive = false;
@@ -527,6 +379,88 @@ const setInshoreTableData = function (arr) {
     return result
 }
 
+// 根据4值数组生成精细化预报chart option
+const setRefinedChartOption = function (arr) {
+    // 生成曲线data和标线data
+    let tidedata = []
+    let markdata = []
+    for (let i = 0; i < arr.length; i++) {
+        // 格式化日期时间数据
+        let date = new Date(arr[i].FORECASTDATE)
+        let fhtime = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + arr[i].FIRSTHIGHTIME.substring(0,2) + ':' + arr[i].FIRSTHIGHTIME.substring(2) + ':00'
+        let fltime = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + arr[i].FIRSTLOWTIME.substring(0,2) + ':' + arr[i].FIRSTLOWTIME.substring(2) + ':00'
+        let shtime = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + arr[i].SECONDHIGHTIME.substring(0,2) + ':' + arr[i].SECONDHIGHTIME.substring(2) + ':00'
+        let sltime = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + arr[i].SECONDLOWTIME.substring(0,2) + ':' + arr[i].SECONDLOWTIME.substring(2) + ':00'
+        // 如果日期不为'-'则加入数组
+        if (arr[i].FIRSTHIGHTIME !== '-') {
+            tidedata.push([new Date(fhtime), arr[i].FIRSTHIGHLEVEL])
+            markdata.push([
+                {coord: [new Date(fhtime), arr[i].FIRSTHIGHLEVEL]},
+                {coord: [new Date(fhtime), 0]}
+            ])
+        }
+        if (arr[i].FIRSTLOWTIME !== '-') {
+            tidedata.push([new Date(fltime), arr[i].FIRSTLOWLEVEL])
+            markdata.push([
+                {coord: [new Date(fltime), arr[i].FIRSTLOWLEVEL]},
+                {coord: [new Date(fltime), 0]}
+            ])
+        }
+        if (arr[i].SECONDHIGHTIME !== '-') {
+            tidedata.push([new Date(shtime), arr[i].SECONDHIGHLEVEL])
+            markdata.push([
+                {coord: [new Date(shtime), arr[i].SECONDHIGHLEVEL]},
+                {coord: [new Date(shtime), 0]}
+            ])
+        }
+        if (arr[i].SECONDLOWTIME !== '-') {
+            tidedata.push([new Date(sltime), arr[i].SECONDLOWLEVEL])
+            markdata.push([
+                {coord: [new Date(sltime), arr[i].SECONDLOWLEVEL]},
+                {coord: [new Date(sltime), 0]}
+            ])
+        }
+    } // end-for
+    // 曲线数据按照日期排序
+    function SortByFirst (x, y) {
+        return x[0] - y[0]
+    }
+    tidedata.sort(SortByFirst)
+    // 根据潮汐和标线数据生成chart option
+    return getOption(tidedata, markdata)
+}
+
+// 根据精细化数据object生成精细化数据object
+const setRefinedData = function (obj) {
+    let result = []
+    // 按照日期排序数组
+    function SortByDate (x, y) {
+        let datex = new Date(x.FORECASTDATE)
+        let datey = new Date(y.FORECASTDATE)
+        return datex - datey
+    }
+    let tidearr = obj.tide
+    let temparr = obj.temperature
+    let wavearr = obj.wave
+    tidearr.sort(SortByDate)
+    temparr.sort(SortByDate)
+    wavearr.sort(SortByDate)
+    // 生成每天数据 加入result数组
+    let location = getLocName(tidearr[0].FORECASTAREA)
+    for (let i = 0; i < 3; i++) {
+        let daydata = {
+            loc: location,  // 地区
+            time: tidearr[i].FORECASTDATE,  // 日期
+            wave: wavearr[i].WAVEHEIGHT,    // 浪高
+            temp: temparr[i].WATERTEMPERATURE,  // 水温
+            windLvl: wavearr[i].WINDFORCE,  // 风力
+            windDir: wavearr[i].WINDDIRECTION,  // 风向
+        }
+        result.push(daydata)
+    }
+    return result
+}
+
 // 根据城市选择潮汐预报request的url和data
 const getTideReqData = function (city) {
     let result = {
@@ -578,9 +512,171 @@ const getLocName = function (STATION) {
             return '黄河海港'
         case '125bzg':
             return '滨州港'
+        case 'DYGLFP':
+            return '东营广利渔港'
+        case 'WFDJQ':
+            return '潍坊度假区'
+        case 'DYFP':
+            return '东营渔港'
+        case 'WHXQ':
+            return '威海新区'
+        case 'YTQQ':
+            return '烟台清泉'
+        case 'DJKP':
+            return '董家口'
+        case 'RZTHD':
+            return '日照桃花岛'
         default:
             return ''
     }
+}
+
+// 根据tidedata和markdata生成曲线chart option
+const getOption = function (tidedata, markdata) {
+    // 获取y轴最大最小值
+    let max = -100
+    let min = 100
+    for (let i = 0; i < markdata.length; i++) {
+        let value = Number(markdata[i][0].coord[1])
+        if (value > max) {
+            max = value
+        }
+        if (value < min) {
+            min = value
+        }
+    }
+    // 获取x轴最大最小值
+    let firstrecord = new Date(tidedata[0][0])
+    let lastrecord = new Date(tidedata[tidedata.length-1][0])
+    let firstdate = new Date(firstrecord.getFullYear() + '/' + firstrecord.getMonth()+1 + '/' + firstrecord.getDate() + ' 00:00:00')
+    let lastdate = new Date(lastrecord.getFullYear() + '/' + lastrecord.getMonth()+1 + '/' + lastrecord.getDate() + ' 23:59:59')
+    let option = {
+        // 图表距离外围div的padding
+        grid: {
+            top: '4%',
+            left: '0%',
+            right: '2%',
+            bottom: '20%',
+            containLabel: true
+        },
+        // 横坐标轴
+        xAxis: {
+            type: 'time',
+            axisLabel: {
+                // 横坐标刻度数值
+                show: true,
+                inside: true,
+                rotate: 90,
+                formatter: function (value, index) {
+                    // 格式化为'月-日'，只在第一个刻度显示年份
+                    let date = new Date(value)
+                    let texts = [date.getMonth() + 1, date.getDate()]
+                    if (index === 0) {
+                        texts.unshift(date.getFullYear())
+                    }
+                    return '\n' + texts.join('-')
+                } // end-formatter-axisLabel
+            }, // end-axisLabel
+            //min: firstdate,
+            //max: lastdate
+        },
+        yAxis: {
+            show: false,
+            boundaryGap: ['20%', '20%'] // 纵坐标轴的范围，比有效数字上下多出20%
+        },
+        series: [
+            // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
+            {
+                name: '潮汐',
+                type: 'line',
+                smooth: true,
+                silent: true,
+                animation: false,
+                symbolSize: 0, // 曲线上数据点小圆圈的大小
+                lineStyle: {
+                    color: '#1c8d3b', // 曲线颜色
+                    width: 1 // 曲线粗细
+                },
+                data: tidedata,
+                markLine: {
+                    symbolSize: 0.1, // 垂直标线一端的箭头 和数据label的大小， 不能设为0否则label不显示
+                    silent: true,
+                    animation: false,
+                    label: {
+                        show: true,
+                        position: 'start',
+                        formatter: function (param) {
+                            return param.data.coord[1] + 'cm'
+                        }
+                        /*
+                        textStyle: {
+                            color: '#000000',
+                        }
+                        */
+                    }, // end-label-markLine
+                    lineStyle: {
+                        type: 'dot'
+                    },
+                    data: markdata
+                }
+            },
+            // 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
+            {
+                name: '标线时间',
+                type: 'line',
+                markLine: {
+                    symbolSize: 0.1,
+                    opacity: 0, // 透明度为0 不渲染这条标线
+                    silent: true,
+                    animation: false,
+                    label: {
+                        show: true,
+                        position: 'end',
+                        formatter: function (param) {
+                            // 返回mm:ss格式的时间
+                            let date = new Date(param.data.coord[0])
+                            let hour = date.getHours()
+                            if (hour < 10) {
+                                hour = '0' + hour
+                            }
+                            let minute = date.getMinutes()
+                            if (minute < 10) {
+                                minute = '0' + minute
+                            }
+                            return hour + ':' + minute
+                        }
+                        /*
+                        textStyle: {
+                            color: '#000000',
+                        }
+                        */
+                    }, // end-label-markLine
+                    lineStyle: {
+                        type: 'dot'
+                    },
+                    data: markdata
+                } // end-markLine
+            },
+            // 第三组series： 两条水平标线 表示三天最高和最低的潮位
+            {
+                name: '最值横线',
+                type: 'line',
+                markLine: {
+                    symbolSize: 0,
+                    silent: true,
+                    animation: false,
+                    lineStyle: {
+                        type: 'dot'
+                    },
+                    label: {
+                        show: false
+                    },
+                    data: [{ yAxis: max }, { yAxis: min }]
+                } // end-markLine
+            }
+        ] // end-series
+    } // end-option
+    return option
 }
 
 // 在console显示object内部的属性
@@ -610,8 +706,11 @@ module.exports = {
     setDateballStatus: setDateballStatus,   // 日期球的状态
     setFivedayChartOption: setFivedayChartOption, // 五日高低温chart option
     setInshoreTableData: setInshoreTableData,   // 近海预报数据
+    setRefinedChartOption: setRefinedChartOption, // 精细化预报chart option
+    setRefinedData: setRefinedData, // 精细化预报图表下方数据
     getTideReqData: getTideReqData, // 潮汐预报request的url和data
     getInshoreReqData: getInshoreReqData,   // 近海预报的request的url和data
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
+    getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
     deepEquals: deepEquals
 }
