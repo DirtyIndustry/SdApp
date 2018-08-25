@@ -20,7 +20,21 @@ DONE... echart x-axies range
 DONE... refined section  
 DONE... echarts to component  
 DONE... put chart into fiveday component  
-fiveday bug after changed city  
+Half done... fiveday bug after changed city  
+DONE... menu page  
+DONE... tabBar masked on lanuch  
+DONE... optimize tide chart, switch v-show earlier than change option  
+城市预报
+预警报
+渔场预报
+DONE... 趋势预测
+天气预报
+天气图
+卫星云图
+雷达图
+台风路径
+新闻中心
+webview pages  
 deal with request response error  
 deal with request response fail  
 use local storage to speed up *startup->localstore->netrequest->localstore*  

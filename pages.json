@@ -26,6 +26,19 @@
 			}
 		},
 		{
+			"path": "pages/cityforecast/cityforecast",
+			"style": {
+				"navigationBarTitleText": "城市预报"
+			}
+		},
+		{
+			"path": "pages/trendprediction/trendprediction",
+			"style": {
+				"navigationBarTitleText": "趋势预测",
+				"backgroundColor": "#F8F8F8"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],

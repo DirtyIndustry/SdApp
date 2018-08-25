@@ -1,0 +1,2220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="Css\Map.css" />
+    <script type="text/javascript" src="..\Jquery\Jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="..\Jquery\echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="..\Css\mui-min.css" />
+    <script type="text/javascript" src="..\Jquery\mui-min.js"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.3&key=d3a96026d8201ca0c4fa48795d6c7bb4"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script type="text/javascript">
+        mui.init();
+        /*重写mui.back()，一秒内连续点击两次，退出应用，仅安卓有效*/
+        var first = null;
+        mui.back = function () {
+            if (!first) {
+                first = new Date().getTime();
+                /*自动消失提示信息*/
+                plus.nativeUI.toast("再按一次退出应用");
+                setTimeout(function () {
+                    first = null;
+                }, 1000);
+            }
+            else {
+                if (new Date().getTime() - first < 1000) {
+                    /*退出应用，仅安卓有效；*/
+                    plus.runtime.quit();
+                }
+            }
+        };
+
+        //首页链接
+        function Left_img() {
+            window.location.href = "../HomePage/HomePage.html";
+        }
+        //菜单链接
+        function Middle_img() {
+            window.location.href = "../Menu/Menu.html";
+        }
+        //设置链接
+        function Right_img() {
+            window.location.href = "../Setting/Setting.html";
+
+        }
+        //刷新，清除缓存
+        $(function () {
+            $("#head_right_img").click(function () {
+                window.location.reload();
+                applicationCache: false;
+            })
+        })
+        //青岛预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '青岛' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{"tide":[{');
+                    //右上角日期
+                    var djk_date = [imgSrc.length + 3];
+                    for (var i = 0; i < imgSrc.length + 3; i++) {
+                        djk_date[i] = imgSrc[1].split('"FORECASTDATE":"')[i + 1].split(' 0:00:00"')[0];
+                    }
+                    var datetime = new Date(djk_date[djk_date.length - djk_date.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#qd_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FIRSTHIGHTIME
+                    document.getElementById("qd_oneGC_CS").innerHTML = imgSrc[2].split('"FIRSTHIGHTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[2].split('"FIRSTHIGHTIME":"')[1].split('",')[0].substring(2, 4);
+                    //FIRSTLOWTIME
+                    document.getElementById("qd_oneDC_CS").innerHTML = imgSrc[2].split('"FIRSTLOWTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[2].split('"FIRSTLOWTIME":"')[1].split('",')[0].substring(2, 4);
+                    //SECONDHIGHTIME
+                    document.getElementById("qd_twoGC_CS").innerHTML = imgSrc[2].split('"SECONDHIGHTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[2].split('"SECONDHIGHTIME":"')[1].split('",')[0].substring(2, 4);
+                    //SECONDLOWTIME
+                    document.getElementById("qd_twoDC_CS").innerHTML = imgSrc[2].split('"SECONDLOWTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[2].split('"SECONDLOWTIME":"')[1].split('",')[0].substring(2, 4);
+
+                    //浪高
+                    document.getElementById("qd_oneGC_CW").innerHTML = imgSrc[2].split('"FIRSTHIGHLEVEL":"')[1].split('",')[0];
+                    //FIRSTLOWTIME
+                    document.getElementById("qd_oneDC_CW").innerHTML = imgSrc[2].split('"FIRSTLOWLEVEL":"')[1].split('",')[0];
+                    //SECONDHIGHTIME
+                    document.getElementById("qd_twoGC_CW").innerHTML = imgSrc[2].split('"SECONDHIGHLEVEL":"')[1].split('",')[0];
+                    //SECONDLOWTIME
+                    document.getElementById("qd_twoDC_CW").innerHTML = imgSrc[2].split('"SECONDLOWLEVEL":"')[1].split('",')[0];
+                }
+            })
+        })
+        //青岛近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '青岛' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("qd_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("qd_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //烟台预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '烟台' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{"tide":[{');
+                    //右上角日期
+                    var djk_date = [imgSrc.length + 3];
+                    for (var i = 0; i < imgSrc.length + 3; i++) {
+                        djk_date[i] = imgSrc[1].split('"FORECASTDATE":"')[i + 1].split(' 0:00:00"')[0];
+                    }
+                    var datetime = new Date(djk_date[djk_date.length - djk_date.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#yt_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FIRSTHIGHTIME
+                    document.getElementById("yt_oneGC_CS").innerHTML = imgSrc[1].split('"FIRSTHIGHTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[1].split('"FIRSTHIGHTIME":"')[1].split('",')[0].substring(2, 4);
+                    //FIRSTLOWTIME
+                    document.getElementById("yt_oneDC_CS").innerHTML = imgSrc[1].split('"FIRSTLOWTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[1].split('"FIRSTLOWTIME":"')[1].split('",')[0].substring(2, 4);
+                    //SECONDHIGHTIME
+                    document.getElementById("yt_twoGC_CS").innerHTML = imgSrc[1].split('"SECONDHIGHTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[1].split('"SECONDHIGHTIME":"')[1].split('",')[0].substring(2, 4);
+                    //SECONDLOWTIME
+                    document.getElementById("yt_twoDC_CS").innerHTML = imgSrc[1].split('"SECONDLOWTIME":"')[1].split('",')[0].substring(0, 2) + ":" + imgSrc[1].split('"SECONDLOWTIME":"')[1].split('",')[0].substring(2, 4);
+
+                    //浪高
+                    document.getElementById("yt_oneGC_CW").innerHTML = imgSrc[1].split('"FIRSTHIGHLEVEL":"')[1].split('",')[0];
+                    //FIRSTLOWTIME
+                    document.getElementById("yt_oneDC_CW").innerHTML = imgSrc[1].split('"FIRSTLOWLEVEL":"')[1].split('",')[0];
+                    //SECONDHIGHTIME
+                    document.getElementById("yt_twoGC_CW").innerHTML = imgSrc[1].split('"SECONDHIGHLEVEL":"')[1].split('",')[0];
+                    //SECONDLOWTIME
+                    document.getElementById("yt_twoDC_CW").innerHTML = imgSrc[1].split('"SECONDLOWLEVEL":"')[1].split('",')[0];
+                }
+            })
+        })
+        //烟台近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '烟台' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("yt_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("yt_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //威海预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '威海' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{');
+                    //右上角日期
+                    var tideTime = [];
+                    for (var i = 0; i < imgSrc.length - 1; i++) {
+                        tideTime[i] = imgSrc[i + 1].split("\"PREDICTIONDATE\":\"")[1].split("0:00:00\",")[0];
+                    }
+                    var datetime = new Date(tideTime[tideTime.length - tideTime.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#wh_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FSTHIGHWIDETIME
+                    document.getElementById("wh_oneGC_CS").innerHTML = imgSrc[1].split('"FSTHIGHWIDETIME":"')[1].split('",')[0];
+                    //FSTLOWWIDETIME
+                    document.getElementById("wh_oneDC_CS").innerHTML = imgSrc[1].split('"FSTLOWWIDETIME":"')[1].split('",')[0];
+                    //SCDHIGHWIDETIME
+                    document.getElementById("wh_twoGC_CS").innerHTML = imgSrc[1].split('"SCDHIGHWIDETIME":"')[1].split('",')[0];
+                    //SCDLOWWIDETIME
+                    document.getElementById("wh_twoDC_CS").innerHTML = imgSrc[1].split('"SCDLOWWIDETIME":"')[1].split('",')[0];
+
+                    //浪高
+                    //FSTHIGHWIDEHEIGHT
+                    document.getElementById("wh_oneGC_CW").innerHTML = imgSrc[1].split('"FSTHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //FSTLOWWIDEHEIGHT
+                    document.getElementById("wh_oneDC_CW").innerHTML = imgSrc[1].split('"FSTLOWWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDHIGHWIDEHEIGHT
+                    document.getElementById("wh_twoGC_CW").innerHTML = imgSrc[1].split('"SCDHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDLOWWIDEHEIGHT
+                    document.getElementById("wh_twoDC_CW").innerHTML = imgSrc[1].split('"SCDLOWWIDEHEIGHT":"')[1].split('"}')[0];
+                }
+            })
+        })
+        //威海近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '威海' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("wh_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("wh_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //日照预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '日照' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{');
+                    //右上角日期
+                    var tideTime = [];
+                    for (var i = 0; i < imgSrc.length - 1; i++) {
+                        tideTime[i] = imgSrc[i + 1].split("\"PREDICTIONDATE\":\"")[1].split("0:00:00\",")[0];
+                    }
+                    var datetime = new Date(tideTime[tideTime.length - tideTime.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#rz_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FSTHIGHWIDETIME
+                    document.getElementById("rz_oneGC_CS").innerHTML = imgSrc[1].split('"FSTHIGHWIDETIME":"')[1].split('",')[0];
+                    //FSTLOWWIDETIME
+                    document.getElementById("rz_oneDC_CS").innerHTML = imgSrc[1].split('"FSTLOWWIDETIME":"')[1].split('",')[0];
+                    //SCDHIGHWIDETIME
+                    document.getElementById("rz_twoGC_CS").innerHTML = imgSrc[1].split('"SCDHIGHWIDETIME":"')[1].split('",')[0];
+                    //SCDLOWWIDETIME
+                    document.getElementById("rz_twoDC_CS").innerHTML = imgSrc[1].split('"SCDLOWWIDETIME":"')[1].split('",')[0];
+
+                    //浪高
+                    //FSTHIGHWIDEHEIGHT
+                    document.getElementById("rz_oneGC_CW").innerHTML = imgSrc[1].split('"FSTHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //FSTLOWWIDEHEIGHT
+                    document.getElementById("rz_oneDC_CW").innerHTML = imgSrc[1].split('"FSTLOWWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDHIGHWIDEHEIGHT
+                    document.getElementById("rz_twoGC_CW").innerHTML = imgSrc[1].split('"SCDHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDLOWWIDEHEIGHT
+                    document.getElementById("rz_twoDC_CW").innerHTML = imgSrc[1].split('"SCDLOWWIDEHEIGHT":"')[1].split('"}')[0];
+                }
+            })
+        })
+        //日照近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '日照' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("rz_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("rz_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //潍坊预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '潍坊' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{');
+                    //右上角日期
+                    var tideTime = [];
+                    for (var i = 0; i < imgSrc.length - 1; i++) {
+                        tideTime[i] = imgSrc[i + 1].split("\"PREDICTIONDATE\":\"")[1].split("0:00:00\",")[0];
+                    }
+                    var datetime = new Date(tideTime[tideTime.length - tideTime.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#wf_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FSTHIGHWIDETIME
+                    document.getElementById("wf_oneGC_CS").innerHTML = imgSrc[1].split('"FSTHIGHWIDETIME":"')[1].split('",')[0];
+                    //FSTLOWWIDETIME
+                    document.getElementById("wf_oneDC_CS").innerHTML = imgSrc[1].split('"FSTLOWWIDETIME":"')[1].split('",')[0];
+                    //SCDHIGHWIDETIME
+                    document.getElementById("wf_twoGC_CS").innerHTML = imgSrc[1].split('"SCDHIGHWIDETIME":"')[1].split('",')[0];
+                    //SCDLOWWIDETIME
+                    document.getElementById("wf_twoDC_CS").innerHTML = imgSrc[1].split('"SCDLOWWIDETIME":"')[1].split('",')[0];
+
+                    //浪高
+                    //FSTHIGHWIDEHEIGHT
+                    document.getElementById("wf_oneGC_CW").innerHTML = imgSrc[1].split('"FSTHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //FSTLOWWIDEHEIGHT
+                    document.getElementById("wf_oneDC_CW").innerHTML = imgSrc[1].split('"FSTLOWWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDHIGHWIDEHEIGHT
+                    document.getElementById("wf_twoGC_CW").innerHTML = imgSrc[1].split('"SCDHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDLOWWIDEHEIGHT
+                    document.getElementById("wf_twoDC_CW").innerHTML = imgSrc[1].split('"SCDLOWWIDEHEIGHT":"')[1].split('"}')[0];
+                }
+            })
+        })
+        //潍坊近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '潍坊' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("wf_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("wf_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //东营预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '东营' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{');
+                    //右上角日期
+                    var tideTime = [];
+                    for (var i = 0; i < imgSrc.length - 1; i++) {
+                        tideTime[i] = imgSrc[i + 1].split("\"PREDICTIONDATE\":\"")[1].split("0:00:00\",")[0];
+                    }
+                    var datetime = new Date(tideTime[tideTime.length - tideTime.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#dy_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FSTHIGHWIDETIME
+                    document.getElementById("dy_oneGC_CS").innerHTML = imgSrc[1].split('"FSTHIGHWIDETIME":"')[1].split('",')[0];
+                    //FSTLOWWIDETIME
+                    document.getElementById("dy_oneDC_CS").innerHTML = imgSrc[1].split('"FSTLOWWIDETIME":"')[1].split('",')[0];
+                    //SCDHIGHWIDETIME
+                    document.getElementById("dy_twoGC_CS").innerHTML = imgSrc[1].split('"SCDHIGHWIDETIME":"')[1].split('",')[0];
+                    //SCDLOWWIDETIME
+                    document.getElementById("dy_twoDC_CS").innerHTML = imgSrc[1].split('"SCDLOWWIDETIME":"')[1].split('",')[0];
+
+                    //浪高
+                    //FSTHIGHWIDEHEIGHT
+                    document.getElementById("dy_oneGC_CW").innerHTML = imgSrc[1].split('"FSTHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //FSTLOWWIDEHEIGHT
+                    document.getElementById("dy_oneDC_CW").innerHTML = imgSrc[1].split('"FSTLOWWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDHIGHWIDEHEIGHT
+                    document.getElementById("dy_twoGC_CW").innerHTML = imgSrc[1].split('"SCDHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDLOWWIDEHEIGHT
+                    document.getElementById("dy_twoDC_CW").innerHTML = imgSrc[1].split('"SCDLOWWIDEHEIGHT":"')[1].split('"}')[0];
+                }
+            })
+        })
+        //东营近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '东营' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("dy_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("dy_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+
+        //滨州预报
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '滨州' },
+                success: function (result) {
+                    var imgSrc = $(result).find('string').text().split('{');
+                    //右上角日期
+                    var tideTime = [];
+                    for (var i = 0; i < imgSrc.length - 1; i++) {
+                        tideTime[i] = imgSrc[i + 1].split("\"PREDICTIONDATE\":\"")[1].split("0:00:00\",")[0];
+                    }
+                    var datetime = new Date(tideTime[tideTime.length - tideTime.length]);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日0时';
+                    $('#bz_right_cityFont').html(str1 + '~' + str2);
+                    //时间
+                    //FSTHIGHWIDETIME
+                    document.getElementById("bz_oneGC_CS").innerHTML = imgSrc[1].split('"FSTHIGHWIDETIME":"')[1].split('",')[0];
+                    //FSTLOWWIDETIME
+                    document.getElementById("bz_oneDC_CS").innerHTML = imgSrc[1].split('"FSTLOWWIDETIME":"')[1].split('",')[0];
+                    //SCDHIGHWIDETIME
+                    document.getElementById("bz_twoGC_CS").innerHTML = imgSrc[1].split('"SCDHIGHWIDETIME":"')[1].split('",')[0];
+                    //SCDLOWWIDETIME
+                    document.getElementById("bz_twoDC_CS").innerHTML = imgSrc[1].split('"SCDLOWWIDETIME":"')[1].split('",')[0];
+
+                    //浪高
+                    //FSTHIGHWIDEHEIGHT
+                    document.getElementById("bz_oneGC_CW").innerHTML = imgSrc[1].split('"FSTHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //FSTLOWWIDEHEIGHT
+                    document.getElementById("bz_oneDC_CW").innerHTML = imgSrc[1].split('"FSTLOWWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDHIGHWIDEHEIGHT
+                    document.getElementById("bz_twoGC_CW").innerHTML = imgSrc[1].split('"SCDHIGHWIDEHEIGHT":"')[1].split('",')[0];
+                    //SCDLOWWIDEHEIGHT
+                    document.getElementById("bz_twoDC_CW").innerHTML = imgSrc[1].split('"SCDLOWWIDEHEIGHT":"')[1].split('"}')[0];
+                }
+            })
+        })
+        //滨州近海
+        $(document).ready(function () {
+            var array = [];
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东', city: '滨州' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    document.getElementById("bz_lg").innerHTML = all[0].split('"SDOSCWLOWESTWAVEHEIGHT":"')[1].split('",')[0] + "m";
+                    document.getElementById("bz_sw").innerHTML = all[0].split('"SDOSCWSURFACETEMPERATURE":"')[1].split('",')[0] + "℃";
+                }
+            })
+        })
+        //渔场预报
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "http://123.234.129.238:8001/MyWebService.asmx/GetFisheriesForecast",
+                data: { name: 'admin', areaflg: '山东' },
+                success: function (result) {
+                    var all = $(result).find('string').text().split('http://123.234.129.238:8001/');
+                    var all_array = [];
+                    for (var i = 0; i < 33; i++) {
+                        all_array[i] = all[0].split('#')[i];
+                    }
+                    //右上角日期
+                    var data = all_array[0].split(' ')[0];
+                    var datetime = new Date(data);
+                    var str1 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日10时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str2 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日10时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str3 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日10时';
+                    datetime.setDate(datetime.getDate() + 1);
+                    var str4 = (datetime.getMonth() + 1) + '月' + datetime.getDate() + '日10时';
+                    $('#right_fontFishery_ldw').html(str1 + '~' + str4);
+                    $('#right_fontFishery_lhk').html(str1 + '~' + str4);
+                    $('#right_fontFishery_bhw').html(str1 + '~' + str4);
+                    $('#right_fontFishery_lzw').html(str1 + '~' + str4);
+                    $('#right_fontFishery_yw').html(str1 + '~' + str4);
+                    $('#right_fontFishery_hyd').html(str1 + '~' + str4);
+                    $('#right_fontFishery_hd').html(str1 + '~' + str4);
+                    $('#right_fontFishery_wd').html(str1 + '~' + str4);
+                    $('#right_fontFishery_sdong').html(str1 + '~' + str4);
+                    $('#right_fontFishery_sdao').html(str1 + '~' + str4);
+                    $('#right_fontFishery_qh').html(str1 + '~' + str4);
+
+                    //渤海湾渔场
+                    var bohaiwan_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        bohaiwan_array[i] = all[0].split('渤海湾渔场,')[i + 1].split('#')[0];
+                    }
+                    bohaiwan_array.sort();
+                    document.getElementById("bhw_tfBG").innerHTML = bohaiwan_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("bhw_tfBX").innerHTML = bohaiwan_array[0].split(',')[2];
+                    document.getElementById("bhw_feBG").innerHTML = bohaiwan_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("bhw_feBX").innerHTML = bohaiwan_array[1].split(',')[2];
+                    document.getElementById("bhw_stBG").innerHTML = bohaiwan_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("bhw_stBX").innerHTML = bohaiwan_array[2].split(',')[2];
+                    //莱州湾渔场
+                    var lzw_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        lzw_array[i] = all[0].split('莱州湾渔场,')[i + 1].split('#')[0];
+                    }
+                    lzw_array.sort();
+                    document.getElementById("lzw_tfBG").innerHTML = lzw_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("lzw_tfBX").innerHTML = lzw_array[0].split(',')[2];
+                    document.getElementById("lzw_feBG").innerHTML = lzw_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("lzw_feBX").innerHTML = lzw_array[1].split(',')[2];
+                    document.getElementById("lzw_stBG").innerHTML = lzw_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("lzw_stBX").innerHTML = lzw_array[2].split(',')[2];
+                    //烟威渔场
+                    var yw_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        yw_array[i] = all[0].split('烟威渔场,')[i + 1].split('#')[0];
+                    }
+                    yw_array.sort();
+                    document.getElementById("yw_tfBG").innerHTML = yw_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("yw_tfBX").innerHTML = yw_array[0].split(',')[2];
+                    document.getElementById("yw_feBG").innerHTML = yw_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("yw_feBX").innerHTML = yw_array[1].split(',')[2];
+                    document.getElementById("yw_stBG").innerHTML = yw_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("yw_stBX").innerHTML = yw_array[2].split(',')[2];
+                    //威东渔场
+                    var wd_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        wd_array[i] = all[0].split('威东渔场,')[i + 1].split('#')[0];
+                    }
+                    wd_array.sort();
+                    document.getElementById("wd_tfBG").innerHTML = wd_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("wd_tfBX").innerHTML = wd_array[0].split(',')[2];
+                    document.getElementById("wd_feBG").innerHTML = wd_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("wd_feBX").innerHTML = wd_array[1].split(',')[2];
+                    document.getElementById("wd_stBG").innerHTML = wd_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("wd_stBX").innerHTML = wd_array[2].split(',')[2];
+                    //青海渔场
+                    var qh_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        qh_array[i] = all[0].split('青海渔场,')[i + 1].split('#')[0];
+                    }
+                    qh_array.sort();
+                    document.getElementById("qh_tfBG").innerHTML = qh_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("qh_tfBX").innerHTML = qh_array[0].split(',')[2];
+                    document.getElementById("qh_feBG").innerHTML = qh_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("qh_feBX").innerHTML = qh_array[1].split(',')[2];
+                    document.getElementById("qh_stBG").innerHTML = qh_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("qh_stBX").innerHTML = qh_array[2].split(',')[2];
+                    //石岛渔场
+                    var sdao_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        sdao_array[i] = all[0].split('石岛渔场,')[i + 1].split('#')[0];
+                    }
+                    sdao_array.sort();
+                    document.getElementById("sdao_tfBG").innerHTML = sdao_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("sdao_tfBX").innerHTML = sdao_array[0].split(',')[2];
+                    document.getElementById("sdao_feBG").innerHTML = sdao_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("sdao_feBX").innerHTML = sdao_array[1].split(',')[2];
+                    document.getElementById("sdao_stBG").innerHTML = sdao_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("sdao_stBX").innerHTML = sdao_array[2].split(',')[2];
+                    //石东渔场
+                    var shidong_array = [];
+                    for (var i = 0; i < 3; i++) {
+                        shidong_array[i] = all[0].split('石东渔场,')[i + 1].split('#')[0];
+                    }
+                    shidong_array.sort();
+                    document.getElementById("sdong_tfBG").innerHTML = shidong_array[0].split(',')[1].split(',')[0];
+                    document.getElementById("sdong_tfBX").innerHTML = shidong_array[0].split(',')[2];
+                    document.getElementById("sdong_feBG").innerHTML = shidong_array[1].split(',')[1].split(',')[0];
+                    document.getElementById("sdong_feBX").innerHTML = shidong_array[1].split(',')[2];
+                    document.getElementById("sdong_stBG").innerHTML = shidong_array[2].split(',')[1].split(',')[0];
+                    document.getElementById("sdong_stBX").innerHTML = shidong_array[2].split(',')[2];
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+    <!--第一部分-->
+    <div class="First">
+        <!--头部框架-->
+        <div class="head">
+            <!--头部左边-->
+            <div class="head_left"></div>
+            <!--头部中间-->
+            <div class="head_middle">地图</div>
+            <!--头部右边-->
+            <div class="head_right">
+                <div class="head_right_img" id="head_right_img"></div>
+            </div>
+        </div>
+    </div>
+    <!--第二部分-->
+    <div class="Section">
+        <div class="frame" id="frame">
+            <!--城市-->
+            <div class="city_map_frame" id="map_second"></div>
+            <!--渔场-->
+            <div class="fishery_map_frame" id="map_third"></div>
+            <!--切换地图-->
+            <!--城市-->
+            <div class="map_switch" id="map_switch_second"></div>
+            <!--渔场-->
+            <div class="map_switch" id="map_switch_third"></div>
+        </div>
+        <div class="option_frame">
+            <div class="option_button">
+                <div class="city" id="city" onclick="javascript: City();">城市</div>
+                <div class="fishery" id="fishery" onclick="javascript: Fishery();">渔场</div>
+            </div>
+        </div>
+        <div class="button">
+            <div class="img" id="switch_img"></div>
+        </div>
+        <!--海区信息体-->
+        <!--城市信息体-->
+        <!--青岛近海-->
+        <div class="table_frame_city" id="table_cityFrame_first">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">青岛近海</div>
+                        <div class="right_font" id="qd_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="qd_oneGC_CS"></td>
+                                <td id="qd_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="qd_oneDC_CS"></td>
+                                <td id="qd_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="qd_twoGC_CS"></td>
+                                <td id="qd_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="qd_twoDC_CS"></td>
+                                <td id="qd_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="qd_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="qd_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--烟台近海-->
+        <div class="table_frame_city" id="table_cityFrame_second">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">烟台近海</div>
+                        <div class="right_font" id="yt_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="yt_oneGC_CS"></td>
+                                <td id="yt_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="yt_oneDC_CS"></td>
+                                <td id="yt_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="yt_twoGC_CS"></td>
+                                <td id="yt_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="yt_twoDC_CS"></td>
+                                <td id="yt_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="yt_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="yt_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--威海近海-->
+        <div class="table_frame_city" id="table_cityFrame_third">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">威海近海</div>
+                        <div class="right_font" id="wh_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="wh_oneGC_CS"></td>
+                                <td id="wh_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="wh_oneDC_CS"></td>
+                                <td id="wh_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="wh_twoGC_CS"></td>
+                                <td id="wh_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="wh_twoDC_CS"></td>
+                                <td id="wh_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="wh_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="wh_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--日照近海-->
+        <div class="table_frame_city" id="table_cityFrame_fourth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">日照近海</div>
+                        <div class="right_font" id="rz_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="rz_oneGC_CS"></td>
+                                <td id="rz_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="rz_oneDC_CS"></td>
+                                <td id="rz_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="rz_twoGC_CS"></td>
+                                <td id="rz_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="rz_twoDC_CS"></td>
+                                <td id="rz_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="rz_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="rz_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--潍坊近海-->
+        <div class="table_frame_city" id="table_cityFrame_fifth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">潍坊近海</div>
+                        <div class="right_font" id="wf_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="wf_oneGC_CS"></td>
+                                <td id="wf_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="wf_oneDC_CS"></td>
+                                <td id="wf_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="wf_twoGC_CS"></td>
+                                <td id="wf_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="wf_twoDC_CS"></td>
+                                <td id="wf_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="wf_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="wf_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--东营近海-->
+        <div class="table_frame_city" id="table_cityFrame_sixth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">东营近海</div>
+                        <div class="right_font" id="dy_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="dy_oneGC_CS"></td>
+                                <td id="dy_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="dy_oneDC_CS"></td>
+                                <td id="dy_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="dy_twoGC_CS"></td>
+                                <td id="dy_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="dy_twoDC_CS"></td>
+                                <td id="dy_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="dy_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="dy_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--滨州近海-->
+        <div class="table_frame_city" id="table_cityFrame_seventh">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">滨州近海</div>
+                        <div class="right_font" id="bz_right_cityFont"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify"></td>
+                                <td class="modify">潮时</td>
+                                <td class="modify">潮位(cm)</td>
+                            </tr>
+                            <tr>
+                                <td>第一次高潮</td>
+                                <td id="bz_oneGC_CS"></td>
+                                <td id="bz_oneGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第一次低潮</td>
+                                <td id="bz_oneDC_CS"></td>
+                                <td id="bz_oneDC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次高潮</td>
+                                <td id="bz_twoGC_CS"></td>
+                                <td id="bz_twoGC_CW"></td>
+                            </tr>
+                            <tr>
+                                <td>第二次低潮</td>
+                                <td id="bz_twoDC_CS"></td>
+                                <td id="bz_twoDC_CW"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="base">
+                        <div class="left_font">
+                            <div class="lg_left">浪高：</div>
+                            <div class="value_right" id="bz_lg"></div>
+                        </div>
+                        <div class="right_font">
+                            <div class="lg_left">水温：</div>
+                            <div class="value_right" id="bz_sw"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_city();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--渔场信息体-->
+        <!--辽东湾渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_first">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">辽东湾渔场</div>
+                        <div class="right_font" id="right_fontFishery_ldw"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="ldw_tfBG"></td>
+                                <td id="ldw_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="ldw_feBG"></td>
+                                <td id="ldw_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="ldw_stBG"></td>
+                                <td id="ldw_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--滦河口渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_second">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">滦河口渔场</div>
+                        <div class="right_font" id="right_fontFishery_lhk"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="lhk_tfBG"></td>
+                                <td id="lhk_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="lhk_feBG"></td>
+                                <td id="lhk_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="lhk_stBG"></td>
+                                <td id="lhk_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--渤海湾渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_third">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">渤海湾渔场</div>
+                        <div class="right_font" id="right_fontFishery_bhw"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="bhw_tfBG"></td>
+                                <td id="bhw_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="bhw_feBG"></td>
+                                <td id="bhw_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="bhw_stBG"></td>
+                                <td id="bhw_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--莱州湾渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_fourth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">莱州湾渔场</div>
+                        <div class="right_font" id="right_fontFishery_lzw"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="lzw_tfBG"></td>
+                                <td id="lzw_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="lzw_feBG"></td>
+                                <td id="lzw_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="lzw_stBG"></td>
+                                <td id="lzw_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--烟威渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_fifth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">烟威渔场</div>
+                        <div class="right_font" id="right_fontFishery_yw"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="yw_tfBG"></td>
+                                <td id="yw_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="yw_feBG"></td>
+                                <td id="yw_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="yw_stBG"></td>
+                                <td id="yw_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--海洋岛渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_sixth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">海洋岛渔场</div>
+                        <div class="right_font" id="right_fontFishery_hyd"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="hyd_tfBG"></td>
+                                <td id="hyd_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="hyd_feBG"></td>
+                                <td id="hyd_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="hyd_stBG"></td>
+                                <td id="hyd_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--海东渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_seventh">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">海东渔场</div>
+                        <div class="right_font" id="right_fontFishery_hd"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="hd_tfBG"></td>
+                                <td id="hd_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="hd_feBG"></td>
+                                <td id="hd_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="hd_stBG"></td>
+                                <td id="hd_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--威东渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_eighth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">威东渔场</div>
+                        <div class="right_font" id="right_fontFishery_wd"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="wd_tfBG"></td>
+                                <td id="wd_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="wd_feBG"></td>
+                                <td id="wd_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="wd_stBG"></td>
+                                <td id="wd_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--石东渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_ninth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">石东渔场</div>
+                        <div class="right_font" id="right_fontFishery_sdong"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="sdong_tfBG"></td>
+                                <td id="sdong_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="sdong_feBG"></td>
+                                <td id="sdong_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="sdong_stBG"></td>
+                                <td id="sdong_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--石岛渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_tenth">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">石岛渔场</div>
+                        <div class="right_font" id="right_fontFishery_sdao"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="sdao_tfBG"></td>
+                                <td id="sdao_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="sdao_feBG"></td>
+                                <td id="sdao_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="sdao_stBG"></td>
+                                <td id="sdao_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--青海渔场-->
+        <div class="table_frame_fishery" id="table_frameFishery_eleventh">
+            <div class="float_below">
+                <div class="float">
+                    <div class="up">
+                        <div class="left_font">青海渔场</div>
+                        <div class="right_font" id="right_fontFishery_qh"></div>
+                    </div>
+                    <div class="hr_first"></div>
+                    <div class="table">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="modify">时效</td>
+                                <td class="modify">波高(m)</td>
+                                <td class="modify">波向</td>
+                            </tr>
+                            <tr>
+                                <td>24h</td>
+                                <td id="qh_tfBG"></td>
+                                <td id="qh_tfBX"></td>
+                            </tr>
+                            <tr>
+                                <td>48h</td>
+                                <td id="qh_feBG"></td>
+                                <td id="qh_feBX"></td>
+                            </tr>
+                            <tr>
+                                <td>72h</td>
+                                <td id="qh_stBG"></td>
+                                <td id="qh_stBX"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="close_up">
+                <div class="close_float">
+                    <div class="close_img" onclick="javascript: Close_fishery();">
+                        <img src="Images/close.png" width="12px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--第三部分-->
+        <div class="below">
+            <div class="bottom">
+                <div class="first" onclick="javascript:Left_img();">
+                    <div class="up_icon">
+                        <img src="../Images/bottom_left_first.png" />
+                    </div>
+                    <div class="below_font">
+                        <font>首页</font>
+                    </div>
+                </div>
+                <div class="second" onclick="javascript:Middle_img();">
+                    <div class="up_icon">
+                        <img src="../Images/bottom_middle_first.png" />
+                    </div>
+                    <div class="below_font">
+                        <font>菜单</font>
+                    </div>
+                </div>
+                <div class="third">
+                    <div class="up_icon">
+                        <img src="../Images/bottom_loc_second.png" />
+                    </div>
+                    <div class="below_font">
+                        <font>地图</font>
+                    </div>
+                </div>
+                <div class="fifth" onclick="javascript:Right_img();">
+                    <div class="up_icon">
+                        <img src="../Images/bottom_right_first.png" />
+                    </div>
+                    <div class="below_font">
+                        <font>设置</font>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var setMap;
+            //打开页面的同时加载
+            window.onload = function () {
+                document.getElementById("city").style.backgroundColor = "#0092d4";
+                document.getElementById("city").style.color = "#ffffff";
+                city_inn = document.getElementById("map_second").style.display = "block";
+                fishery_inn = document.getElementById("map_third").style.display = "none";
+
+                document.getElementById("table_cityFrame_first").style.display = "none";
+                document.getElementById("table_cityFrame_second").style.display = "none";
+                document.getElementById("table_cityFrame_third").style.display = "none";
+                document.getElementById("table_cityFrame_fourth").style.display = "none";
+                document.getElementById("table_cityFrame_fifth").style.display = "none";
+                document.getElementById("table_cityFrame_sixth").style.display = "none";
+                document.getElementById("table_cityFrame_seventh").style.display = "none";
+
+                document.getElementById("table_frameFishery_first").style.display = "none";
+                document.getElementById("table_frameFishery_second").style.display = "none";
+                document.getElementById("table_frameFishery_third").style.display = "none";
+                document.getElementById("table_frameFishery_fourth").style.display = "none";
+                document.getElementById("table_frameFishery_fifth").style.display = "none";
+                document.getElementById("table_frameFishery_sixth").style.display = "none";
+                document.getElementById("table_frameFishery_seventh").style.display = "none";
+                document.getElementById("table_frameFishery_eighth").style.display = "none";
+                document.getElementById("table_frameFishery_ninth").style.display = "none";
+                document.getElementById("table_frameFishery_tenth").style.display = "none";
+                document.getElementById("table_frameFishery_eleventh").style.display = "none";
+
+                setMap = true;
+            }
+
+            var area_inn;
+            var city_inn;
+            var fishery_inn;
+
+            //城市选项
+            function City() {
+                document.getElementById("city").style.backgroundColor = "#0092d4";
+                document.getElementById("city").style.color = "#ffffff";
+                document.getElementById("fishery").style.backgroundColor = "#ffffff";
+                document.getElementById("fishery").style.color = "#0092d4";
+                city_inn = document.getElementById("map_second").style.display = "block";
+                fishery_inn = document.getElementById("map_third").style.display = "none";
+                //关闭信息体
+                document.getElementById("table_cityFrame_first").style.display = "none";
+                document.getElementById("table_cityFrame_second").style.display = "none";
+                document.getElementById("table_cityFrame_third").style.display = "none";
+                document.getElementById("table_cityFrame_fourth").style.display = "none";
+                document.getElementById("table_cityFrame_fifth").style.display = "none";
+                document.getElementById("table_cityFrame_sixth").style.display = "none";
+                document.getElementById("table_cityFrame_seventh").style.display = "none";
+
+                document.getElementById("table_frameFishery_first").style.display = "none";
+                document.getElementById("table_frameFishery_second").style.display = "none";
+                document.getElementById("table_frameFishery_third").style.display = "none";
+                document.getElementById("table_frameFishery_fourth").style.display = "none";
+                document.getElementById("table_frameFishery_fifth").style.display = "none";
+                document.getElementById("table_frameFishery_sixth").style.display = "none";
+                document.getElementById("table_frameFishery_seventh").style.display = "none";
+                document.getElementById("table_frameFishery_eighth").style.display = "none";
+                document.getElementById("table_frameFishery_ninth").style.display = "none";
+                document.getElementById("table_frameFishery_tenth").style.display = "none";
+                document.getElementById("table_frameFishery_eleventh").style.display = "none";
+
+                setMap = true;
+                //切换地图
+                document.getElementById("switch_img").style.backgroundImage = "URL(Images/wxdt.png)";
+            }
+            //渔场选项
+            function Fishery() {
+                document.getElementById("city").style.backgroundColor = "#ffffff";
+                document.getElementById("city").style.color = "#0092d4";
+                document.getElementById("fishery").style.backgroundColor = "#0092d4";
+                document.getElementById("fishery").style.color = "#ffffff";
+                city_inn = document.getElementById("map_second").style.display = "none";
+                fishery_inn = document.getElementById("map_third").style.display = "block";
+                //关闭信息体
+                document.getElementById("table_cityFrame_first").style.display = "none";
+                document.getElementById("table_cityFrame_second").style.display = "none";
+                document.getElementById("table_cityFrame_third").style.display = "none";
+                document.getElementById("table_cityFrame_fourth").style.display = "none";
+                document.getElementById("table_cityFrame_fifth").style.display = "none";
+                document.getElementById("table_cityFrame_sixth").style.display = "none";
+                document.getElementById("table_cityFrame_seventh").style.display = "none";
+
+                document.getElementById("table_frameFishery_first").style.display = "none";
+                document.getElementById("table_frameFishery_second").style.display = "none";
+                document.getElementById("table_frameFishery_third").style.display = "none";
+                document.getElementById("table_frameFishery_fourth").style.display = "none";
+                document.getElementById("table_frameFishery_fifth").style.display = "none";
+                document.getElementById("table_frameFishery_sixth").style.display = "none";
+                document.getElementById("table_frameFishery_seventh").style.display = "none";
+                document.getElementById("table_frameFishery_eighth").style.display = "none";
+                document.getElementById("table_frameFishery_ninth").style.display = "none";
+                document.getElementById("table_frameFishery_tenth").style.display = "none";
+                document.getElementById("table_frameFishery_eleventh").style.display = "none";
+
+                setMap = true;
+                //切换地图
+                document.getElementById("switch_img").style.backgroundImage = "URL(Images/wxdt.png)";
+            }
+
+            //城市地图
+            var city_map = new AMap.Map('map_second', {
+                resizeEnable: true,
+                zoom: 6,
+                center: [120.292059, 36.79898]
+            });
+            //卫星图
+            var city_satelliteMap = new AMap.Map('map_switch_second', {
+                center: [120.292059, 36.79898],
+                layers: [
+                    new AMap.TileLayer.Satellite(),
+                    new AMap.TileLayer.RoadNet()
+                ],
+                zoom: 6
+            });
+            //添加点标记，使用自己的icon
+            //青岛
+            var QD_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [120.315579, 36.061865],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Qd_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var QD_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [120.315579, 36.061865],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Qd_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //日照
+            var RZ_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [119.570555, 35.423879],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Rz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var RZ_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [119.570555, 35.423879],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Rz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //烟台
+            var YT_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [121.184684, 37.583791],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Yt_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var YT_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [121.184684, 37.583791],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Yt_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //威海
+            var WH_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [122.139768, 37.493996],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Wh_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var WH_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [122.139768, 37.493996],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Wh_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //潍坊
+            var WF_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [119.440566, 37.116516],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Wf_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var WF_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [119.440566, 37.116516],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Wf_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //东营
+            var DY_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [118.92083, 37.432009],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Dy_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var DY_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [118.92083, 37.432009],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Dy_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //滨州
+            var BZ_icon_map = new AMap.Marker({
+                map: city_map,
+                position: [118.021037, 38.195308],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Bz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var BZ_icon_satelliteMap = new AMap.Marker({
+                map: city_satelliteMap,
+                position: [118.021037, 38.195308],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(70, 150),  //图标大小
+                    imageSize: new AMap.Size(50, 62),
+                    image: "Images/Bz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //获取地图的缩放比例
+            city_map.on('zoom', function (e) {
+                if (city_map.getZoom() <= "4") {
+                    QD_icon_map.hide();
+                    RZ_icon_map.hide();
+                    YT_icon_map.hide();
+                    WH_icon_map.hide();
+                    WF_icon_map.hide();
+                    DY_icon_map.hide();
+                    BZ_icon_map.hide();
+                }
+                else {
+                    QD_icon_map.show();
+                    RZ_icon_map.show();
+                    YT_icon_map.show();
+                    WH_icon_map.show();
+                    WF_icon_map.show();
+                    DY_icon_map.show();
+                    BZ_icon_map.show();
+                }
+            });
+            city_satelliteMap.on('zoom', function (e) {
+                if (city_satelliteMap.getZoom() <= "4") {
+                    QD_icon_satelliteMap.hide();
+                    RZ_icon_satelliteMap.hide();
+                    YT_icon_satelliteMap.hide();
+                    WH_icon_satelliteMap.hide();
+                    WF_icon_satelliteMap.hide();
+                    DY_icon_satelliteMap.hide();
+                    BZ_icon_satelliteMap.hide();
+                }
+                else {
+                    QD_icon_satelliteMap.show();
+                    RZ_icon_satelliteMap.show();
+                    YT_icon_satelliteMap.show();
+                    WH_icon_satelliteMap.show();
+                    WF_icon_satelliteMap.show();
+                    DY_icon_satelliteMap.show();
+                    BZ_icon_satelliteMap.show();
+                }
+            });
+
+            //关闭信息体
+            function Close_city() {
+                document.getElementById("table_cityFrame_first").style.display = "none";
+                document.getElementById("table_cityFrame_second").style.display = "none";
+                document.getElementById("table_cityFrame_third").style.display = "none";
+                document.getElementById("table_cityFrame_fourth").style.display = "none";
+                document.getElementById("table_cityFrame_fifth").style.display = "none";
+                document.getElementById("table_cityFrame_sixth").style.display = "none";
+                document.getElementById("table_cityFrame_seventh").style.display = "none";
+            }
+            //信息体
+            //青岛
+            AMap.event.addListener(QD_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_first").style.display = "block";
+            });
+            AMap.event.addListener(QD_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_first").style.display = "block";
+            });
+            //日照
+            AMap.event.addListener(RZ_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_fourth").style.display = "block";
+            });
+            AMap.event.addListener(RZ_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_fourth").style.display = "block";
+            });
+            //烟台
+            AMap.event.addListener(YT_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_second").style.display = "block";
+            });
+            AMap.event.addListener(YT_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_second").style.display = "block";
+            });
+            //威海
+            AMap.event.addListener(WH_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_third").style.display = "block";
+            });
+            AMap.event.addListener(WH_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_third").style.display = "block";
+            });
+            //潍坊
+            AMap.event.addListener(WF_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_fifth").style.display = "block";
+            });
+            AMap.event.addListener(WF_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_fifth").style.display = "block";
+            });
+            //东营
+            AMap.event.addListener(DY_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_sixth").style.display = "block";
+            });
+            AMap.event.addListener(DY_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_sixth").style.display = "block";
+            });
+            //滨州
+            AMap.event.addListener(BZ_icon_map, 'click', function () {
+                document.getElementById("table_cityFrame_seventh").style.display = "block";
+            });
+            AMap.event.addListener(BZ_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_cityFrame_seventh").style.display = "block";
+            });
+
+            //渔场地图
+            var fishery_map = new AMap.Map('map_third', {
+                resizeEnable: true,
+                zoom: 6,
+                center: [122.027899, 37.246322]
+            });
+            //卫星图
+            var fishery_satelliteMap = new AMap.Map('map_switch_third', {
+                center: [122.027899, 37.246322],
+                layers: [
+                    new AMap.TileLayer.Satellite(),
+                    new AMap.TileLayer.RoadNet()
+                ],
+                zoom: 6
+            });
+            //添加点标记，使用自己的icon
+            //渤海湾渔场
+            var bhwan_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [117.928101, 38.320428],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/bhwan_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var bhwan_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [117.928101, 38.320428],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/bhwan_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //莱州湾渔场
+            var lz_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [119.740845, 38.014877],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/lz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var lz_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [119.740845, 38.014877],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/lz_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //烟威渔场
+            var yw_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [121.828248, 37.702614],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/yw_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var yw_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [121.828248, 37.702614],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/yw_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //威东渔场
+            var wd_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [124.061219, 37.534009],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/wd_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var wd_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [124.061219, 37.534009],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/wd_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //石岛渔场
+            var sdao_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [122.390392, 36.455348],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/sdao_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var sdao_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [122.390392, 36.455348],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/sdao_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //石东渔场
+            var sdong_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [124.38853, 36.514972],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/sdong_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var sdong_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [124.38853, 36.514972],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/sdong_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //青海渔场
+            var qhai_icon_map = new AMap.Marker({
+                map: fishery_map,
+                position: [120.566718, 36.033695],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/qhai_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            var qhai_icon_satelliteMap = new AMap.Marker({
+                map: fishery_satelliteMap,
+                position: [120.566718, 36.033695],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(90, 150),  //图标大小
+                    imageSize: new AMap.Size(90, 52),
+                    image: "Images/qhai_location.png",
+                    imageOffset: new AMap.Pixel(0, 0)
+                })
+            });
+            //获取地图的缩放比例
+            fishery_map.on('zoom', function (e) {
+                if (fishery_map.getZoom() <= "4") {
+                    ld_icon_map.hide();
+                    lhk_icon_map.hide();
+                    bhwan_icon_map.hide();
+                    lz_icon_map.hide();
+                    yw_icon_map.hide();
+                    hy_icon_map.hide();
+                    hdong_icon_map.hide();
+                    wd_icon_map.hide();
+                    sdao_icon_map.hide();
+                    sdong_icon_map.hide();
+                    qhai_icon_map.hide();
+                }
+                else {
+                    ld_icon_map.show();
+                    lhk_icon_map.show();
+                    bhwan_icon_map.show();
+                    lz_icon_map.show();
+                    yw_icon_map.show();
+                    hy_icon_map.show();
+                    hdong_icon_map.show();
+                    wd_icon_map.show();
+                    sdao_icon_map.show();
+                    sdong_icon_map.show();
+                    qhai_icon_map.show();
+                }
+            });
+            fishery_satelliteMap.on('zoom', function (e) {
+                if (fishery_satelliteMap.getZoom() <= "4") {
+                    ld_icon_satelliteMap.hide();
+                    lhk_icon_satelliteMap.hide();
+                    bhwan_icon_satelliteMap.hide();
+                    lz_icon_satelliteMap.hide();
+                    yw_icon_satelliteMap.hide();
+                    hy_icon_satelliteMap.hide();
+                    hdong_icon_satelliteMap.hide();
+                    wd_icon_satelliteMap.hide();
+                    sdao_icon_satelliteMap.hide();
+                    sdong_icon_satelliteMap.hide();
+                    qhai_icon_satelliteMap.hide();
+                }
+                else {
+                    ld_icon_satelliteMap.show();
+                    lhk_icon_satelliteMap.show();
+                    bhwan_icon_satelliteMap.show();
+                    lz_icon_satelliteMap.show();
+                    yw_icon_satelliteMap.show();
+                    hy_icon_satelliteMap.show();
+                    hdong_icon_satelliteMap.show();
+                    wd_icon_satelliteMap.show();
+                    sdao_icon_satelliteMap.show();
+                    sdong_icon_satelliteMap.show();
+                    qhai_icon_satelliteMap.show();
+                }
+            });
+            //关闭信息体
+            function Close_fishery() {
+                document.getElementById("table_frameFishery_first").style.display = "none";
+                document.getElementById("table_frameFishery_second").style.display = "none";
+                document.getElementById("table_frameFishery_third").style.display = "none";
+                document.getElementById("table_frameFishery_fourth").style.display = "none";
+                document.getElementById("table_frameFishery_fifth").style.display = "none";
+                document.getElementById("table_frameFishery_sixth").style.display = "none";
+                document.getElementById("table_frameFishery_seventh").style.display = "none";
+                document.getElementById("table_frameFishery_eighth").style.display = "none";
+                document.getElementById("table_frameFishery_ninth").style.display = "none";
+                document.getElementById("table_frameFishery_tenth").style.display = "none";
+                document.getElementById("table_frameFishery_eleventh").style.display = "none";
+            }
+            //信息体
+            //渤海湾渔场
+            AMap.event.addListener(bhwan_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_third").style.display = "block";
+            });
+            AMap.event.addListener(bhwan_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_third").style.display = "block";
+            });
+            //莱州湾渔场
+            AMap.event.addListener(lz_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_fourth").style.display = "block";
+            });
+            AMap.event.addListener(lz_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_fourth").style.display = "block";
+            });
+            //烟威渔场
+            AMap.event.addListener(yw_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_fifth").style.display = "block";
+            });
+            AMap.event.addListener(yw_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_fifth").style.display = "block";
+            });
+            //威东渔场
+            AMap.event.addListener(wd_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_eighth").style.display = "block";
+            });
+            AMap.event.addListener(wd_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_eighth").style.display = "block";
+            });
+            //石岛渔场
+            AMap.event.addListener(sdao_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_tenth").style.display = "block";
+            });
+            AMap.event.addListener(sdao_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_tenth").style.display = "block";
+            });
+            //石东渔场
+            AMap.event.addListener(sdong_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_ninth").style.display = "block";
+            });
+            AMap.event.addListener(sdong_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_ninth").style.display = "block";
+            });
+            //青海渔场
+            AMap.event.addListener(qhai_icon_map, 'click', function () {
+                document.getElementById("table_frameFishery_eleventh").style.display = "block";
+            });
+            AMap.event.addListener(qhai_icon_satelliteMap, 'click', function () {
+                document.getElementById("table_frameFishery_eleventh").style.display = "block";
+            });
+
+            //卫星图切换
+            $('#switch_img').click(function () {
+                if (city_inn == "block" && fishery_inn == "none") {
+                    if (setMap) {
+                        setMap = false;
+                        $(this).css({ 'background-image': 'url(Images/jddt.png)' });
+                        document.getElementById("map_switch_second").style.display = "block";
+                        document.getElementById("map_switch_third").style.display = "none";
+                        document.getElementById("map_second").style.display = "none";
+                        document.getElementById("map_third").style.display = "none";
+                    }
+                    else {
+                        setMap = true;
+                        $(this).css({ 'background-image': 'url(Images/wxdt.png)' });
+                        document.getElementById("map_switch_second").style.display = "none";
+                        document.getElementById("map_switch_third").style.display = "none";
+                        document.getElementById("map_second").style.display = "block";
+                        document.getElementById("map_third").style.display = "none";
+                    }
+                }
+                if (city_inn == "none" && fishery_inn == "block") {
+                    if (setMap) {
+                        setMap = false;
+                        $(this).css({ 'background-image': 'url(Images/jddt.png)' });
+                        document.getElementById("map_switch_second").style.display = "none";
+                        document.getElementById("map_switch_third").style.display = "block";
+                        document.getElementById("map_second").style.display = "none";
+                        document.getElementById("map_third").style.display = "none";
+                    }
+                    else {
+                        setMap = true;
+                        $(this).css({ 'background-image': 'url(Images/wxdt.png)' });
+                        document.getElementById("map_switch_second").style.display = "none";
+                        document.getElementById("map_switch_third").style.display = "none";
+                        document.getElementById("map_second").style.display = "none";
+                        document.getElementById("map_third").style.display = "block";
+                    }
+                }
+            });
+        </script>
+</body>
+</html>

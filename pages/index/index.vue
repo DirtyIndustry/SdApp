@@ -134,13 +134,11 @@
 					typhoonWarning: '',
 					waveWarning: ''
 				},
-				// 潮汐预报两个图表的地区
-				chartTideOneTitle: '',
+				// 潮汐预报
+				chartTideOneTitle: '',	// 两个图表的地区
 				chartTideTwoTitle: '',
-				// 潮汐预报第二个图表是否显示
-				chartTideTwoShow: true,
-				// 潮汐预报图表数据
-				optionTideOne: {},
+				chartTideTwoShow: true,	// 第二个图表是否显示
+				optionTideOne: {},		// 两个图表的option
 				optionTideTwo: {},
 				// 五日天气预报
 				fivedayWeather: [], // 天气详情
@@ -219,9 +217,10 @@
 			// 地区选择变化
 			bindPickerChange: function (e) {
 				// 弹出loading toast
-				uni.showLoading(
-					{ title: '加载中' }
-				);
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				});
 				this.setLocation(e.target.value)
 				this.requestData(this.array[e.target.value])
 				// 10秒后关闭toast
@@ -482,6 +481,10 @@
 								arrOne.push(resarr[i])
 							} else {
 								arrTwo.push(resarr[i])
+								// 第二个数组有内容 提前显示所属的view 牺牲一点性能（每次循环都判断一次if）
+								if (that.chartTideTwoShow === false) {
+									that.chartTideTwoShow = true
+								}
 							}
 						}
 						// 根据STATION代号设置图表标题(地名)
@@ -586,6 +589,7 @@
 					this.completedRequestCount++
 					return true
 				}
+				// 提前显示相关view
 				uni.request({
 					url: appsettings.hosturl + 'GetRefinedForecast_2018',
 					data: { name: 'admin', areaflg: '山东', city: that.array[that.location] },
@@ -640,7 +644,6 @@
 			}
 		},
 		onLoad() {
-			uni.showLoading()
 			this.loadWeather()
 			this.loadWarning()
 			this.loadInshore()

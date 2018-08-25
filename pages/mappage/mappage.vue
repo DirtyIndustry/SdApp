@@ -1,10 +1,7 @@
 <template>
-	<view class="content">
-		<text>This is HomePage.\n</text>
-		<text>{{array[location]}}</text>
-		<text>{{newvalue}}\n</text>
-		<text>{{newValueTwo}}</text>
-	</view>
+	<view>
+        <web-view src="../../static/Map.html"></web-view>
+    </view>
 </template>
 
 <script>

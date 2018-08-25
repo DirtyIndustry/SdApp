@@ -1,9 +1,10 @@
 <template>
 	<view class="content">
 		<text>This is HomePage.\n</text>
-		<text>{{array[location]}}</text>
+		<button @tap="tabme">Click</button>
+		<!-- <text>{{array[location]}}</text>
 		<text>{{newvalue}}\n</text>
-		<text>{{newValueTwo}}</text>
+		<text>{{newValueTwo}}</text> -->
 	</view>
 </template>
 
@@ -19,6 +20,17 @@
 			...mapState(['location']),
 			...mapState(['newvalue']),
 			...mapState(['newValueTwo'])
+		},
+		onLoad () {
+			uni.hideLoading()
+		},
+		methods: {
+			tabme () {
+				console.log('tab')
+				uni.navigateTo({
+				url: '../index/index'
+			});
+			}
 		}
 	}
 </script>
