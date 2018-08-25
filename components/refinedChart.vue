@@ -35,10 +35,10 @@
 </template>
 
 <script>
-    import {
-        mapState,
-        mapMutations
-    } from 'vuex'
+    // import {
+    //     mapState,
+    //     mapMutations
+    // } from 'vuex'
 
     import myChart from './myChart.vue'
 
@@ -110,7 +110,12 @@
             }
         },
         computed: {
-            ...mapState(['systemInfo'])
+            // ...mapState(['systemInfo'])
+            systemInfo: {
+                get () {
+                    return this.$store.state.Infos.systeminfo
+                }
+            }
         },
         methods: {
             // 设置曲线图下方日期球的日期

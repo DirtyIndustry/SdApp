@@ -1,15 +1,14 @@
 <script>
-	import {
-		mapState,
-		mapMutations
-	} from 'vuex'
-	
 	export default {
 		computed: {
-			...mapState(['systemInfo'])
-		},
-		methods: {
-			...mapMutations(['setSystemInfo'])
+			systemInfo: {
+				get () {
+					return this.$store.state.Infos.systeminfo
+				},
+				set (value) {
+					this.$store.dispatch('setSystemInfo', value)
+				}
+			}
 		},
 		onLaunch: function () {
 			console.log('App Launch')
@@ -63,7 +62,7 @@
 			uni.getSystemInfo({
 				success: function (res) {
 					// 将系统信息存入vuex
-					that.setSystemInfo(res)
+					that.systemInfo = res
 				}
 			})
 		},

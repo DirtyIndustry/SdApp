@@ -88,7 +88,6 @@
 </template>
 
 <script>
-	import { mapState, mapMutations } from 'vuex'
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	import myChart from '../../components/myChart.vue'
@@ -210,10 +209,16 @@
 			}
 		},
 		computed: {
-			...mapState(['location', 'systemInfo'])
+			location: {
+				get () {
+					return this.$store.state.Infos.locindex
+				},
+				set (value) {
+					this.$store.dispatch('setLocIndex', value)
+				}
+			}
 		},
 		methods: {
-			...mapMutations(['setLocation']),
 			// 地区选择变化
 			bindPickerChange: function (e) {
 				// 弹出loading toast
@@ -221,7 +226,7 @@
 					title: '加载中',
 					mask: true
 				});
-				this.setLocation(e.target.value)
+				this.location = (e.target.value)
 				this.requestData(this.array[e.target.value])
 				// 10秒后关闭toast
 				setTimeout(function () {
