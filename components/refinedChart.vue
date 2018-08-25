@@ -42,8 +42,6 @@
 
     import myChart from './myChart.vue'
 
-    let chart
-
     export default {
         name: 'refinedChart',
         components: {
@@ -58,7 +56,9 @@
             // 图表数据
             option: {
                 type: Object,
-                default: {}
+                default() {
+                    return {}
+                }
             },
             // 表格数据
             data: {

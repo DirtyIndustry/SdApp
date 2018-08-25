@@ -47,7 +47,7 @@
 				<text>{{chartTideOneTitle}}</text>
 				<scroll-view scroll-x="true">
 					<view class="chart-tide">
-						<myChart :option="optionTideOne" canvasId="canvasTideOne" />
+						<myChart :option="optionTideOne" canvasId="tideOne" />
 					</view>
 				</scroll-view>
 			</view>
@@ -56,7 +56,7 @@
 				<text>{{chartTideTwoTitle}}</text>
 				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 					<view class="chart-tide">
-						<myChart :option="optionTideTwo" canvasId="canvasTideTwo" />
+						<myChart :option="optionTideTwo" canvasId="tideTwo" />
 					</view>
 				</scroll-view>
 			</view>
@@ -71,16 +71,16 @@
 			<!-- 精细化预报 -->
 			<view class="page-section" v-show="showRefined">
 				<view>精细化预报</view>
-				<refinedChart :option="optionRefinedOne" :data="refinedDataOne" canvasId="canvasRefinedOne" />
+				<refinedChart :option="optionRefinedOne" :data="refinedDataOne" canvasId="refinedOne" />
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="showRefinedTwo"/>
 				<view v-show="showRefinedTwo">
-					<refinedChart :option="optionRefinedTwo" :data="refinedDataTwo" canvasId="canvasRefinedTwo" />
+					<refinedChart :option="optionRefinedTwo" :data="refinedDataTwo" canvasId="refinedTwo" />
 				</view>
 			</view>
 			<!-- 五日天气预报 -->
-			<view class="page-section container-fiveday">
-				<fivedayForcast :fivedayWeather="fivedayWeather" :option="optionFiveday" canvasId="canvasFiveday"/>
+			<view class="page-section">
+				<fivedayForcast :option="optionFiveday" :fivedayWeather="fivedayWeather" canvasId="fiveday"/>
 			</view>
 			<!-- <view class="page-section" /> -->
 		</view>
@@ -298,6 +298,8 @@
 						that.fivedayWeather = []
 						that.fivedayHighTemp = []
 						that.fivedayLowTemp = []
+						let higharr = []
+						let lowarr = []
 						for (let i = 0; i < fivedayarr.length; i++) {
 							// 星期 由'一'改为'周一'
 							let week = '周' + fivedayarr[i].week
@@ -327,10 +329,14 @@
 							// 高低温数组
 							that.fivedayHighTemp.push(Number(tempHigh))
 							that.fivedayLowTemp.push(Number(tempLow))
+							higharr.push(Number(tempHigh))
+							lowarr.push(Number(tempLow))
 						} // end-for
 						that.optionFiveday = utils.setFivedayChartOption(
-							that.fivedayHighTemp,
-							that.fivedayLowTemp
+							// that.fivedayHighTemp,
+							// that.fivedayLowTemp
+							higharr, 
+							lowarr
 						)
 						that.completedRequestCount++
 					}, // end-success-request
@@ -495,8 +501,10 @@
 							StationTwo = arrTwo[0].STATION
 							that.chartTideTwoTitle = utils.getLocName(StationTwo)	// 标题地名
 							that.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
-						} else {
+						} else {	// 不需要显示第二个图表
 							that.chartTideTwoShow = false
+							that.chartTideTwoTitle = ''
+							that.optionTideTwo = {}
 						}
 						// 根据STATION代号设置图表标题(地名)
 						that.chartTideOneTitle = utils.getLocName(StationOne)
@@ -589,6 +597,8 @@
 					console.log('滨州无精细化预报')
 					this.showRefined = false
 					this.showRefinedTwo = false	// 第二个图表是否显示
+					this.optionRefinedOne = {}
+					this.optionRefinedTwo = {}
 					this.completedRequestCount++
 					return true
 				}
@@ -621,7 +631,13 @@
 							}
 						} // end-for
 						// 如果有多于一组数据 则第二个chart显示
-						that.showRefinedTwo = attrcounter > 1 ? true : false
+						// that.showRefinedTwo = attrcounter > 1 ? true : false
+						if (attrcounter > 1) {
+							that.showRefinedTwo = true
+						} else {
+							that.showRefinedTwo = false
+							that.optionRefinedTwo = {}
+						}
 						that.completedRequestCount++
 					}, // end-success
 					fail: function (res) {

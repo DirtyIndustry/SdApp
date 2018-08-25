@@ -19,7 +19,8 @@ DONE... loading toast
 DONE... echart x-axies range  
 DONE... refined section  
 DONE... echarts to component  
-DONE... put chart into fiveday component
+DONE... put chart into fiveday component  
+fiveday bug after changed city  
 deal with request response error  
 deal with request response fail  
 use local storage to speed up *startup->localstore->netrequest->localstore*  

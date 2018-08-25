@@ -16,17 +16,26 @@
 			// 画布id 在页面中必须唯一
             canvasId: {
 				type: String,
+				default: 'id',
 				required: true
             },
             // 图表数据
             option: {
                 type: Object,
-				default: {}
+				default() {
+					return {}
+				},
+				required: true
             }
 		},
 		data() {
 			return {
-				echarts,
+				echarts
+			}
+		},
+		computed: {
+			thischart: function () {
+				return chart
 			}
 		},
 		watch: {
@@ -34,7 +43,8 @@
                 handler(newVal, oldVal) {
                     if (chart !== undefined) {
                         if (newVal) {
-                            chart.setOption(newVal)
+							//chart.setOption(newVal, true)
+							this.$refs.echartsRef.init()
                         }
                     }
                 }
@@ -51,7 +61,7 @@
                     height: height
                 })
                 canvas.setChart(chart)
-                chart.setOption(this.option)
+                chart.setOption(this.option, false)
                 return chart
             }
 		},

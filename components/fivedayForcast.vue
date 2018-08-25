@@ -1,5 +1,5 @@
 <template>
-<view>
+<view class="fiveday-body">
     <view class="uni-flex uni-row">
         <!-- 依据fivedayWeather生成列 -->
         <view class="fiveday-column uni-flex uni-column" :class="{'fiveday-column-left': index<4}" v-for="(item, index) in fivedayWeather" :key="index">
@@ -39,7 +39,9 @@ export default {
         // 图表数据
         option: {
             type: Object,
-            default: {}
+            default() {
+                return {}
+            }
         }
     },
     components: {
@@ -60,6 +62,11 @@ export default {
 
     .uni-column {
         flex-direction: column;
+    }
+
+    /* 5日天气预报的容器 */
+    .fiveday-body {
+        position: relative;
     }
 
 	/* 5日天气预报的列 */
