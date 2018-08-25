@@ -1,8 +1,19 @@
 var state = {
     // 实时天气
-    weatherdata: {},
+    weatherdata: {
+        temperature: '25', // 气温
+        aircondition: '35', // 空气质量
+        airconDesc: '优',
+        airconIcon: '../../static/Images/right_leaf_sev.png', // 空气质量绿叶图标
+        weather: '晴',
+        weatherIcon: '../../static/Images/right_weather_fine.png', // 天气图表
+        pm25: '8', // PM2.5
+        pm25Style: 'good'
+    },
     // 潮汐预报
-    tidedata: {},
+    tidedata: {
+
+    },
     // 近海预报
     inshoredata: {},
     // 浴场预报
@@ -10,7 +21,51 @@ var state = {
     // 精细化预报
     refineddata: {},
     // 五日天气
-    fivedaydata: {}
+    fivedaydata: {
+        fivedayWeather: [   // 五日天气详情
+            {
+                week: '',
+                date: '',
+                weather: '',
+                weatherIcon: '',
+                windDir: '',
+                windLvl: ''
+            },
+            {
+                week: '',
+                date: '',
+                weather: '',
+                weatherIcon: '',
+                windDir: '',
+                windLvl: ''
+            },
+            {
+                week: '',
+                date: '',
+                weather: '',
+                weatherIcon: '',
+                windDir: '',
+                windLvl: ''
+            },
+            {
+                week: '',
+                date: '',
+                weather: '',
+                weatherIcon: '',
+                windDir: '',
+                windLvl: ''
+            },
+            {
+                week: '',
+                date: '',
+                weather: '',
+                weatherIcon: '',
+                windDir: '',
+                windLvl: ''
+            }
+        ],
+        optionFiveday: {}   // 五日高低温图表option
+    }
 }
 
 const mutations = {
@@ -35,9 +90,8 @@ const mutations = {
 }
 
 const actions = {
-    setWeatherData (context, weatherdata, fivedaydata) {
+    setWeatherData (context, weatherdata) {
         context.commit('setweather', weatherdata)
-        context.commit('setfiveday', fivedaydata)
     },
     setTideData (context, tidedata) {
         context.commit('settide', tidedata)
@@ -50,6 +104,9 @@ const actions = {
     },
     setRefinedData (context, refineddata) {
         context.commit('setrefined', refineddata)
+    },
+    setFivedayData (context, fivedaydata) {
+        context.commit('setfiveday', fivedaydata)
     }
 }
 

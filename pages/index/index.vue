@@ -80,7 +80,7 @@
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section">
-				<fivedayForcast :option="optionFiveday" :fivedayWeather="fivedayWeather" canvasId="fiveday"/>
+				<fivedayForcast :option="fivedayData.optionFiveday" :fivedayWeather="fivedayData.fivedayWeather" canvasId="fiveday"/>
 			</view>
 			<!-- <view class="page-section" /> -->
 		</view>
@@ -117,17 +117,7 @@
 				lastSelectedCityIndex: 0,
 				// 完成的request计数
 				completedRequestCount: 0,
-				// 天气数据
-				weatherData: {
-					temperature: '25', // 气温
-					aircondition: '35', // 空气质量
-					airconDesc: '优',
-					airconIcon: '../../static/Images/right_leaf_sev.png', // 空气质量绿叶图标
-					weather: '晴',
-					weatherIcon: '../../static/Images/right_weather_fine.png', // 天气图表
-					pm25: '8', // PM2.5
-					pm25Style: 'good'
-				},
+				
 				// 警报数据
 				warningData: {
 					typhoonWarning: '',
@@ -139,11 +129,6 @@
 				chartTideTwoShow: true,	// 第二个图表是否显示
 				optionTideOne: {},		// 两个图表的option
 				optionTideTwo: {},
-				// 五日天气预报
-				fivedayWeather: [], // 天气详情
-				fivedayHighTemp: [], // 每日最高温度
-				fivedayLowTemp: [], // 每日最低温度
-				optionFiveday: {}, // 高低温chart option
 				// 近海预报
 				inshoreData: {},
 				// 浴场预报
@@ -210,12 +195,38 @@
 		},
 		computed: {
 			location: {
-				get () {
-					return this.$store.state.Infos.locindex
-				},
-				set (value) {
-					this.$store.dispatch('setLocIndex', value)
-				}
+				get () { return this.$store.state.Infos.locindex },
+				set (value) { this.$store.dispatch('setLocIndex', value) }
+			},
+			// 实时天气
+			weatherData: {
+				get () {return this.$store.state.Datas.weatherdata},
+				set (value) {this.$store.dispatch('setWeatherData', value)}
+			},
+			// 潮汐预报
+			tideData: {
+				get () {return this.$store.state.Datas.tidedata},
+				set (value) {this.$store.dispatch('setTideData', value)}
+			},
+			// 近海预报
+			inshoreData: {
+				get () {return this.$store.state.Datas.inshoredata},
+				set (value) {this.$store.dispatch('setInshoreData', value)}
+			},
+			// 浴场预报
+			bathsData: {
+				get() { return this.$store.state.Datas.bathsdata },
+				set(value) { this.$store.dispatch('setBathsData', value) }
+			},
+			// 精细化预报
+			refinedData: {
+				get() { return this.$store.state.Datas.refineddata },
+				set(value) { this.$store.dispatch('setRefinedData', value) }
+			},
+			// 五日天气
+			fivedayData: {
+				get() { return this.$store.state.Datas.fivedaydata },
+				set(value) { this.$store.dispatch('setFivedayData', value) }
 			}
 		},
 		methods: {
@@ -268,35 +279,28 @@
 							that.completedRequestCount++
 							return false
 						}
+						let weatherresult = {}
 						// 气温数值
-						that.weatherData.temperature =
-							result.result.data.realtime.weather.temperature
+						weatherresult.temperature = result.result.data.realtime.weather.temperature
 						// 空气质量数值
-						that.weatherData.aircondition = result.result.data.pm25.pm25.curPm
+						weatherresult.aircondition = result.result.data.pm25.pm25.curPm
 						// 空气质量文字描述
-						that.weatherData.airconDesc = result.result.data.pm25.pm25.quality
+						weatherresult.airconDesc =	result.result.data.pm25.pm25.quality
 						// pm2.5数值
-						that.weatherData.pm25 = result.result.data.pm25.pm25.pm25
+						weatherresult.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
-						that.weatherData.weather = result.result.data.realtime.weather.info
+						weatherresult.weather = result.result.data.realtime.weather.info
 						// 天气图标
-						that.weatherData.weatherIcon = utils.setWeatherIcon(
-							that.weatherData.weather
-						)
+						weatherresult.weatherIcon = utils.setWeatherIcon(weatherresult.weather)
 						// 空气质量图标及pm2.5字体颜色
-						that.weatherData.airconIcon = utils.setAirconIcon(
-							that.weatherData.airconDesc
-						)
-						that.weatherData.pm25Style = utils.setAirconClass(
-							that.weatherData.airconDesc
-						)
+						weatherresult.airconIcon = utils.setAirconIcon(weatherresult.airconDesc)
+						weatherresult.pm25Style = utils.setAirconClass(weatherresult.airconDesc)
+
 						// 五日天气预报数组，高低温数组
 						let fivedayarr = result.result.data.weather
-						// 清空数组
-						that.fivedayWeather = []
-						that.fivedayHighTemp = []
-						that.fivedayLowTemp = []
-						let higharr = []
+						// 准备空数组
+						let dataarr = []	// 显示用数据
+						let higharr = []	// 高低温
 						let lowarr = []
 						for (let i = 0; i < fivedayarr.length; i++) {
 							// 星期 由'一'改为'周一'
@@ -316,7 +320,7 @@
 							// 低温
 							let tempLow = fivedayarr[i].info.night[2]
 							// 五日天气数组
-							that.fivedayWeather.push({
+							dataarr.push({
 								week: week,
 								date: date,
 								weather: weather,
@@ -325,13 +329,19 @@
 								windLvl: windLvl
 							})
 							// 高低温数组
-							that.fivedayHighTemp.push(Number(tempHigh))
-							that.fivedayLowTemp.push(Number(tempLow))
+							higharr.push(Number(tempHigh))
+							lowarr.push(Number(tempLow))
 						} // end-for
-						that.optionFiveday = utils.setFivedayChartOption(
-							that.fivedayHighTemp,
-							that.fivedayLowTemp
-						)
+						let fivedayresult = {
+							fivedayWeather: dataarr,
+							optionFiveday: utils.setFivedayChartOption(higharr, lowarr)
+						}
+						// 写入Vuex
+						that.weatherData = weatherresult
+						that.fivedayData = fivedayresult
+						// 写入本地缓存
+						utils.storeToLocal('weatherdata', weatherresult)
+						utils.storeToLocal('fivedaydata', fivedayresult)
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {

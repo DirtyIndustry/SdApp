@@ -24,6 +24,7 @@ Half done... fiveday bug after changed city
 DONE... menu page  
 DONE... tabBar masked on lanuch  
 DONE... optimize tide chart, switch v-show earlier than change option  
+DONE... vuex optimize
 城市预报
 预警报
 渔场预报
