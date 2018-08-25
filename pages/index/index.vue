@@ -100,12 +100,6 @@
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
-	let chartTideOne	// 潮汐预报图表
-	let chartTideTwo
-	let chartFiveday	// 五日天气预报图表
-	let chartRefinedOne	// 精细化预报图表
-	let chartRefinedTwo
-
 	export default {
 		components: {
 			mpvueEcharts,
@@ -329,14 +323,10 @@
 							// 高低温数组
 							that.fivedayHighTemp.push(Number(tempHigh))
 							that.fivedayLowTemp.push(Number(tempLow))
-							higharr.push(Number(tempHigh))
-							lowarr.push(Number(tempLow))
 						} // end-for
 						that.optionFiveday = utils.setFivedayChartOption(
-							// that.fivedayHighTemp,
-							// that.fivedayLowTemp
-							higharr, 
-							lowarr
+							that.fivedayHighTemp,
+							that.fivedayLowTemp
 						)
 						that.completedRequestCount++
 					}, // end-success-request
@@ -484,8 +474,7 @@
 						let resarr = JSON.parse(res.data.d)
 						let arrOne = []		// 第一个图表数据数组
 						let arrTwo = []		// 第二个图表数据数组
-						let StationOne = ''	// 第一组数据的地名
-						let StationTwo = ''	// 第二组数据的地名
+						let StationOne = ''	// 第一组数据的地名编号
 						StationOne = resarr[0].STATION
 						// 按照不同的STATION分组
 						for (let i = 0; i < resarr.length; i++) {
@@ -495,21 +484,18 @@
 								arrTwo.push(resarr[i])
 							}
 						}
-						// 如果第二个数组arrTwo有内容 说明第二个图表需要显示
-						if (arrTwo.length > 0) {
-							that.chartTideTwoShow = true
-							StationTwo = arrTwo[0].STATION
-							that.chartTideTwoTitle = utils.getLocName(StationTwo)	// 标题地名
-							that.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
-						} else {	// 不需要显示第二个图表
-							that.chartTideTwoShow = false
-							that.chartTideTwoTitle = ''
-							that.optionTideTwo = {}
-						}
 						// 根据STATION代号设置图表标题(地名)
 						that.chartTideOneTitle = utils.getLocName(StationOne)
 						// 由数组生成echarts所需的option
 						that.optionTideOne = utils.setTideChartOption(arrOne)
+						// 如果第二个数组arrTwo有内容 说明第二个图表需要显示
+						if (arrTwo.length > 0) {
+							that.chartTideTwoShow = true
+							that.chartTideTwoTitle = utils.getLocName(arrTwo[0].STATION)	// 标题地名
+							that.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
+						} else {	// 不需要显示第二个图表
+							that.chartTideTwoShow = false
+						}
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -597,8 +583,6 @@
 					console.log('滨州无精细化预报')
 					this.showRefined = false
 					this.showRefinedTwo = false	// 第二个图表是否显示
-					this.optionRefinedOne = {}
-					this.optionRefinedTwo = {}
 					this.completedRequestCount++
 					return true
 				}
@@ -631,13 +615,7 @@
 							}
 						} // end-for
 						// 如果有多于一组数据 则第二个chart显示
-						// that.showRefinedTwo = attrcounter > 1 ? true : false
-						if (attrcounter > 1) {
-							that.showRefinedTwo = true
-						} else {
-							that.showRefinedTwo = false
-							that.optionRefinedTwo = {}
-						}
+						that.showRefinedTwo = attrcounter > 1 ? true : false
 						that.completedRequestCount++
 					}, // end-success
 					fail: function (res) {
@@ -693,8 +671,8 @@
 	.page-body {
 		/* width: 100%; */
 		height: 100%;
-		/* padding: 0 30px; */
-		margin: 0 30px;
+		padding: 0 30px;
+		/* margin: 0 30px; */
 		flex-grow: 1;
 		overflow-x: hidden;
 		/*
@@ -705,10 +683,6 @@
 	}
 
 	.page-section {
-		/* width: 96%; */
-		/* margin: auto; */
-		/* padding: 5%; */
-		/* margin: 5%; */
 		margin-bottom: 60px;
 		background-color: rgba(255, 255, 255, 0.8);
 	}
@@ -747,10 +721,5 @@
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000;
-	}
-
-	/* 五日天气预报容器 */
-	.container-fiveday {
-		position: relative;
 	}
 </style>
