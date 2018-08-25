@@ -3,7 +3,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "山东海洋预报"
+				"navigationBarTitleText": "山东海洋预报",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

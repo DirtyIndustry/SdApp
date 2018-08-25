@@ -1,0 +1,124 @@
+﻿青岛天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '青岛', name: 'admin', areaflg: '山东' },
+青岛五日天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '青岛', name: 'admin', areaflg: '北海' },
+青岛潮汐预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetAstronomicalTide_QD",
+                data: { name: 'admin', areaflg: '青岛' },
+青岛近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetQDBinhai_1020",
+                data: { name: 'admin', areaflg: '山东' },
+青岛浴场预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetBathsForecast",
+                data: { name: 'admin', areaflg: '青岛' },
+青岛精细化预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '青岛' },
+
+烟台天气预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '烟台', name: 'admin', areaflg: '山东' },
+烟台潮汐预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东',cityname:'烟台' },
+烟台近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'烟台' },
+烟台精细化预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '烟台' },
+烟台五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '烟台', name: 'admin', areaflg: '山东' },
+
+潍坊天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '潍坊', name: 'admin', areaflg: '山东' },
+潍坊潮汐
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东',cityname:'潍坊' },
+潍坊近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'潍坊' },
+潍坊精细化预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '潍坊' },
+潍坊五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '潍坊', name: 'admin', areaflg: '山东' },
+
+威海天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '威海', name: 'admin', areaflg: '山东' },
+威海潮汐
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东',cityname:'威海' },
+威海近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'威海' },
+威海精细化
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '威海' },
+威海五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '威海', name: 'admin', areaflg: '山东' },
+威海特有城市预报
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetWeihaiCity_BH",
+                data: { name: 'admin', areaflg: '北海' },
+
+日照天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '日照', name: 'admin', areaflg: '山东' },
+日照潮汐
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东',cityname:'日照' },
+日照近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'日照' },
+日照精细化
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '日照' },
+日照五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '日照', name: 'admin', areaflg: '山东' },
+
+东营天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '东营', name: 'admin', areaflg: '山东' },
+东营潮汐
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东', cityname: '东营' },
+东营近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'东营' },
+东营精细化
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018",
+                data: { name: 'admin', areaflg: '山东', city: '东营' },
+东营五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '东营', name: 'admin', areaflg: '山东' },
+
+滨州天气
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '滨州', name: 'admin', areaflg: '山东' },
+滨州潮汐
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityforcast_BH",
+                data: { name: 'admin', areaflg: '山东',cityname:'滨州' },
+滨州近海
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetSevenCity_1020",
+                data: { name: 'admin', areaflg: '山东',city:'滨州' },
+滨州五日
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
+                data: { weather: '滨州', name: 'admin', areaflg: '山东' },
+
+台风预警
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList",
+                data: { areaflg: '青岛', Typhoonyear: nowdate.getFullYear() },
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonPath",
+                                data: { areaflg: '青岛', typhoonNumber: array[index].split(',')[0] },
+
+海浪预警
+url: "http://123.234.129.238:8001/MyWebService.asmx/GetEachWarning_ceshi",
+                data: { name: 'admin', areaflg: '青岛' },
