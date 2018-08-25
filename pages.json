@@ -8,12 +8,30 @@
 			}
 		},
 		{
+			"path": "pages/menupage/menupage",
+			"style": {
+				"navigationBarTitleText": "菜单"
+			}
+		},
+		{
+			"path": "pages/mappage/mappage",
+			"style": {
+				"navigationBarTitleText": "地图"
+			}
+		},
+		{
+			"path": "pages/settingpage/settingpage",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "演示",
+		"navigationBarTitleText": "山东海洋预报",
 		"navigationBarBackgroundColor": "#8F8F94",
 		"backgroundColor": "#F00"
 	},
@@ -22,22 +40,27 @@
 		"color": "#7A7E83",
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
+		"backgroundColor": "#8F8F94",
 		"list": [{
 			"pagePath": "pages/index/index",
-			"iconPath": "static/component.png",
-			"selectedIconPath": "static/componentHL.png",
+			"iconPath": "static/Images/bottom_left_first.png",
+			"selectedIconPath": "static/Images/bottom_left_second.png",
 			"text": "主页"
 		}, {
-			"pagePath": "pages/homepage/homepage",
-			"iconPath": "static/api.png",
-			"selectedIconPath": "static/apiHL.png",
-			"text": "接口"
+			"pagePath": "pages/menupage/menupage",
+			"iconPath": "static/Images/bottom_middle_first.png",
+			"selectedIconPath": "static/Images/bottom_middle_second.png",
+			"text": "菜单"
 		}, {
-			"pagePath": "pages/homepage/homepage",
-			"iconPath": "static/template.png",
-			"selectedIconPath": "static/templateHL.png",
-			"text": "模版"
+			"pagePath": "pages/mappage/mappage",
+			"iconPath": "static/Images/bottom_loc_first.png",
+			"selectedIconPath": "static/Images/bottom_loc_first.png",
+			"text": "地图"
+		}, {
+			"pagePath": "pages/settingpage/settingpage",
+			"iconPath": "static/Images/bottom_right_first.png",
+			"selectedIconPath": "static/Images/bottom_right_second.png",
+			"text": "设置"
 		}]
 	}
 }
