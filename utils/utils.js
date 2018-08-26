@@ -642,6 +642,62 @@ const storeToLocal = function (key, value) {
     })
 }
 
+// 切换城市（包含自动）所进行的操作
+const switchCity = function (city, operate) {
+    if (city === '自动') {
+        // 获取当前经纬度
+        uni.getLocation({
+            success: function (res) {
+                console.log('[设备]: 获取 地理位置信息')
+                let lati = res.latitude // 纬度
+                let longi = res.longitude // 经度
+                // 申请百度地图位置服务
+                uni.request({
+                    url: 'http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + lati + ',' + longi + '&coordtype=wgs84ll&output=json&pois=0&ak=' +'lRNKq2t9caNdkxY4jsbPR7j9B8lsSqu6',
+                    method: 'GET',
+                    success: function (mapres) {
+                        // 去除首尾无效字符
+                        // let mapresobj = JSON.parse(mapres.data.substr(29, mapres.data.length - 30))
+                        let mapresobj = JSON.parse(mapres.data.substring(29, mapres.data.length - 1))
+                        // TODO: 可能有必要一层层判断undefined
+                        let autocity = mapresobj.result.addressComponent.city
+                        // 去掉结尾的'市'字
+                        if (autocity.substring(autocity.length - 1) === '市') {
+                            autocity = autocity.substring(0, autocity.length - 1)
+                        }
+                        // 判断是否在列表中
+                        let contains = false
+                        switch (autocity) {
+                            case '青岛': 
+                            case '烟台':
+                            case '潍坊':
+                            case '威海':
+                            case '日照':
+                            case '东营':
+                            case '滨州':
+                                contains = true
+                                break
+                            default:
+                                break
+                        }
+                        if (contains === false) {
+                            console.log('当前城市不在可选列表中')
+                            autocity = '青岛'
+                        }
+                        operate(autocity)
+                    }, // end-success-request map.baidu.com
+                    fail: function () {
+                        console.log('自动定位失败')
+                        operate('青岛')
+                    }
+                }) // end-request map.baidu.com
+            } // end-success-uni.getLocation
+        }) // end-uni.getLocation
+    } else {
+        operate(city)
+    }
+}
+
 // 在console显示object内部的属性
 const deepEquals = function (x, y, layer) {
     if (layer > 6) {
@@ -675,5 +731,6 @@ module.exports = {
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
     storeToLocal: storeToLocal, //将数据存入本地缓存
     getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
+    switchCity: switchCity, // 切换城市 包括自动定位
     deepEquals: deepEquals
 }
