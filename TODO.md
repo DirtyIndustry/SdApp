@@ -1,8 +1,6 @@
 ﻿# TODO List
 DONE... watch echarts option  
 DONE... sticky ball  
-current time pointer  
-修改返回值不为JSON的接口  
 Fail... ~~import iScroll~~  
 DONE... appsettings in a file  
 DONE... general method code in standalone file  
@@ -21,24 +19,28 @@ DONE... refined section
 DONE... echarts to component  
 DONE... put chart into fiveday component  
 Half done... fiveday bug after changed city  
+Fail... try sticky on ios  
 DONE... menu page  
 DONE... tabBar masked on lanuch  
 DONE... optimize tide chart, switch v-show earlier than change option  
-DONE... vuex optimize
+DONE... vuex optimize  
+DONE... 趋势预测  
+DONE... optimize debug console log  
+DONE... use local storage to speed up *startup->localstore->netrequest->localstore*  
+修改返回值不为JSON的接口  
+set up Dev document, setting version, storage format version etc.  
 城市预报  
 预警报  
 渔场预报  
-DONE... 趋势预测  
 天气预报  
 天气图  
 卫星云图  
 雷达图  
 台风路径  
 新闻中心  
-DONE... optimize debug console log
 webview pages  
 deal with request response error  
 deal with request response fail  
-DONE... use local storage to speed up *startup->localstore->netrequest->localstore*  
 auto location, default location setting  
-Fail... try sticky on ios  
+navibar city selection  
+current time pointer  

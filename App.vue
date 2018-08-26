@@ -96,7 +96,7 @@
 				uni.getStorage({
 					key: 'weatherdata',
 					success: function (res) {
-						console.log('[本地]: 获取 实时天气')
+						console.log('[缓存]: 获取 实时天气')
 						// console.log(res.data)
 						that.weatherData = JSON.parse(res.data)
 					}
@@ -105,7 +105,7 @@
 				uni.getStorage({
 					key: 'tidedata',
 					success: function (res) {
-						console.log('[本地]: 获取 潮汐预报')
+						console.log('[缓存]: 获取 潮汐预报')
 						// console.log(res.data)
 						that.tideData = JSON.parse(res.data)
 					}
@@ -114,7 +114,7 @@
 				uni.getStorage({
 					key: 'inshoredata',
 					success: function (res) {
-						console.log('[本地]: 获取 近海预报')
+						console.log('[缓存]: 获取 近海预报')
 						// console.log(res.data)
 						that.inshoreData = JSON.parse(res.data)
 					}
@@ -123,7 +123,7 @@
 				uni.getStorage({
 					key: 'bathsdata',
 					success: function (res) {
-						console.log('[本地]: 获取 浴场预报')
+						console.log('[缓存]: 获取 浴场预报')
 						// console.log(res.data)
 						that.bathsData = JSON.parse(res.data)
 					}
@@ -132,7 +132,7 @@
 				uni.getStorage({
 					key: 'refineddata',
 					success: function (res) {
-						console.log('[本地]: 获取 精细化预报')
+						console.log('[缓存]: 获取 精细化预报')
 						// console.log(res.data)
 						that.refinedData = JSON.parse(res.data)
 					}
@@ -141,7 +141,7 @@
 				uni.getStorage({
 					key: 'fivedaydata',
 					success: function (res) {
-						console.log('[本地]: 获取 五日天气')
+						console.log('[缓存]: 获取 五日天气')
 						// console.log(res.data)
 						that.fivedayData = JSON.parse(res.data)
 					}

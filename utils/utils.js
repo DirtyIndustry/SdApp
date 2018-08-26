@@ -637,7 +637,7 @@ const storeToLocal = function (key, value) {
         key: key,
         data: value,
         success: function () {
-            console.log('缓存: ' + key)
+            console.log('[缓存]: <- ' + key)
         }
     })
 }
