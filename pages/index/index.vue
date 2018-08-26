@@ -1,6 +1,7 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
+		<myPicker ref="citypicker"></myPicker>
 		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
@@ -16,7 +17,7 @@
 							</view>
 							<view class="sidebar">
 								<!-- 切换城市按钮 -->
-								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray" ref="citypicker">
+								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray">
 									<view class="uni-input">切换城市</view>
 								</picker>
 							</view>
@@ -96,6 +97,7 @@
 	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
+	import myPicker from '../../components/myPicker.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -107,7 +109,8 @@
 			fivedayForcast,
 			inshoreTable,
 			bathsTable,
-			refinedChart
+			refinedChart,
+			myPicker
 		},
 		data() {
 			return {
@@ -704,6 +707,7 @@
 			// 		console.log(res.errMsg)
 			// 	}
 			// })
+			this.$refs.citypicker.switchDialog()
 		}
 	}
 </script>
