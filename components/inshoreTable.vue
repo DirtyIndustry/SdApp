@@ -5,9 +5,9 @@
         <view class="uni-flex uni-column">
             <view class="uni-flex uni-row inshore-row" :class="{'inshore-row-top': index == 0}" v-for="(item, index) in inshoreData.data"
                 :key="index">
-                <view class="inshore-cell inshore-column">{{inshoreData.data[index].loc}}</view>
-                <view class="inshore-cell inshore-column inshore-column-right">{{inshoreData.data[index].wave}}</view>
-                <view class="inshore-cell inshore-column inshore-column-right">{{inshoreData.data[index].temp}}</view>
+                <view class="inshore-cell inshore-column">{{item.loc}}</view>
+                <view class="inshore-cell inshore-column inshore-column-right">{{item.wave}}</view>
+                <view class="inshore-cell inshore-column inshore-column-right">{{item.temp}}</view>
             </view>
         </view>
         <!-- 占位 -->

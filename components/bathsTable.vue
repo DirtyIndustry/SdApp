@@ -3,10 +3,10 @@
         <view>浴场预报</view>
         <view class="uni-flex uni-column">
             <view class="uni-flex uni-row baths-row" :class="{'baths-row-top': index == 0}" v-for="(item, index) in bathsData" :key="index">
-                <view class="baths-cell baths-column-dual">{{bathsData[index].BathsName}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaveHeight}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaterTemp}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].Swimming}}</view>
+                <view class="baths-cell baths-column-dual">{{item.BathsName}}</view>
+                <view class="baths-cell baths-column baths-column-right">{{item.WaveHeight}}</view>
+                <view class="baths-cell baths-column baths-column-right">{{item.WaterTemp}}</view>
+                <view class="baths-cell baths-column baths-column-right">{{item.Swimming}}</view>
             </view>
         </view>
     </view>

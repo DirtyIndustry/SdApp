@@ -629,25 +629,15 @@ const getOption = function (tidedata, markdata) {
 
 // 将数据存入本地缓存
 const storeToLocal = function (key, value) {
+    // 判断value是不是object
+    // if (typeof value === 'object') {
+    //     value = JSON.stringify(value)
+    // }
     uni.setStorage({
         key: key,
         data: value,
         success: function () {
-            console.log('write local success: ' + key)
-        }
-    })
-}
-
-// 从本地缓存读取数据
-const readFromLocal = function (key) {
-    uni.getStorage({
-        key: key,
-        success: function (res) {
-            console.log('read local success: ' + key)
-            return res.data
-        },
-        fail: function () {
-            return {}
+            console.log('缓存: ' + key)
         }
     })
 }
@@ -684,7 +674,6 @@ module.exports = {
     getInshoreReqData: getInshoreReqData,   // 近海预报的request的url和data
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
     storeToLocal: storeToLocal, //将数据存入本地缓存
-    readFromLocal: readFromLocal,   //从本地缓存读取数据
     getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
     deepEquals: deepEquals
 }

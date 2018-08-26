@@ -44,19 +44,19 @@
 			<!-- 潮汐预报模块 -->
 			<!-- 第一个图表 -->
 			<view class="page-section">
-				<text>{{chartTideOneTitle}}</text>
+				<text>{{tideData.chartTideOneTitle}}</text>
 				<scroll-view scroll-x="true">
 					<view class="chart-tide">
-						<myChart :option="optionTideOne" canvasId="tideOne" />
+						<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
 					</view>
 				</scroll-view>
 			</view>
 			<!-- 第二个图表 只在青岛地区显示 -->
-			<view class="page-section" v-show="chartTideTwoShow">
-				<text>{{chartTideTwoTitle}}</text>
+			<view class="page-section" v-show="tideData.chartTideTwoShow">
+				<text>{{tideData.chartTideTwoTitle}}</text>
 				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 					<view class="chart-tide">
-						<myChart :option="optionTideTwo" canvasId="tideTwo" />
+						<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
 					</view>
 				</scroll-view>
 			</view>
@@ -65,17 +65,17 @@
 				<inshoreTable :inshoreData="inshoreData" />
 			</view>
 			<!-- 浴场预报 -->
-			<view class="page-section" v-if="showBaths">
-				<bathsTable :bathsData="bathsData" />
+			<view class="page-section" v-if="bathsData.showBaths">
+				<bathsTable :bathsData="bathsData.data" />
 			</view>
 			<!-- 精细化预报 -->
-			<view class="page-section" v-show="showRefined">
+			<view class="page-section" v-show="refinedData.show">
 				<view>精细化预报</view>
-				<refinedChart :option="optionRefinedOne" :data="refinedDataOne" canvasId="refinedOne" />
+				<refinedChart :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
 				<!-- 两个图表之间的空白 -->
-				<view style="height: 60px" v-if="showRefinedTwo"/>
-				<view v-show="showRefinedTwo">
-					<refinedChart :option="optionRefinedTwo" :data="refinedDataTwo" canvasId="refinedTwo" />
+				<view style="height: 60px" v-if="refinedData.showTwo"/>
+				<view v-show="refinedData.showTwo">
+					<refinedChart :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
 				</view>
 			</view>
 			<!-- 五日天气预报 -->
@@ -123,74 +123,6 @@
 					typhoonWarning: '',
 					waveWarning: ''
 				},
-				// 潮汐预报
-				chartTideOneTitle: '',	// 两个图表的地区
-				chartTideTwoTitle: '',
-				chartTideTwoShow: true,	// 第二个图表是否显示
-				optionTideOne: {},		// 两个图表的option
-				optionTideTwo: {},
-				// 近海预报
-				inshoreData: {},
-				// 浴场预报
-				showBaths: true,
-				bathsData: {},
-				// 精细化预报
-				optionRefinedOne: {},	// 两个图表的option
-				optionRefinedTwo: {},
-				showRefined: true,	// 精细化模块是否显示
-				showRefinedTwo: true,	// 第二个图表是否显示
-				refinedDataOne: [	// 图标周围显示的数据
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-				],
-				refinedDataTwo: [	// 图标周围显示的数据
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-					{
-						loc: '',
-						time: '',
-						wave: '',
-						temp: '',
-						windLvl: '',
-						windDir: ''
-					},
-				]
 			}
 		},
 		computed: {
@@ -267,15 +199,15 @@
 					},
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取天气数据!')
+						console.log('[服务器]: 返回 天气数据')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 天气数据 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
 						let result = JSON.parse(res.data.d)
 						if (result.result === null) {
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 天气数据 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
@@ -340,8 +272,8 @@
 						that.weatherData = weatherresult
 						that.fivedayData = fivedayresult
 						// 写入本地缓存
-						utils.storeToLocal('weatherdata', weatherresult)
-						utils.storeToLocal('fivedaydata', fivedayresult)
+						utils.storeToLocal('weatherdata', JSON.stringify(weatherresult))
+						utils.storeToLocal('fivedaydata', JSON.stringify(fivedayresult))
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -365,9 +297,9 @@
 					},
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取台风列表')
+						console.log('[服务器]: 返回 台风列表')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 台风列表 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
@@ -386,9 +318,9 @@
 							},
 							method: 'POST',
 							success: function (res2) {
-								console.log('成功获取台风详情')
+								console.log('[服务器]: 返回 台风详情')
 								if (!res2.data.d) { // 返回的值为空
-									console.log('返回值为空')
+									console.log('[服务器]: 返回 台风详情 返回值为空')
 									that.completedRequestCount++
 									return false
 								}
@@ -434,9 +366,9 @@
 					},
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取海浪预警列表')
+						console.log('[服务器]: 返回 海浪预警列表')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 海浪预警列表 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
@@ -479,13 +411,20 @@
 					data: req.data,
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取潮汐预报数据')
+						console.log('[服务器]: 返回 潮汐预报数据')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 潮汐预报数据 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
 						let resarr = JSON.parse(res.data.d)
+						let result = {
+							chartTideOneTitle: '',
+							chartTideTwoTitle: '',
+							chartTideTwoShow: true,
+							optionTideOne: {},
+							optionTideTwo: {}
+						}
 						let arrOne = []		// 第一个图表数据数组
 						let arrTwo = []		// 第二个图表数据数组
 						let StationOne = ''	// 第一组数据的地名编号
@@ -497,23 +436,27 @@
 							} else {
 								arrTwo.push(resarr[i])
 								// 第二个数组有内容 提前显示所属的view 牺牲一点性能（每次循环都判断一次if）
-								if (that.chartTideTwoShow === false) {
-									that.chartTideTwoShow = true
-								}
+								// if (that.chartTideTwoShow === false) {
+								// 	that.chartTideTwoShow = true
+								// }
 							}
 						}
 						// 根据STATION代号设置图表标题(地名)
-						that.chartTideOneTitle = utils.getLocName(StationOne)
+						result.chartTideOneTitle = utils.getLocName(StationOne)
 						// 由数组生成echarts所需的option
-						that.optionTideOne = utils.setTideChartOption(arrOne)
+						result.optionTideOne = utils.setTideChartOption(arrOne)
 						// 如果第二个数组arrTwo有内容 说明第二个图表需要显示
 						if (arrTwo.length > 0) {
-							that.chartTideTwoShow = true
-							that.chartTideTwoTitle = utils.getLocName(arrTwo[0].STATION)	// 标题地名
-							that.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
+							// that.chartTideTwoShow = true
+							result.chartTideTwoTitle = utils.getLocName(arrTwo[0].STATION)	// 标题地名
+							result.optionTideTwo = utils.setTideChartOption(arrTwo)	// 图表数据
 						} else {	// 不需要显示第二个图表
-							that.chartTideTwoShow = false
+							result.chartTideTwoShow = false
 						}
+						// 写入Vuex
+						that.tideData = result
+						// 写入本地缓存
+						utils.storeToLocal('tidedata', JSON.stringify(result))
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -533,14 +476,18 @@
 					data: req.data,
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取近海预报数据')
+						console.log('[服务器]: 返回 近海预报数据')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 近海预报数据 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						that.inshoreData = utils.setInshoreTableData(resdata.wave)
+						let result = utils.setInshoreTableData(resdata.wave)
+						// 写入Vuex
+						that.inshoreData = result
+						// 写入本地缓存
+						utils.storeToLocal('inshoredata', JSON.stringify(result))
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -554,34 +501,45 @@
 			// 读取服务器浴场预报
 			loadBaths(city) {
 				let that = this
+				let result = {
+					showBaths: false,
+					data: []
+				}
 				// 如果不是青岛 直接返回
 				if (this.array[this.location] != '青岛') {
-					this.showBaths = false
+					// 写入Vuex
+					this.showBaths = result
+					// 写入本地缓存
+					utils.storeToLocal('bathsdata', JSON.stringify(result))
 					that.completedRequestCount++
 					return true
 				}
-				this.showBaths = true
+				result.showBaths = true
 				uni.request({
 					url: appsettings.hosturl + 'GetBathsForecast_0823',
 					data: { name: 'admin', areaflg: '青岛' },
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取浴场预报数据')
+						console.log('[服务器]: 返回 浴场预报数据')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 浴场预报数据 返回值为空')
 							that.showBaths = false
 							that.completedRequestCount++
 							return false
 						}
-						that.bathsData = JSON.parse(res.data.d)
+						result.data = JSON.parse(res.data.d)
 						// 在数组前端加入表头
-						that.bathsData.unshift({
+						result.data.unshift({
 							PublishDate: new Date().toString(),
 							BathsName: '浴场名称',
 							WaveHeight: '浪高(m)',
 							WaterTemp: '水温(℃)',
 							Swimming: '游泳指数'
 						})
+						// 写入Vuex
+						that.bathsData = result
+						// 写入本地缓存
+						utils.storeToLocal('bathsdata', JSON.stringify(result))
 						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
@@ -596,11 +554,21 @@
 			// 读取服务器精细化预报
 			loadRefined(city) {
 				let that = this
+				let result = {
+					optionOne: {},
+					optionTwo: {},
+					show: false,
+					showTwo: false,
+					dataOne: [],
+					dataTwo: []
+				}
 				// 滨州没有精细化预报 设置模块隐藏并返回
 				if (this.array[this.location] === '滨州') {
 					console.log('滨州无精细化预报')
-					this.showRefined = false
-					this.showRefinedTwo = false	// 第二个图表是否显示
+					// 写入Vuex
+					this.refinedData = result
+					// 写入本地缓存
+					utils.storeToLocal('refineddata', JSON.stringify(result))
 					this.completedRequestCount++
 					return true
 				}
@@ -610,31 +578,40 @@
 					data: { name: 'admin', areaflg: '山东', city: that.array[that.location] },
 					method: 'POST',
 					success: function (res) {
-						console.log('成功获取精细化预报数据')
+						console.log('[服务器]: 返回 精细化预报数据')
 						if (!res.data.d) { // 返回的值为空
-							console.log('返回值为空')
+							console.log('[服务器]: 返回 精细化预报数据 返回值为空')
 							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						that.showRefined = true
+						result.show = true
 						let attrcounter = 0	// 统计返回值有多少组数据
 						for (let attr in resdata) {
 							if (resdata.hasOwnProperty(attr)) {
 								if (attrcounter === 0) {	// 第一组数据
-									that.optionRefinedOne = utils.setRefinedChartOption(resdata[attr].tide)
-									that.refinedDataOne = utils.setRefinedData(resdata[attr])
+									// that.optionRefinedOne = utils.setRefinedChartOption(resdata[attr].tide)
+									result.optionOne = utils.setRefinedChartOption(resdata[attr].tide)
+									// that.refinedDataOne = utils.setRefinedData(resdata[attr])
+									result.dataOne = utils.setRefinedData(resdata[attr])
 									attrcounter++
 								} else if (attrcounter === 1) {	// 超过一组数据
-									that.optionRefinedTwo = utils.setRefinedChartOption(resdata[attr].tide)
-									that.refinedDataTwo = utils.setRefinedData(resdata[attr])
+									// that.optionRefinedTwo = utils.setRefinedChartOption(resdata[attr].tide)
+									result.optionTwo = utils.setRefinedChartOption(resdata[attr].tide)
+									// that.refinedDataTwo = utils.setRefinedData(resdata[attr])
+									result.dataTwo = utils.setRefinedData(resdata[attr])
+									result.showTwo = true
 									attrcounter++
 									break
 								}
 							}
 						} // end-for
 						// 如果有多于一组数据 则第二个chart显示
-						that.showRefinedTwo = attrcounter > 1 ? true : false
+						// that.showRefinedTwo = attrcounter > 1 ? true : false
+						// 写入Vuex
+						that.refinedData = result
+						// 写入本地缓存
+						utils.storeToLocal('refineddata', JSON.stringify(result))
 						that.completedRequestCount++
 					}, // end-success
 					fail: function (res) {
@@ -673,7 +650,7 @@
 			}.bind(this), 10000)
 		},
 		onPullDownRefresh() {
-			console.log('refresh')
+			console.log('pull down refresh.')
 			this.requestData(this.array[this.location])
 			// 10秒后关闭提示
 			setTimeout(function () {

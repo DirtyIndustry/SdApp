@@ -12,14 +12,151 @@ var state = {
     },
     // 潮汐预报
     tidedata: {
-
+        chartTideOneTitle: '',	// 两个图表的地区
+        chartTideTwoTitle: '',
+        chartTideTwoShow: true,	// 第二个图表是否显示
+        optionTideOne: {},		// 两个图表的option
+        optionTideTwo: {}
     },
     // 近海预报
-    inshoredata: {},
+    inshoredata: {
+        location: "",
+        time: "",
+        data: [
+            {
+                loc: "海域",
+                wave: "浪高(m)",
+                temp: "表层水温(℃)"
+            },
+            {
+                loc: "",
+                wave: "",
+                temp: ""
+            },
+            {
+                loc: "",
+                wave: "",
+                temp: ""
+            },
+            {
+                loc: "",
+                wave: "",
+                temp: ""
+            },
+            {
+                loc: "",
+                wave: "",
+                temp: ""
+            }
+        ],
+        showextra: true,
+        extra: {
+            wave48h: "",
+            temp48h: "",
+            wave72h: "",
+            temp72h: ""
+        }
+    },
     // 浴场预报
-    bathsdata: {},
+    bathsdata: {
+        showBaths: true,
+        data: [
+            {
+                PublishDate: "",
+                BathsName: "",
+                WaveHeight: "",
+                WaterTemp: "",
+                Swimming: ""
+            },
+            {
+                PublishDate: "",
+                BathsName: "",
+                WaveHeight: "",
+                WaterTemp: "",
+                Swimming: ""
+            },
+            {
+                PublishDate: "",
+                BathsName: "",
+                WaveHeight: "",
+                WaterTemp: "",
+                Swimming: ""
+            },
+            {
+                PublishDate: "",
+                BathsName: "",
+                WaveHeight: "",
+                WaterTemp: "",
+                Swimming: ""
+            },
+            {
+                PublishDate: "",
+                BathsName: "",
+                WaveHeight: "",
+                WaterTemp: "",
+                Swimming: ""
+            }
+        ]
+    },
     // 精细化预报
-    refineddata: {},
+    refineddata: {
+        optionOne: {},	// 两个图表的option
+        optionTwo: {},
+        show: true,	// 精细化模块是否显示
+        showTwo: true,	// 第二个图表是否显示
+        dataOne: [	// 图标周围显示的数据
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+        ],
+        dataTwo: [	// 图标周围显示的数据
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+            {
+                loc: '',
+                time: '',
+                wave: '',
+                temp: '',
+                windLvl: '',
+                windDir: ''
+            },
+        ]
+    },
     // 五日天气
     fivedaydata: {
         fivedayWeather: [   // 五日天气详情

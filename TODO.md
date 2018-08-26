@@ -25,19 +25,20 @@ DONE... menu page
 DONE... tabBar masked on lanuch  
 DONE... optimize tide chart, switch v-show earlier than change option  
 DONE... vuex optimize
-城市预报
-预警报
-渔场预报
-DONE... 趋势预测
-天气预报
-天气图
-卫星云图
-雷达图
-台风路径
-新闻中心
+城市预报  
+预警报  
+渔场预报  
+DONE... 趋势预测  
+天气预报  
+天气图  
+卫星云图  
+雷达图  
+台风路径  
+新闻中心  
+DONE... optimize debug console log
 webview pages  
 deal with request response error  
 deal with request response fail  
-use local storage to speed up *startup->localstore->netrequest->localstore*  
+DONE... use local storage to speed up *startup->localstore->netrequest->localstore*  
 auto location, default location setting  
 Fail... try sticky on ios  

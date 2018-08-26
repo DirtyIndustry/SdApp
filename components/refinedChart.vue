@@ -1,7 +1,7 @@
 <template>
     <view class="refinedChart-body">
         <!-- 地名 -->
-        <view>{{data[0].loc}}</view>
+        <view v-if="data.length > 0">{{data[0].loc}}</view>
         <scroll-view scroll-x="true" @scroll="handleScroll">
             <view class="chart">
                 <myChart :option="option" :canvasId="canvasId" />
@@ -13,12 +13,10 @@
             </view>
             <!-- 信息面板 -->
             <view class="infopanel">
-                <view class="infocolumn infocolumn-left">浪高：{{data[0].wave}}米\n风力：{{data[0].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[0].temp}}℃\n风向：{{data[0].windDir}}</view>
-                <view class="infocolumn infocolumn-left">浪高：{{data[1].wave}}米\n风力：{{data[1].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[1].temp}}℃\n风向：{{data[1].windDir}}</view>
-                <view class="infocolumn infocolumn-left">浪高：{{data[2].wave}}米\n风力：{{data[2].windLvl}}级</view>
-                <view class="infocolumn">水温：{{data[2].temp}}℃\n风向：{{data[2].windDir}}</view>
+                <view class="infopanel-day" v-for="(item, index) in data" :key="index">
+                    <view class="infocolumn infocolumn-left">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
+                    <view class="infocolumn">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
+                </view>
             </view>
         </scroll-view>
         <!-- 固定在两端的日期球
@@ -316,12 +314,20 @@
     /* 图表下方显示信息的面板 */
     .infopanel {
         position: absolute;
-        bottom: 0px;
+        top: 260px;
         width: 290%;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         height: 80px;
+    }
+
+    /* 信息面板中一天的部分 */
+    .infopanel-day {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
     }
 
     /* 信息面板的列 */
