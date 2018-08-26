@@ -44,4 +44,5 @@ webview pages
 deal with request response error  
 deal with request response fail  
 navibar city selection  
+selection panel with mask, for city pick  
 current time pointer  

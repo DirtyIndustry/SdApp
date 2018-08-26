@@ -4,7 +4,19 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "山东海洋预报",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf041",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "22px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
 			}
 		},
 		{

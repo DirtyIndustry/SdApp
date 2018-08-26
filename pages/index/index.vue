@@ -16,7 +16,7 @@
 							</view>
 							<view class="sidebar">
 								<!-- 切换城市按钮 -->
-								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray">
+								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray" ref="citypicker">
 									<view class="uni-input">切换城市</view>
 								</picker>
 							</view>
@@ -173,27 +173,25 @@
 					title: '加载中',
 					mask: true
 				})
-				// 写入Vuex
+				// 写入Vuex和缓存
 				this.cityIndex = e.target.value
-				// 写入本地缓存
 				utils.storeToLocal('cityindex', e.target.value)
-				this.switchCityIndex(e.target.value)
+				this.switchCityByIndex(e.target.value)
 
 				// 10秒后关闭toast
 				setTimeout(function () {
 					uni.hideLoading()
 				}.bind(this), 10000)
 			},
-			// 根据index切换城市
-			switchCityIndex (index) {
+			// 根据index切换城市 允许自动定位 不写入缓存
+			switchCityByIndex (index) {
 				// 切换城市
-				utils.switchCity(this.cityArray[index], this.applyCity)
+				utils.switchCity(this.cityArray[index], this.switchCityByName)
 			},
-			// 应用所选城市
-			applyCity (city) {
-				// 写入Vuex
+			// 根据name切换城市 写入缓存
+			switchCityByName (city) {
+				// 写入Vuex和缓存
 				this.cityName = city
-				// 写入本地缓存
 				utils.storeToLocal('cityname', city)
 				// 根据城市向服务器申请数据
 				this.requestData(city)
@@ -667,15 +665,21 @@
 			}
 		},
 		onLoad() {
+			console.log('index page onload.')
 			// this.loadWeather()
 			// this.loadWarning()
 			// this.loadInshore()
 			// this.loadBaths()
 		},
 		onReady() {
+			console.log('index page ready.')
 			// this.loadAstronomicalTide()
 			// this.loadRefined()
-			this.switchCityIndex(this.cityIndex)
+		},
+		mounted () {
+			console.log('index vue mounted.')
+			// 根据index切换城市 允许自动定位 不写入缓存 
+			this.switchCityByIndex(this.cityIndex)
 			// 10秒后关闭toast
 			setTimeout(function () {
 				uni.hideLoading()
@@ -688,6 +692,18 @@
 			setTimeout(function () {
 				uni.stopPullDownRefresh()
 			}.bind(this), 10000)
+		},
+		onNavigationBarButtonTap() {
+			console.log('navibar button tapped.')
+			// uni.showActionSheet({
+			// 	itemList: ['自动', '青岛', '烟台', '潍坊', '威海', '日照'],
+			// 	success: function (res) {
+			// 		console.log('选中了第' + (res.tapIndex + 1) + '个按钮')
+			// 	},
+			// 	fail: function (res) {
+			// 		console.log(res.errMsg)
+			// 	}
+			// })
 		}
 	}
 </script>
