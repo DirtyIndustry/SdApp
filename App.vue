@@ -7,6 +7,16 @@
 				get() {return this.$store.state.Infos.systeminfo},
 				set(value) {this.$store.dispatch('setSystemInfo', value)}
 			},
+			// 城市选择列表 所选index
+			cityIndex: {
+				get () { return this.$store.state.Infos.cityindex },
+				set (value) { this.$store.dispatch('setCityIndex', value) }
+			},
+			// 当前城市名称
+			cityName: {
+				get () { return this.$store.state.Datas.cityname },
+				set (value) { this.$store.dispatch('setCityName', value) }
+			},
 			// 实时天气
 			weatherData: {
 				get () {return this.$store.state.Datas.weatherdata},
@@ -92,6 +102,24 @@
 			// 获取本地存储的数据
 			getLocalStorage () {
 				let that = this
+				// 城市菜单index
+				uni.getStorage({
+					key: 'cityindex',
+					success: function (res) {
+						console.log('[缓存]: 获取 城市菜单index')
+						console.log(res.data)
+						that.cityIndex = res.data
+					}
+				})
+				// 所宣城市名称
+				uni.getStorage({
+					key: 'cityname',
+					success: function (res) {
+						console.log('[缓存]: 获取 城市名称')
+						console.log(res.data)
+						that.cityName = res.data
+					}
+				})
 				// 实时天气
 				uni.getStorage({
 					key: 'weatherdata',

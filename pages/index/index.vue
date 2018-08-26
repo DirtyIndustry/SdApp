@@ -12,11 +12,11 @@
 						<!-- 布局右侧宽度固定，左侧自适应 -->
 						<view class="container">
 							<view class="main">
-								{{array[location]}}地区预报
+								{{cityName}}地区预报
 							</view>
 							<view class="sidebar">
 								<!-- 切换城市按钮 -->
-								<picker @change="bindPickerChange" :value="location" :range="array">
+								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray">
 									<view class="uni-input">切换城市</view>
 								</picker>
 							</view>
@@ -111,10 +111,6 @@
 		},
 		data() {
 			return {
-				// 城市列表
-				array: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
-				// 上一个选择的城市
-				lastSelectedCityIndex: 0,
 				// 完成的request计数
 				completedRequestCount: 0,
 				
@@ -126,9 +122,17 @@
 			}
 		},
 		computed: {
-			location: {
-				get () { return this.$store.state.Infos.locindex },
-				set (value) { this.$store.dispatch('setLocIndex', value) }
+			// 城市选择列表
+			cityArray () { return this.$store.state.Infos.cityarray },
+			// 城市选择列表 所选index
+			cityIndex: {
+				get () { return this.$store.state.Infos.cityindex },
+				set (value) { this.$store.dispatch('setCityIndex', value) }
+			},
+			// 当前城市名称
+			cityName: {
+				get () { return this.$store.state.Datas.cityname },
+				set (value) { this.$store.dispatch('setCityName', value) }
 			},
 			// 实时天气
 			weatherData: {
@@ -162,22 +166,41 @@
 			}
 		},
 		methods: {
-			// 地区选择变化
+			// 地区选择菜单操作
 			bindPickerChange: function (e) {
 				// 弹出loading toast
 				uni.showLoading({
 					title: '加载中',
 					mask: true
-				});
-				this.location = (e.target.value)
-				this.requestData(this.array[e.target.value])
+				})
+				// 写入Vuex
+				this.cityIndex = e.target.value
+				// 写入本地缓存
+				utils.storeToLocal('cityindex', e.target.value)
+				this.switchCityIndex(e.target.value)
+
 				// 10秒后关闭toast
 				setTimeout(function () {
 					uni.hideLoading()
 				}.bind(this), 10000)
 			},
+			// 根据index切换城市
+			switchCityIndex (index) {
+				// 切换城市
+				utils.switchCity(this.cityArray[index], this.applyCity)
+			},
+			// 应用所选城市
+			applyCity (city) {
+				// 写入Vuex
+				this.cityName = city
+				// 写入本地缓存
+				utils.storeToLocal('cityname', city)
+				// 根据城市向服务器申请数据
+				this.requestData(city)
+			},
 			// 读取服务器数据
 			requestData(city) {
+				// 任务计数器归零
 				this.completedRequestCount = 0
 				this.loadWeather(city)
 				this.loadWarning()
@@ -192,8 +215,8 @@
 				uni.request({
 					url: appsettings.hosturl + 'GetCityWeather',
 					data: {
-						weather: that.array[that.location],
-						// weather: city,
+						// weather: that.array[that.location],
+						weather: city,
 						name: 'admin',
 						areaflg: '山东'
 					},
@@ -404,8 +427,8 @@
 			loadAstronomicalTide(city) {
 				let that = this
 				// 根据城市选择url和data
-				let req = utils.getTideReqData(this.array[this.location])
-				// let req = utils.getTideReqData(city)
+				// let req = utils.getTideReqData(this.array[this.location])
+				let req = utils.getTideReqData(city)
 				uni.request({
 					url: appsettings.hosturl + req.url,
 					data: req.data,
@@ -424,6 +447,10 @@
 							chartTideTwoShow: true,
 							optionTideOne: {},
 							optionTideTwo: {}
+						}
+						// 如果city是青岛则第二个图表提前显示
+						if (city === '青岛') {
+							that.tideData.chartTideTwoShow = true
 						}
 						let arrOne = []		// 第一个图表数据数组
 						let arrTwo = []		// 第二个图表数据数组
@@ -470,7 +497,9 @@
 			// 读取服务器近海预报
 			loadInshore(city) {
 				let that = this
-				let req = utils.getInshoreReqData(this.array[this.location])
+				// 根据所选城市选择url和data
+				// let req = utils.getInshoreReqData(this.array[this.location])
+				let req = utils.getInshoreReqData(city)
 				uni.request({
 					url: appsettings.hosturl + req.url,
 					data: req.data,
@@ -506,9 +535,9 @@
 					data: []
 				}
 				// 如果不是青岛 直接返回
-				if (this.array[this.location] != '青岛') {
+				if (city !== '青岛') {
 					// 写入Vuex
-					this.showBaths = result
+					this.bathsData = result
 					// 写入本地缓存
 					utils.storeToLocal('bathsdata', JSON.stringify(result))
 					that.completedRequestCount++
@@ -523,7 +552,7 @@
 						console.log('[服务器]: 返回 浴场预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 浴场预报数据 返回值为空')
-							that.showBaths = false
+							result.showBaths = false
 							that.completedRequestCount++
 							return false
 						}
@@ -544,7 +573,7 @@
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
-						that.showBaths = false
+						that.bathsData.showBaths = false
 						that.completedRequestCount++
 						return false
 					}
@@ -552,7 +581,7 @@
 				return true
 			},
 			// 读取服务器精细化预报
-			loadRefined(city) {
+			loadRefined(cityname) {
 				let that = this
 				let result = {
 					optionOne: {},
@@ -563,7 +592,8 @@
 					dataTwo: []
 				}
 				// 滨州没有精细化预报 设置模块隐藏并返回
-				if (this.array[this.location] === '滨州') {
+				// if (this.array[this.location] === '滨州') {
+				if (cityname === '滨州') {
 					console.log('滨州无精细化预报')
 					// 写入Vuex
 					this.refinedData = result
@@ -575,7 +605,8 @@
 				// 提前显示相关view
 				uni.request({
 					url: appsettings.hosturl + 'GetRefinedForecast_2018',
-					data: { name: 'admin', areaflg: '山东', city: that.array[that.location] },
+					// data: { name: 'admin', areaflg: '山东', city: that.array[that.location] },
+					data: { name: 'admin', areaflg: '山东', city: cityname },
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 精细化预报数据')
@@ -616,7 +647,7 @@
 					}, // end-success
 					fail: function (res) {
 						// 网络请求失败 返回false
-						that.showBaths = false
+						that.refinedData.show = false
 						that.completedRequestCount++
 						return false
 					}
@@ -636,14 +667,15 @@
 			}
 		},
 		onLoad() {
-			this.loadWeather()
-			this.loadWarning()
-			this.loadInshore()
-			this.loadBaths()
+			// this.loadWeather()
+			// this.loadWarning()
+			// this.loadInshore()
+			// this.loadBaths()
 		},
 		onReady() {
-			this.loadAstronomicalTide()
-			this.loadRefined()
+			// this.loadAstronomicalTide()
+			// this.loadRefined()
+			this.switchCityIndex(this.cityIndex)
 			// 10秒后关闭toast
 			setTimeout(function () {
 				uni.hideLoading()
@@ -651,7 +683,7 @@
 		},
 		onPullDownRefresh() {
 			console.log('pull down refresh.')
-			this.requestData(this.array[this.location])
+			this.requestData(this.cityName)
 			// 10秒后关闭提示
 			setTimeout(function () {
 				uni.stopPullDownRefresh()

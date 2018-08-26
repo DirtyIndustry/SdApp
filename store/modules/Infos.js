@@ -1,15 +1,15 @@
 var state = {
     systeminfo: {},
-    locarray: ['青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
-    locindex: 0
+    cityarray: ['自动', '青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
+    cityindex: 1
 }
 
 const mutations = {
     setsysteminfo (state, value) {
         state.systeminfo = value
     },
-    setlocindex (state, value) {
-        state.locindex = value
+    setcityindex (state, value) {
+        state.cityindex = value
     }
 }
 
@@ -17,8 +17,8 @@ const actions = {
     setSystemInfo (context, info) {
         context.commit('setsysteminfo', info)
     },
-    setLocIndex (context, index) {
-        context.commit('setlocindex', index)
+    setCityIndex (context, index) {
+        context.commit('setcityindex', index)
     }
 }
 

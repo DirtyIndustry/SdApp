@@ -1,4 +1,6 @@
 var state = {
+    // 当前城市名称
+    cityname: '青岛',
     // 实时天气
     weatherdata: {
         temperature: '25', // 气温
@@ -206,6 +208,9 @@ var state = {
 }
 
 const mutations = {
+    setcityname (state, value) {
+        state.cityname = value
+    },
     setweather (state, value) {
         state.weatherdata = value
     },
@@ -227,6 +232,9 @@ const mutations = {
 }
 
 const actions = {
+    setCityName (context, cityname) {
+        context.commit('setcityname', cityname)
+    },
     setWeatherData (context, weatherdata) {
         context.commit('setweather', weatherdata)
     },

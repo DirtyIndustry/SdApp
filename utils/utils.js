@@ -633,6 +633,7 @@ const storeToLocal = function (key, value) {
     // if (typeof value === 'object') {
     //     value = JSON.stringify(value)
     // }
+    // console.log ('store '+key+': '+value)
     uni.setStorage({
         key: key,
         data: value,
@@ -684,6 +685,7 @@ const switchCity = function (city, operate) {
                             console.log('当前城市不在可选列表中')
                             autocity = '青岛'
                         }
+                        console.log('[设备]: 自动定位城市为 ' + autocity)
                         operate(autocity)
                     }, // end-success-request map.baidu.com
                     fail: function () {
@@ -691,7 +693,11 @@ const switchCity = function (city, operate) {
                         operate('青岛')
                     }
                 }) // end-request map.baidu.com
-            } // end-success-uni.getLocation
+            }, // end-success-uni.getLocation
+            fail: function() {
+                console.log('[设备]: 获取 地理位置信息 失败')
+                operate('青岛')
+            }
         }) // end-uni.getLocation
     } else {
         operate(city)

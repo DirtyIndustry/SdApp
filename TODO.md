@@ -27,6 +27,8 @@ DONE... vuex optimize
 DONE... 趋势预测  
 DONE... optimize debug console log  
 DONE... use local storage to speed up *startup->localstore->netrequest->localstore*  
+DONE... auto location, default location setting  
+DONE... bug: baths shows in all city  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.  
 城市预报  
@@ -41,6 +43,5 @@ set up Dev document, setting version, storage format version etc.
 webview pages  
 deal with request response error  
 deal with request response fail  
-auto location, default location setting  
 navibar city selection  
 current time pointer  
