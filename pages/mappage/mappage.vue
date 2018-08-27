@@ -1,6 +1,6 @@
 <template>
 	<view>
-        <web-view src="../../static/Map.html"></web-view>
+        <web-view src="http://123.234.129.238:8001/SdForecast/Map/Map.html"></web-view>
     </view>
 </template>
 
