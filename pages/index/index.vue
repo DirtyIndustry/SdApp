@@ -98,12 +98,9 @@
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
 	import myPicker from '../../components/myPicker.vue'
-	import * as echarts from 'echarts'
-	import mpvueEcharts from 'mpvue-echarts'
 
 	export default {
 		components: {
-			mpvueEcharts,
 			myChart,
 			weatherSection,
 			fivedayForcast,

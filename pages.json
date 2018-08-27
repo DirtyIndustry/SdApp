@@ -40,7 +40,8 @@
 		{
 			"path": "pages/cityforecast/cityforecast",
 			"style": {
-				"navigationBarTitleText": "城市预报"
+				"navigationBarTitleText": "城市预报",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
