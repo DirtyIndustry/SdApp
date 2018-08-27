@@ -6,11 +6,11 @@
 
 <script>
 	export default {
-		name: "page-head",
+		name: 'page-head',
 		props: {
 			title: {
 				type: String,
-				default: ""
+				default: ''
 			}
 		}
 	}

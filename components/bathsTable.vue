@@ -19,11 +19,11 @@ export default {
         bathsData: {
             type: Array,
             default: [{
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             }]
         },
         showBaths: {

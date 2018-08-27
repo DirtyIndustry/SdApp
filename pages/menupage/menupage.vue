@@ -98,14 +98,14 @@ export default {
             console.log('城市预报点击')
             uni.navigateTo({
                 url: '../cityforecast/cityforecast'
-            });
+            })
         },
         // 趋势预测
         TrendTap (e) {
             console.log('趋势预测点击')
             uni.navigateTo({
                 url: '../trendprediction/trendprediction'
-            });
+            })
         }
     }
 }
