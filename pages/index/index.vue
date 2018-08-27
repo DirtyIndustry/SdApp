@@ -163,6 +163,11 @@
 			fivedayData: {
 				get() { return this.$store.state.Datas.fivedaydata },
 				set(value) { this.$store.dispatch('setFivedayData', value) }
+			},
+			// 威海专项
+			weihaiData: {
+				get () { return this.$store.state.Datas.weihaidata },
+				set (value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -651,6 +656,33 @@
 					}
 				}) // end-request
 				return true
+			},
+			// 读取威海专项预报
+			loadWeihai(cityname) {
+				let that = this
+				let result = {
+					show: false,
+					data: []
+				}
+				// 不是威海则没有此项
+				if (city !== '威海') {
+					// 写入Vuex和缓存
+					this.weihaiData = result
+					utils.storeToLocal('weihaidata', JSON.stringify(result))
+					this.completedRequestCount++
+					return true
+				}
+				uni.request({
+					url: appsettings.hosturl + 'GetWeihaiCity_BH',
+					data: { name: 'admin', areaflg: '北海' },
+					method: 'POST',
+					success: function (res) {
+
+					},
+					fail: function (res) {
+
+					}
+				})
 			}
 		}, // end-methods
 		watch: {

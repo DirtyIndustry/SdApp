@@ -204,6 +204,68 @@ var state = {
             }
         ],
         optionFiveday: {}   // 五日高低温图表option
+    },
+    // 威海专项预报
+    weihaidata: {
+        show: false,
+        data: [
+            {
+                FORECASTDATE: '',
+                REPORTAREA: '',
+                WAVEHEIGHT: '',
+                WATERTEMP: '',
+                FIRSTHIGHTIME: '',
+                FIRSTHIGH: '',
+                FIRSTLOWTIME: '',
+                FIRSTLOW: '',
+                SECONDHIGHTIME: '',
+                SECONDHIGH: '',
+                SECONDLOWTIME: '',
+                SECONDLOW: ''
+            },
+            {
+                FORECASTDATE: '',
+                REPORTAREA: '',
+                WAVEHEIGHT: '',
+                WATERTEMP: '',
+                FIRSTHIGHTIME: '',
+                FIRSTHIGH: '',
+                FIRSTLOWTIME: '',
+                FIRSTLOW: '',
+                SECONDHIGHTIME: '',
+                SECONDHIGH: '',
+                SECONDLOWTIME: '',
+                SECONDLOW: ''
+            },
+            {
+                FORECASTDATE: '',
+                REPORTAREA: '',
+                WAVEHEIGHT: '',
+                WATERTEMP: '',
+                FIRSTHIGHTIME: '',
+                FIRSTHIGH: '',
+                FIRSTLOWTIME: '',
+                FIRSTLOW: '',
+                SECONDHIGHTIME: '',
+                SECONDHIGH: '',
+                SECONDLOWTIME: '',
+                SECONDLOW: ''
+            },
+            {
+                FORECASTDATE: '',
+                REPORTAREA: '',
+                WAVEHEIGHT: '',
+                WATERTEMP: '',
+                FIRSTHIGHTIME: '',
+                FIRSTHIGH: '',
+                FIRSTLOWTIME: '',
+                FIRSTLOW: '',
+                SECONDHIGHTIME: '',
+                SECONDHIGH: '',
+                SECONDLOWTIME: '',
+                SECONDLOW: ''
+            }
+        ]
     }
 }
 
@@ -228,6 +290,9 @@ const mutations = {
     },
     setfiveday (state, value) {
         state.fivedaydata = value
+    },
+    setweihai (state, value) {
+        state.weihaidata = value
     }
 }
 
@@ -252,6 +317,9 @@ const actions = {
     },
     setFivedayData (context, fivedaydata) {
         context.commit('setfiveday', fivedaydata)
+    },
+    setWeihaiData (context, weihaidata) {
+        context.commit('setweihai', weihaidata)
     }
 }
 

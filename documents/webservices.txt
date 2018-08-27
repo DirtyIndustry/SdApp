@@ -67,6 +67,7 @@ url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",
 威海特有城市预报
 url: "http://123.234.129.238:8001/MyWebService.asmx/GetWeihaiCity_BH",
                 data: { name: 'admin', areaflg: '北海' },
+错误: 没有权限访问此权限
 
 日照天气
 url: "http://123.234.129.238:8001/MyWebService.asmx/GetCityWeather",

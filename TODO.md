@@ -35,6 +35,9 @@ DONE... 天气预报
 set up Dev document, setting version, storage format version etc.  
 clean web page mui infest  
 weihai special section  
+    Vuex项目修正
+    页面中computed变量+
+    页面任务计数器加一
 预警报  
 渔场预报   
 天气图  

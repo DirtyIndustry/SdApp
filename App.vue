@@ -46,6 +46,11 @@
 			fivedayData: {
 				get() { return this.$store.state.Datas.fivedaydata },
 				set(value) { this.$store.dispatch('setFivedayData', value) }
+			},
+			// 威海专项
+			weihaiData: {
+				get () { return this.$store.state.Datas.weihaidata },
+				set (value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -107,7 +112,7 @@
 					key: 'cityindex',
 					success: function (res) {
 						console.log('[缓存]: 获取 城市菜单index')
-						console.log(res.data)
+						// console.log(res.data)
 						that.cityIndex = res.data
 					}
 				})
@@ -116,7 +121,7 @@
 					key: 'cityname',
 					success: function (res) {
 						console.log('[缓存]: 获取 城市名称')
-						console.log(res.data)
+						// console.log(res.data)
 						that.cityName = res.data
 					}
 				})
@@ -174,8 +179,17 @@
 						that.fivedayData = JSON.parse(res.data)
 					}
 				})
+				// 威海专项
+				uni.getStorage({
+					key: 'weihaidata',
+					success: function (res) {
+						console.log('[缓存]: 获取 威海专项预报')
+						// console.log(res.data)
+						that.weihaiData = JSON.parse(res.data)
+					}
+				})
 			} // end-getLocalStorage()
-		},
+		}, // end-methods
 		onLaunch: function () {
 			console.log('App Launch')
 			uni.showLoading({
