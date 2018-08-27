@@ -32,7 +32,27 @@
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section">
-				<fivedayForcast :option="fivedayData.optionFiveday" :fivedayWeather="fivedayData.fivedayWeather" canvasId="fiveday"/>
+				<view class="fiveday-body">
+					<view class="uni-flex uni-row">
+						<!-- 依据fivedayWeather生成列 -->
+						<view class="fiveday-column uni-flex uni-column" :class="{'fiveday-column-left': index < 4}" v-for="(item, index) in fivedayData.fivedayWeather"
+						 :key="index">
+							<!-- 自上而下分别为 周，日期，天气，天气图标，折线空格，风向，风力 -->
+							<view class="flex-cell-single">{{item.week}}</view>
+							<view class="flex-cell-single">{{item.date}}</view>
+							<view class="flex-cell-single">{{item.weather}}</view>
+							<view class="flex-cell-single">
+								<image :src="item.weatherIcon" mode="widthFix" style="width: 50px; height: 50px" />
+							</view>
+							<view class="flex-cell-quad"> </view>
+							<view class="flex-cell-single">{{item.windDir}}</view>
+							<view class="flex-cell-single">{{item.windLvl}}</view>
+						</view>
+					</view>
+					<view class="chart-fiveday">
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitFiveday" canvasId="canvasIdFiveday" ref="echartsRefFiveday"></mpvue-echarts>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -42,47 +62,50 @@
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	import weatherSection from '../../components/weatherSection.vue'
-	import fivedayForcast from '../../components/fivedayForcast.vue'
+	import * as echarts from 'echarts'
+	import mpvueEcharts from 'mpvue-echarts'
+
+	let chartFiveday
 
 	export default {
 		components: {
-			myChart,
 			weatherSection,
-			fivedayForcast
+			mpvueEcharts
 		},
 		data() {
 			return {
 				// 完成的request计数
-				completedRequestCount: 0
+				completedRequestCount: 0,
+				echarts
 			}
 		},
 		computed: {
 			// 城市选择列表
-			cityArray () { return this.$store.state.Infos.cityarray },
+			cityArray() { return this.$store.state.Infos.cityarray },
 			// 城市选择列表 所选index
 			cityIndex: {
-				get () { return this.$store.state.Infos.cityindex },
-				set (value) { this.$store.dispatch('setCityIndex', value) }
+				get() { return this.$store.state.Infos.cityindex },
+				set(value) { this.$store.dispatch('setCityIndex', value) }
 			},
 			// 当前城市名称
 			cityName: {
-				get () { return this.$store.state.Datas.cityname },
-				set (value) { this.$store.dispatch('setCityName', value) }
+				get() { return this.$store.state.Datas.cityname },
+				set(value) { this.$store.dispatch('setCityName', value) }
 			},
 			// 实时天气
 			weatherData: {
-				get () {return this.$store.state.Datas.weatherdata},
-				set (value) {this.$store.dispatch('setWeatherData', value)}
+				get() { return this.$store.state.Datas.weatherdata },
+				set(value) { this.$store.dispatch('setWeatherData', value) }
 			},
 			// 潮汐预报
 			tideData: {
-				get () {return this.$store.state.Datas.tidedata},
-				set (value) {this.$store.dispatch('setTideData', value)}
+				get() { return this.$store.state.Datas.tidedata },
+				set(value) { this.$store.dispatch('setTideData', value) }
 			},
 			// 近海预报
 			inshoreData: {
-				get () {return this.$store.state.Datas.inshoredata},
-				set (value) {this.$store.dispatch('setInshoreData', value)}
+				get() { return this.$store.state.Datas.inshoredata },
+				set(value) { this.$store.dispatch('setInshoreData', value) }
 			},
 			// 浴场预报
 			bathsData: {
@@ -119,12 +142,12 @@
 				}.bind(this), 10000)
 			},
 			// 根据index切换城市 允许自动定位 不写入缓存
-			switchCityByIndex (index) {
+			switchCityByIndex(index) {
 				// 切换城市
 				utils.switchCity(this.cityArray[index], this.switchCityByName)
 			},
 			// 根据name切换城市 写入缓存
-			switchCityByName (city) {
+			switchCityByName(city) {
 				// 写入Vuex和缓存
 				this.cityName = city
 				utils.storeToLocal('cityname', city)
@@ -172,7 +195,7 @@
 						// 空气质量数值
 						weatherresult.aircondition = result.result.data.pm25.pm25.curPm
 						// 空气质量文字描述
-						weatherresult.airconDesc =	result.result.data.pm25.pm25.quality
+						weatherresult.airconDesc = result.result.data.pm25.pm25.quality
 						// pm2.5数值
 						weatherresult.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
@@ -237,122 +260,6 @@
 						return false
 					}
 				}) // end-request
-				return true
-			},
-			// 读取服务器台风和海浪警报
-			loadWarning() {
-				let that = this
-				// 读取台风信息
-				// 请求服务器台风列表
-				uni.request({
-					url: appsettings.hosturl + 'GetTyphoonList',
-					data: {
-						areaflg: '青岛',
-						Typhoonyear: new Date().getFullYear()
-					},
-					method: 'POST',
-					success: function (res) {
-						console.log('[服务器]: 返回 台风列表')
-						if (!res.data.d) { // 返回的值为空
-							console.log('[服务器]: 返回 台风列表 返回值为空')
-							that.completedRequestCount++
-							return false
-						}
-						// TODO： 接口返回值改为json格式
-						// 字符串用#,分割
-						let typhoonlist = res.data.d.toString().split('#,')
-						// 获取列表中最后一个（最新）台风的详细信息
-						// 数组[台风编号，台风中文名，台风英文名]
-						let lasttyphoon = typhoonlist[typhoonlist.length - 1].split(',')
-						// 请求last typhoon详情数据
-						uni.request({
-							url: appsettings.hosturl + 'GetTyphoonPath',
-							data: {
-								areaflg: '青岛',
-								typhoonNumber: lasttyphoon[0] // 台风编号
-							},
-							method: 'POST',
-							success: function (res2) {
-								console.log('[服务器]: 返回 台风详情')
-								if (!res2.data.d) { // 返回的值为空
-									console.log('[服务器]: 返回 台风详情 返回值为空')
-									that.completedRequestCount++
-									return false
-								}
-								// TODO： 接口返回值改为json格式
-								// 字符串用#$分割
-								let datelist = res2.data.d.toString().split('#$')
-								// 数组中最后一项为空，倒数第二项为最后一个有效值
-								let typhoondate = new Date(
-									datelist[datelist.length - 2].split(',')[0].replace(/-/g, '/')
-								)
-								let nowdate = new Date()
-								nowdate.setHours(nowdate.getHours() - 10)
-								if (typhoondate > nowdate) {
-									// 有台风警报
-									console.log('有台风警报')
-									that.warningData.typhoonWarning =
-										'编号:' +
-										lasttyphoon[0] +
-										'"' +
-										lasttyphoon[1] +
-										'"正在靠近……'
-								} // end-if (typhoondate > nowdate)
-							}, // end-success-request
-							fail: function (res) {
-								// 网络请求失败 返回false
-								that.completedRequestCount++
-								return false
-							}
-						}) // end-request 请求服务器台风详情
-					}, // end-success-request
-					fail: function (res) {
-						// 网络请求失败 返回false
-						that.completedRequestCount++
-						return false
-					}
-				}) // end-request 请求服务器台风列表
-				// 请求服务器海浪预警列表
-				uni.request({
-					url: appsettings.hosturl + 'GetEachWarning_ceshi',
-					data: {
-						name: 'admin',
-						areaflg: '青岛'
-					},
-					method: 'POST',
-					success: function (res) {
-						console.log('[服务器]: 返回 海浪预警列表')
-						if (!res.data.d) { // 返回的值为空
-							console.log('[服务器]: 返回 海浪预警列表 返回值为空')
-							that.completedRequestCount++
-							return false
-						}
-						// TODO： 接口返回值改为json格式
-						// 垃圾接口，就懒得写说明了，改了以后在说
-						let warninglist = res.data.d.toString().split('.html')
-						warninglist.pop()
-						if (warninglist.length > 0) {
-							let firstwarning = warninglist[0].split(',')
-							let warningname
-							let warningdate
-							for (let i = 0; i < firstwarning.length; i++) {
-								if (firstwarning[i] != '') {
-									warningname = firstwarning[i]
-									warningdate = firstwarning[i + 1]
-									break
-								}
-							} // end-for
-							that.warningData.waveWarning =
-								warningname + ',' + warningdate + '……'
-						} // end-if (warninglist.length > 0)
-					}, // end-success-request
-					fail: function (res) {
-						// 网络请求失败 返回false
-						that.completedRequestCount++
-						return false
-					}
-				}) // end-request 请求海浪预警
-				that.completedRequestCount++
 				return true
 			},
 			// 读取服务器潮汐预报
@@ -585,6 +492,16 @@
 					}
 				}) // end-request
 				return true
+			},
+			// 初始化高低温图表
+			handleInitFiveday(canvas, width, height) {
+				chartFiveday = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartFiveday)
+				chartFiveday.setOption(this.fivedayData.optionFiveday, true)
+				return chartFiveday
 			}
 		}, // end-methods
 		watch: {
@@ -596,22 +513,33 @@
 						uni.stopPullDownRefresh()
 					}
 				}
+			},
+			// 高低温图表option
+			fivedayData: {
+				handler(newVal, oldVal) {
+					if (chartFiveday !== undefined) {
+						if (newVal) {
+							chartFiveday.setOption(newVal.optionFiveday, true)
+							// this.$refs.echartsRefFiveday.init()
+						}
+					}
+				}
 			}
 		},
 		onLoad() {
-			console.log('index page onload.')
+			console.log('weatherforecast page onload.')
 			// this.loadWeather()
 			// this.loadWarning()
 			// this.loadInshore()
 			// this.loadBaths()
 		},
 		onReady() {
-			console.log('index page ready.')
+			console.log('weatherforecast page ready.')
 			// this.loadAstronomicalTide()
 			// this.loadRefined()
 		},
-		mounted () {
-			console.log('index vue mounted.')
+		mounted() {
+			console.log('weatherforecast vue mounted.')
 			// 根据index切换城市 允许自动定位 不写入缓存 
 			// this.switchCityByIndex(this.cityIndex)
 			// 10秒后关闭toast
@@ -686,5 +614,56 @@
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000;
+	}
+
+	.uni-flex {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .uni-row {
+        flex-direction: row;
+    }
+
+    .uni-column {
+        flex-direction: column;
+    }
+
+    /* 5日天气预报的容器 */
+    .fiveday-body {
+        position: relative;
+    }
+
+	/* 5日天气预报的列 */
+	.fiveday-column {
+		flex: 1;
+		height: 600px;
+	}
+
+	/* 5日天气预报非最右边的列 添加右边框 */
+	.fiveday-column-left {
+		border-right: 1px solid #000000;
+	}
+
+	/* 5日天气预报中每列中的单元格 */
+	.flex-cell-single {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/* 5日天气预报中占四行高度的单元格 */
+	.flex-cell-quad {
+		flex: 4;
+	}
+
+	/* 五日天气预报气温图表 */
+	.chart-fiveday {
+		width: 100%;
+		height: 235px;
+		/* margin-top: -360px; */
+		top: 240px;
+		position: absolute;
 	}
 </style>

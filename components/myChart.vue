@@ -61,7 +61,7 @@
                     height: height
                 })
                 canvas.setChart(chart)
-                chart.setOption(this.option, false)
+                chart.setOption(this.option, true)
                 return chart
             }
 		},

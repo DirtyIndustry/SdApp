@@ -111,7 +111,7 @@ export default {
         WeatherTap (e) {
             console.log('天气预报点击')
             uni.navigateTo({
-                url: '../weatherpage/weatherpage'
+                url: '../weatherforecast/weatherforecast'
             })
         }
     }
