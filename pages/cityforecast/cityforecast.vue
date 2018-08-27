@@ -793,7 +793,7 @@
 			// 加载时根据当前日期设置日期球文字
             this.setDateballText()
 			// 根据index切换城市 允许自动定位 不写入缓存 
-			this.switchCityByIndex(this.cityIndex)
+			// this.switchCityByIndex(this.cityIndex)
 			// 10秒后关闭toast
 			setTimeout(function () {
 				uni.hideLoading()

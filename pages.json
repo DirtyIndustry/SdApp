@@ -52,6 +52,13 @@
 			}
 		},
 		{
+			"path": "pages/weatherpage/weatherpage",
+			"style": {
+				"navigationBarTitleText": "天气预报",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],

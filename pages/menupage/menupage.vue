@@ -39,7 +39,7 @@
             <view class="uni-flex uni-row menu-row">
                 <!-- 第三行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="WeatherTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
                         <view class="menu-button-text">天气预报</view>
                     </button>
@@ -105,6 +105,13 @@ export default {
             console.log('趋势预测点击')
             uni.navigateTo({
                 url: '../trendprediction/trendprediction'
+            })
+        },
+        // 天气预报
+        WeatherTap (e) {
+            console.log('天气预报点击')
+            uni.navigateTo({
+                url: '../weatherpage/weatherpage'
             })
         }
     }

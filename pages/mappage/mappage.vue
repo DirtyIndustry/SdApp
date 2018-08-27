@@ -1,6 +1,7 @@
 <template>
 	<view>
-        <web-view src="http://123.234.129.238:8001/SdForecast/Map/Map.html"></web-view>
+        <!-- <web-view src="http://123.234.129.238:8001/SdForecast/MapSec/Map.html"></web-view> -->
+		<web-view src="http://123.234.129.238:8001/SdForecast/TyphoonSec/Typhoon.html"></web-view>
     </view>
 </template>
 
@@ -16,4 +17,5 @@
 </script>
 
 <style>
+
 </style>

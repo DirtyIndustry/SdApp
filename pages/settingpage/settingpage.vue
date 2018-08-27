@@ -1,10 +1,8 @@
 <template>
-	<view class="content">
-		<text>This is HomePage.\n</text>
-		<text>{{array[location]}}</text>
-		<text>{{newvalue}}\n</text>
-		<text>{{newValueTwo}}</text>
-	</view>
+	<view>
+        <web-view src="http://123.234.129.238:8001/SdForecast/MapSec/Map.html"></web-view>
+		<!-- <web-view src="http://123.234.129.238:8001/SdForecast/TyphoonSec/Typhoon.html"></web-view> -->
+    </view>
 </template>
 
 <script>
@@ -13,10 +11,11 @@
 			array: ['青岛','烟台','潍坊','威海','日照','东营','滨州']
 		},
 		computed: {
-
+			
 		}
 	}
 </script>
 
 <style>
+
 </style>
