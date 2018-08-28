@@ -211,6 +211,7 @@
 				this.loadInshore(city)
 				this.loadBaths(city)
 				this.loadRefined(city)
+				this.loadWeihai(city)
 			},
 			// 读取服务器天气数据
 			loadWeather(city) {
@@ -555,7 +556,7 @@
 						console.log('[服务器]: 返回 浴场预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 浴场预报数据 返回值为空')
-							result.showBaths = false
+							that.bathsData.showBaths = false
 							that.completedRequestCount++
 							return false
 						}
@@ -665,7 +666,7 @@
 					data: []
 				}
 				// 不是威海则没有此项
-				if (city !== '威海') {
+				if (cityname !== '威海') {
 					// 写入Vuex和缓存
 					this.weihaiData = result
 					utils.storeToLocal('weihaidata', JSON.stringify(result))
@@ -677,10 +678,23 @@
 					data: { name: 'admin', areaflg: '北海' },
 					method: 'POST',
 					success: function (res) {
+						console.log('[服务器]: 返回 威海专项预报数据')
+						// 判断返回数据有效性
+						if (!res.data.d | res.data.d.length <= 0 | res.data.d === '没有权限访问此权限') { // 返回的值为空
+							console.log('[服务器]: 返回 威海专项预报数据 返回值为空')
+							that.weihaiData.show = false
+							that.completedRequestCount++
+							return false
+						}
+						console.log(res.data.d)
+						let resdata = res.data.d
 
 					},
 					fail: function (res) {
-
+						// 网络请求失败 返回false
+						that.weihaiData.show = false
+						that.completedRequestCount++
+						return false
 					}
 				})
 			}
@@ -689,7 +703,8 @@
 			// 完成的request
 			completedRequestCount: {
 				handler(newVal, oldVal) {
-					if (newVal === 6) {
+					// 服务器请求任务的总数
+					if (newVal === 7) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					}

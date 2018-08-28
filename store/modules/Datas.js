@@ -214,56 +214,28 @@ var state = {
                 REPORTAREA: '',
                 WAVEHEIGHT: '',
                 WATERTEMP: '',
-                FIRSTHIGHTIME: '',
-                FIRSTHIGH: '',
-                FIRSTLOWTIME: '',
-                FIRSTLOW: '',
-                SECONDHIGHTIME: '',
-                SECONDHIGH: '',
-                SECONDLOWTIME: '',
-                SECONDLOW: ''
+                option: {}
             },
             {
                 FORECASTDATE: '',
                 REPORTAREA: '',
                 WAVEHEIGHT: '',
                 WATERTEMP: '',
-                FIRSTHIGHTIME: '',
-                FIRSTHIGH: '',
-                FIRSTLOWTIME: '',
-                FIRSTLOW: '',
-                SECONDHIGHTIME: '',
-                SECONDHIGH: '',
-                SECONDLOWTIME: '',
-                SECONDLOW: ''
+                option: {}
             },
             {
                 FORECASTDATE: '',
                 REPORTAREA: '',
                 WAVEHEIGHT: '',
                 WATERTEMP: '',
-                FIRSTHIGHTIME: '',
-                FIRSTHIGH: '',
-                FIRSTLOWTIME: '',
-                FIRSTLOW: '',
-                SECONDHIGHTIME: '',
-                SECONDHIGH: '',
-                SECONDLOWTIME: '',
-                SECONDLOW: ''
+                option: {}
             },
             {
                 FORECASTDATE: '',
                 REPORTAREA: '',
                 WAVEHEIGHT: '',
                 WATERTEMP: '',
-                FIRSTHIGHTIME: '',
-                FIRSTHIGH: '',
-                FIRSTLOWTIME: '',
-                FIRSTLOW: '',
-                SECONDHIGHTIME: '',
-                SECONDHIGH: '',
-                SECONDLOWTIME: '',
-                SECONDLOW: ''
+                option: {}
             }
         ]
     }

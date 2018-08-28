@@ -1,7 +1,8 @@
 <template>
 	<view>
         <!-- <web-view src="http://123.234.129.238:8001/SdForecast/MapSec/Map.html"></web-view> -->
-		<web-view src="http://123.234.129.238:8001/SdForecast/TyphoonSec/Typhoon.html"></web-view>
+		<!-- <web-view src="http://123.234.129.238:8001/SdForecast/TyphoonSec/Typhoon.html"></web-view> -->
+		<web-view src="http://192.168.2.19/MapSec/Map.html"></web-view>
     </view>
 </template>
 
