@@ -674,7 +674,7 @@
 					return true
 				}
 				uni.request({
-					url: appsettings.hosturl + 'GetWeihaiCity_BH',
+					url: appsettings.hosturl + 'GetWeihaiCity_BH_0828',
 					data: { name: 'admin', areaflg: '北海' },
 					method: 'POST',
 					success: function (res) {
@@ -686,9 +686,27 @@
 							that.completedRequestCount++
 							return false
 						}
-						console.log(res.data.d)
-						let resdata = res.data.d
-
+						let resdata = JSON.parse(res.data.d)
+						for (let i = 0; i < resdata.length; i++) {
+							let spdata = {}
+							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
+								continue
+							}
+							spdata.FORECASTDATE = resdata[i].FORECASTDATE
+							spdata.REPORTAREA = resdata[i].REPORTAREA
+							spdata.WAVEHEIGHT = resdata[i].WAVEHEIGHT
+							spdata.WATERTEMP = resdata[i].WATERTEMP
+							spdata.option = utils.setWeihaiChartOption(resdata[i])
+							result.data.push(spdata)
+						}
+						if (result.data.length > 0) {
+							result.show = true
+						}
+						// 写入Vuex和本地缓存
+						that.weihaiData = result
+						utils.storeToLocal('weihaidata', JSON.stringify(result))
+						that.completedRequestCount++
+						return true
 					},
 					fail: function (res) {
 						// 网络请求失败 返回false
@@ -696,7 +714,7 @@
 						that.completedRequestCount++
 						return false
 					}
-				})
+				}) // end-request
 			}
 		}, // end-methods
 		watch: {

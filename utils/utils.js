@@ -364,6 +364,55 @@ const setRefinedChartOption = function (arr) {
     return getOption(tidedata, markdata)
 }
 
+// 根据地区数据生成威海专项预报chart option
+const setWeihaiChartOption = function (obj) {
+    let tidedata = []
+    let markdata = []
+    // 格式化日期
+    let reportdate = new Date(obj.FORECASTDATE)
+    let reportdatestring = reportdate.getFullYear() + '/' + (reportdate.getMonth() + 1) + '/' + reportdate.getDate()
+    let fhtime = reportdatestring + ' ' + obj.FIRSTHIGHTIME + ':00'
+    let fltime = reportdatestring + ' ' + obj.FIRSTLOWTIME + ':00'
+    let shtime = reportdatestring + ' ' + obj.SECONDHIGHTIME + ':00'
+    let sltime = reportdatestring + ' ' + obj.SECONDLOWTIME + ':00'
+    // 如果数据不为空则填入数组
+    if (obj.FIRSTHIGHLEVEL !== '') {
+        tidedata.push([new Date(fhtime), obj.FIRSTHIGHLEVEL])
+        markdata.push([
+            { coord: [new Date(fhtime), obj.FIRSTHIGHLEVEL] },
+            { coord: [new Date(fhtime), 0] }
+        ])
+    }
+    if (obj.FIRSTLOWLEVEL !== '') {
+        tidedata.push([new Date(fhtime), obj.FIRSTLOWLEVEL])
+        markdata.push([
+            { coord: [new Date(fhtime), obj.FIRSTLOWLEVEL] },
+            { coord: [new Date(fhtime), 0] }
+        ])
+    }
+    if (obj.SECONDHIGHLEVEL !== '') {
+        tidedata.push([new Date(fhtime), obj.SECONDHIGHLEVEL])
+        markdata.push([
+            { coord: [new Date(fhtime), obj.SECONDHIGHLEVEL] },
+            { coord: [new Date(fhtime), 0] }
+        ])
+    }
+    if (obj.SECONDLOWLEVEL !== '') {
+        tidedata.push([new Date(fhtime), obj.SECONDLOWLEVEL])
+        markdata.push([
+            { coord: [new Date(fhtime), obj.SECONDLOWLEVEL] },
+            { coord: [new Date(fhtime), 0] }
+        ])
+    }
+    // 曲线数据按照日期排序
+    function SortByFirst (x, y) {
+        return x[0] - y[0]
+    }
+    tidedata.sort(SortByFirst)
+    // 根据曲线和标线数据生成chart option
+    return getOption(tidedata, markdata)
+}
+
 // 根据精细化数据object生成精细化数据object
 const setRefinedData = function (obj) {
     let result = []
@@ -732,6 +781,7 @@ module.exports = {
     setInshoreTableData: setInshoreTableData,   // 近海预报数据
     setRefinedChartOption: setRefinedChartOption, // 精细化预报chart option
     setRefinedData: setRefinedData, // 精细化预报图表下方数据
+    setWeihaiChartOption: setWeihaiChartOption, // 威海专项预报chart option
     getTideReqData: getTideReqData, // 潮汐预报request的url和data
     getInshoreReqData: getInshoreReqData,   // 近海预报的request的url和data
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
