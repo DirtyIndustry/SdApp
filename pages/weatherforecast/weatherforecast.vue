@@ -121,6 +121,11 @@
 			fivedayData: {
 				get() { return this.$store.state.Datas.fivedaydata },
 				set(value) { this.$store.dispatch('setFivedayData', value) }
+			},
+			// 威海专项
+			weihaiData: {
+				get () { return this.$store.state.Datas.weihaidata },
+				set (value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -163,6 +168,7 @@
 				this.loadInshore(city)
 				this.loadBaths(city)
 				this.loadRefined(city)
+				this.loadWeihai(city)
 			},
 			// 读取服务器天气数据
 			loadWeather(city) {
@@ -493,6 +499,88 @@
 				}) // end-request
 				return true
 			},
+			// 读取威海专项预报
+			loadWeihai(cityname) {
+				let that = this
+				let result = {
+					show: false,
+					first: {show: false},
+					second: {show: false},
+					third: {show: false},
+					fourth: {show: false}
+				}
+				// 不是威海则没有此项
+				if (cityname !== '威海') {
+					// 写入Vuex和缓存
+					this.weihaiData = result
+					utils.storeToLocal('weihaidata', JSON.stringify(result))
+					this.completedRequestCount++
+					return true
+				}
+				uni.request({
+					url: appsettings.hosturl + 'GetWeihaiCity_BH_0828',
+					data: { name: 'admin', areaflg: '北海' },
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 威海专项预报数据')
+						// 判断返回数据有效性
+						if (!res.data.d | res.data.d.length <= 0 | res.data.d === '没有权限访问此权限') { // 返回的值为空
+							console.log('[服务器]: 返回 威海专项预报数据 返回值为空')
+							that.weihaiData.show = false
+							that.completedRequestCount++
+							return false
+						}
+						let resdata = JSON.parse(res.data.d)
+						let counter = 0
+						for (let i = 0; i < resdata.length; i++) {
+							let spdata = {}
+							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
+								continue
+							}
+							spdata.show = true
+							spdata.FORECASTDATE = resdata[i].FORECASTDATE
+							spdata.REPORTAREA = resdata[i].REPORTAREA
+							spdata.WAVEHEIGHT = resdata[i].WAVEHEIGHT
+							spdata.WATERTEMP = resdata[i].WATERTEMP
+							spdata.option = utils.setWeihaiChartOption(resdata[i])
+							switch (counter) {
+								case 0:
+									result.first = spdata
+									counter++
+									break
+								case 1:
+									result.second = spdata
+									counter++
+									break
+								case 2:
+									result.third = spdata
+									counter++
+									break
+								case 3:
+									result.fourth = spdata
+									counter++
+									break
+								default:
+									break
+							}
+						}
+						if (result.first.show === true | result.second.show === true | result.third.show === true | result.fourth.show === true) {
+							result.show = true
+						}
+						// 写入Vuex和本地缓存
+						that.weihaiData = result
+						utils.storeToLocal('weihaidata', JSON.stringify(result))
+						that.completedRequestCount++
+						return true
+					},
+					fail: function (res) {
+						// 网络请求失败 返回false
+						that.weihaiData.show = false
+						that.completedRequestCount++
+						return false
+					}
+				}) // end-request
+			},
 			// 初始化高低温图表
 			handleInitFiveday(canvas, width, height) {
 				chartFiveday = echarts.init(canvas, null, {
@@ -508,7 +596,7 @@
 			// 完成的request
 			completedRequestCount: {
 				handler(newVal, oldVal) {
-					if (newVal === 5) {
+					if (newVal === 6) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					}

@@ -123,6 +123,17 @@
 					</view>
 				</view>
 			</view>
+			<!-- 威海专项预报 -->
+			<view class="page-section" v-show="weihaiData.show">
+				<view>威海专项预报</view>
+				<view v-show="weihaiData.first.show">
+					<view>{{weihaiData.first.REPORTAREA}}</view>
+					<!-- 图表部分 -->
+					<view class="chart-weihai">
+						<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiOne" canvasId="canvasIdWeihaiOne" ref="echartsRefWeihaiOne"></mpvue-echarts>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -139,6 +150,10 @@
 	let chartTideTwo
 	let chartRefinedOne
 	let chartRefinedTwo
+	let chartWeihaiOne
+	let chartWeihaiTwo
+	let chartWeihaiThree
+	let chartWeihaiFour
 
 	export default {
 		components: {
@@ -221,6 +236,11 @@
 			fivedayData: {
 				get() { return this.$store.state.Datas.fivedaydata },
 				set(value) { this.$store.dispatch('setFivedayData', value) }
+			},
+			// 威海专项
+			weihaiData: {
+				get () { return this.$store.state.Datas.weihaidata },
+				set (value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -263,6 +283,7 @@
 				this.loadInshore(city)
 				this.loadBaths(city)
 				this.loadRefined(city)
+				this.loadWeihai(city)
 			},
 			// 读取服务器天气数据
 			loadWeather(city) {
@@ -596,6 +617,88 @@
 				}) // end-request
 				return true
 			},
+			// 读取威海专项预报
+			loadWeihai(cityname) {
+				let that = this
+				let result = {
+					show: false,
+					first: {show: false},
+					second: {show: false},
+					third: {show: false},
+					fourth: {show: false}
+				}
+				// 不是威海则没有此项
+				if (cityname !== '威海') {
+					// 写入Vuex和缓存
+					this.weihaiData = result
+					utils.storeToLocal('weihaidata', JSON.stringify(result))
+					this.completedRequestCount++
+					return true
+				}
+				uni.request({
+					url: appsettings.hosturl + 'GetWeihaiCity_BH_0828',
+					data: { name: 'admin', areaflg: '北海' },
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 威海专项预报数据')
+						// 判断返回数据有效性
+						if (!res.data.d | res.data.d.length <= 0 | res.data.d === '没有权限访问此权限') { // 返回的值为空
+							console.log('[服务器]: 返回 威海专项预报数据 返回值为空')
+							that.weihaiData.show = false
+							that.completedRequestCount++
+							return false
+						}
+						let resdata = JSON.parse(res.data.d)
+						let counter = 0
+						for (let i = 0; i < resdata.length; i++) {
+							let spdata = {}
+							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
+								continue
+							}
+							spdata.show = true
+							spdata.FORECASTDATE = resdata[i].FORECASTDATE
+							spdata.REPORTAREA = resdata[i].REPORTAREA
+							spdata.WAVEHEIGHT = resdata[i].WAVEHEIGHT
+							spdata.WATERTEMP = resdata[i].WATERTEMP
+							spdata.option = utils.setWeihaiChartOption(resdata[i])
+							switch (counter) {
+								case 0:
+									result.first = spdata
+									counter++
+									break
+								case 1:
+									result.second = spdata
+									counter++
+									break
+								case 2:
+									result.third = spdata
+									counter++
+									break
+								case 3:
+									result.fourth = spdata
+									counter++
+									break
+								default:
+									break
+							}
+						}
+						if (result.first.show === true | result.second.show === true | result.third.show === true | result.fourth.show === true) {
+							result.show = true
+						}
+						// 写入Vuex和本地缓存
+						that.weihaiData = result
+						utils.storeToLocal('weihaidata', JSON.stringify(result))
+						that.completedRequestCount++
+						return true
+					},
+					fail: function (res) {
+						// 网络请求失败 返回false
+						that.weihaiData.show = false
+						that.completedRequestCount++
+						return false
+					}
+				}) // end-request
+			},
 			// 初始化潮汐预报图表一
 			handleInitTideOne(canvas, width, height) {
 				chartTideOne = echarts.init(canvas, null, {
@@ -635,6 +738,46 @@
                 canvas.setChart(chartRefinedTwo)
                 chartRefinedTwo.setOption(this.refinedData.optionTwo, true)
                 return chartRefinedTwo
+			},
+			// 初始化威海专项图表一
+			handleInitWeihaiOne(canvas, width, height) {
+				chartWeihaiOne = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartWeihaiOne)
+				chartWeihaiOne.setOption(this.weihaiData.first.option, true)
+				return chartWeihaiOne
+			},
+			// 初始化威海专项图表二
+			handleInitWeihaiTwo(canvas, width, height) {
+				chartWeihaiTwo = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartWeihaiTwo)
+				chartWeihaiTwo.setOption(this.weihaiData.second.option, true)
+				return chartWeihaiTwo
+			},
+			// 初始化威海专项图表三
+			handleInitWeihaiThree(canvas, width, height) {
+				chartWeihaiThree = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartWeihaiThree)
+				chartWeihaiThree.setOption(this.weihaiData.third.option, true)
+				return chartWeihaiThree
+			},
+			// 初始化威海专项图表四
+			handleInitWeihaiFour(canvas, width, height) {
+				chartWeihaiFour = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartWeihaiFour)
+				chartWeihaiFour.setOption(this.weihaiData.fourth.option, true)
+				return chartWeihaiFour
 			},
 			// 设置曲线图下方日期球的日期
             setDateballText() {
@@ -735,7 +878,7 @@
 			// 完成的request
 			completedRequestCount: {
 				handler(newVal, oldVal) {
-					if (newVal === 5) {
+					if (newVal === 6) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					}
@@ -771,6 +914,33 @@
 						if (newVal) {
 							chartRefinedTwo.setOption(newVal.optionTwo, true)
 							// this.$refs.echartsRefTideTwo.init()
+						}
+					}
+				}
+			},
+			// 威海专项四个chart更新
+			weihaiData: {
+				handler(newVal, oldVal) {
+					if (chartWeihaiOne !== undefined) {
+						if (newVal) {
+							chartWeihaiOne.setOption(newVal.first.option, true)
+							// this.$refs.echartsRefWeihaiOne.init()
+						}
+					}
+					if (chartWeihaiTwo !== undefined) {
+						if (newVal) {
+							chartWeihaiTwo.setOption(newVal.second.option, true)
+							// this.$refs.echartsRefWeihaiTwo.init()
+						}
+					}
+					if (chartWeihaiThree !== undefined) {
+						if (newVal) {
+							chartWeihaiThree.setOption(newVal.third.option, true)
+						}
+					}
+					if (chartWeihaiFour !== undefined) {
+						if (newVal) {
+							chartWeihaiFour.setOption(newVal.fourth.option, true)
 						}
 					}
 				}
@@ -996,4 +1166,11 @@
     .infocolumn-left {
         text-align: right;
     }
+
+	/* 威海专项图表 */
+	.chart-weihai {
+		width: 100%;
+        height: 250px;
+        border: 1px solid #000000;
+	}
 </style>

@@ -663,7 +663,10 @@
 				let that = this
 				let result = {
 					show: false,
-					data: []
+					first: {show: false},
+					second: {show: false},
+					third: {show: false},
+					fourth: {show: false}
 				}
 				// 不是威海则没有此项
 				if (cityname !== '威海') {
@@ -687,19 +690,42 @@
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
+						let counter = 0	// 计数器
 						for (let i = 0; i < resdata.length; i++) {
 							let spdata = {}
 							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
 								continue
 							}
+							spdata.show = true
 							spdata.FORECASTDATE = resdata[i].FORECASTDATE
 							spdata.REPORTAREA = resdata[i].REPORTAREA
 							spdata.WAVEHEIGHT = resdata[i].WAVEHEIGHT
 							spdata.WATERTEMP = resdata[i].WATERTEMP
 							spdata.option = utils.setWeihaiChartOption(resdata[i])
-							result.data.push(spdata)
+							// 依次放入第一至四个obj中
+							switch (counter) {
+								case 0:
+									result.first = spdata
+									counter++
+									break
+								case 1:
+									result.second = spdata
+									counter++
+									break
+								case 2:
+									result.third = spdata
+									counter++
+									break
+								case 3:
+									result.fourth = spdata
+									counter++
+									break
+								default:
+									break
+							}
 						}
-						if (result.data.length > 0) {
+						// 任意一个地区有有效数据则显示模块
+						if (result.first.show === true | result.second.show === true | result.third.show === true | result.fourth.show === true) {
 							result.show = true
 						}
 						// 写入Vuex和本地缓存

@@ -208,36 +208,38 @@ var state = {
     // 威海专项预报
     weihaidata: {
         show: false,
-        data: [
-            {
-                FORECASTDATE: '',
-                REPORTAREA: '',
-                WAVEHEIGHT: '',
-                WATERTEMP: '',
-                option: {}
-            },
-            {
-                FORECASTDATE: '',
-                REPORTAREA: '',
-                WAVEHEIGHT: '',
-                WATERTEMP: '',
-                option: {}
-            },
-            {
-                FORECASTDATE: '',
-                REPORTAREA: '',
-                WAVEHEIGHT: '',
-                WATERTEMP: '',
-                option: {}
-            },
-            {
-                FORECASTDATE: '',
-                REPORTAREA: '',
-                WAVEHEIGHT: '',
-                WATERTEMP: '',
-                option: {}
-            }
-        ]
+        first: {
+            show: false,
+            FORECASTDATE: '',
+            REPORTAREA: '',
+            WAVEHEIGHT: '',
+            WATERTEMP: '',
+            option: {}
+        },
+        second: {
+            show: false,
+            FORECASTDATE: '',
+            REPORTAREA: '',
+            WAVEHEIGHT: '',
+            WATERTEMP: '',
+            option: {}
+        },
+        third: {
+            show: false,
+            FORECASTDATE: '',
+            REPORTAREA: '',
+            WAVEHEIGHT: '',
+            WATERTEMP: '',
+            option: {}
+        },
+        fourth: {
+            show: false,
+            FORECASTDATE: '',
+            REPORTAREA: '',
+            WAVEHEIGHT: '',
+            WATERTEMP: '',
+            option: {}
+        }
     }
 }
 
