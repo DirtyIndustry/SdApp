@@ -229,13 +229,11 @@
 						console.log('[服务器]: 返回 天气数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 天气数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let result = JSON.parse(res.data.d)
 						if (result.result === null) {
 							console.log('[服务器]: 返回 天气数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let weatherresult = {}
@@ -301,15 +299,14 @@
 						// 写入本地缓存
 						utils.storeToLocal('weatherdata', JSON.stringify(weatherresult))
 						utils.storeToLocal('fivedaydata', JSON.stringify(fivedayresult))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
-				return true
 			},
 			// 读取服务器台风和海浪警报
 			loadWarning() {
@@ -441,7 +438,6 @@
 						console.log('[服务器]: 返回 潮汐预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 潮汐预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resarr = JSON.parse(res.data.d)
@@ -488,12 +484,12 @@
 						that.tideData = result
 						// 写入本地缓存
 						utils.storeToLocal('tidedata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -512,7 +508,6 @@
 						console.log('[服务器]: 返回 近海预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 近海预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
@@ -521,12 +516,12 @@
 						that.inshoreData = result
 						// 写入本地缓存
 						utils.storeToLocal('inshoredata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -557,7 +552,6 @@
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 浴场预报数据 返回值为空')
 							that.bathsData.showBaths = false
-							that.completedRequestCount++
 							return false
 						}
 						result.data = JSON.parse(res.data.d)
@@ -573,13 +567,12 @@
 						that.bathsData = result
 						// 写入本地缓存
 						utils.storeToLocal('bathsdata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
-						that.bathsData.showBaths = false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -616,7 +609,6 @@
 						console.log('[服务器]: 返回 精细化预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 精细化预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
@@ -647,13 +639,13 @@
 						that.refinedData = result
 						// 写入本地缓存
 						utils.storeToLocal('refineddata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
 						that.refinedData.show = false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -686,7 +678,6 @@
 						if (!res.data.d | res.data.d.length <= 0 | res.data.d === '没有权限访问此权限') { // 返回的值为空
 							console.log('[服务器]: 返回 威海专项预报数据 返回值为空')
 							that.weihaiData.show = false
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
@@ -731,14 +722,13 @@
 						// 写入Vuex和本地缓存
 						that.weihaiData = result
 						utils.storeToLocal('weihaidata', JSON.stringify(result))
-						that.completedRequestCount++
-						return true
 					},
 					fail: function (res) {
 						// 网络请求失败 返回false
 						that.weihaiData.show = false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 			}

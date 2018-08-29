@@ -186,13 +186,11 @@
 						console.log('[服务器]: 返回 天气数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 天气数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let result = JSON.parse(res.data.d)
 						if (result.result === null) {
 							console.log('[服务器]: 返回 天气数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let weatherresult = {}
@@ -201,7 +199,7 @@
 						// 空气质量数值
 						weatherresult.aircondition = result.result.data.pm25.pm25.curPm
 						// 空气质量文字描述
-						weatherresult.airconDesc = result.result.data.pm25.pm25.quality
+						weatherresult.airconDesc =	result.result.data.pm25.pm25.quality
 						// pm2.5数值
 						weatherresult.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
@@ -258,15 +256,14 @@
 						// 写入本地缓存
 						utils.storeToLocal('weatherdata', JSON.stringify(weatherresult))
 						utils.storeToLocal('fivedaydata', JSON.stringify(fivedayresult))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
-				return true
 			},
 			// 读取服务器潮汐预报
 			loadAstronomicalTide(city) {
@@ -282,7 +279,6 @@
 						console.log('[服务器]: 返回 潮汐预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 潮汐预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resarr = JSON.parse(res.data.d)
@@ -329,12 +325,12 @@
 						that.tideData = result
 						// 写入本地缓存
 						utils.storeToLocal('tidedata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -353,7 +349,6 @@
 						console.log('[服务器]: 返回 近海预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 近海预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
@@ -362,12 +357,12 @@
 						that.inshoreData = result
 						// 写入本地缓存
 						utils.storeToLocal('inshoredata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -397,8 +392,7 @@
 						console.log('[服务器]: 返回 浴场预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 浴场预报数据 返回值为空')
-							result.showBaths = false
-							that.completedRequestCount++
+							that.bathsData.showBaths = false
 							return false
 						}
 						result.data = JSON.parse(res.data.d)
@@ -414,13 +408,12 @@
 						that.bathsData = result
 						// 写入本地缓存
 						utils.storeToLocal('bathsdata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success-request
 					fail: function (res) {
-						// 网络请求失败 返回false
-						that.bathsData.showBaths = false
+						// 网络请求失败
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -457,7 +450,6 @@
 						console.log('[服务器]: 返回 精细化预报数据')
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 精细化预报数据 返回值为空')
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
@@ -488,13 +480,13 @@
 						that.refinedData = result
 						// 写入本地缓存
 						utils.storeToLocal('refineddata', JSON.stringify(result))
-						that.completedRequestCount++
 					}, // end-success
 					fail: function (res) {
-						// 网络请求失败 返回false
+						// 网络请求失败
 						that.refinedData.show = false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 				return true
@@ -527,11 +519,10 @@
 						if (!res.data.d | res.data.d.length <= 0 | res.data.d === '没有权限访问此权限') { // 返回的值为空
 							console.log('[服务器]: 返回 威海专项预报数据 返回值为空')
 							that.weihaiData.show = false
-							that.completedRequestCount++
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						let counter = 0
+						let counter = 0	// 计数器
 						for (let i = 0; i < resdata.length; i++) {
 							let spdata = {}
 							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
@@ -543,6 +534,7 @@
 							spdata.WAVEHEIGHT = resdata[i].WAVEHEIGHT
 							spdata.WATERTEMP = resdata[i].WATERTEMP
 							spdata.option = utils.setWeihaiChartOption(resdata[i])
+							// 依次放入第一至四个obj中
 							switch (counter) {
 								case 0:
 									result.first = spdata
@@ -564,20 +556,20 @@
 									break
 							}
 						}
+						// 任意一个地区有有效数据则显示模块
 						if (result.first.show === true | result.second.show === true | result.third.show === true | result.fourth.show === true) {
 							result.show = true
 						}
 						// 写入Vuex和本地缓存
 						that.weihaiData = result
 						utils.storeToLocal('weihaidata', JSON.stringify(result))
-						that.completedRequestCount++
-						return true
 					},
 					fail: function (res) {
 						// 网络请求失败 返回false
 						that.weihaiData.show = false
+					},
+					complete: function (res) {
 						that.completedRequestCount++
-						return false
 					}
 				}) // end-request
 			},
