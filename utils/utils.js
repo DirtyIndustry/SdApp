@@ -377,31 +377,31 @@ const setWeihaiChartOption = function (obj) {
     let sltime = reportdatestring + ' ' + obj.SECONDLOWTIME + ':00'
     // 如果数据不为空则填入数组
     if (obj.FIRSTHIGHLEVEL !== '') {
-        tidedata.push([new Date(fhtime), obj.FIRSTHIGHLEVEL])
+        tidedata.push([new Date(fhtime), Number(obj.FIRSTHIGH)])
         markdata.push([
-            { coord: [new Date(fhtime), obj.FIRSTHIGHLEVEL] },
+            { coord: [new Date(fhtime), Number(obj.FIRSTHIGH)] },
             { coord: [new Date(fhtime), 0] }
         ])
     }
     if (obj.FIRSTLOWLEVEL !== '') {
-        tidedata.push([new Date(fhtime), obj.FIRSTLOWLEVEL])
+        tidedata.push([new Date(fltime), Number(obj.FIRSTLOW)])
         markdata.push([
-            { coord: [new Date(fhtime), obj.FIRSTLOWLEVEL] },
-            { coord: [new Date(fhtime), 0] }
+            { coord: [new Date(fltime), Number(obj.FIRSTLOW)] },
+            { coord: [new Date(fltime), 0] }
         ])
     }
     if (obj.SECONDHIGHLEVEL !== '') {
-        tidedata.push([new Date(fhtime), obj.SECONDHIGHLEVEL])
+        tidedata.push([new Date(shtime), Number(obj.SECONDHIGH)])
         markdata.push([
-            { coord: [new Date(fhtime), obj.SECONDHIGHLEVEL] },
-            { coord: [new Date(fhtime), 0] }
+            { coord: [new Date(shtime), Number(obj.SECONDHIGH)] },
+            { coord: [new Date(shtime), 0] }
         ])
     }
     if (obj.SECONDLOWLEVEL !== '') {
-        tidedata.push([new Date(fhtime), obj.SECONDLOWLEVEL])
+        tidedata.push([new Date(sltime), Number(obj.SECONDLOW)])
         markdata.push([
-            { coord: [new Date(fhtime), obj.SECONDLOWLEVEL] },
-            { coord: [new Date(fhtime), 0] }
+            { coord: [new Date(sltime), Number(obj.SECONDLOW)] },
+            { coord: [new Date(sltime), 0] }
         ])
     }
     // 曲线数据按照日期排序
@@ -518,7 +518,7 @@ const getLocName = function (STATION) {
 const getOption = function (tidedata, markdata) {
     // 获取y轴最大最小值
     let max = -100
-    let min = 100
+    let min = 1000
     for (let i = 0; i < markdata.length; i++) {
         let value = Number(markdata[i][0].coord[1])
         if (value > max) {
@@ -561,6 +561,9 @@ const getOption = function (tidedata, markdata) {
         // 横坐标轴
         xAxis: {
             type: 'time',
+            // show: false,
+            offset: 0,
+            interval: 24*60*60*1000,
             axisLabel: {
                 // 横坐标刻度数值
                 show: true,
@@ -579,7 +582,9 @@ const getOption = function (tidedata, markdata) {
         },
         yAxis: {
             show: false,
-            boundaryGap: ['20%', '20%'] // 纵坐标轴的范围，比有效数字上下多出20%
+            boundaryGap: ['20%', '20%'], // 纵坐标轴的范围，比有效数字上下多出20%
+            min: 0,
+            // max: max + 110
         },
         series: [
             // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label

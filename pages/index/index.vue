@@ -731,6 +731,7 @@
 						// 写入Vuex和本地缓存
 						that.weihaiData = result
 						utils.storeToLocal('weihaidata', JSON.stringify(result))
+						console.log(that.weihaiData)
 						that.completedRequestCount++
 						return true
 					},
