@@ -27,7 +27,7 @@ import utils from '../../utils/utils.js'
 import myChart from './myChart.vue'
 
 export default {
-    name: 'weihaiSPSection',
+    name: 'weihaiSPChart',
     components: {
         myChart
     },
