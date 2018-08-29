@@ -714,7 +714,7 @@
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						let counter = 0
+						let counter = 0	// 计数器
 						for (let i = 0; i < resdata.length; i++) {
 							let spdata = {}
 							if (resdata[i].FIRSTHIGHTIME === '' | resdata[i].FIRSTLOWTIME === '' | resdata[i].SECONDHIGHTIME === '' | resdata[i].SECONDLOWTIME) {
@@ -731,7 +731,7 @@
 							// } else {
 							// 	spdata.option.yAxis.min = Number(resdata[i].SECONDLOW - 100)
 							// }
-							
+							// 依次放入第一至四个obj中
 							switch (counter) {
 								case 0:
 									result.first = spdata
@@ -753,6 +753,7 @@
 									break
 							}
 						}
+						// 任意一个地区有有效数据则显示模块
 						if (result.first.show === true | result.second.show === true | result.third.show === true | result.fourth.show === true) {
 							result.show = true
 						}
@@ -1254,7 +1255,6 @@
 		display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-		border: 1px solid #000;
 	}
 
 	/* 威海专项 信息面板的列 */
