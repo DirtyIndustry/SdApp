@@ -124,7 +124,7 @@
 				</view>
 			</view>
 			<!-- 威海专项预报 -->
-			<view class="page-section" v-if="weihaiData.show">
+			<view class="page-section" v-show="weihaiData.show">
 				<view>威海专项预报</view>
 				<!-- 第一部分 -->
 				<view v-show="weihaiData.first.show">
@@ -684,10 +684,13 @@
 				// 不是威海则没有此项
 				if (cityname !== '威海') {
 					// 写入Vuex和缓存
-					this.weihaiData = result
-					utils.storeToLocal('weihaidata', JSON.stringify(result))
+					this.weihaiData.show = false
+					utils.storeToLocal('weihaidata', JSON.stringify(this.weihaiData))
 					this.completedRequestCount++
 					return true
+				} else {
+					// 提前展开模块供echarts刷新
+					this.weihaiData.show = true
 				}
 				uni.request({
 					url: appsettings.hosturl + 'GetWeihaiCity_BH_0828',

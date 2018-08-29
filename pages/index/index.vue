@@ -663,8 +663,8 @@
 				// 不是威海则没有此项
 				if (cityname !== '威海') {
 					// 写入Vuex和缓存
-					this.weihaiData = result
-					utils.storeToLocal('weihaidata', JSON.stringify(result))
+					this.weihaiData.show = false
+					utils.storeToLocal('weihaidata', JSON.stringify(this.weihaiData))
 					this.completedRequestCount++
 					return true
 				}
