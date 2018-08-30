@@ -2,8 +2,8 @@
 	<view>
         <!-- <web-view src="http://123.234.129.238:8001/SdForecast/MapSec/Map.html"></web-view> -->
 		<!-- <web-view src="http://123.234.129.238:8001/SdForecast/TyphoonSec/Typhoon.html"></web-view> -->
-		<!-- <web-view src="http://192.168.2.19/MapSec/Map.html"></web-view> -->
-		<map style="width: 100%; height: 1200px;" :latitude="centerlati" :longitude="centerlongi" :scale="scale" :markers="markers"></map>
+		<web-view src="http://192.168.2.19/MapSec/Map.html"></web-view>
+		<!-- <map style="width: 100%; height: 1200px;" :latitude="centerlati" :longitude="centerlongi" :scale="scale" :markers="markers"></map> -->
     </view>
 </template>
 

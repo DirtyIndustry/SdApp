@@ -1,0 +1,294 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>简单地图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+        }
+
+        .wrap {
+            z-index: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        p {
+            width: 603px;
+            padding-top: 3px;
+            overflow: hidden;
+        }
+
+        .btn {
+            width: 142px;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            /* min-width:600px;
+            min-height:767px; */
+
+        }
+
+        .option_frame {
+            border: 1px
+            /*solid*/
+            #000000;
+            width: 100%;
+            height: 44px;
+            position: fixed;
+            z-index: 9;
+            top: 30px;
+        }
+
+        .option_frame .option_button {
+            border: 1px
+            /*solid*/
+            #000000;
+            width: 60%;
+            height: 36px;
+            margin: 0 auto;
+        }
+
+        .option_frame .option_button .city {
+            border-left: 1px solid #0092d4;
+            border-top: 1px solid #0092d4;
+            border-bottom: 1px solid #0092d4;
+            width: 50%;
+            height: 34px;
+            color: #0092d4;
+            background-color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            line-height: 34px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            opacity: 0.9;
+            float: left;
+        }
+
+        .option_frame .option_button .fishery {
+            border-right: 1px solid #0092d4;
+            border-top: 1px solid #0092d4;
+            border-bottom: 1px solid #0092d4;
+            width: 48%;
+            height: 34px;
+            background-color: #ffffff;
+            color: #0092d4;
+            font-size: 16px;
+            text-align: center;
+            line-height: 34px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            opacity: 0.9;
+            float: left;
+        }
+
+        .selected {
+            background-color: #0092d4 !important;
+            color: #ffffff !important;
+            opacity: 0.9 !important;
+        }
+
+        /*卫星切换*/
+        .switchbutton {
+            /* border: 1px solid #000000; */
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            z-index: 99;
+        }
+
+        .switchbutton .img {
+            width: 100%;
+            height: 100%;
+            background-image: url(./Images/wxdt.png);
+            background-size: 100% 100%;
+            margin-right: 8px;
+            float: center;
+        }
+    </style>
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
+    <script>
+
+        var map
+        var markerCityQD
+
+        window.onload = function () {
+
+            //直接加载地图
+
+
+            //初始化地图函数  自定义函数名init
+            function init() {
+                //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
+                map = new qq.maps.Map(document.getElementById("container"), {
+                    center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
+                    zoom: 6,                                                 // 地图的中心地理坐标。
+                    mapTypeControl: false
+                });
+
+                // 
+                /*
+                var anchor = new qq.maps.Point(0, 39),
+                    size = new qq.maps.Size(90, 115),
+                    scaleSize = new qq.maps.Size(50, 62),
+                    origin = new qq.maps.Point(0, 0), */
+                // 青岛城市图标
+                var iconCityQD = new qq.maps.MarkerImage(
+                        "./Images/Qd_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                
+                // 青岛城市Marker
+                markerCityQD = new qq.maps.Marker({
+                    //设置Marker的位置坐标
+                    position: new qq.maps.LatLng(36.061865, 120.315579),
+                    //设置显示Marker的地图
+                    map: map
+                })
+                markerCityQD.setIcon(iconCityQD)
+
+                // 日照城市图标
+                var iconCityRZ = new qq.maps.MarkerImage(
+                        "./Images/Rz_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                
+                // 日照城市Marker
+                markerCityRZ = new qq.maps.Marker({
+                    //设置Marker的位置坐标
+                    position: new qq.maps.LatLng(35.423879, 119.570555),
+                    //设置显示Marker的地图
+                    map: map
+                })
+                markerCityRZ.setIcon(iconCityRZ)
+
+                // 烟台城市图标
+                var iconCityYT = new qq.maps.MarkerImage(
+                        "./Images/Yt_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                
+                // 烟台城市Marker
+                markerCityYT = new qq.maps.Marker({
+                    //设置Marker的位置坐标
+                    position: new qq.maps.LatLng(37.583791, 121.184684),
+                    //设置显示Marker的地图
+                    map: map
+                })
+                markerCityYT.setIcon(iconCityYT)
+
+                // 威海城市图标
+                var iconCityWH = new qq.maps.MarkerImage(
+                        "./Images/Wh_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                
+                // 威海城市Marker
+                markerCityWH = new qq.maps.Marker({
+                    //设置Marker的位置坐标
+                    position: new qq.maps.LatLng(37.493996, 122.139768),
+                    //设置显示Marker的地图
+                    map: map
+                })
+                markerCityWH.setIcon(iconCityWH)
+            }
+
+            //调用初始化函数地图
+            init();
+            City()
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <!--   定义地图显示容器   -->
+        <div id="container"></div>
+        <div class="option_frame">
+            <div class="option_button">
+                <div class="city selected" id="city" onclick="javascript: City();">城市</div>
+                <div class="fishery" id="fishery" onclick="javascript: Fishery();">渔场</div>
+            </div>
+        </div>
+        <div class="switchbutton" onclick="javascript: switchMap();">
+            <div class="img" id="switch_img"></div>
+        </div>
+    </div>
+
+    <script>
+        // 顶部城市按钮点击
+        var City = function () {
+            console.log('City clicked!')
+            markerCityQD.setVisible(true)
+            markerCityRZ.setVisible(true)
+            markerCityYT.setVisible(true)
+            markerCityWH.setVisible(true)
+        }
+        // 顶部渔场按钮点击
+        var Fishery = function () {
+            console.log('fishery clicked!')
+            markerCityQD.setVisible(false)
+            markerCityRZ.setVisible(false)
+            markerCityYT.setVisible(false)
+            markerCityWH.setVisible(false)
+        }
+        // 顶部城市-渔场按钮切换点击样式用
+        $(function () {
+            $(".option_button").children().click(function () {
+                $(this).addClass("selected").siblings().removeClass("selected")
+            })
+        })
+        // 切换普通-卫星地图
+        var switchMap = function () {
+            console.log('switch button clicked!')
+            if (map.getMapTypeId() === qq.maps.MapTypeId.ROADMAP) {
+                map.setMapTypeId(qq.maps.MapTypeId.HYBRID)
+            } else {
+                map.setMapTypeId(qq.maps.MapTypeId.ROADMAP)
+            }
+        }
+    </script>
+</body>
+
+</html>
