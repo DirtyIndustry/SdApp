@@ -32,9 +32,9 @@ DONE... bug: baths shows in all city
 DONE... 城市预报  
 DONE... 天气预报  
 DONE... weihai special section  
+DONE... clean web page mui infest  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.  
-clean web page mui infest  
 optimize requests by move quest counter to complete  
 预警报  
 渔场预报   

@@ -46,14 +46,17 @@
             width: 142px;
         }
 
+        /* 地图容器 */
         #container {
             width: 100%;
-            height: 100%;
+            /* 高度多5%隐藏底部腾讯logo */
+            height: 105%;
             /* min-width:600px;
             min-height:767px; */
 
         }
 
+        /* 城市-渔场切换按钮容器 */
         .option_frame {
             border: 1px
             /*solid*/
@@ -65,6 +68,7 @@
             top: 30px;
         }
 
+        /* 城市-渔场切换按钮 */
         .option_frame .option_button {
             border: 1px
             /*solid*/
@@ -73,7 +77,8 @@
             height: 36px;
             margin: 0 auto;
         }
-
+        
+        /* 城市按钮 */
         .option_frame .option_button .city {
             border-left: 1px solid #0092d4;
             border-top: 1px solid #0092d4;
@@ -91,6 +96,7 @@
             float: left;
         }
 
+        /* 渔场按钮 */
         .option_frame .option_button .fishery {
             border-right: 1px solid #0092d4;
             border-top: 1px solid #0092d4;
@@ -108,13 +114,14 @@
             float: left;
         }
 
+        /* 城市-渔场按钮选中时的状态 */
         .selected {
             background-color: #0092d4 !important;
             color: #ffffff !important;
             opacity: 0.9 !important;
         }
 
-        /*卫星切换*/
+        /*卫星图切换*/
         .switchbutton {
             /* border: 1px solid #000000; */
             width: 50px;
@@ -125,6 +132,7 @@
             z-index: 99;
         }
 
+        /* 卫星图切换按钮图片 */
         .switchbutton .img {
             width: 100%;
             height: 100%;
@@ -136,107 +144,6 @@
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
     <script>
-
-        var map
-        var markerCityQD
-
-        window.onload = function () {
-
-            //直接加载地图
-
-
-            //初始化地图函数  自定义函数名init
-            function init() {
-                //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-                map = new qq.maps.Map(document.getElementById("container"), {
-                    center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
-                    zoom: 6,                                                 // 地图的中心地理坐标。
-                    mapTypeControl: false
-                });
-
-                // 
-                /*
-                var anchor = new qq.maps.Point(0, 39),
-                    size = new qq.maps.Size(90, 115),
-                    scaleSize = new qq.maps.Size(50, 62),
-                    origin = new qq.maps.Point(0, 0), */
-                // 青岛城市图标
-                var iconCityQD = new qq.maps.MarkerImage(
-                        "./Images/Qd_location.png",
-                        new qq.maps.Size(90, 115),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(0, 39),   // anchor
-                        new qq.maps.Size(50, 62)    // scaleSize
-                    )
-                
-                // 青岛城市Marker
-                markerCityQD = new qq.maps.Marker({
-                    //设置Marker的位置坐标
-                    position: new qq.maps.LatLng(36.061865, 120.315579),
-                    //设置显示Marker的地图
-                    map: map
-                })
-                markerCityQD.setIcon(iconCityQD)
-
-                // 日照城市图标
-                var iconCityRZ = new qq.maps.MarkerImage(
-                        "./Images/Rz_location.png",
-                        new qq.maps.Size(90, 115),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(0, 39),   // anchor
-                        new qq.maps.Size(50, 62)    // scaleSize
-                    )
-                
-                // 日照城市Marker
-                markerCityRZ = new qq.maps.Marker({
-                    //设置Marker的位置坐标
-                    position: new qq.maps.LatLng(35.423879, 119.570555),
-                    //设置显示Marker的地图
-                    map: map
-                })
-                markerCityRZ.setIcon(iconCityRZ)
-
-                // 烟台城市图标
-                var iconCityYT = new qq.maps.MarkerImage(
-                        "./Images/Yt_location.png",
-                        new qq.maps.Size(90, 115),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(0, 39),   // anchor
-                        new qq.maps.Size(50, 62)    // scaleSize
-                    )
-                
-                // 烟台城市Marker
-                markerCityYT = new qq.maps.Marker({
-                    //设置Marker的位置坐标
-                    position: new qq.maps.LatLng(37.583791, 121.184684),
-                    //设置显示Marker的地图
-                    map: map
-                })
-                markerCityYT.setIcon(iconCityYT)
-
-                // 威海城市图标
-                var iconCityWH = new qq.maps.MarkerImage(
-                        "./Images/Wh_location.png",
-                        new qq.maps.Size(90, 115),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(0, 39),   // anchor
-                        new qq.maps.Size(50, 62)    // scaleSize
-                    )
-                
-                // 威海城市Marker
-                markerCityWH = new qq.maps.Marker({
-                    //设置Marker的位置坐标
-                    position: new qq.maps.LatLng(37.493996, 122.139768),
-                    //设置显示Marker的地图
-                    map: map
-                })
-                markerCityWH.setIcon(iconCityWH)
-            }
-
-            //调用初始化函数地图
-            init();
-            City()
-        }
     </script>
 </head>
 
@@ -245,40 +152,531 @@
     <div class="wrap">
         <!--   定义地图显示容器   -->
         <div id="container"></div>
+        <!-- 城市-渔场切换按钮 -->
         <div class="option_frame">
             <div class="option_button">
                 <div class="city selected" id="city" onclick="javascript: City();">城市</div>
                 <div class="fishery" id="fishery" onclick="javascript: Fishery();">渔场</div>
             </div>
         </div>
+        <!-- 普通-卫星地图切换按钮 -->
         <div class="switchbutton" onclick="javascript: switchMap();">
             <div class="img" id="switch_img"></div>
         </div>
+
     </div>
 
     <script>
+        var map // 地图实体
+
+        // 城市地图中的marker
+        var markerCityQD,   // 青岛
+            markerCityRZ,   // 日照
+            markerCityYT,   // 烟台
+            markerCityWH,   // 威海
+            markerCityWF,   // 潍坊
+            markerCityDY,   // 东营
+            markerCityBZ    // 滨州
+
+        // 渔场地图中的marker
+        var markerFishBHWan,    // 渤海湾
+            markerFishLZWan,    // 莱州湾
+            markerFishYW,       // 烟威
+            markerFishWD,       // 威东
+            markerFishSDao,     // 石岛
+            markerFishSDong,    // 石东
+            markerFishQHai      // 青海
+
+        // 渔场地图中的多边形
+        var polygonBHWan,   // 渤海湾
+            polygonLZWan,   // 莱州湾
+            polygonYW,      // 烟威
+            polygonWD,      // 威东
+            polygonSDong,   // 石东
+            polygonSDao,    // 石岛
+            polygonQHai     // 青海
+
+        window.onload = function () {
+            //直接加载地图
+
+            //初始化地图函数  自定义函数名init
+            function init() {
+                //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
+                map = new qq.maps.Map(document.getElementById("container"), {
+                    center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
+                    zoom: 6,                                                 // 地图的中心地理坐标。
+                    mapTypeControl: false,  // 切换卫星图按钮
+                    zoomControl: false      // 缩放按钮
+                })
+
+                // 
+                /*
+                var anchor = new qq.maps.Point(0, 39),
+                    size = new qq.maps.Size(90, 115),
+                    scaleSize = new qq.maps.Size(50, 62),
+                    origin = new qq.maps.Point(0, 0), */
+
+                // 城市Marker
+                {
+                    // 青岛城市图标
+                    var iconCityQD = new qq.maps.MarkerImage(
+                        "./Images/Qd_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 青岛城市Marker
+                    markerCityQD = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(36.061865, 120.315579),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityQD.setIcon(iconCityQD)
+
+                    // 日照城市图标
+                    var iconCityRZ = new qq.maps.MarkerImage(
+                        "./Images/Rz_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 日照城市Marker
+                    markerCityRZ = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(35.423879, 119.570555),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityRZ.setIcon(iconCityRZ)
+
+                    // 烟台城市图标
+                    var iconCityYT = new qq.maps.MarkerImage(
+                        "./Images/Yt_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 烟台城市Marker
+                    markerCityYT = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.583791, 121.184684),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityYT.setIcon(iconCityYT)
+
+                    // 威海城市图标
+                    var iconCityWH = new qq.maps.MarkerImage(
+                        "./Images/Wh_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 威海城市Marker
+                    markerCityWH = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.493996, 122.139768),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityWH.setIcon(iconCityWH)
+
+                    // 潍坊城市图标
+                    var iconCityWF = new qq.maps.MarkerImage(
+                        "./Images/Wf_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 潍坊城市Marker
+                    markerCityWF = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.116516, 119.440566),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityWF.setIcon(iconCityWF)
+
+                    // 东营城市图标
+                    var iconCityDY = new qq.maps.MarkerImage(
+                        "./Images/Dy_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 东营城市Marker
+                    markerCityDY = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.432009, 118.92083),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityDY.setIcon(iconCityDY)
+
+                    // 滨州城市图标
+                    var iconCityBZ = new qq.maps.MarkerImage(
+                        "./Images/Bz_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(0, 39),   // anchor
+                        new qq.maps.Size(50, 62)    // scaleSize
+                    )
+                    // 滨州城市Marker
+                    markerCityBZ = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(38.195308, 118.021037),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerCityBZ.setIcon(iconCityBZ)
+                } // end-城市Marker
+
+                // 渔场Marker
+                {
+                    // 渤海湾渔场图标
+                    var iconFishBHWan = new qq.maps.MarkerImage(
+                        "./Images/bhwan_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 渤海湾渔场Marker
+                    markerFishBHWan = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(38.320428, 117.928101),
+                        //设置显示Marker的地图
+                        map: map,
+                    })
+                    markerFishBHWan.setIcon(iconFishBHWan)
+
+                    // 莱州湾渔场图标
+                    var iconFishLZWan = new qq.maps.MarkerImage(
+                        "./Images/lz_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 莱州湾渔场Marker
+                    markerFishLZWan = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(38.014877, 119.740845),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishLZWan.setIcon(iconFishLZWan)
+
+                    // 烟威渔场图标
+                    var iconFishYW = new qq.maps.MarkerImage(
+                        "./Images/yw_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 烟威渔场Marker
+                    markerFishYW = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.702614, 121.828248),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishYW.setIcon(iconFishYW)
+
+                    // 威东渔场图标
+                    var iconFishWD = new qq.maps.MarkerImage(
+                        "./Images/wd_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 威东渔场Marker
+                    markerFishWD = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(37.534009, 124.061219),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishWD.setIcon(iconFishWD)
+
+                    // 石岛渔场图标
+                    var iconFishSDao = new qq.maps.MarkerImage(
+                        "./Images/sdao_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 石岛渔场Marker
+                    markerFishSDao = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(36.455348, 122.390392),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishSDao.setIcon(iconFishSDao)
+
+                    // 石东渔场图标
+                    var iconFishSDong = new qq.maps.MarkerImage(
+                        "./Images/sdong_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 石东渔场Marker
+                    markerFishSDong = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(36.514972, 124.38853),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishSDong.setIcon(iconFishSDong)
+
+                    // 青海渔场图标
+                    var iconFishQHai = new qq.maps.MarkerImage(
+                        "./Images/qhai_location.png",
+                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Point(0, 0),    // origin
+                        new qq.maps.Point(40, 20),   // anchor
+                        new qq.maps.Size(90, 52)    // scaleSize
+                    )
+                    // 青海渔场Marker
+                    markerFishQHai = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(36.033695, 120.566718),
+                        //设置显示Marker的地图
+                        map: map
+                    })
+                    markerFishQHai.setIcon(iconFishQHai)
+                } // end-渔场marker
+
+                // 渔场多边形
+                {
+                    // 渤海湾渔场多边形
+                    var pathBHWan = [
+                        new qq.maps.LatLng(39.236874, 117.615041),
+                        new qq.maps.LatLng(38.166442, 117.615041),
+                        new qq.maps.LatLng(38.166442, 119.079926),
+                        new qq.maps.LatLng(39.236874, 119.079926)
+                    ]
+                    polygonBHWan = new qq.maps.Polygon({
+                        map: map,
+                        path: pathBHWan,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 莱州湾渔场多边形
+                    var pathLZWan = [
+                        new qq.maps.LatLng(38.736874, 119.079926),
+                        new qq.maps.LatLng(37.096874, 119.079926),
+                        new qq.maps.LatLng(37.096874, 120.105575),
+                        new qq.maps.LatLng(37.504361, 120.105575),
+                        new qq.maps.LatLng(37.504361, 120.984046),
+                        new qq.maps.LatLng(38.736874, 120.984046),
+
+                    ]
+                    polygonLZWan = new qq.maps.Polygon({
+                        map: map,
+                        path: pathLZWan,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 烟威渔场多边形
+                    var pathYW = [
+                        new qq.maps.LatLng(38.736874, 120.984046),
+                        new qq.maps.LatLng(37.504361, 120.984046),
+                        new qq.maps.LatLng(37.504361, 123.780435),
+                        new qq.maps.LatLng(37.986469, 123.780435),
+                        new qq.maps.LatLng(37.986469, 122.888166),
+                        new qq.maps.LatLng(38.736874, 122.888166)
+                    ]
+                    polygonYW = new qq.maps.Polygon({
+                        map: map,
+                        path: pathYW,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 威东渔场多边形
+                    var pathWD = [
+                        new qq.maps.LatLng(37.986469, 123.780435),
+                        new qq.maps.LatLng(37.504361, 123.780435),
+                        new qq.maps.LatLng(37.504361, 124.465734),
+                        new qq.maps.LatLng(37.986469, 124.465734)
+                    ]
+                    polygonWD = new qq.maps.Polygon({
+                        map: map,
+                        path: pathWD,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 石东渔场多边形
+                    var pathSDong = [
+                        new qq.maps.LatLng(37.504361, 123.780435),
+                        new qq.maps.LatLng(36.00924, 123.780435),
+                        new qq.maps.LatLng(36.00924, 125.008455),
+                        new qq.maps.LatLng(37.504361, 125.008455)
+                    ]
+                    polygonSDong = new qq.maps.Polygon({
+                        map: map,
+                        path: pathSDong,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 石岛渔场多边形
+                    var pathSDao = [
+                        new qq.maps.LatLng(37.504361, 122.58921),
+                        new qq.maps.LatLng(37.504361, 123.780435),
+                        new qq.maps.LatLng(36.00924, 123.780435),
+                        new qq.maps.LatLng(36.00924, 122.018894),
+                        new qq.maps.LatLng(36.930523, 122.018894),
+                        new qq.maps.LatLng(36.930523, 122.58921)
+                    ]
+                    polygonSDao = new qq.maps.Polygon({
+                        map: map,
+                        path: pathSDao,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+
+                    // 青海渔场多边形
+                    var pathQHai = [
+                        new qq.maps.LatLng(36.930523, 121.000143),
+                        new qq.maps.LatLng(36.930523, 122.018894),
+                        new qq.maps.LatLng(36.00924, 122.018894),
+                        new qq.maps.LatLng(36.00924, 121.454327),
+                        new qq.maps.LatLng(35.557625, 121.454327),
+                        new qq.maps.LatLng(35.557625, 119.628395),
+                        new qq.maps.LatLng(36.014845, 119.628395),
+                        new qq.maps.LatLng(36.014845, 120.419479),
+                        new qq.maps.LatLng(36.46569, 120.419479),
+                        new qq.maps.LatLng(36.46569, 121.02659),
+                    ]
+                    polygonQHai = new qq.maps.Polygon({
+                        map: map,
+                        path: pathQHai,
+                        strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
+                        strokeWeight: 1,
+                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                    })
+                } // end-渔场多边形
+
+            } // end-init()
+            
+            // 向服务器请求数据
+            function requestData () {
+
+            }
+
+            //调用初始化函数地图
+            init()
+            City()
+            requestData()
+        } // end-window.onload()
         // 顶部城市按钮点击
         var City = function () {
             console.log('City clicked!')
+            // 改变按钮颜色
+            selectCity()
+            // 改变地图中心
+            map.panTo(new qq.maps.LatLng(36.79898, 120.292059))
+            // 显示城市marker
             markerCityQD.setVisible(true)
             markerCityRZ.setVisible(true)
             markerCityYT.setVisible(true)
             markerCityWH.setVisible(true)
+            markerCityWF.setVisible(true)
+            markerCityDY.setVisible(true)
+            markerCityBZ.setVisible(true)
+            // 隐藏渔场marker
+            markerFishBHWan.setVisible(false)
+            markerFishLZWan.setVisible(false)
+            markerFishYW.setVisible(false)
+            markerFishWD.setVisible(false)
+            markerFishSDao.setVisible(false)
+            markerFishSDong.setVisible(false)
+            markerFishQHai.setVisible(false)
+            // 隐藏渔场多边形
+            polygonBHWan.setVisible(false)
+            polygonLZWan.setVisible(false)
+            polygonYW.setVisible(false)
+            polygonWD.setVisible(false)
+            polygonSDong.setVisible(false)
+            polygonSDao.setVisible(false)
+            polygonQHai.setVisible(false)
         }
         // 顶部渔场按钮点击
         var Fishery = function () {
             console.log('fishery clicked!')
+            // 改变按钮颜色
+            selectFishery()
+            // 改变地图中心
+            map.panTo(new qq.maps.LatLng(37.246322, 121.527899))
+            // 隐藏城市marker
             markerCityQD.setVisible(false)
             markerCityRZ.setVisible(false)
             markerCityYT.setVisible(false)
             markerCityWH.setVisible(false)
+            markerCityWF.setVisible(false)
+            markerCityDY.setVisible(false)
+            markerCityBZ.setVisible(false)
+            // 显示渔场marker
+            markerFishBHWan.setVisible(true)
+            markerFishLZWan.setVisible(true)
+            markerFishYW.setVisible(true)
+            markerFishWD.setVisible(true)
+            markerFishSDao.setVisible(true)
+            markerFishSDong.setVisible(true)
+            markerFishQHai.setVisible(true)
+            // 显示渔场多边形
+            polygonBHWan.setVisible(true)
+            polygonLZWan.setVisible(true)
+            polygonYW.setVisible(true)
+            polygonWD.setVisible(true)
+            polygonSDong.setVisible(true)
+            polygonSDao.setVisible(true)
+            polygonQHai.setVisible(true)
         }
         // 顶部城市-渔场按钮切换点击样式用
+        /*
         $(function () {
             $(".option_button").children().click(function () {
                 $(this).addClass("selected").siblings().removeClass("selected")
             })
         })
+        */
+        var selectCity = function () {
+            var divcity = document.getElementById('city')
+            divcity.className = 'city selected'
+            var divfishery = document.getElementById('fishery')
+            divfishery.className = 'fishery'
+        }
+        var selectFishery = function () {
+            var divcity = document.getElementById('city')
+            divcity.className = 'city'
+            var divfishery = document.getElementById('fishery')
+            divfishery.className = 'fishery selected'
+        }
         // 切换普通-卫星地图
         var switchMap = function () {
             console.log('switch button clicked!')
