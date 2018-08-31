@@ -141,6 +141,80 @@
             margin-right: 8px;
             float: center;
         }
+
+        /* 城市信息面板 */
+        .cityinfopanel {
+            /* border: 1px solid #000; */
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 70%;
+            height: 280px;
+            position: fixed;
+            left: 15%;
+            bottom: 150px;
+            z-index: 99;
+            display: none;
+            flex-direction: column;
+            border-radius: 15px;
+        }
+
+        /* 城市信息面板 行 */
+        .cityinfopanel-row {
+            /* border: 1px solid #f00; */
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .cityinfopanel-firstrow {
+            border-bottom: 1px solid #cccccc;
+        }
+
+        /* 城市信息面板 列 */
+        .cityinfopanel-column {
+            /* border: 1px solid #00f; */
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        /* 城市信息面板 单元格 */
+        .cityinfopanel-cell {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+        
+        /* 城市信息面板 地名 */
+        .cityinfopanel-location {
+            flex: 2;
+        }
+
+        .cityinfopanel-locationcell {
+            font-size: 16px;
+        }
+
+        /* 城市信息面板 日期 */
+        .cityinfopanel-date {
+            flex: 5;
+        }
+
+        /* 城市信息面板 日期 */
+        .cityinfopanel-datecell {
+            height: 100%;
+            flex: 3;
+            font-size: 12px;
+            text-align: right;
+            line-height: 60px;
+        }
+
+        /* 城市信息面板 最底行表头列 */
+        .cityinfopanel-tableheader {
+            color: #0092d4;
+        }
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
     <script>
@@ -163,11 +237,94 @@
         <div class="switchbutton" onclick="javascript: switchMap();">
             <div class="img" id="switch_img"></div>
         </div>
-
+        <!-- 城市信息面板 -->
+        <div class="cityinfopanel">
+            <!-- 标题-日期 -->
+            <div class="cityinfopanel-row cityinfopanel-firstrow">
+                <div class="cityinfopanel-column cityinfopanel-location">
+                    <div class="cityinfopanel-cell cityinfopanel-locationcell" id="cityQD_cityname"></div>
+                </div>
+                <div class="cityinfopanel-column cityinfopanel-date">
+                    <div class="cityinfopanel-datecell" id="cityQD_date"></div>
+                </div>
+            </div>
+            <!-- 表头 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell cityinfopanel-tableheader">潮时</div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell cityinfopanel-tableheader">潮位(cm)</div>
+                </div>
+            </div>
+            <!-- 第一行数据 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell">第一次高潮</div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_fht"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_fh"></div>
+                </div>
+            </div>
+            <!-- 第二行数据 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell">第一次低潮</div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_flt"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_fl"></div>
+                </div>
+            </div>
+            <!-- 第三行数据 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell">第二次高潮</div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_sht"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_sh"></div>
+                </div>
+            </div>
+            <!-- 第四行数据 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell">第二次低潮</div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_slt"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell" id="cityQD_sl"></div>
+                </div>
+            </div>
+            <!-- 浪高-水温 -->
+            <div class="cityinfopanel-row">
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell cityinfopanel-tableheader">浪高:&nbsp;</div>
+                    <div class="cityinfopanel-cell" id="cityQD_wave"></div>
+                </div>
+                <div class="cityinfopanel-column">
+                    <div class="cityinfopanel-cell cityinfopanel-tableheader">水温:&nbsp;</div>
+                    <div class="cityinfopanel-cell" id="cityQD_temp"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         var map // 地图实体
+        var mapdrag = false
 
         // 城市地图中的marker
         var markerCityQD,   // 青岛
@@ -195,6 +352,15 @@
             polygonSDong,   // 石东
             polygonSDao,    // 石岛
             polygonQHai     // 青海
+        
+        // 城市信息面板数据
+        var infoCityQD = {}
+        var infoCityRZ = {}
+        var infoCityYT = {}
+        var infoCityWH = {}
+        var infoCityWF = {}
+        var infoCityDY = {}
+        var infoCityBZ = {}
 
         window.onload = function () {
             //直接加载地图
@@ -206,7 +372,7 @@
                     center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
                     zoom: 6,                                                 // 地图的中心地理坐标。
                     mapTypeControl: false,  // 切换卫星图按钮
-                    zoomControl: false      // 缩放按钮
+                    // zoomControl: false      // 缩放按钮
                 })
 
                 // 
@@ -464,10 +630,12 @@
                 {
                     // 渤海湾渔场多边形
                     var pathBHWan = [
-                        new qq.maps.LatLng(39.236874, 117.615041),
-                        new qq.maps.LatLng(38.166442, 117.615041),
-                        new qq.maps.LatLng(38.166442, 119.079926),
-                        new qq.maps.LatLng(39.236874, 119.079926)
+                        new qq.maps.LatLng(38.0016803226888, 117.5513364203396),
+                        new qq.maps.LatLng(39.23219428943497, 117.5497830177721),
+                        new qq.maps.LatLng(39.22612651053009, 119.0077355479573),
+                        new qq.maps.LatLng(39.00033607794768, 119.0115242442486),
+                        new qq.maps.LatLng(38.50033594944455, 119.0115241992825),
+                        new qq.maps.LatLng(38.0003358200421, 119.0115241552156)
                     ]
                     polygonBHWan = new qq.maps.Polygon({
                         map: map,
@@ -479,12 +647,19 @@
 
                     // 莱州湾渔场多边形
                     var pathLZWan = [
-                        new qq.maps.LatLng(38.736874, 119.079926),
-                        new qq.maps.LatLng(37.096874, 119.079926),
-                        new qq.maps.LatLng(37.096874, 120.105575),
-                        new qq.maps.LatLng(37.504361, 120.105575),
-                        new qq.maps.LatLng(37.504361, 120.984046),
-                        new qq.maps.LatLng(38.736874, 120.984046),
+                        new qq.maps.LatLng(38.00012612512063, 121.0001234114663),
+                        new qq.maps.LatLng(37.5001259966175, 121.0001233665002),
+                        new qq.maps.LatLng(37.50012603798632, 120.5001233845866),
+                        new qq.maps.LatLng(37.50012607935514, 120.000123402673),
+                        new qq.maps.LatLng(37.11691211859943, 119.9996784756812),
+                        new qq.maps.LatLng(37.10917554781332, 119.0093974555282),
+                        new qq.maps.LatLng(37.50012616209278, 119.0001234379464),
+                        new qq.maps.LatLng(38.00012629059586, 119.0001234829125),
+                        new qq.maps.LatLng(38.50012641909899, 119.0001235269792),
+                        new qq.maps.LatLng(38.50012637773023, 119.5001235088929),
+                        new qq.maps.LatLng(38.5001263363614, 120.0001234908066),
+                        new qq.maps.LatLng(38.50012629499258, 120.5001234727201),
+                        new qq.maps.LatLng(38.50012625362376, 121.0001234555331)
 
                     ]
                     polygonLZWan = new qq.maps.Polygon({
@@ -497,12 +672,22 @@
 
                     // 烟威渔场多边形
                     var pathYW = [
-                        new qq.maps.LatLng(38.736874, 120.984046),
-                        new qq.maps.LatLng(37.504361, 120.984046),
-                        new qq.maps.LatLng(37.504361, 123.780435),
-                        new qq.maps.LatLng(37.986469, 123.780435),
-                        new qq.maps.LatLng(37.986469, 122.888166),
-                        new qq.maps.LatLng(38.736874, 122.888166)
+                        new qq.maps.LatLng(38.00012587690776, 124.0001233038474),
+                        new qq.maps.LatLng(37.50012574840463, 124.0001232597807),
+                        new qq.maps.LatLng(37.50012578977345, 123.500123277867),
+                        new qq.maps.LatLng(37.50012583114227, 123.0001232950541),
+                        new qq.maps.LatLng(37.50012587251103, 122.5001233131404),
+                        new qq.maps.LatLng(37.50012591387986, 122.0001233312269),
+                        new qq.maps.LatLng(37.50012595524868, 121.5001233493132),
+                        new qq.maps.LatLng(37.5001259966175, 121.0001233665002),
+                        new qq.maps.LatLng(38.00012612512063, 121.0001234114663),
+                        new qq.maps.LatLng(38.50012625362376, 121.0001234555331),
+                        new qq.maps.LatLng(38.50012621225494, 121.5001234374467),
+                        new qq.maps.LatLng(38.50012617178544, 122.0001234193604),
+                        new qq.maps.LatLng(38.50012613041662, 122.5001234021734),
+                        new qq.maps.LatLng(38.5001260890478, 123.0001233840869),
+                        new qq.maps.LatLng(38.0001259596454, 123.0001233400202),
+                        new qq.maps.LatLng(38.00012591827658, 123.5001233219339)
                     ]
                     polygonYW = new qq.maps.Polygon({
                         map: map,
@@ -514,10 +699,10 @@
 
                     // 威东渔场多边形
                     var pathWD = [
-                        new qq.maps.LatLng(37.986469, 123.780435),
-                        new qq.maps.LatLng(37.504361, 123.780435),
-                        new qq.maps.LatLng(37.504361, 124.465734),
-                        new qq.maps.LatLng(37.986469, 124.465734)
+                        new qq.maps.LatLng(37.50012574840463, 124.0001232597807),
+                        new qq.maps.LatLng(38.00012587690776, 124.0001233038474),
+                        new qq.maps.LatLng(38.00012583553894, 124.5001232857611),
+                        new qq.maps.LatLng(37.50012570703581, 124.5001232416943)
                     ]
                     polygonWD = new qq.maps.Polygon({
                         map: map,
@@ -529,10 +714,16 @@
 
                     // 石东渔场多边形
                     var pathSDong = [
-                        new qq.maps.LatLng(37.504361, 123.780435),
-                        new qq.maps.LatLng(36.00924, 123.780435),
-                        new qq.maps.LatLng(36.00924, 125.008455),
-                        new qq.maps.LatLng(37.504361, 125.008455)
+                        new qq.maps.LatLng(36.50012540866072, 125.0001231354744),
+                        new qq.maps.LatLng(36.00012527925827, 125.0001230914077),
+                        new qq.maps.LatLng(36.00012532062709, 124.500123109494),
+                        new qq.maps.LatLng(36.00012536199591, 124.000123126681),
+                        new qq.maps.LatLng(36.50012549139836, 124.0001231716471),
+                        new qq.maps.LatLng(37.0001256199015, 124.0001232157139),
+                        new qq.maps.LatLng(37.50012574840463, 124.0001232597807),
+                        new qq.maps.LatLng(37.50012570703581, 124.5001232416943),
+                        new qq.maps.LatLng(37.50012566566699, 125.0001232236079),
+                        new qq.maps.LatLng(37.00012553716385, 125.0001231795412)
                     ]
                     polygonSDong = new qq.maps.Polygon({
                         map: map,
@@ -544,12 +735,20 @@
 
                     // 石岛渔场多边形
                     var pathSDao = [
-                        new qq.maps.LatLng(37.504361, 122.58921),
-                        new qq.maps.LatLng(37.504361, 123.780435),
-                        new qq.maps.LatLng(36.00924, 123.780435),
-                        new qq.maps.LatLng(36.00924, 122.018894),
-                        new qq.maps.LatLng(36.930523, 122.018894),
-                        new qq.maps.LatLng(36.930523, 122.58921)
+                        new qq.maps.LatLng(37.50012574840463, 124.0001232597807),
+                        new qq.maps.LatLng(37.0001256199015, 124.0001232157139),
+                        new qq.maps.LatLng(36.50012549139836, 124.0001231716471),
+                        new qq.maps.LatLng(36.00012536199591, 124.000123126681),
+                        new qq.maps.LatLng(36.00012540336473, 123.5001231447674),
+                        new qq.maps.LatLng(36.00012544473356, 123.0001231628537),
+                        new qq.maps.LatLng(36.00012548610238, 122.5001231809401),
+                        new qq.maps.LatLng(36.00012552747114, 122.0001231981272),
+                        new qq.maps.LatLng(36.50012565597427, 122.0001232430933),
+                        new qq.maps.LatLng(37.00012578537672, 122.00012328716),
+                        new qq.maps.LatLng(37.00012574400796, 122.5001232690737),
+                        new qq.maps.LatLng(37.50012587251103, 122.5001233131404),
+                        new qq.maps.LatLng(37.50012583114227, 123.0001232950541),
+                        new qq.maps.LatLng(37.50012578977345, 123.500123277867)
                     ]
                     polygonSDao = new qq.maps.Polygon({
                         map: map,
@@ -561,16 +760,22 @@
 
                     // 青海渔场多边形
                     var pathQHai = [
-                        new qq.maps.LatLng(36.930523, 121.000143),
-                        new qq.maps.LatLng(36.930523, 122.018894),
-                        new qq.maps.LatLng(36.00924, 122.018894),
-                        new qq.maps.LatLng(36.00924, 121.454327),
-                        new qq.maps.LatLng(35.557625, 121.454327),
-                        new qq.maps.LatLng(35.557625, 119.628395),
-                        new qq.maps.LatLng(36.014845, 119.628395),
-                        new qq.maps.LatLng(36.014845, 120.419479),
-                        new qq.maps.LatLng(36.46569, 120.419479),
-                        new qq.maps.LatLng(36.46569, 121.02659),
+                        new qq.maps.LatLng(37.00012578537672, 122.00012328716),
+                        new qq.maps.LatLng(36.50012565597427, 122.0001232430933),
+                        new qq.maps.LatLng(36.00012552747114, 122.0001231981272),
+                        new qq.maps.LatLng(36.00012556883996, 121.5001232162135),
+                        new qq.maps.LatLng(35.50012544033683, 121.5001231721467),
+                        new qq.maps.LatLng(35.50012548170565, 121.0001231902331),
+                        new qq.maps.LatLng(35.50012552217515, 120.5001232083195),
+                        new qq.maps.LatLng(35.50012556354397, 120.0001232255065),
+                        new qq.maps.LatLng(35.49996888905304, 119.6012450963841),
+                        new qq.maps.LatLng(35.99897768497226, 119.6012450963841),
+                        new qq.maps.LatLng(36.00012569294643, 120.0001232695734),
+                        new qq.maps.LatLng(36.0001256515776, 120.5001232523863),
+                        new qq.maps.LatLng(36.50012578008074, 120.500123296453),
+                        new qq.maps.LatLng(36.50012573871192, 121.0001232783667),
+                        new qq.maps.LatLng(37.00012586721505, 121.0001233224334),
+                        new qq.maps.LatLng(37.00012582674555, 121.5001233052463)
                     ]
                     polygonQHai = new qq.maps.Polygon({
                         map: map,
@@ -581,18 +786,153 @@
                     })
                 } // end-渔场多边形
 
-            } // end-init()
-            
-            // 向服务器请求数据
-            function requestData () {
+                qq.maps.event.addListener(map, 'click', function() {
+                    cityInfoPanelHide()
+                })
+                // qq.maps.event.addListener(map, 'bounds_changed', function() {
+                //     cityInfoPanelHide()
+                // })
+                qq.maps.event.addListener(map, 'dragstart', function() {
+                    mapdrag = true
+                })
+                qq.maps.event.addListener(map, 'dragend', function() {
+                    setTimeout(function(){   
+                        mapdrag = false
+                    }, 50)
+                })
 
-            }
+                // 城市marker添加点击事件
+                {
+                    qq.maps.event.addListener(markerCityQD, 'click', function(){
+                        if (mapdrag === false) {
+                            setCityInfoPanel(infoCityQD)
+                            cityInfoPanelShow()
+                        }
+                    })
+                }
+            } // end-init()
 
             //调用初始化函数地图
             init()
             City()
-            requestData()
+            // requestData('http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018', 'name=admin&areaflg=山东&city=青岛', {})
+            loadQD()
+
         } // end-window.onload()
+
+        // 向服务器请求数据
+        var requestData = function (url, data, output) {
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        output = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
+                    }
+                }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, false)
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send(data)
+        } // end-requestData()
+
+        var loadQD = function () {
+            var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018'
+            var data = 'name=admin&areaflg=山东&city=青岛'
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        var res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                        console.log(res)
+                        var date = new Date()
+                        var todaystring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
+                        date.setDate(date.getDate() + 1)
+                        var tomorrowstring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
+                        var fhtime = ''
+                        var fltime = ''
+                        var shtime = ''
+                        var sltime = ''
+                        if (res.DYFP.tide[0].FIRSTHIGHTIME === '-') {
+                            fhtime = '-:-'
+                        } else {
+                            fhtime = timeFormat(res.DYFP.tide[0].FIRSTHIGHTIME)
+                        }
+                        if (res.DYFP.tide[0].FIRSTLOWTIME === '-') {
+                            fltime = '-:-'
+                        } else {
+                            fltime = timeFormat(res.DYFP.tide[0].FIRSTLOWTIME)
+                        }
+                        if (res.DYFP.tide[0].SECONDHIGHTIME === '-') {
+                            shtime = '-:-'
+                        } else {
+                            shtime = timeFormat(res.DYFP.tide[0].SECONDHIGHTIME)
+                        }
+                        if (res.DYFP.tide[0].SECONDLOWTIME === '-') {
+                            sltime = '-:-'
+                        } else {
+                            sltime = timeFormat(res.DYFP.tide[0].SECONDLOWTIME)
+                        }
+                        infoCityQD = {
+                            location: '青岛近海',
+                            date: todaystring + '~' + tomorrowstring,
+                            firsthightime: fhtime,
+                            firstlowtime: fltime,
+                            secondhightime: shtime,
+                            secondlowtime: sltime,
+                            firsthigh: res.DYFP.tide[0].FIRSTHIGHLEVEL,
+                            firstlow: res.DYFP.tide[0].FIRSTLOWLEVEL,
+                            secondhigh: res.DYFP.tide[0].SECONDHIGHLEVEL,
+                            secondlow: res.DYFP.tide[0].SECONDLOWLEVEL,
+                            waveheight: res.DYFP.wave[0].WAVEHEIGHT,
+                            temperature: res.DYFP.temperature[0].WATERTEMPERATURE
+                        }
+                        /*
+                        document.getElementById('cityQD_cityname').innerHTML = infoCityQD.location
+                        document.getElementById('cityQD_date').innerHTML = infoCityQD.date
+                        document.getElementById('cityQD_fht').innerHTML = infoCityQD.firsthightime
+                        document.getElementById('cityQD_fh').innerHTML = infoCityQD.firsthigh
+                        document.getElementById('cityQD_flt').innerHTML = infoCityQD.firstlowtime
+                        document.getElementById('cityQD_fl').innerHTML = infoCityQD.firstlow
+                        document.getElementById('cityQD_sht').innerHTML = infoCityQD.secondhightime
+                        document.getElementById('cityQD_sh').innerHTML = infoCityQD.secondhigh
+                        document.getElementById('cityQD_slt').innerHTML = infoCityQD.secondlowtime
+                        document.getElementById('cityQD_sl').innerHTML = infoCityQD.secondlow
+                        document.getElementById('cityQD_wave').innerHTML = infoCityQD.waveheight + 'm'
+                        document.getElementById('cityQD_temp').innerHTML = infoCityQD.temperature.trim() + '℃'
+                        */
+
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
+                    }
+                }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, true)
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send(data)
+        } // end-loadQD()
+        
+        // 将####格式时间转为##:##格式
+        var timeFormat = function (time) {
+            return time.substring(0, 2) + ':' + time.substring(2)
+        }
+
         // 顶部城市按钮点击
         var City = function () {
             console.log('City clicked!')
@@ -672,6 +1012,7 @@
             divfishery.className = 'fishery'
         }
         var selectFishery = function () {
+            cityInfoPanelHide()
             var divcity = document.getElementById('city')
             divcity.className = 'city'
             var divfishery = document.getElementById('fishery')
@@ -685,6 +1026,34 @@
             } else {
                 map.setMapTypeId(qq.maps.MapTypeId.ROADMAP)
             }
+        }
+    
+        // 显示城市信息面板
+        var cityInfoPanelShow = function () {
+            var divarr = document.getElementsByClassName('cityinfopanel')
+            divarr[0].style.display = "flex"
+        }
+
+        // 关闭城市信息面板
+        var cityInfoPanelHide = function () {
+            var divarr = document.getElementsByClassName('cityinfopanel')
+            divarr[0].style.display = "none"
+        }
+
+        // 填写城市信息面板
+        var setCityInfoPanel = function (obj) {
+            document.getElementById('cityQD_cityname').innerHTML = obj.location
+            document.getElementById('cityQD_date').innerHTML = obj.date
+            document.getElementById('cityQD_fht').innerHTML = obj.firsthightime
+            document.getElementById('cityQD_fh').innerHTML = obj.firsthigh
+            document.getElementById('cityQD_flt').innerHTML = obj.firstlowtime
+            document.getElementById('cityQD_fl').innerHTML = obj.firstlow
+            document.getElementById('cityQD_sht').innerHTML = obj.secondhightime
+            document.getElementById('cityQD_sh').innerHTML = obj.secondhigh
+            document.getElementById('cityQD_slt').innerHTML = obj.secondlowtime
+            document.getElementById('cityQD_sl').innerHTML = obj.secondlow
+            document.getElementById('cityQD_wave').innerHTML = obj.waveheight + 'm'
+            document.getElementById('cityQD_temp').innerHTML = obj.temperature.trim() + '℃'
         }
     </script>
 </body>
