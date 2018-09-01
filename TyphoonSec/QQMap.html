@@ -51,6 +51,23 @@
 
     <script>
 
+        var map // 地图实例
+        var typhoonCount    // 地图上台风数量的计数器
+        var typhoonList     // 台风数据数组
+        var typhoonListSnd
+        var typhoonListTrd
+        var markerArray     // 台风路径点数组
+        var markerArraySnd
+        var markerArrayTrd
+        var markerCluster   // 台风路径集合
+        var markerClusterSnd
+        var markerClusterTrd
+        var markerEventArray     // 台风路径点的点击事件
+        var markerEventArraySnd
+        var markerEventArrayTrd
+        var infoWindow      // 台风信息气泡
+
+
         window.onload = function () {
 
             //直接加载地图
@@ -58,10 +75,55 @@
 
             //初始化地图函数  自定义函数名init
             function init() {
+
                 //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-                var map = new qq.maps.Map(document.getElementById("container"), {
-                    center: new qq.maps.LatLng(39.916527, 116.397128),      // 地图的中心地理坐标。
-                    zoom: 8                                                 // 地图的中心地理坐标。
+                map = new qq.maps.Map(document.getElementById('container'), {
+                    center: new qq.maps.LatLng(30, 123),    // 地图的中心地理坐标。
+                    zoom: 5                                 // 地图的缩放级数。
+                })
+
+                
+                // 初始化公共变量
+                typhoonCount = 0
+                markerArray = new qq.maps.MVCArray()
+                markerArraySnd = new qq.maps.MVCArray()
+                markerArrayTrd = new qq.maps.MVCArray()
+                markerCluster = new qq.maps.MarkerCluster({
+                    map: map,
+                    minimumClusterSize: 99, //默认2
+                    markers: markerArray,
+                    zoomOnClick: true, //默认为true
+                    gridSize: 30, //默认60
+                    averageCenter: true, //默认false
+                    maxZoom: 7, //默认18
+                })
+                markerClusterSnd = new qq.maps.MarkerCluster({
+                    map: map,
+                    minimumClusterSize: 99, //默认2
+                    markers: markerArraySnd,
+                    zoomOnClick: true, //默认为true
+                    gridSize: 30, //默认60
+                    averageCenter: true, //默认false
+                    maxZoom: 7, //默认18
+                })
+                markerClusterTrd = new qq.maps.MarkerCluster({
+                    map: map,
+                    minimumClusterSize: 99, //默认2
+                    markers: markerArrayTrd,
+                    zoomOnClick: true, //默认为true
+                    gridSize: 30, //默认60
+                    averageCenter: true, //默认false
+                    maxZoom: 7, //默认18
+                })
+                typhoonList = []
+                typhoonListSnd = []
+                typhoonListTrd = []
+                markerEventArray = []
+                markerEventArraySnd = []
+                markerEventArrayTrd = []
+                infoWindow = new qq.maps.InfoWindow({
+                    map: map,
+                    zIndex: 99
                 })
             }
 
@@ -69,6 +131,13 @@
             init()
 
             startupRequest()
+
+            setTimeout(function () {
+                console.log('suprise!')
+                console.log('typhoonList.length = ' + typhoonList.length)
+                console.log('markerArray.length = ' + markerArray.getLength())
+            }, 5000)
+
         } // end-window.onloda()
 
         // 向服务器请求数据
@@ -93,10 +162,11 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, false)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-requestData()
 
+        // 页面加载时向服务器请求起始数据
         var startupRequest = function () {
             var year = new Date().getFullYear()
             var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList'
@@ -119,12 +189,14 @@
                         if (res.length >= 3) {
                             for (var j = 0; j < 3; j++) {
                                 /* 切割字符串 */
-                                requestTyphoonPath(res[res.length - 1 - j].split(',')[0], false)
+                                var resarr = res[res.length - 1 - j].split(',')
+                                requestTyphoonPath(resarr[1], resarr[0], false)
                             }
                         } else {
                             for (var k = res.length - 1; k > 0; k--) {
                                 /* 切割字符串 */
-                                requestTyphoonPath(res[k].split(',')[0], false)
+                                var resarr = res[k].split(',')
+                                requestTyphoonPath(resarr[1], resarr[0], false)
                             }
                         }
                     } else if (xmlhttp.status === 400) {
@@ -137,11 +209,12 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, true)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-startupRequest
 
-        var requestTyphoonPath = function (typhoonNo, alwaysshow) {
+        // 向服务器请求台风路径
+        var requestTyphoonPath = function (typhoonName, typhoonNo, alwaysshow) {
             var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonPath'
             var data = 'areaflg=青岛&typhoonNumber=' + typhoonNo
             var res = []
@@ -152,13 +225,16 @@
                         // console.log(xmlhttp.responseText)
                         var parser = new DOMParser()
                         var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
-                        // console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                        /* 切割字符串 */
                         var bigarr = xmldoc.getElementsByTagName('string')[0].innerHTML.split('#$')
+                        
                         // 最后一个项为空项
                         for (var i = 0; i < bigarr.length - 1; i++) {
+                            /* 切割字符串 */
                             var smallarr = bigarr[i].split(',')
                             var info = {
+                                name: typhoonName,              // 台风名称
+                                number: typhoonNo,              // 台风编号
                                 date: smallarr[0],              // 数据日期
                                 longitude: smallarr[1],         // 经度
                                 latitude: smallarr[2],          // 纬度
@@ -172,7 +248,7 @@
                             res.push(info)
                         } // end-for
                         // 获得数据列表
-                        console.log(res)
+                        // console.log(res)
                         // 是否要判断时效性
                         if (alwaysshow === false) {
                             var today = new Date()
@@ -186,7 +262,31 @@
                                 return
                             }
                         } // end-if
-                        
+                        // 查看哪个数组为空
+                        var count = 0   // 本地的台风计数器
+                        switch (typhoonCount) {
+                            case 0:
+                                typhoonCount++
+                                count = 1
+                                typhoonList = res
+                                break
+                            case 1:
+                                typhoonCount++
+                                count = 2
+                                typhoonListSnd = res
+                                break
+                            case 2:
+                                typhoonCount++
+                                count = 3
+                                typhoonListTrd = res
+                                break
+                            default:
+                                break
+                        } // end-switch
+                        // TODO: 在地图上显示该台风
+                        for (var j = 0; j < res.length; j++) {
+                            typhoonInfoToMarker(res[j], count)
+                        }
                     } else if (xmlhttp.status === 400) {
                         console.log('error 400')
                         alert('There was an error 400')
@@ -197,9 +297,127 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, true)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
-        }
+        } // end-requestTyphoonPath()
+
+        // 根据中心风力大小获取对应的台风级别和icon路径
+        function getTyphoonLevel(centerspeed) {
+            if (centerspeed < 17.2) {
+                return ['热带低压', 'TropicalDepression.png']
+            } else if (centerspeed < 24.5) {
+                return ['热带风暴', 'tropicalStorm.png']
+            } else if (centerspeed < 32.6) {
+                return ['强热带风暴', 'SevereTropicalStorm.png']
+            } else if (centerspeed < 41.4) {
+                return ['台风', 'Typhoon.png']
+            } else if (centerspeed < 50.9) {
+                return ['强台风', 'ViolentTyphoon.png']
+            } else {
+                return ['超强台风', 'SuperTyphoon.png']
+            }
+        } // end-getTyphoonLevel()
+
+        // 根据一个标记点信息生成Marker和Listener
+        function typhoonInfoToMarker (info, typhooncount) {
+            // Marker
+            var newmarker = new qq.maps.Marker({
+                position: new qq.maps.LatLng(info.latitude, info.longitude),
+                map: map
+            })
+            var newicon = new qq.maps.MarkerImage(
+                './Images/' + getTyphoonLevel(info.centerspeed)[1],
+                new qq.maps.Size(11, 11),  // size
+                new qq.maps.Point(0, 0),    // origin
+                new qq.maps.Point(0, 0),   // anchor
+                new qq.maps.Size(11, 11)    // scaleSize
+            )
+            newmarker.setIcon(newicon)
+            // Listener
+            var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
+                // TODO: 填充并显示InfoWindow
+                infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + info.name + '</b><br/>' 
+                    + '时间：' + info.date + '<br/>' 
+                    + '经纬度：' + info.longitude + '°E, ' + info.latitude + '°N' + '<br/>' 
+                    + '中心气压(百帕)：' + info.centerpressure + '<br/>' 
+                    + '中心风力(米/秒)：' + info.centerspeed + '<br/>' 
+                    + '七级风圈(公里)：' + info.sevencircle + '<br/>' 
+                    + '十级风圈(公里)：' + info.tencircle + '<br/>' 
+                    + '移动速度(公里/时)：' + info.movingspeed + '<br/>' 
+                    + '移动方向：' + info.movingdir 
+                    + '</div>')
+                infoWindow.setPosition(newmarker)
+                infoWindow.open()
+            }) // end-new listener
+            switch (typhooncount) {
+                case 1:
+                    markerCluster.addMarker(newmarker)
+                    markerEventArray.push(newlistener)
+                    break
+                case 2:
+                    markerClusterSnd.addMarker(newmarker)
+                    markerEventArraySnd.push(newlistener)
+                    break
+                case 3:
+                    markerClusterTrd.addMarker(newmarker)
+                    markerEventArrayTrd.push(newlistener)
+                    break
+                default:
+                    break
+            } // end-switch(typhooncount)
+        } // end-typhoonInfoToMarker()
+
+        // 将整组台风数据显示在地图上
+        function addTyphoonToMap (infoarray, typhooncount) {
+            // Marker Listener Polyline Moving-Marker
+            for (var i = 0; i < infoarray.length; i++) {
+                // Marker
+                var newmarker = new qq.maps.Marker({
+                    position: new qq.maps.LatLng(infoarray[i].latitude, infoarray[i].longitude),
+                    map: map
+                })
+                var newicon = new qq.maps.MarkerImage(
+                    './Images/' + getTyphoonLevel(infoarray[i].centerspeed)[1],
+                    new qq.maps.Size(11, 11),  // size
+                    new qq.maps.Point(0, 0),    // origin
+                    new qq.maps.Point(0, 0),   // anchor
+                    new qq.maps.Size(11, 11)    // scaleSize
+                )
+                newmarker.setIcon(newicon)
+                // Listener
+                var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
+                    // TODO: 填充并显示InfoWindow
+                    infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + infoarray[i].name + '</b><br/>'
+                        + '时间：' + infoarray[i].date + '<br/>'
+                        + '经纬度：' + infoarray[i].longitude + '°E, ' + infoarray[i].latitude + '°N' + '<br/>'
+                        + '中心气压(百帕)：' + infoarray[i].centerpressure + '<br/>'
+                        + '中心风力(米/秒)：' + infoarray[i].centerspeed + '<br/>'
+                        + '七级风圈(公里)：' + infoarray[i].sevencircle + '<br/>'
+                        + '十级风圈(公里)：' + infoarray[i].tencircle + '<br/>'
+                        + '移动速度(公里/时)：' + infoarray[i].movingspeed + '<br/>'
+                        + '移动方向：' + infoarray[i].movingdir
+                        + '</div>')
+                    infoWindow.setPosition(newmarker)
+                    infoWindow.open()
+                }) // end-new listener
+                switch (typhooncount) {
+                    case 1:
+                        markerCluster.addMarker(newmarker)
+                        markerEventArray.push(newlistener)
+                        break
+                    case 2:
+                        markerClusterSnd.addMarker(newmarker)
+                        markerEventArraySnd.push(newlistener)
+                        break
+                    case 3:
+                        markerClusterTrd.addMarker(newmarker)
+                        markerEventArrayTrd.push(newlistener)
+                        break
+                    default:
+                        break
+                } // end-switch(typhooncount)
+            } // end-for
+        } // end-addTyphoonToMap()
 
     </script>
 
