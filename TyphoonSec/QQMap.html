@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>简单地图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+        }
+
+        p {
+            width: 603px;
+            padding-top: 3px;
+            overflow: hidden;
+        }
+
+        .btn {
+            width: 142px;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
+
+</head>
+
+<body>
+    <!--   定义地图显示容器   -->
+    <div id="container"></div>
+
+    <script>
+
+        window.onload = function () {
+
+            //直接加载地图
+
+
+            //初始化地图函数  自定义函数名init
+            function init() {
+                //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
+                var map = new qq.maps.Map(document.getElementById("container"), {
+                    center: new qq.maps.LatLng(39.916527, 116.397128),      // 地图的中心地理坐标。
+                    zoom: 8                                                 // 地图的中心地理坐标。
+                })
+            }
+
+            //调用初始化函数地图
+            init()
+
+            startupRequest()
+        } // end-window.onloda()
+
+        // 向服务器请求数据
+        var requestData = function (url, data, output) {
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                        output = xmldoc.getElementsByTagName('string')[0].innerHTML
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
+                    }
+                }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, false)
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.send(data)
+        } // end-requestData()
+
+        var startupRequest = function () {
+            var year = new Date().getFullYear()
+            var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList'
+            var data = 'areaflg=山东&Typhoonyear=' + year
+            var res = []
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        var divarr = xmldoc.getElementsByTagName('string')
+                        // 获取列表
+                        for (var i = 0; i < divarr.length; i++) {
+                            res.push(divarr[i].innerHTML)
+                        }
+                        // 大于3?
+                        if (res.length >= 3) {
+                            for (var j = 0; j < 3; j++) {
+                                /* 切割字符串 */
+                                requestTyphoonPath(res[res.length - 1 - j].split(',')[0], false)
+                            }
+                        } else {
+                            for (var k = res.length - 1; k > 0; k--) {
+                                /* 切割字符串 */
+                                requestTyphoonPath(res[k].split(',')[0], false)
+                            }
+                        }
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
+                    }
+                }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, true)
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.send(data)
+        } // end-startupRequest
+
+        var requestTyphoonPath = function (typhoonNo, alwaysshow) {
+            var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonPath'
+            var data = 'areaflg=青岛&typhoonNumber=' + typhoonNo
+            var res = []
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        // console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                        var bigarr = xmldoc.getElementsByTagName('string')[0].innerHTML.split('#$')
+                        // 最后一个项为空项
+                        for (var i = 0; i < bigarr.length - 1; i++) {
+                            var smallarr = bigarr[i].split(',')
+                            var info = {
+                                date: smallarr[0],              // 数据日期
+                                longitude: smallarr[1],         // 经度
+                                latitude: smallarr[2],          // 纬度
+                                centerpressure: smallarr[3],    // 中心气压
+                                centerspeed: smallarr[4],       // 中心风速
+                                sevencircle: smallarr[5],       // 七级风圈
+                                tencircle: smallarr[6],         // 十级风圈
+                                movingspeed: smallarr[7],       // 移动速度
+                                movingdir: smallarr[8]          // 移动方向
+                            }
+                            res.push(info)
+                        } // end-for
+                        // 获得数据列表
+                        console.log(res)
+                        // 是否要判断时效性
+                        if (alwaysshow === false) {
+                            var today = new Date()
+                            today = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + ' 00:00:00'
+                            today = new Date(today)
+                            tydate = new Date(res[res.length - 1].date)
+                            tydate = tydate.getFullYear() + '/' + (tydate.getMonth() + 1) + '/' + tydate.getDate() + ' 00:00:00'
+                            tydate = new Date(tydate)
+                            if (tydate < today) {
+                                console.log('typhoon ' + typhoonNo + ' has finished.')
+                                return
+                            }
+                        } // end-if
+                        
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
+                    }
+                }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, true)
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xmlhttp.send(data)
+        }
+
+    </script>
+
+</body>
+
+</html>

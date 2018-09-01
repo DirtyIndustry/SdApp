@@ -157,19 +157,36 @@
             float: center;
         }
 
-        /* 城市信息面板 */
-        .cityinfopanel {
-            /* border: 1px solid #000; */
-            background-color: rgba(255, 255, 255, 0.95);
-            width: 70%;
-            height: 280px;
+        /* 信息面板定位容器 */
+        .infopanel-page {
+            /* border: 1px solid #f00; */
+            width: 100%;
+            height: 100%;
             position: fixed;
-            left: 15%;
-            bottom: 150px;
-            z-index: 99;
-            display: none;
+            left: 0;
+            top: 0;
+            /* z-index: -1; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        /* 信息面板框体 */
+        .infopanel-body {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 300px;
+            height: 280px;
+            display: flex;
             flex-direction: column;
             border-radius: 15px;
+            z-index: 99;
+            pointer-events: auto;
+        }
+
+        /* 城市信息面板 */
+        .cityinfopanel {
+            display: none;
         }
 
         /* 城市信息面板 行 */
@@ -234,17 +251,7 @@
 
         /* 渔场信息面板 */
         .fisheryinfopanel {
-            /* border: 1px solid #000; */
-            background-color: rgba(255, 255, 255, 0.95);
-            width: 70%;
-            height: 200px;
-            position: fixed;
-            left: 15%;
-            bottom: 150px;
-            z-index: 99;
             display: none;
-            flex-direction: column;
-            border-radius: 15px;
         }
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
@@ -273,150 +280,156 @@
             <div class="imgNormal" id="switchback_img"></div>
         </div>
 
-        <!-- 城市信息面板 -->
-        <div class="cityinfopanel">
-            <!-- 标题-日期 -->
-            <div class="infopanel-row infopanel-firstrow">
-                <div class="infopanel-column infopanel-location">
-                    <div class="infopanel-cell infopanel-locationcell" id="city_cityname"></div>
+        <!-- 信息面板定位容器 -->
+        <div class="infopanel-page">
+
+            <!-- 城市信息面板 -->
+            <div class="infopanel-body cityinfopanel">
+                <!-- 标题-日期 -->
+                <div class="infopanel-row infopanel-firstrow">
+                    <div class="infopanel-column infopanel-location">
+                        <div class="infopanel-cell infopanel-locationcell" id="city_cityname"></div>
+                    </div>
+                    <div class="infopanel-column infopanel-date">
+                        <div class="infopanel-datecell" id="city_date"></div>
+                    </div>
                 </div>
-                <div class="infopanel-column infopanel-date">
-                    <div class="infopanel-datecell" id="city_date"></div>
+                <!-- 表头 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">潮时</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">潮位(cm)</div>
+                    </div>
+                </div>
+                <!-- 第一行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">第一次高潮</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_fht"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_fh"></div>
+                    </div>
+                </div>
+                <!-- 第二行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">第一次低潮</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_flt"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_fl"></div>
+                    </div>
+                </div>
+                <!-- 第三行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">第二次高潮</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_sht"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_sh"></div>
+                    </div>
+                </div>
+                <!-- 第四行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">第二次低潮</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_slt"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="city_sl"></div>
+                    </div>
+                </div>
+                <!-- 浪高-水温 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">浪高:&nbsp;</div>
+                        <div class="infopanel-cell" id="city_wave"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">水温:&nbsp;</div>
+                        <div class="infopanel-cell" id="city_temp"></div>
+                    </div>
                 </div>
             </div>
-            <!-- 表头 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell"></div>
+
+            <!-- 渔场信息面板 -->
+            <div class="infopanel-body fisheryinfopanel">
+                <!-- 标题-日期 -->
+                <div class="infopanel-row infopanel-firstrow">
+                    <div class="infopanel-column infopanel-location">
+                        <div class="infopanel-cell infopanel-locationcell" id="fishery_fisheryname"></div>
+                    </div>
+                    <div class="infopanel-column infopanel-date">
+                        <div class="infopanel-datecell" id="fishery_date"></div>
+                    </div>
                 </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">潮时</div>
+                <!-- 表头 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">时效</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">波高(m)</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell infopanel-tableheader">波向</div>
+                    </div>
                 </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">潮位(cm)</div>
+                <!-- 第一行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">24h</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavelvl"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavedir"></div>
+                    </div>
                 </div>
-            </div>
-            <!-- 第一行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">第一次高潮</div>
+                <!-- 第二行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">48h</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavelvl48h"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavedir48h"></div>
+                    </div>
                 </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_fht"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_fh"></div>
-                </div>
-            </div>
-            <!-- 第二行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">第一次低潮</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_flt"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_fl"></div>
-                </div>
-            </div>
-            <!-- 第三行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">第二次高潮</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_sht"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_sh"></div>
-                </div>
-            </div>
-            <!-- 第四行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">第二次低潮</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_slt"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="city_sl"></div>
-                </div>
-            </div>
-            <!-- 浪高-水温 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">浪高:&nbsp;</div>
-                    <div class="infopanel-cell" id="city_wave"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">水温:&nbsp;</div>
-                    <div class="infopanel-cell" id="city_temp"></div>
+                <!-- 第三行数据 -->
+                <div class="infopanel-row">
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell">72h</div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavelvl72h"></div>
+                    </div>
+                    <div class="infopanel-column">
+                        <div class="infopanel-cell" id="fishery_wavedir72h"></div>
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- 渔场信息面板 -->
-        <div class="fisheryinfopanel">
-            <!-- 标题-日期 -->
-            <div class="infopanel-row infopanel-firstrow">
-                <div class="infopanel-column infopanel-location">
-                    <div class="infopanel-cell infopanel-locationcell" id="fishery_fisheryname"></div>
-                </div>
-                <div class="infopanel-column infopanel-date">
-                    <div class="infopanel-datecell" id="fishery_date"></div>
-                </div>
-            </div>
-            <!-- 表头 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">时效</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">波高(m)</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell infopanel-tableheader">波向</div>
-                </div>
-            </div>
-            <!-- 第一行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">24h</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavelvl"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavedir"></div>
-                </div>
-            </div>
-            <!-- 第二行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">48h</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavelvl48h"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavedir48h"></div>
-                </div>
-            </div>
-            <!-- 第三行数据 -->
-            <div class="infopanel-row">
-                <div class="infopanel-column">
-                    <div class="infopanel-cell">72h</div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavelvl72h"></div>
-                </div>
-                <div class="infopanel-column">
-                    <div class="infopanel-cell" id="fishery_wavedir72h"></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -478,7 +491,7 @@
                     center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
                     zoom: 6,                                                 // 地图的中心地理坐标。
                     mapTypeControl: false,  // 切换卫星图按钮
-                    // zoomControl: false      // 缩放按钮
+                    zoomControl: false      // 缩放按钮
                 })
 
                 // 
@@ -766,7 +779,6 @@
                         new qq.maps.LatLng(38.5001263363614, 120.0001234908066),
                         new qq.maps.LatLng(38.50012629499258, 120.5001234727201),
                         new qq.maps.LatLng(38.50012625362376, 121.0001234555331)
-
                     ]
                     polygonLZWan = new qq.maps.Polygon({
                         map: map,
@@ -908,7 +920,7 @@
                         }, 50)
                     })
                 }
-                
+
                 // 城市marker添加点击事件
                 {
                     // 青岛
@@ -961,7 +973,7 @@
                         }
                     })
                 }
-            
+
                 // 渔场marker添加点击事件
                 {
                     // 渤海湾
@@ -1056,89 +1068,6 @@
             xmlhttp.send(data)
         } // end-requestData()
 
-        var loadQD = function () {
-            var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018'
-            var data = 'name=admin&areaflg=山东&city=青岛'
-            var xmlhttp = new XMLHttpRequest()
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
-                    if (xmlhttp.status === 200) {
-                        // console.log(xmlhttp.responseText)
-                        var parser = new DOMParser()
-                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                        var res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
-                        console.log(res)
-                        var date = new Date()
-                        var todaystring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
-                        date.setDate(date.getDate() + 1)
-                        var tomorrowstring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
-                        var fhtime = ''
-                        var fltime = ''
-                        var shtime = ''
-                        var sltime = ''
-                        if (res.DYFP.tide[0].FIRSTHIGHTIME === '-') {
-                            fhtime = '-:-'
-                        } else {
-                            fhtime = timeFormat(res.DYFP.tide[0].FIRSTHIGHTIME)
-                        }
-                        if (res.DYFP.tide[0].FIRSTLOWTIME === '-') {
-                            fltime = '-:-'
-                        } else {
-                            fltime = timeFormat(res.DYFP.tide[0].FIRSTLOWTIME)
-                        }
-                        if (res.DYFP.tide[0].SECONDHIGHTIME === '-') {
-                            shtime = '-:-'
-                        } else {
-                            shtime = timeFormat(res.DYFP.tide[0].SECONDHIGHTIME)
-                        }
-                        if (res.DYFP.tide[0].SECONDLOWTIME === '-') {
-                            sltime = '-:-'
-                        } else {
-                            sltime = timeFormat(res.DYFP.tide[0].SECONDLOWTIME)
-                        }
-                        infoCityQD = {
-                            location: '青岛近海',
-                            date: todaystring + '~' + tomorrowstring,
-                            firsthightime: fhtime,
-                            firstlowtime: fltime,
-                            secondhightime: shtime,
-                            secondlowtime: sltime,
-                            firsthigh: res.DYFP.tide[0].FIRSTHIGHLEVEL,
-                            firstlow: res.DYFP.tide[0].FIRSTLOWLEVEL,
-                            secondhigh: res.DYFP.tide[0].SECONDHIGHLEVEL,
-                            secondlow: res.DYFP.tide[0].SECONDLOWLEVEL,
-                            waveheight: res.DYFP.wave[0].WAVEHEIGHT,
-                            temperature: res.DYFP.temperature[0].WATERTEMPERATURE
-                        }
-                        /*
-                        document.getElementById('city_cityname').innerHTML = infoCityQD.location
-                        document.getElementById('city_date').innerHTML = infoCityQD.date
-                        document.getElementById('city_fht').innerHTML = infoCityQD.firsthightime
-                        document.getElementById('city_fh').innerHTML = infoCityQD.firsthigh
-                        document.getElementById('city_flt').innerHTML = infoCityQD.firstlowtime
-                        document.getElementById('city_fl').innerHTML = infoCityQD.firstlow
-                        document.getElementById('city_sht').innerHTML = infoCityQD.secondhightime
-                        document.getElementById('city_sh').innerHTML = infoCityQD.secondhigh
-                        document.getElementById('city_slt').innerHTML = infoCityQD.secondlowtime
-                        document.getElementById('city_sl').innerHTML = infoCityQD.secondlow
-                        document.getElementById('city_wave').innerHTML = infoCityQD.waveheight + 'm'
-                        document.getElementById('city_temp').innerHTML = infoCityQD.temperature.trim() + '℃'
-                        */
-
-                    } else if (xmlhttp.status === 400) {
-                        console.log('error 400')
-                        alert('There was an error 400')
-                    } else {
-                        console.log('something else other than 200 was returned')
-                        console.log(xmlhttp.responseText)
-                    }
-                }
-            } // end-xmlhttp.onreadystatechange()
-            xmlhttp.open('POST', url, true)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send(data)
-        } // end-loadQD()
-
         // 向服务器请求城市信息
         var loadCityInfo = function (city, output) {
             var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018'
@@ -1199,17 +1128,17 @@
                         //     temperature: resdata.temperature[0].WATERTEMPERATURE
                         // }
                         output.location = resdata.tide[0].FORECASTAREA,
-                        output.date = todaystring + '~' + tomorrowstring,
-                        output.firsthightime = fhtime,
-                        output.firstlowtime = fltime,
-                        output.secondhightime = shtime,
-                        output.secondlowtime = sltime,
-                        output.firsthigh = resdata.tide[0].FIRSTHIGHLEVEL,
-                        output.firstlow = resdata.tide[0].FIRSTLOWLEVEL,
-                        output.secondhigh = resdata.tide[0].SECONDHIGHLEVEL,
-                        output.secondlow = resdata.tide[0].SECONDLOWLEVEL,
-                        output.waveheight = resdata.wave[0].WAVEHEIGHT,
-                        output.temperature = resdata.temperature[0].WATERTEMPERATURE
+                            output.date = todaystring + '~' + tomorrowstring,
+                            output.firsthightime = fhtime,
+                            output.firstlowtime = fltime,
+                            output.secondhightime = shtime,
+                            output.secondlowtime = sltime,
+                            output.firsthigh = resdata.tide[0].FIRSTHIGHLEVEL,
+                            output.firstlow = resdata.tide[0].FIRSTLOWLEVEL,
+                            output.secondhigh = resdata.tide[0].SECONDHIGHLEVEL,
+                            output.secondlow = resdata.tide[0].SECONDLOWLEVEL,
+                            output.waveheight = resdata.wave[0].WAVEHEIGHT,
+                            output.temperature = resdata.temperature[0].WATERTEMPERATURE
                         // console.log(output)
 
                     } else if (xmlhttp.status === 400) {
