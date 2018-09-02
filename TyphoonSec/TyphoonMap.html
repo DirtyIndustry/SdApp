@@ -42,63 +42,103 @@
             height: 105%;
         }
 
-        /*卫星图切换*/
-        .switchbutton {
-            /* border: 1px solid #000000; */
-            display: flex;
-            width: 50px;
-            height: 50px;
+        /* 浮动控件通用属性 */
+        .floatcontrol {
             position: fixed;
-            right: 20px;
-            bottom: 100px;
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 99;
         }
 
-        /* 卫星图切换按钮图片 */
-        .switchbutton .imgSatel {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            background-image: url(./Images/wxdt.png);
-            background-size: 100% 100%;
-            float: center;
+        /* 台风名称面板 */
+        .namepanel {
+            border: 2px solid rgb(0, 153, 255);
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            /* width: 180px; */
+            min-width: 150px;
+            top: 5px;
+            left: 5px;
+            flex-direction: column;
         }
 
-        /* 卫星地图切换按钮图片2 */
-        .switchbutton .imgNormal {
-            display: none;
+        /* 台风名称容器 */
+        .typhoonname {
+            /* border: 1px solid #f00; */
             width: 100%;
-            height: 100%;
-            background-image: url(./Images/jddt.png);
-            background-size: 100% 100%;
-            float: center;
+            height: 25px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /*卫星图切换*/
+        .switchbutton {
+            /* border: 1px solid #000000; */
+            width: 50px;
+            height: 50px;
+            right: 65px;
+            bottom: 0px;
+        }
+
+        /* 图例按钮 */
+        .legendbutton {
+            /* border: 1px solid #000; */
+            width: 50px;
+            height: 50px;
+            right: 5px;
+            bottom: 0px;
         }
 
         /* 预报中心logo */
         .stationlogo {
             /* border: 1px solid #000; */
-            display: flex;
             width: 120px;
             height: 27px;
-            position: fixed;
-            left: 1px;
-            bottom: 1px;
-            align-items: center;
-            justify-content: center;
-            background-image: url(./Images/fontfamily.png);
-            background-size: 100% 100%;
-            z-index: 99;
+            left: 10px;
+            bottom: 11.5px;
         }
 
-        .stationlogo .img {
-            display: flex;
+        /* 图例框定位 */
+        #volet_clos {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background-image: url(./Images/fontfamily.png);
-            background-size: 100% 100%;
-            float: center;
+        }
+
+        /* 图例外框 */
+        #volet {
+            padding: 10px;
+            padding-bottom: 45px;
+            background: #6B9A49;
+            color: #fff;
+        }
+
+        /* 初始定位 */
+        #volet {
+            position: absolute;
+            left: 0px;
+            bottom: -520px;
+            transition: all .2s ease-in;
+        }
+
+        /* 弹出时的定位 */
+        #volet:target {
+            left: 0px;
+            bottom: 0px;
+        }
+
+        /* 关闭时的定位 */
+        #volet_clos:target #volet {
+            left: 0px;
+            bottom: -520px;
+        }
+
+        /* 图例图片 */
+        #volet img {
+            width: 100%;
         }
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
@@ -109,105 +149,205 @@
     <!--   定义地图显示容器   -->
     <div id="container"></div>
 
+    <!-- 台风名称面板 -->
+    <div class="floatcontrol namepanel">
+        <div class="typhoonname" id="firstTyphoon" onclick="javascript: panToFirst()"></div>
+        <div class="typhoonname" id="secondTyphoon" onclick="javascript: panToSecond()"></div>
+        <div class="typhoonname" id="thirdTyphoon" onclick="javascript: panToThird()"></div>
+    </div>
+
     <!-- 普通-卫星地图切换按钮 -->
-    <div class="switchbutton" onclick="javascript: switchMap();">
-        <div class="imgSatel" id="switch_img"></div>
-        <div class="imgNormal" id="switchback_img"></div>
+    <div class="floatcontrol switchbutton" onclick="javascript: switchMap()">
+        <img id="switchicon" src="./Images/wxdt.png" alt="切换地图">
     </div>
 
     <!-- 预报中心logo -->
-    <div class="stationlogo">
-        <!-- <div class="img"></div> -->
+    <div class="floatcontrol stationlogo">
+        <img src="./Images/fontfamily.png" alt="北海预报中心" />
+    </div>
+
+    <!-- 图例按钮 -->
+    <div class="floatcontrol legendbutton" onclick="javascript: switchLegend()">
+        <img src="./Images/legendButton.png" alt="图例">
+    </div>
+
+    <!-- 图例面板 -->
+    <div id="volet_clos">
+        <div id="volet">
+            <img src="./Images/legend.png" alt="图例">
+            <a href="#volet" aria-hidden="true" aria-label="滑出"></a>
+            <a href="#volet_clos" aria-hidden="true" aria-label="滑入"></a>
+        </div>
     </div>
 
     <script>
 
+        var map // 地图实例
+        var mapdragging = false // 地图是否在拖动状态
+        var firstTyphoon = ''   // 台风名称 中文名（英文名）
+        var secondTyphoon = ''
+        var thirdTyphoon = ''
+        var typhoonCount    // 地图上台风数量的计数器
+        var typhoonList     // 台风数据数组
+        var typhoonListSnd
+        var typhoonListTrd
+        var markerArray     // 台风路径点数组
+        var markerCluster   // 台风路径集合
+        var markerEventArray     // 台风路径点的点击事件数组
+        var polylineArray   // 路径折线数组
+        var infoWindow      // 台风信息气泡
 
-            var map // 地图实例
-            var mapdragging = false // 地图是否在拖动状态
-            var typhoonCount    // 地图上台风数量的计数器
-            var typhoonList     // 台风数据数组
-            var typhoonListSnd
-            var typhoonListTrd
-            var markerArray     // 台风路径点数组
-            var markerCluster   // 台风路径集合
-            var markerEventArray     // 台风路径点的点击事件数组
-            var polylineArray   // 路径折线数组
-            var infoWindow      // 台风信息气泡
+        // string.startsWith()
+        if (typeof String.prototype.startsWith != 'function') {
+            String.prototype.startsWith = function (prefix) {
+                return this.slice(0, prefix.length) === prefix
+            }
+        }
+        // string.endsWith()
+        if (typeof String.prototype.endsWith != 'function') {
+            String.prototype.endsWith = function (suffix) {
+                return this.indexOf(suffix, this.length - suffix.length) !== -1
+            }
+        }
+        // string.contains()
+        if (typeof String.prototype.contains != 'function') {
+            String.prototype.contains = function (str) {
+                if (str == null || str == "" || this.length == 0 || str.length > this.length) {
+                    return false
+                }
+                if (this.indexOf(str) >= 0) {
+                    return true
+                } else {
+                    return false
+                }
+                return true
+            }
+        }
 
 
-            window.onload = function () {
+        window.onload = function () {
 
-                //直接加载地图
+            //直接加载地图
 
 
-                //初始化地图函数  自定义函数名init
-                function init() {
+            //初始化地图函数  自定义函数名init
+            function init() {
 
-                    //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-                    map = new qq.maps.Map(document.getElementById('container'), {
-                        center: new qq.maps.LatLng(30, 123),    // 地图的中心地理坐标。
-                        zoom: 4,                                // 地图的缩放级数。
-                        mapTypeControl: false,  // 切换卫星图按钮
-                        zoomControl: false      // 缩放按钮
+                //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
+                map = new qq.maps.Map(document.getElementById('container'), {
+                    center: new qq.maps.LatLng(30, 123),    // 地图的中心地理坐标。
+                    zoom: 4,                                // 地图的缩放级数。
+                    mapTypeControl: false,  // 切换卫星图按钮
+                    zoomControl: false      // 缩放按钮
+                })
+
+
+                // 初始化公共变量
+                typhoonCount = 0
+                markerArray = new qq.maps.MVCArray()
+                markerCluster = new qq.maps.MarkerCluster({
+                    map: map,
+                    minimumClusterSize: 99, //默认2
+                    markers: markerArray,
+                    zoomOnClick: true, //默认为true
+                    gridSize: 30, //默认60
+                    averageCenter: true, //默认false
+                    maxZoom: 7, //默认18
+                })
+                typhoonList = []
+                typhoonListSnd = []
+                typhoonListTrd = []
+                markerEventArray = []
+                polylineArray = []
+                infoWindow = new qq.maps.InfoWindow({
+                    map: map,
+                    zIndex: 99
+                })
+
+                // 点击地图关闭信息窗体
+                {
+                    qq.maps.event.addListener(map, 'click', function () {
+                        infoWindow.close()
+                        self.location.href = '#'
                     })
 
-
-                    // 初始化公共变量
-                    typhoonCount = 0
-                    markerArray = new qq.maps.MVCArray()
-                    markerCluster = new qq.maps.MarkerCluster({
-                        map: map,
-                        minimumClusterSize: 99, //默认2
-                        markers: markerArray,
-                        zoomOnClick: true, //默认为true
-                        gridSize: 30, //默认60
-                        averageCenter: true, //默认false
-                        maxZoom: 7, //默认18
+                    qq.maps.event.addListener(map, 'dragstart', function () {
+                        mapdragging = true
                     })
-                    typhoonList = []
-                    typhoonListSnd = []
-                    typhoonListTrd = []
-                    markerEventArray = []
-                    polylineArray = []
-                    infoWindow = new qq.maps.InfoWindow({
-                        map: map,
-                        zIndex: 99
+                    qq.maps.event.addListener(map, 'dragend', function () {
+                        setTimeout(function () {
+                            mapdragging = false
+                        }, 50)
                     })
+                }
+            }
 
-                    // 点击地图关闭信息窗体
-                    {
-                        qq.maps.event.addListener(map, 'click', function () {
-                            infoWindow.close()
-                        })
+            //调用初始化函数地图
+            init()
 
-                        qq.maps.event.addListener(map, 'dragstart', function () {
-                            mapdragging = true
-                        })
-                        qq.maps.event.addListener(map, 'dragend', function () {
-                            setTimeout(function () {
-                                mapdragging = false
-                            }, 50)
-                        })
+            startupRequest()
+
+        } // end-window.onloda()
+
+        // 向服务器请求数据
+        var requestData = function (url, data) {
+            var xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                    if (xmlhttp.status === 200) {
+                        // console.log(xmlhttp.responseText)
+                        var parser = new DOMParser()
+                        var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                    } else if (xmlhttp.status === 400) {
+                        console.log('error 400')
+                        alert('There was an error 400')
+                    } else {
+                        console.log('something else other than 200 was returned')
+                        console.log(xmlhttp.responseText)
                     }
                 }
+            } // end-xmlhttp.onreadystatechange()
+            xmlhttp.open('POST', url, false)
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+            xmlhttp.send(data)
+        } // end-requestData()
 
-                //调用初始化函数地图
-                init()
+        // 清空地图
+        var clearMap = function () {
+            // 地图上台风数量的计数器
+            typhoonCount = 0
+            // 台风信息气泡
+            infoWindow.close()
+            // 路径折线数组
+            for (var j = 0; j < polylineArray.length; j++) {
+                polylineArray[j].setMap(null)
+                polylineArray[j] = null
+            }
+            polylineArray = []
+            // 台风路径点的点击事件数组
+            for (var i = 0; i < markerEventArray.length; i++) {
+                qq.maps.event.removeListener(markerEventArray[i])
+                markerEventArray[i] = null
+            }
+            markerEventArray = []
+            // 台风路径集合
+            markerCluster.clearMarkers()
+            // 台风数据数组
+            typhoonList = []
+            typhoonListSnd = []
+            typhoonListTrd = []
+        }
 
-                startupRequest()
-
-                // setTimeout(function () {
-                //     console.log('suprise!')
-                //     // console.log('typhoonList.length = ' + typhoonList.length)
-                //     // console.log('markerArray.length = ' + markerArray.getLength())
-                //     clearMap()
-                // }, 10000)
-
-            } // end-window.onloda()
-
-            // 向服务器请求数据
-            var requestData = function (url, data) {
+        // 台风路径数据相关 请求 显示
+        {
+            // 页面加载时向服务器请求起始数据
+            var startupRequest = function () {
+                var year = new Date().getFullYear()
+                var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList'
+                var data = 'areaflg=山东&Typhoonyear=' + year
+                var res = []
                 var xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
@@ -216,7 +356,25 @@
                             var parser = new DOMParser()
                             var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
                             // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
-                            console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                            var divarr = xmldoc.getElementsByTagName('string')
+                            // 获取列表
+                            for (var i = 0; i < divarr.length; i++) {
+                                res.push(divarr[i].innerHTML)
+                            }
+                            // 大于3?
+                            if (res.length >= 3) {
+                                for (var j = 0; j < 3; j++) {
+                                    /* 切割字符串 */
+                                    var resarr = res[res.length - 1 - j].split(',')
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
+                                }
+                            } else {
+                                for (var k = res.length - 1; k > 0; k--) {
+                                    /* 切割字符串 */
+                                    var resarr = res[k].split(',')
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
+                                }
+                            }
                         } else if (xmlhttp.status === 400) {
                             console.log('error 400')
                             alert('There was an error 400')
@@ -226,443 +384,443 @@
                         }
                     }
                 } // end-xmlhttp.onreadystatechange()
-                xmlhttp.open('POST', url, false)
+                xmlhttp.open('POST', url, true)
                 xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
                 xmlhttp.send(data)
-            } // end-requestData()
+            } // end-startupRequest
 
-            // 清空地图
-            var clearMap = function () {
-                // 地图上台风数量的计数器
-                typhoonCount = 0
-                // 台风信息气泡
-                infoWindow.close()
-                // 路径折线数组
-                for (var j = 0; j < polylineArray.length; j++) {
-                    polylineArray[j].setMap(null)
-                    polylineArray[j] = null
-                }
-                polylineArray = []
-                // 台风路径点的点击事件数组
-                for (var i = 0; i < markerEventArray.length; i++) {
-                    qq.maps.event.removeListener(markerEventArray[i])
-                    markerEventArray[i] = null
-                }
-                markerEventArray = []
-                // 台风路径集合
-                markerCluster.clearMarkers()
-                // 台风数据数组
-                typhoonList = []
-                typhoonListSnd = []
-                typhoonListTrd = []
-            }
-
-            // 台风路径数据相关 请求 显示
-            {
-                // 页面加载时向服务器请求起始数据
-                var startupRequest = function () {
-                    var year = new Date().getFullYear()
-                    var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList'
-                    var data = 'areaflg=山东&Typhoonyear=' + year
-                    var res = []
-                    var xmlhttp = new XMLHttpRequest()
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
-                            if (xmlhttp.status === 200) {
-                                // console.log(xmlhttp.responseText)
-                                var parser = new DOMParser()
-                                var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                                // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
-                                var divarr = xmldoc.getElementsByTagName('string')
-                                // 获取列表
-                                for (var i = 0; i < divarr.length; i++) {
-                                    res.push(divarr[i].innerHTML)
-                                }
-                                // 大于3?
-                                if (res.length >= 3) {
-                                    for (var j = 0; j < 3; j++) {
-                                        /* 切割字符串 */
-                                        var resarr = res[res.length - 1 - j].split(',')
-                                        requestTyphoonPath(resarr[1], resarr[0], false)
-                                    }
-                                } else {
-                                    for (var k = res.length - 1; k > 0; k--) {
-                                        /* 切割字符串 */
-                                        var resarr = res[k].split(',')
-                                        requestTyphoonPath(resarr[1], resarr[0], false)
-                                    }
-                                }
-                            } else if (xmlhttp.status === 400) {
-                                console.log('error 400')
-                                alert('There was an error 400')
-                            } else {
-                                console.log('something else other than 200 was returned')
-                                console.log(xmlhttp.responseText)
-                            }
-                        }
-                    } // end-xmlhttp.onreadystatechange()
-                    xmlhttp.open('POST', url, true)
-                    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-                    xmlhttp.send(data)
-                } // end-startupRequest
-
-                // 向服务器请求台风路径
-                var requestTyphoonPath = function (typhoonName, typhoonNo, alwaysshow) {
-                    var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonPath'
-                    var data = 'areaflg=青岛&typhoonNumber=' + typhoonNo
-                    var res = []
-                    var active = false
-                    var xmlhttp = new XMLHttpRequest()
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
-                            if (xmlhttp.status === 200) {
-                                // console.log(xmlhttp.responseText)
-                                var parser = new DOMParser()
-                                var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+            // 向服务器请求台风路径
+            var requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
+                var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonPath'
+                var data = 'areaflg=青岛&typhoonNumber=' + typhoonNo
+                var res = []
+                var active = false
+                var xmlhttp = new XMLHttpRequest()
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                        if (xmlhttp.status === 200) {
+                            // console.log(xmlhttp.responseText)
+                            var parser = new DOMParser()
+                            var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                            /* 切割字符串 */
+                            var bigarr = xmldoc.getElementsByTagName('string')[0].innerHTML.split('#$')
+                            // 最后一个项为空项
+                            for (var i = 0; i < bigarr.length - 1; i++) {
                                 /* 切割字符串 */
-                                var bigarr = xmldoc.getElementsByTagName('string')[0].innerHTML.split('#$')
-                                // 最后一个项为空项
-                                for (var i = 0; i < bigarr.length - 1; i++) {
-                                    /* 切割字符串 */
-                                    var smallarr = bigarr[i].split(',')
-                                    var origindatestring = smallarr[0]
-                                    var datestring = origindatestring.replace(/-/g, '/')
-                                    var info = {
-                                        name: typhoonName,              // 台风名称
-                                        number: typhoonNo,              // 台风编号
-                                        date: datestring,               // 数据日期
-                                        longitude: smallarr[1],         // 经度
-                                        latitude: smallarr[2],          // 纬度
-                                        centerpressure: smallarr[3],    // 中心气压
-                                        centerspeed: smallarr[4],       // 中心风速
-                                        sevencircle: smallarr[5],       // 七级风圈
-                                        tencircle: smallarr[6],         // 十级风圈
-                                        movingspeed: smallarr[7],       // 移动速度
-                                        movingdir: smallarr[8]          // 移动方向
-                                    }
-                                    res.push(info)
-                                } // end-for
-                                // 获得数据列表
-                                // console.log(res)
-                                // 判断时效性
-                                var today = new Date()
-                                today = today.setHours(today.getHours() - 10)
-                                tydate = new Date(res[res.length - 1].date)
-                                if (tydate < today) {
-                                    console.log('typhoon ' + typhoonNo + ' has finished.')
-                                    active = false
-                                } else {
-                                    active = true
+                                var smallarr = bigarr[i].split(',')
+                                var origindatestring = smallarr[0]
+                                var datestring = origindatestring.replace(/-/g, '/')
+                                var info = {
+                                    name: typhoonName,              // 台风名称
+                                    number: typhoonNo,              // 台风编号
+                                    date: datestring,               // 数据日期
+                                    longitude: smallarr[1],         // 经度
+                                    latitude: smallarr[2],          // 纬度
+                                    centerpressure: smallarr[3],    // 中心气压
+                                    centerspeed: smallarr[4],       // 中心风速
+                                    sevencircle: smallarr[5],       // 七级风圈
+                                    tencircle: smallarr[6],         // 十级风圈
+                                    movingspeed: smallarr[7],       // 移动速度
+                                    movingdir: smallarr[8]          // 移动方向
                                 }
-                                // 如果不是强制显示且该台风已过期 则跳过该台风
-                                if (alwaysshow === false & active === false) {
-                                    return
-                                }
-                                // 查看哪个数组为空
-                                var count = 0   // 本地的台风计数器
-                                switch (typhoonCount) {
-                                    case 0:
-                                        typhoonCount++
-                                        count = 1
-                                        typhoonList = res
-                                        break
-                                    case 1:
-                                        typhoonCount++
-                                        count = 2
-                                        typhoonListSnd = res
-                                        break
-                                    case 2:
-                                        typhoonCount++
-                                        count = 3
-                                        typhoonListTrd = res
-                                        break
-                                    default:
-                                        break
-                                } // end-switch
-                                // 在地图上显示该台风
-                                addTyphoonToMap(res)
-                                // 如果台风是活动状态则请求预测路线
-                                if (active === true) {
-                                    requestPathPrediction(typhoonName, typhoonNo, '中国', res[res.length - 1])
-                                    requestPathPrediction(typhoonName, typhoonNo, '中国台湾', res[res.length - 1])
-                                    requestPathPrediction(typhoonName, typhoonNo, '中国香港', res[res.length - 1])
-                                    requestPathPrediction(typhoonName, typhoonNo, '美国', res[res.length - 1])
-                                    requestPathPrediction(typhoonName, typhoonNo, '日本', res[res.length - 1])
-                                    requestPathPrediction(typhoonName, typhoonNo, '韩国', res[res.length - 1])
-                                }
-                            } else if (xmlhttp.status === 400) {
-                                console.log('error 400')
-                                alert('There was an error 400')
+                                res.push(info)
+                            } // end-for
+                            // 获得数据列表
+                            // console.log(res)
+                            // 判断时效性
+                            var today = new Date()
+                            today = today.setHours(today.getHours() - 10)
+                            tydate = new Date(res[res.length - 1].date)
+                            if (tydate < today) {
+                                console.log('typhoon ' + typhoonNo + ' has finished.')
+                                active = false
                             } else {
-                                console.log('something else other than 200 was returned')
-                                console.log(xmlhttp.responseText)
+                                active = true
                             }
+                            // 如果不是强制显示且该台风已过期 则跳过该台风
+                            if (alwaysshow === false & active === false) {
+                                return
+                            }
+                            // 查看哪个数组为空
+                            var count = 0   // 本地的台风计数器
+                            switch (typhoonCount) {
+                                case 0:
+                                    typhoonCount++
+                                    count = 1
+                                    typhoonList = res
+                                    firstTyphoon = typhoonName + '（' + typhoonEng + '）'
+                                    break
+                                case 1:
+                                    typhoonCount++
+                                    count = 2
+                                    typhoonListSnd = res
+                                    secondTyphoon = typhoonName + '（' + typhoonEng + '）'
+                                    break
+                                case 2:
+                                    typhoonCount++
+                                    count = 3
+                                    typhoonListTrd = res
+                                    thirdTyphoon = typhoonName + '（' + typhoonEng + '）'
+                                    break
+                                default:
+                                    break
+                            } // end-switch
+                            // 在地图上显示该台风
+                            addTyphoonToMap(res)
+                            // 显示台风名字
+                            showTyphoonName()
+                            // 如果台风是活动状态则请求预测路线
+                            if (active === true) {
+                                requestPathPrediction(typhoonName, typhoonNo, '中国', res[res.length - 1])
+                                requestPathPrediction(typhoonName, typhoonNo, '中国台湾', res[res.length - 1])
+                                requestPathPrediction(typhoonName, typhoonNo, '中国香港', res[res.length - 1])
+                                requestPathPrediction(typhoonName, typhoonNo, '美国', res[res.length - 1])
+                                requestPathPrediction(typhoonName, typhoonNo, '日本', res[res.length - 1])
+                                requestPathPrediction(typhoonName, typhoonNo, '韩国', res[res.length - 1])
+                            }
+                        } else if (xmlhttp.status === 400) {
+                            console.log('error 400')
+                            alert('There was an error 400')
+                        } else {
+                            console.log('something else other than 200 was returned')
+                            console.log(xmlhttp.responseText)
                         }
-                    } // end-xmlhttp.onreadystatechange()
-                    xmlhttp.open('POST', url, true)
-                    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-                    xmlhttp.send(data)
-                } // end-requestTyphoonPath()
+                    }
+                } // end-xmlhttp.onreadystatechange()
+                xmlhttp.open('POST', url, true)
+                xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                xmlhttp.send(data)
+            } // end-requestTyphoonPath()
 
-                // 向服务器请求台风路径预测
-                var requestPathPrediction = function (typhoonName, typhoonNo, forecastsite, lastpoint) {
-                    var url = 'http://123.234.129.238:8001/MyWebService.asmx/Typhoonforcastpath'
-                    var data = 'name=admin&areaflg=青岛&number=' + typhoonNo + '&forcastlestTyphoon=' + forecastsite
-                    var res = []
-                    var xmlhttp = new XMLHttpRequest()
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
-                            if (xmlhttp.status === 200) {
-                                // console.log(xmlhttp.responseText)
-                                var parser = new DOMParser()
-                                var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                                // console.log(forecastsite)
-                                // console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
-                                // 返回值为'当前无台风'时 直接返回
-                                var resstring = xmldoc.getElementsByTagName('string')[0].innerHTML
-                                if (resstring === '当前无台风') {
-                                    return
+            // 向服务器请求台风路径预测
+            var requestPathPrediction = function (typhoonName, typhoonNo, forecastsite, lastpoint) {
+                var url = 'http://123.234.129.238:8001/MyWebService.asmx/Typhoonforcastpath'
+                var data = 'name=admin&areaflg=青岛&number=' + typhoonNo + '&forcastlestTyphoon=' + forecastsite
+                var res = []
+                var xmlhttp = new XMLHttpRequest()
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                        if (xmlhttp.status === 200) {
+                            // console.log(xmlhttp.responseText)
+                            var parser = new DOMParser()
+                            var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                            // console.log(forecastsite)
+                            // console.log(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                            // 返回值为'当前无台风'时 直接返回
+                            var resstring = xmldoc.getElementsByTagName('string')[0].innerHTML
+                            if (resstring === '当前无台风') {
+                                return
+                            }
+                            var bigarr = resstring.split('#$')
+                            // 最后一项为空
+                            for (var i = 0; i < bigarr.length - 1; i++) {
+                                var smallarr = bigarr[i].split(',')
+                                var info = {
+                                    name: typhoonName,
+                                    number: typhoonNo,
+                                    site: forecastsite,
+                                    date: smallarr[0],
+                                    longitude: smallarr[1],
+                                    latitude: smallarr[2],
+                                    centerpressure: smallarr[3] == '' ? '-' : smallarr[3],
+                                    centerspeed: smallarr[4] == '' ? '-' : smallarr[4]
                                 }
-                                var bigarr = resstring.split('#$')
-                                // 最后一项为空
-                                for (var i = 0; i < bigarr.length - 1; i++) {
-                                    var smallarr = bigarr[i].split(',')
-                                    var info = {
-                                        name: typhoonName,
-                                        number: typhoonNo,
-                                        site: forecastsite,
-                                        date: smallarr[0],
-                                        longitude: smallarr[1],
-                                        latitude: smallarr[2],
-                                        centerpressure: smallarr[3] == '' ? '-' : smallarr[3],
-                                        centerspeed: smallarr[4] == '' ? '-' : smallarr[4]
-                                    }
-                                    res.push(info)
-                                } // end-for
-                                // 将预测数据载入地图
-                                addPredicToMap(res, lastpoint)
-                            } else if (xmlhttp.status === 400) {
-                                console.log('error 400')
-                                alert('There was an error 400')
-                            } else {
-                                console.log('something else other than 200 was returned')
-                                console.log(xmlhttp.responseText)
-                            }
+                                res.push(info)
+                            } // end-for
+                            // 将预测数据载入地图
+                            addPredicToMap(res, lastpoint)
+                        } else if (xmlhttp.status === 400) {
+                            console.log('error 400')
+                            alert('There was an error 400')
+                        } else {
+                            console.log('something else other than 200 was returned')
+                            console.log(xmlhttp.responseText)
                         }
-                    } // end-xmlhttp.onreadystatechange()
-                    xmlhttp.open('POST', url, true)
-                    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-                    xmlhttp.send(data)
-                }
-
-                // 根据中心风力大小获取对应的台风级别和icon路径
-                var getTyphoonLevel = function (centerspeed) {
-                    if (centerspeed < 17.2) {
-                        return ['热带低压', 'TropicalDepression.png']
-                    } else if (centerspeed < 24.5) {
-                        return ['热带风暴', 'tropicalStorm.png']
-                    } else if (centerspeed < 32.6) {
-                        return ['强热带风暴', 'SevereTropicalStorm.png']
-                    } else if (centerspeed < 41.4) {
-                        return ['台风', 'Typhoon.png']
-                    } else if (centerspeed < 50.9) {
-                        return ['强台风', 'ViolentTyphoon.png']
-                    } else {
-                        return ['超强台风', 'SuperTyphoon.png']
                     }
-                } // end-getTyphoonLevel()
-
-                // 根据一个标记点信息生成Marker和Listener
-                var typhoonInfoToMarkerListner = function (info) {
-                    // Marker
-                    var newmarker = new qq.maps.Marker({
-                        position: new qq.maps.LatLng(info.latitude, info.longitude),
-                        map: map
-                    })
-                    var newicon = new qq.maps.MarkerImage(
-                        './Images/' + getTyphoonLevel(info.centerspeed)[1],
-                        new qq.maps.Size(11, 11),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(6, 6),   // anchor
-                        new qq.maps.Size(11, 11)    // scaleSize
-                    )
-                    newmarker.setIcon(newicon)
-                    // Listener
-                    var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
-                        if (mapdragging === false) {
-                            infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + info.name + '</b><br/>'
-                                + '时间：' + info.date + '<br/>'
-                                + '经纬度：' + info.longitude + '°E, ' + info.latitude + '°N' + '<br/>'
-                                + '中心气压(百帕)：' + info.centerpressure + '<br/>'
-                                + '中心风力(米/秒)：' + info.centerspeed + '<br/>'
-                                + '七级风圈(公里)：' + info.sevencircle + '<br/>'
-                                + '十级风圈(公里)：' + info.tencircle + '<br/>'
-                                + '移动速度(公里/时)：' + info.movingspeed + '<br/>'
-                                + '移动方向：' + info.movingdir
-                                + '</div>')
-                            infoWindow.setPosition(newmarker)
-                            infoWindow.open()
-                        }
-                    }) // end-new listener
-                    markerCluster.addMarker(newmarker)
-                    markerEventArray.push(newlistener)
-                } // end-typhoonInfoToMarker()
-
-                // 根据路径点在地图上显示折线
-                var pathToPolyline = function (path, linestyle, linecolor) {
-                    var newline = new qq.maps.Polyline({
-                        clickable: false,
-                        map: map,
-                        path: path,
-                        strokeColor: linecolor,
-                        strokeDashStyle: linestyle,
-                        zIndex: 5
-                    })
-                    polylineArray.push(newline)
-                } // end-pathToPolyline()
-
-                // 由路径和最后一个点的信息生成移动Marker
-                var typhoonInfoToMovingMarker = function (lastinfo, path) {
-                    // Marker
-                    var newmarker = new qq.maps.Marker({
-                        position: path[0],
-                        map: map,
-                        zIndex: 10
-                    })
-                    var newicon = new qq.maps.MarkerImage(
-                        './Images/tf_center25x25.gif',
-                        new qq.maps.Size(29, 29),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(15, 15),   // anchor
-                        new qq.maps.Size(29, 29)    // scaleSize
-                    )
-                    newmarker.setIcon(newicon)
-                    // Listener
-                    // 弹出信息框
-                    var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
-                        if (mapdragging === false) {
-                            infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + lastinfo.name + '</b><br/>'
-                                + '时间：' + lastinfo.date + '<br/>'
-                                + '经纬度：' + lastinfo.longitude + '°E, ' + lastinfo.latitude + '°N' + '<br/>'
-                                + '中心气压(百帕)：' + lastinfo.centerpressure + '<br/>'
-                                + '中心风力(米/秒)：' + lastinfo.centerspeed + '<br/>'
-                                + '七级风圈(公里)：' + lastinfo.sevencircle + '<br/>'
-                                + '十级风圈(公里)：' + lastinfo.tencircle + '<br/>'
-                                + '移动速度(公里/时)：' + lastinfo.movingspeed + '<br/>'
-                                + '移动方向：' + lastinfo.movingdir
-                                + '</div>')
-                            infoWindow.setPosition(newmarker)
-                            infoWindow.open()
-                        }
-                    }) // end-new listener
-                    // 移动结束后重定位marker
-                    var movinglistener = new qq.maps.event.addListener(newmarker, 'moveend', function () {
-                        newmarker.setPosition(path[path.length - 1])
-                    })
-                    markerCluster.addMarker(newmarker)
-                    markerEventArray.push(newlistener)
-                    markerEventArray.push(movinglistener)
-                    // 移动路径
-                    newmarker.moveAlong(path, 400000)
-                } // end-typhoonInfoToMovingMarker()
-
-                // 将整组台风数据显示在地图上
-                var addTyphoonToMap = function (infoarray) {
-                    // Marker Listener Polyline Moving-Marker
-                    var path = []
-                    for (var i = 0; i < infoarray.length; i++) {
-                        // Marker Listener
-                        typhoonInfoToMarkerListner(infoarray[i])
-                        path.push(new qq.maps.LatLng(infoarray[i].latitude, infoarray[i].longitude))
-                    } // end-for
-                    // Polyline
-                    pathToPolyline(path, 'solid', '#3366FF')
-                    // Moving-Marker
-                    typhoonInfoToMovingMarker(infoarray[infoarray.length - 1], path)
-                } // end-addTyphoonToMap()
-
-                // 将整组预测线路数据显示在地图上
-                var addPredicToMap = function (infoarray, lastpoint) {
-                    // Marker Listener Polyline
-                    var path = []
-                    path.push(new qq.maps.LatLng(lastpoint.latitude, lastpoint.longitude))
-                    for (var i = 0; i < infoarray.length; i++) {
-                        predicInfoToMarkerListener(infoarray[i])
-                        path.push(new qq.maps.LatLng(infoarray[i].latitude, infoarray[i].longitude))
-                    }
-                    // Polyline
-                    pathToPolyline(path, 'dash', getPredicLineColor(infoarray[0].site))
-                } // end-addPredicToMap()
-
-                // 根据预测点信息生成Marker和Listener
-                var predicInfoToMarkerListener = function (info) {
-                    // Marker
-                    var newmarker = new qq.maps.Marker({
-                        position: new qq.maps.LatLng(info.latitude, info.longitude),
-                        map: map
-                    })
-                    var newicon = new qq.maps.MarkerImage(
-                        './Images/' + getTyphoonLevel(info.centerspeed)[1],
-                        new qq.maps.Size(11, 11),  // size
-                        new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(6, 6),   // anchor
-                        new qq.maps.Size(11, 11)    // scaleSize
-                    )
-                    newmarker.setIcon(newicon)
-                    // Listener
-                    var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
-                        if (mapdragging === false) {
-                            infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + info.name + '</b><br/>'
-                                + '预报台：' + info.site + '<br/>'
-                                + '时间：' + info.date + '<br/>'
-                                + '经纬度：' + info.longitude + '°E, ' + info.latitude + '°N' + '<br/>'
-                                + '中心气压(百帕)：' + info.centerpressure + '<br/>'
-                                + '中心风力(米/秒)：' + info.centerspeed
-                                + '</div>')
-                            infoWindow.setPosition(newmarker)
-                            infoWindow.open()
-                        }
-                    }) // end-new listener
-                    markerCluster.addMarker(newmarker)
-                    markerEventArray.push(newlistener)
-                } // end-predicInfoToMarkerListener
-
-                // 根据国家返回预测线颜色代码
-                var getPredicLineColor = function (country) {
-                    switch (country) {
-                        case '中国':
-                            return '#F53C49'
-                        case '美国':
-                            return '#44D9F5'
-                        case '日本':
-                            return '#5BF964'
-                        case '韩国':
-                            return '#5e9492'
-                        case '中国香港':
-                            return '#FF982E'
-                        case '中国台湾':
-                            return '#EA6AE9'
-                        default:
-                            return '#000000'
-                    }
-                } // end-getPredicLineColor
+                } // end-xmlhttp.onreadystatechange()
+                xmlhttp.open('POST', url, true)
+                xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                xmlhttp.send(data)
             }
 
-            // 切换普通-卫星地图
-            var switchMap = function () {
-                console.log('switch button clicked!')
-                if (map.getMapTypeId() === qq.maps.MapTypeId.ROADMAP) { // 如果是普通地图
-                    map.setMapTypeId(qq.maps.MapTypeId.HYBRID)
-                    document.getElementById('switch_img').style.display = 'none'
-                    document.getElementById('switchback_img').style.display = 'flex'
-                } else { // 如果是卫星图
-                    map.setMapTypeId(qq.maps.MapTypeId.ROADMAP)
-                    document.getElementById('switch_img').style.display = 'flex'
-                    document.getElementById('switchback_img').style.display = 'none'
+            // 根据中心风力大小获取对应的台风级别和icon路径
+            var getTyphoonLevel = function (centerspeed) {
+                if (centerspeed < 17.2) {
+                    return ['热带低压', 'TropicalDepression.png']
+                } else if (centerspeed < 24.5) {
+                    return ['热带风暴', 'tropicalStorm.png']
+                } else if (centerspeed < 32.6) {
+                    return ['强热带风暴', 'SevereTropicalStorm.png']
+                } else if (centerspeed < 41.4) {
+                    return ['台风', 'Typhoon.png']
+                } else if (centerspeed < 50.9) {
+                    return ['强台风', 'ViolentTyphoon.png']
+                } else {
+                    return ['超强台风', 'SuperTyphoon.png']
+                }
+            } // end-getTyphoonLevel()
+
+            // 根据一个标记点信息生成Marker和Listener
+            var typhoonInfoToMarkerListner = function (info) {
+                // Marker
+                var newmarker = new qq.maps.Marker({
+                    position: new qq.maps.LatLng(info.latitude, info.longitude),
+                    map: map
+                })
+                var newicon = new qq.maps.MarkerImage(
+                    './Images/' + getTyphoonLevel(info.centerspeed)[1],
+                    new qq.maps.Size(11, 11),  // size
+                    new qq.maps.Point(0, 0),    // origin
+                    new qq.maps.Point(6, 6),   // anchor
+                    new qq.maps.Size(11, 11)    // scaleSize
+                )
+                newmarker.setIcon(newicon)
+                // Listener
+                var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
+                    if (mapdragging === false) {
+                        infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + info.name + '</b><br/>'
+                            + '时间：' + info.date + '<br/>'
+                            + '经纬度：' + info.longitude + '°E, ' + info.latitude + '°N' + '<br/>'
+                            + '中心气压(百帕)：' + info.centerpressure + '<br/>'
+                            + '中心风力(米/秒)：' + info.centerspeed + '<br/>'
+                            + '七级风圈(公里)：' + info.sevencircle + '<br/>'
+                            + '十级风圈(公里)：' + info.tencircle + '<br/>'
+                            + '移动速度(公里/时)：' + info.movingspeed + '<br/>'
+                            + '移动方向：' + info.movingdir
+                            + '</div>')
+                        infoWindow.setPosition(newmarker)
+                        infoWindow.open()
+                    }
+                }) // end-new listener
+                markerCluster.addMarker(newmarker)
+                markerEventArray.push(newlistener)
+            } // end-typhoonInfoToMarker()
+
+            // 根据路径点在地图上显示折线
+            var pathToPolyline = function (path, linestyle, linecolor) {
+                var newline = new qq.maps.Polyline({
+                    clickable: false,
+                    map: map,
+                    path: path,
+                    strokeColor: linecolor,
+                    strokeDashStyle: linestyle,
+                    zIndex: 5
+                })
+                polylineArray.push(newline)
+            } // end-pathToPolyline()
+
+            // 由路径和最后一个点的信息生成移动Marker
+            var typhoonInfoToMovingMarker = function (lastinfo, path) {
+                // Marker
+                var newmarker = new qq.maps.Marker({
+                    position: path[0],
+                    map: map,
+                    zIndex: 10
+                })
+                var newicon = new qq.maps.MarkerImage(
+                    './Images/tf_center25x25.gif',
+                    new qq.maps.Size(29, 29),  // size
+                    new qq.maps.Point(0, 0),    // origin
+                    new qq.maps.Point(15, 15),   // anchor
+                    new qq.maps.Size(29, 29)    // scaleSize
+                )
+                newmarker.setIcon(newicon)
+                // Listener
+                // 弹出信息框
+                var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
+                    if (mapdragging === false) {
+                        infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + lastinfo.name + '</b><br/>'
+                            + '时间：' + lastinfo.date + '<br/>'
+                            + '经纬度：' + lastinfo.longitude + '°E, ' + lastinfo.latitude + '°N' + '<br/>'
+                            + '中心气压(百帕)：' + lastinfo.centerpressure + '<br/>'
+                            + '中心风力(米/秒)：' + lastinfo.centerspeed + '<br/>'
+                            + '七级风圈(公里)：' + lastinfo.sevencircle + '<br/>'
+                            + '十级风圈(公里)：' + lastinfo.tencircle + '<br/>'
+                            + '移动速度(公里/时)：' + lastinfo.movingspeed + '<br/>'
+                            + '移动方向：' + lastinfo.movingdir
+                            + '</div>')
+                        infoWindow.setPosition(newmarker)
+                        infoWindow.open()
+                    }
+                }) // end-new listener
+                // 移动结束后重定位marker
+                var movinglistener = new qq.maps.event.addListener(newmarker, 'moveend', function () {
+                    newmarker.setPosition(path[path.length - 1])
+                })
+                markerCluster.addMarker(newmarker)
+                markerEventArray.push(newlistener)
+                markerEventArray.push(movinglistener)
+                // 移动路径
+                newmarker.moveAlong(path, 400000)
+            } // end-typhoonInfoToMovingMarker()
+
+            // 将整组台风数据显示在地图上
+            var addTyphoonToMap = function (infoarray) {
+                // Marker Listener Polyline Moving-Marker
+                var path = []
+                for (var i = 0; i < infoarray.length; i++) {
+                    // Marker Listener
+                    typhoonInfoToMarkerListner(infoarray[i])
+                    path.push(new qq.maps.LatLng(infoarray[i].latitude, infoarray[i].longitude))
+                } // end-for
+                // Polyline
+                pathToPolyline(path, 'solid', '#3366FF')
+                // Moving-Marker
+                typhoonInfoToMovingMarker(infoarray[infoarray.length - 1], path)
+            } // end-addTyphoonToMap()
+
+            // 将整组预测线路数据显示在地图上
+            var addPredicToMap = function (infoarray, lastpoint) {
+                // Marker Listener Polyline
+                var path = []
+                path.push(new qq.maps.LatLng(lastpoint.latitude, lastpoint.longitude))
+                for (var i = 0; i < infoarray.length; i++) {
+                    predicInfoToMarkerListener(infoarray[i])
+                    path.push(new qq.maps.LatLng(infoarray[i].latitude, infoarray[i].longitude))
+                }
+                // Polyline
+                pathToPolyline(path, 'dash', getPredicLineColor(infoarray[0].site))
+            } // end-addPredicToMap()
+
+            // 根据预测点信息生成Marker和Listener
+            var predicInfoToMarkerListener = function (info) {
+                // Marker
+                var newmarker = new qq.maps.Marker({
+                    position: new qq.maps.LatLng(info.latitude, info.longitude),
+                    map: map
+                })
+                var newicon = new qq.maps.MarkerImage(
+                    './Images/' + getTyphoonLevel(info.centerspeed)[1],
+                    new qq.maps.Size(11, 11),  // size
+                    new qq.maps.Point(0, 0),    // origin
+                    new qq.maps.Point(6, 6),   // anchor
+                    new qq.maps.Size(11, 11)    // scaleSize
+                )
+                newmarker.setIcon(newicon)
+                // Listener
+                var newlistener = new qq.maps.event.addListener(newmarker, 'click', function () {
+                    if (mapdragging === false) {
+                        infoWindow.setContent('<div style=\'padding:0px 0px 0px 4px;\'><b>台风信息：' + info.name + '</b><br/>'
+                            + '预报台：' + info.site + '<br/>'
+                            + '时间：' + info.date + '<br/>'
+                            + '经纬度：' + info.longitude + '°E, ' + info.latitude + '°N' + '<br/>'
+                            + '中心气压(百帕)：' + info.centerpressure + '<br/>'
+                            + '中心风力(米/秒)：' + info.centerspeed
+                            + '</div>')
+                        infoWindow.setPosition(newmarker)
+                        infoWindow.open()
+                    }
+                }) // end-new listener
+                markerCluster.addMarker(newmarker)
+                markerEventArray.push(newlistener)
+            } // end-predicInfoToMarkerListener
+
+            // 根据国家返回预测线颜色代码
+            var getPredicLineColor = function (country) {
+                switch (country) {
+                    case '中国':
+                        return '#F53C49'
+                    case '美国':
+                        return '#44D9F5'
+                    case '日本':
+                        return '#5BF964'
+                    case '韩国':
+                        return '#5e9492'
+                    case '中国香港':
+                        return '#FF982E'
+                    case '中国台湾':
+                        return '#EA6AE9'
+                    default:
+                        return '#000000'
+                }
+            } // end-getPredicLineColor
+
+            // 显示台风名称
+            var showTyphoonName = function () {
+                if (firstTyphoon !== '') {
+                    var elem = document.getElementById('firstTyphoon')
+                    elem.style.display = 'flex'
+                    elem.innerHTML = '台风：' + firstTyphoon
+                }
+                if (secondTyphoon !== '') {
+                    var elem = document.getElementById('secondTyphoon')
+                    elem.style.display = 'flex'
+                    elem.innerHTML = '台风：' + secondTyphoon
+                }
+                if (thirdTyphoon !== '') {
+                    var elem = document.getElementById('thirdTyphoon')
+                    elem.style.display = 'flex'
+                    elem.innerHTML = '台风：' + thirdTyphoon
                 }
             }
+        }
 
-        
+        // 切换普通-卫星地图
+        var switchMap = function () {
+            console.log('switch button clicked!')
+            if (map.getMapTypeId() === qq.maps.MapTypeId.ROADMAP) { // 如果是普通地图
+                map.setMapTypeId(qq.maps.MapTypeId.HYBRID)
+                document.getElementById('switchicon').src = './Images/jddt.png'
+            } else { // 如果是卫星图
+                map.setMapTypeId(qq.maps.MapTypeId.ROADMAP)
+                document.getElementById('switchicon').src = './Images/wxdt.png'
+            }
+        }
+
+        // 显示-关闭图例
+        var switchLegend = function () {
+            console.log('legend button clicked!')
+            console.log(self.location.href)
+            if (self.location.href.endsWith('#volet')) {
+                self.location.href = '#volet_clos'
+            } else {
+                self.location.href = '#volet'
+            }
+        }
+
+        // 显示第一个台风
+        var panToFirst = function () {
+            panToTyphoon(typhoonList)
+        }
+
+        // 显示第二个台风
+        var panToSecond = function () {
+            panToTyphoon(typhoonListSnd)
+        }
+
+        // 显示第三个台风
+        var panToThird = function () {
+            panToTyphoon(typhoonListTrd)
+        }
+
+        // 将某个台风的路径点全部显示
+        var panToTyphoon = function (list) {
+            if (list.length > 0) {
+                var latimin = list[0].latitude
+                var latimax = list[0].latitude
+                var longimin = list[0].longitude
+                var longimax = list[0].longitude
+                for (var i = 1; i < list.length; i++) {
+                    if (list[i].latitude < latimin) {
+                        latimin = list[i].latitude
+                    }
+                    if (list[i].latitude > latimax) {
+                        latimax = list[i].latitude
+                    }
+                    if (list[i].longitude < longimin) {
+                        longimin = list[i].longitude
+                    }
+                    if (list[i].longitude > longimax) {
+                        longimax = list[i].longitude
+                    }
+                }
+                var sw = new qq.maps.LatLng(latimin, longimin)
+                var ne = new qq.maps.LatLng(latimax, longimax)
+                var bounds = new qq.maps.LatLngBounds(sw, ne)
+                map.fitBounds(bounds, {padding: 20})
+            }
+        }
+
     </script>
 
 </body>

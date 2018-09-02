@@ -135,28 +135,6 @@
             z-index: 99;
         }
 
-        /* 卫星图切换按钮图片 */
-        .switchbutton .imgSatel {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            background-image: url(./Images/wxdt.png);
-            background-size: 100% 100%;
-            margin-right: 8px;
-            float: center;
-        }
-
-        /* 卫星地图切换按钮图片2 */
-        .switchbutton .imgNormal {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background-image: url(./Images/jddt.png);
-            background-size: 100% 100%;
-            margin-right: 8px;
-            float: center;
-        }
-
         /* 信息面板定位容器 */
         .infopanel-page {
             /* border: 1px solid #f00; */
@@ -281,9 +259,8 @@
         </div>
 
         <!-- 普通-卫星地图切换按钮 -->
-        <div class="switchbutton" onclick="javascript: switchMap();">
-            <div class="imgSatel" id="switch_img"></div>
-            <div class="imgNormal" id="switchback_img"></div>
+        <div class="switchbutton" onclick="javascript: switchMap()">
+            <img id="switchicon" src="./Images/wxdt.png" alt="切换地图">
         </div>
 
         <!-- 信息面板定位容器 -->
@@ -1438,12 +1415,10 @@
             console.log('switch button clicked!')
             if (map.getMapTypeId() === qq.maps.MapTypeId.ROADMAP) { // 如果是普通地图
                 map.setMapTypeId(qq.maps.MapTypeId.HYBRID)
-                document.getElementById('switch_img').style.display = 'none'
-                document.getElementById('switchback_img').style.display = 'inherit'
+                document.getElementById('switchicon').src = './Images/jddt.png'
             } else { // 如果是卫星图
                 map.setMapTypeId(qq.maps.MapTypeId.ROADMAP)
-                document.getElementById('switch_img').style.display = 'inherit'
-                document.getElementById('switchback_img').style.display = 'none'
+                document.getElementById('switchicon').src = './Images/wxdt.png'
             }
         }
 
