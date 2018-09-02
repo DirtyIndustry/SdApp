@@ -176,7 +176,6 @@
         .infopanel-body {
             background-color: rgba(255, 255, 255, 0.95);
             width: 300px;
-            height: 280px;
             display: flex;
             flex-direction: column;
             border-radius: 15px;
@@ -187,6 +186,7 @@
         /* 城市信息面板 */
         .cityinfopanel {
             display: none;
+            height: 280px;
         }
 
         /* 城市信息面板 行 */
@@ -222,11 +222,11 @@
         }
 
         /* 城市信息面板 地名 */
-        .infopanel-location {
+        .infopanel-citycolumn {
             flex: 2;
         }
 
-        .infopanel-locationcell {
+        .infopanel-citycell {
             font-size: 16px;
         }
 
@@ -252,6 +252,12 @@
         /* 渔场信息面板 */
         .fisheryinfopanel {
             display: none;
+            height: 200px;
+        }
+
+        /* 渔场信息面板 渔场名称列 */
+        .infopanel-fisherycolumn {
+            flex: 3;
         }
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
@@ -287,8 +293,8 @@
             <div class="infopanel-body cityinfopanel">
                 <!-- 标题-日期 -->
                 <div class="infopanel-row infopanel-firstrow">
-                    <div class="infopanel-column infopanel-location">
-                        <div class="infopanel-cell infopanel-locationcell" id="city_cityname"></div>
+                    <div class="infopanel-column infopanel-citycolumn">
+                        <div class="infopanel-cell infopanel-citycell" id="city_cityname"></div>
                     </div>
                     <div class="infopanel-column infopanel-date">
                         <div class="infopanel-datecell" id="city_date"></div>
@@ -371,8 +377,8 @@
             <div class="infopanel-body fisheryinfopanel">
                 <!-- 标题-日期 -->
                 <div class="infopanel-row infopanel-firstrow">
-                    <div class="infopanel-column infopanel-location">
-                        <div class="infopanel-cell infopanel-locationcell" id="fishery_fisheryname"></div>
+                    <div class="infopanel-column infopanel-fisherycolumn">
+                        <div class="infopanel-cell infopanel-citycell" id="fishery_fisheryname"></div>
                     </div>
                     <div class="infopanel-column infopanel-date">
                         <div class="infopanel-datecell" id="fishery_date"></div>
@@ -506,10 +512,10 @@
                     // 青岛城市图标
                     var iconCityQD = new qq.maps.MarkerImage(
                         "./Images/Qd_location.png",
-                        new qq.maps.Size(50, 62),  // size
+                        new qq.maps.Size(49, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
-                        new qq.maps.Size(50, 62)    // scaleSize
+                        new qq.maps.Size(49, 62)    // scaleSize
                     )
                     // 青岛城市Marker
                     markerCityQD = new qq.maps.Marker({
@@ -628,15 +634,15 @@
                     // 渤海湾渔场图标
                     var iconFishBHWan = new qq.maps.MarkerImage(
                         "./Images/bhwan_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 渤海湾渔场Marker
                     markerFishBHWan = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(38.320428, 117.928101),
+                        position: new qq.maps.LatLng(38.616, 118.281),
                         //设置显示Marker的地图
                         map: map,
                     })
@@ -645,15 +651,15 @@
                     // 莱州湾渔场图标
                     var iconFishLZWan = new qq.maps.MarkerImage(
                         "./Images/lz_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 莱州湾渔场Marker
                     markerFishLZWan = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(38.014877, 119.740845),
+                        position: new qq.maps.LatLng(37.805, 120.000),
                         //设置显示Marker的地图
                         map: map
                     })
@@ -662,15 +668,15 @@
                     // 烟威渔场图标
                     var iconFishYW = new qq.maps.MarkerImage(
                         "./Images/yw_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 烟威渔场Marker
                     markerFishYW = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(37.702614, 121.828248),
+                        position: new qq.maps.LatLng(38.000, 122.000),
                         //设置显示Marker的地图
                         map: map
                     })
@@ -679,15 +685,15 @@
                     // 威东渔场图标
                     var iconFishWD = new qq.maps.MarkerImage(
                         "./Images/wd_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 威东渔场Marker
                     markerFishWD = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(37.534009, 124.061219),
+                        position: new qq.maps.LatLng(37.750, 124.250),
                         //设置显示Marker的地图
                         map: map
                     })
@@ -696,15 +702,15 @@
                     // 石岛渔场图标
                     var iconFishSDao = new qq.maps.MarkerImage(
                         "./Images/sdao_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 石岛渔场Marker
                     markerFishSDao = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(36.455348, 122.390392),
+                        position: new qq.maps.LatLng(36.500, 122.667),
                         //设置显示Marker的地图
                         map: map
                     })
@@ -713,15 +719,15 @@
                     // 石东渔场图标
                     var iconFishSDong = new qq.maps.MarkerImage(
                         "./Images/sdong_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 石东渔场Marker
                     markerFishSDong = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(36.514972, 124.38853),
+                        position: new qq.maps.LatLng(36.750, 124.500),
                         //设置显示Marker的地图
                         map: map
                     })
@@ -730,15 +736,15 @@
                     // 青海渔场图标
                     var iconFishQHai = new qq.maps.MarkerImage(
                         "./Images/qhai_location.png",
-                        new qq.maps.Size(90, 115),  // size
+                        new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
-                        new qq.maps.Point(40, 20),   // anchor
-                        new qq.maps.Size(90, 52)    // scaleSize
+                        new qq.maps.Point(40, 8),   // anchor
+                        new qq.maps.Size(80, 52)    // scaleSize
                     )
                     // 青海渔场Marker
                     markerFishQHai = new qq.maps.Marker({
                         //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(36.033695, 120.566718),
+                        position: new qq.maps.LatLng(36.034, 120.99),
                         //设置显示Marker的地图
                         map: map
                     })

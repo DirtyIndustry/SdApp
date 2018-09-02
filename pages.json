@@ -59,6 +59,12 @@
 			}
 		},
 		{
+			"path": "pages/typhoonmap/typhoonmap",
+			"style": {
+				"navigationBarTitleText": "台风路径"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],

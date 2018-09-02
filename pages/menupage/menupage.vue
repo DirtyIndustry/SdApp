@@ -73,7 +73,7 @@
             <view class="uni-flex uni-row menu-row">
                 <!-- 第五行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="TyphoonpathTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
                         <view class="menu-button-text">台风路径</view>
                     </button>
@@ -112,6 +112,13 @@ export default {
             console.log('天气预报点击')
             uni.navigateTo({
                 url: '../weatherforecast/weatherforecast'
+            })
+        },
+        // 台风路径
+        TyphoonpathTap (e) {
+            console.log('台风路径点击')
+            uni.navigateTo({
+                url: '../typhoonmap/typhoonmap'
             })
         }
     }

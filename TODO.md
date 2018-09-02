@@ -34,7 +34,26 @@ DONE... 天气预报
 DONE... weihai special section  
 DONE... clean web page mui infest  
 DONE... optimize requests by move quest counter to complete  
-DONE... test main map apis on iphone
+DONE... test main map apis on iphone  
+DONE... city map switch to satellite map  
+DONE... city map switch to fishery map  
+DONE... city map requests arrange
+DONE... city map markers  
+DONE... fishery map markers and polygons  
+DONE... city map info window controls  
+DONE... fishery map info window controls  
+DONE... info window positioning  
+DONE... typhoon map requests arrange  
+DONE... typhoon map datas and map elements management  
+DONE... typhoon map markers and info windows  
+DONE... typhoon map polylines  
+DONE... typhoon map moving marker path  
+DONE... typhoon activition judgement  
+DONE... fishery map icon position fine tune  
+DONE... fishery map info window height fine tune  
+DONE... typhoon map city map switch to satellite map  
+typhoon map typhoon name panel  
+typhoon map search interface  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.   
 预警报  
