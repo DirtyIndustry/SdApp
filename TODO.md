@@ -52,6 +52,8 @@ DONE... typhoon activition judgement
 DONE... fishery map icon position fine tune  
 DONE... fishery map info window height fine tune  
 DONE... typhoon map city map switch to satellite map  
+typhoon map avoid path change  
+typhoon map sort up zindex  
 typhoon map typhoon name panel  
 typhoon map search interface  
 修改返回值不为JSON的接口  
