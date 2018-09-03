@@ -49,11 +49,12 @@
 
         /* 浮动控件通用属性 */
         .floatcontrol {
+            /* border: 1px solid #000; */
             position: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 99;
+            z-index: 9;
         }
 
         /* 浮动控件图片通用属性 */
@@ -62,19 +63,24 @@
             height: 100%;
         }
 
+        /* 浮动面板类控件 */
+        .floatcontrol-panel {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-family:'微软雅黑';
+        }
+
         /* 台风名称面板 */
         .namepanel {
-            border: 2px solid rgb(0, 153, 255);
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
             display: none;
-            /* width: 180px; */
             min-width: 150px;
             top: 5px;
             left: 5px;
             flex-direction: column;
             opacity: 1;
-            transition: opacity .2s ease-in;
+            transition: opacity .2s ease-in 0s;
+            padding-left: 10px;
         }
 
         /* 台风名称容器 */
@@ -84,34 +90,60 @@
             height: 40px;
             display: none;
             align-items: center;
-            justify-content: center;
             font-size: 15px;
+            text-align: left;
+        }
+
+        /* 搜索条呼出按钮 */
+        .searchbutton {
+            /* border: 1px solid #000; */
+            width: 50px;
+            height: 50px;
+            top: 90px;
+            right: 5px;
+            opacity: 100;
+            transition: opacity .2s ease;
+        }
+        /* 搜索条呼出按钮图标 */
+        .searchbuttonimg {
+            width: 100%;
         }
 
         /* 搜索条 */
         .searchstrip {
-            border: 2px solid rgb(0, 153, 255);
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.9);
-            width: calc(100% - 4px);
-            height: 60px;
+            /* border: 1px solid #000000; */
+            border-radius: 20px;
+            width: 96%;
+            height: 40px;
             top: 5px;
-            right: calc(100% - 60px);
+            left: 100%;
             display: flex;
             align-items: left;
             justify-content: center;
             transition: all .2s ease-in;
-            /* color: rgb(0, 153, 255); */
         }
 
-        /* 搜索图标 */
-        .searchicon {
+        /* 搜索确定 */
+        .searchconfirm {
             /* border: 1px solid #0ff; */
-            width: 60px;
-            height: 60px;
-            left: 0;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
             font-family: "fontawesome";
-            font-size: 30px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 搜索取消 */
+        .searchcancel {
+            /* border: 1px solid #f00; */
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            font-family: "fontawesome";
+            font-size: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -119,9 +151,34 @@
 
         /* 搜索输入面板 */
         .searchinputpanel {
+            /* border: 1px solid #f00; */
             flex: 1;
-            border: 1px solid #f00;
-            height: 60px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 搜索输入框 */
+        .searchinput {
+            flex: 1;
+            height: calc(100% - 14px);
+            color: #fff;
+            background: none;
+            border: none;
+            outline: none;
+        }
+        *::-webkit-input-placeholder {
+            color: #fff;
+        }
+
+        *:-moz-placeholder {
+            color: #fff;
+        }
+
+        *:-ms-input-placeholder {
+            /* IE10+ */
+            color: #fff;
         }
 
         /*卫星图切换*/
@@ -129,8 +186,10 @@
             /* border: 1px solid #000000; */
             width: 50px;
             height: 50px;
-            right: 65px;
-            bottom: 0px;
+            right: 5px;
+            top: 210px;
+            opacity: 100;
+            transition: opacity .2s ease;
         }
 
         /* 图例按钮 */
@@ -139,7 +198,9 @@
             width: 50px;
             height: 50px;
             right: 5px;
-            bottom: 0px;
+            top: 150px;
+            opacity: 100;
+            transition: opacity .2s ease;
         }
 
         /* 预报中心logo */
@@ -157,13 +218,12 @@
             bottom: 0;
             left: 0;
             width: 100%;
+            z-index: 10;
         }
 
         /* 图例外框 */
         #volet {
             padding: 10px;
-            padding-bottom: 45px;
-            background: #6B9A49;
             color: #fff;
         }
 
@@ -201,20 +261,31 @@
     <div id="container"></div>
 
     <!-- 台风名称面板 -->
-    <div class="floatcontrol namepanel" id="typhoonNamePanel">
+    <div class="floatcontrol floatcontrol-panel namepanel" id="typhoonNamePanel">
         <div class="typhoonname" id="firstTyphoon" onclick="javascript: panToFirst()"></div>
         <div class="typhoonname" id="secondTyphoon" onclick="javascript: panToSecond()"></div>
         <div class="typhoonname" id="thirdTyphoon" onclick="javascript: panToThird()"></div>
     </div>
 
+    <!-- 搜索呼出按钮 -->
+    <div class="floatcontrol searchbutton" id="searchbutton" onclick="javascript: switchSearch()">
+        <img class="searchbuttonimg" src="./Images/searchButton.png" alt="搜索">
+    </div>
     <!-- 搜索条 -->
-    <div class="floatcontrol searchstrip" id="searchstrip">
-        <div class="searchinputpanel"></div>
-        <div class="searchicon" onclick="javascript: switchSearch()">&#61442</div>
+    <div class="floatcontrol floatcontrol-panel searchstrip" id="searchstrip">
+        
+        <div class="searchcancel" onclick="javascript: switchSearch()">&#61701</div>
+            <div class="searchinputpanel">
+                <form action="" id="searchform">
+                    <input class="searchinput" id="searchinput" type="search" placeholder="输入年份或关键字进行搜索...">
+                </form>
+            </div>
+        <div class="searchconfirm" >&#61442</div>
+        
     </div>
 
     <!-- 普通-卫星地图切换按钮 -->
-    <div class="floatcontrol switchbutton" onclick="javascript: switchMap()">
+    <div class="floatcontrol switchbutton" id="switchbutton" onclick="javascript: switchMap()">
         <img class="controlimg" id="switchicon" src="./Images/wxdt.png" alt="切换地图">
     </div>
 
@@ -224,13 +295,13 @@
     </div>
 
     <!-- 图例按钮 -->
-    <div class="floatcontrol legendbutton" onclick="javascript: switchLegend()">
+    <div class="floatcontrol legendbutton" id="legendbutton" onclick="javascript: switchLegend()">
         <img class="controlimg" src="./Images/legendButton.png" alt="图例">
     </div>
 
     <!-- 图例面板 -->
     <div id="volet_clos">
-        <div id="volet">
+        <div id="volet" class="floatcontrol-panel">
             <img src="./Images/legend.png" alt="图例">
             <a href="#volet" aria-hidden="true" aria-label="滑出"></a>
             <a href="#volet_clos" aria-hidden="true" aria-label="滑入"></a>
@@ -251,10 +322,6 @@
         var markerEventArray = []   // 台风路径点的点击事件数组
         var polylineArray = []      // 路径折线数组
         var infoWindow          // 台风信息气泡
-
-        var searchPosition = '0px'  // 搜索条的起始位置
-        var searchTop = '5px'
-        var searchRight = '0px'
 
         // string.startsWith()
         if (typeof String.prototype.startsWith != 'function') {
@@ -295,8 +362,6 @@
                 {
                     var clientWidth = document.body.clientWidth
                     var clientHeight = document.body.clientHeight
-                    searchPosition = (clientWidth - 60) + 'px'
-                    document.getElementById('searchstrip').style.right = searchPosition
                 }
 
                 //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
@@ -433,13 +498,13 @@
                                 for (var j = 0; j < 3; j++) {
                                     /* 切割字符串 */
                                     var resarr = res[res.length - 1 - j].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
                                 }
                             } else {
                                 for (var k = res.length - 1; k > 0; k--) {
                                     /* 切割字符串 */
                                     var resarr = res[k].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
                                 }
                             }
                         } else if (xmlhttp.status === 400) {
@@ -854,9 +919,6 @@
                     default:
                         break
                 } // end-switch
-                // 计算搜索条垂直位置
-                searchTop = (showingArray.length * 40 + 10 + 4) + 'px'
-                document.getElementById('searchstrip').style.top = searchTop
             } // end-showTyphoonName()
         }
 
@@ -890,7 +952,7 @@
 
         // 切换搜索条
         var switchSearch = function () {
-            if (document.getElementById('searchstrip').style.right !== '0px') {
+            if (document.getElementById('searchstrip').style.left !== '2%') {
                 searchShow()
             } else {
                 searchHide()
@@ -899,20 +961,41 @@
 
         // 展开搜索条
         var searchShow = function () {
-            var search = document.getElementById('searchstrip')
+            var searchstrip = document.getElementById('searchstrip')
             var name = document.getElementById('typhoonNamePanel')
-            search.style.right = '0px'
-            search.style.top = '5px'
+            var switchbutton = document.getElementById('switchbutton')
+            var legendbutton = document.getElementById('legendbutton')
+            var searchbutton = document.getElementById('searchbutton')
+            searchstrip.style.left = '2%'
             name.style.opacity = '0'
+            switchbutton.style.opacity = '0'
+            legendbutton.style.opacity = '0'
+            searchbutton.style.opacity = '0'
+            document.getElementById('volet').style.bottom = '-520px'
+            setTimeout(function () {
+                name.style.left = '-500px'
+                switchbutton.style.right = '-100px'
+                legendbutton.style.right = '-100px'
+                searchbutton.style.right = '-100px'
+            }, 200)
         }
 
         // 收起搜索条
         var searchHide = function () {
             var search = document.getElementById('searchstrip')
             var name = document.getElementById('typhoonNamePanel')
-            search.style.right = searchPosition
-            search.style.top = searchTop
+            var switchbutton = document.getElementById('switchbutton')
+            var legendbutton = document.getElementById('legendbutton')
+            var searchbutton = document.getElementById('searchbutton')
+            search.style.left = '100%'
+            name.style.left = '5px'
+            switchbutton.style.right = '5px'
+            legendbutton.style.right = '5px'
+            searchbutton.style.right = '5px'
             name.style.opacity = '100'
+            switchbutton.style.opacity = '100'
+            legendbutton.style.opacity = '100'
+            searchbutton.style.opacity = '100'
         }
 
         // 显示第一个台风
