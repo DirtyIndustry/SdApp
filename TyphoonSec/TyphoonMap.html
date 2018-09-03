@@ -158,11 +158,15 @@
             align-items: center;
             justify-content: center;
         }
-
+        /* 搜索框form */
+        .searchform {
+            flex: 1;
+            display: flex;
+        }
         /* 搜索输入框 */
         .searchinput {
             flex: 1;
-            height: calc(100% - 14px);
+            /* height: calc(100% - 14px); */
             color: #fff;
             background: none;
             border: none;
@@ -276,7 +280,7 @@
         
         <div class="searchcancel" onclick="javascript: switchSearch()">&#61701</div>
             <div class="searchinputpanel">
-                <form action="" id="searchform">
+                <form action="" class="searchform" id="searchform">
                     <input class="searchinput" id="searchinput" type="search" placeholder="输入年份或关键字进行搜索...">
                 </form>
             </div>
