@@ -67,7 +67,7 @@
         .floatcontrol-panel {
             background-color: rgba(0, 0, 0, 0.5);
             color: #fff;
-            font-family:'微软雅黑';
+            font-family: '微软雅黑';
         }
 
         /* 台风名称面板 */
@@ -104,6 +104,7 @@
             opacity: 100;
             transition: opacity .2s ease;
         }
+
         /* 搜索条呼出按钮图标 */
         .searchbuttonimg {
             width: 100%;
@@ -135,7 +136,16 @@
             align-items: center;
             justify-content: center;
         }
-        
+
+        input[type=submit] {
+            background: rgba(0,0,0,0);
+            color: #fff;
+            border: 0 none;
+            -webkit-border-radius: 20px;
+            border-radius: 20px;
+            outline: none;
+        }
+
         /* 搜索取消 */
         .searchcancel {
             /* border: 1px solid #f00; */
@@ -158,11 +168,13 @@
             align-items: center;
             justify-content: center;
         }
+
         /* 搜索框form */
         .searchform {
             flex: 1;
             display: flex;
         }
+
         /* 搜索输入框 */
         .searchinput {
             flex: 1;
@@ -172,6 +184,7 @@
             border: none;
             outline: none;
         }
+
         *::-webkit-input-placeholder {
             color: #fff;
         }
@@ -183,6 +196,82 @@
         *:-ms-input-placeholder {
             /* IE10+ */
             color: #fff;
+        }
+
+        /* input[type=search]::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+
+            position: relative;
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background-color: rgba(235, 235, 235);
+        }
+
+        input[type=search]::-webkit-search-cancel-button:after {
+            position: absolute;
+            content: 'x';
+            left: 25%;
+            top: -12%;
+            font-size: 14px;
+            color: rgba(0, 0, 0);
+        } */
+
+        /* 搜索结果面板 */
+        .searchresult-panel {
+            /* border: 1px solid #000; */
+            border-radius: 20px;
+            width: 96%;
+            max-height: calc(100% - 60px);
+            top: 50px;
+            left: 2%;
+            flex-direction: column;
+            font-family: '微软雅黑';
+            font-size: 15px;
+            overflow: hidden;
+            transition: all .2s ease-in;
+            z-index: 8;
+        }
+
+        /* 搜索结果行 */
+        .searchresult-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 40px;
+            min-height: 40px;
+        }
+
+        /* 搜索结果窄行 */
+        .searchresult-narrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            /* height: 24px; */
+            min-height: 20px;
+            font-family: 'fontawesome'
+        }
+
+        /* 搜索结果列 */
+        .searchresult-column {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 搜索结果表 */
+        .searchresult-table {
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            flex-direction: column;
+            overflow-y: scroll;
         }
 
         /*卫星图切换*/
@@ -277,15 +366,121 @@
     </div>
     <!-- 搜索条 -->
     <div class="floatcontrol floatcontrol-panel searchstrip" id="searchstrip">
-        
+
         <div class="searchcancel" onclick="javascript: switchSearch()">&#61701</div>
-            <div class="searchinputpanel">
-                <form action="" class="searchform" id="searchform">
-                    <input class="searchinput" id="searchinput" type="search" placeholder="输入年份或关键字进行搜索...">
-                </form>
+        <div class="searchinputpanel">
+            <form action="" class="searchform" id="searchform" >
+                <input class="searchinput" id="searchinput" type="search" placeholder="输入年份或关键字进行搜索..." >
+                <input class="searchconfirm" type="submit" value="&#61442"></div>
+            </form>
+        </div>
+        <!-- <div class="searchconfirm">&#61442</div> -->
+    </div>
+    <!-- 搜索结果面板 -->
+    <div class="floatcontrol floatcontrol-panel searchresult-panel">
+        <div class="searchresult-row" id="resultempty">未查找到台风信息</div>
+        <div class="searchresult-row" id="resulthead">
+            <div class="searchresult-column">编号</div>
+            <div class="searchresult-column">中文名</div>
+            <div class="searchresult-column">英文名</div>
+        </div>
+        <div class="searchresult-narrow" id="resultUp">&#61698</div>
+        <div class="searchresult-table" id="resulttable" onscroll="javascript: resultScroll()">
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
             </div>
-        <div class="searchconfirm" >&#61442</div>
-        
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div><div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+            <div class="searchresult-row">
+                <div class="searchresult-column">201808</div>
+                <div class="searchresult-column">玛莉亚</div>
+                <div class="searchresult-column">Maria</div>
+            </div>
+        </div>
+        <div class="searchresult-narrow" id="resultDown">&#61699</div>
     </div>
 
     <!-- 普通-卫星地图切换按钮 -->
@@ -413,6 +608,11 @@
                         }, 50)
                     })
                 }
+                // 搜索框回车不重新加载页面
+                document.getElementById('searchform').addEventListener('submit', function (e) {
+                    searchRequest()
+                    e.preventDefault()
+                }, false)
 
             }
 
@@ -502,13 +702,13 @@
                                 for (var j = 0; j < 3; j++) {
                                     /* 切割字符串 */
                                     var resarr = res[res.length - 1 - j].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
                                 }
                             } else {
                                 for (var k = res.length - 1; k > 0; k--) {
                                     /* 切割字符串 */
                                     var resarr = res[k].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), true)
+                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
                                 }
                             }
                         } else if (xmlhttp.status === 400) {
@@ -524,6 +724,65 @@
                 xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
                 xmlhttp.send(data)
             } // end-startupRequest
+
+            var searchRequest = function () {
+                var value = document.getElementById('searchinput').value
+                console.log(value)
+                // 如果没有输入任何内容则结束搜索
+                if (value === '') {
+                    return
+                }
+                var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetTyphoonList'
+                var data = 'areaflg=青岛&Typhoonyear=' + value
+                var xmlhttp = new XMLHttpRequest()
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
+                        if (xmlhttp.status === 200) {
+                            // console.log(xmlhttp.responseText)
+                            var parser = new DOMParser()
+                            var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
+                            var resarr = xmldoc.getElementsByTagName('string')
+                            var res = []
+                            for (var i = 0; i < resarr.length; i++) {
+                                var strarr = resarr[i].innerHTML.slice(0, -1).split(',')
+                                res.push({
+                                    no: strarr[0],
+                                    name: strarr[1],
+                                    eng: strarr[2]
+                                })
+                            }
+                            console.log(res)
+                            if (res.length === 0) {
+                                document.getElementById('resultempty').style.display = 'flex'
+                                document.getElementById('resulthead').style.display = 'none'
+                                document.getElementById('resulttable').style.display = 'none'
+                                resultScroll()
+                            } else {
+                                document.getElementById('resultempty').style.display = 'none'
+                                document.getElementById('resulthead').style.display = 'flex'
+                                document.getElementById('resulttable').style.display = 'flex'
+                                resultScroll()
+                            }
+                            document.getElementById('resulttable').innerHTML = ''
+                            for (var j = 0; j < res.length; j++) {
+                                var newelem = document.createElement("div")
+                                newelem.innerHTML = '<div class="searchresult-row">< div class="searchresult-column">' + res[j].no + '</div ><div class="searchresult-column">' + res[j].name + '</div><div class="searchresult-column">' + res[j].eng + '</div></div>'
+
+                                document.getElementById('resulttable').appendChild(newelem)
+                            }
+                        } else if (xmlhttp.status === 400) {
+                            console.log('error 400')
+                            alert('There was an error 400')
+                        } else {
+                            console.log('something else other than 200 was returned')
+                            console.log(xmlhttp.responseText)
+                        }
+                    }
+                } // end-xmlhttp.onreadystatechange()
+                xmlhttp.open('POST', url, true)
+                xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                xmlhttp.send(data)
+            } // end-searchRequest()
 
             // 向服务器请求台风路径
             var requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
@@ -976,6 +1235,7 @@
             legendbutton.style.opacity = '0'
             searchbutton.style.opacity = '0'
             document.getElementById('volet').style.bottom = '-520px'
+            document.getElementById('searchinput').focus()
             setTimeout(function () {
                 name.style.left = '-500px'
                 switchbutton.style.right = '-100px'
@@ -991,6 +1251,7 @@
             var switchbutton = document.getElementById('switchbutton')
             var legendbutton = document.getElementById('legendbutton')
             var searchbutton = document.getElementById('searchbutton')
+            document.getElementById('searchinput').value = ''
             search.style.left = '100%'
             name.style.left = '5px'
             switchbutton.style.right = '5px'
@@ -1065,6 +1326,36 @@
                 map.panTo(point)
             }
         } // end-panToLastPoint()
+
+        // 判断元素是否在滚动区域内显示
+        var isScrolledIntoView = function (el) {
+            var rect = el.getBoundingClientRect();
+            var elemTop = rect.top;
+            var elemBottom = rect.bottom;
+
+            // Only completely visible elements return true:
+            var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+            // Partially visible elements return true:
+            //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+            return isVisible;
+        }
+
+        // 搜索结果列表滚动
+        var resultScroll = function () {
+            var elem = document.getElementById('resulttable')
+            if (elem.scrollTop !== 0) { // not on top
+                document.getElementById('resultUp').style.display = 'flex'
+            } else {
+                console.log('on top.')
+                document.getElementById('resultUp').style.display = 'none'
+            }
+            if (elem.scrollTop + elem.clientHeight !== elem.scrollHeight) { // not on buttom
+                document.getElementById('resultDown').style.display = 'flex'
+            } else {
+                console.log('on bottom')
+                document.getElementById('resultDown').style.display = 'none'
+            }
+        }
 
     </script>
 
