@@ -96,11 +96,11 @@
             width: calc(100% - 4px);
             height: 60px;
             top: 5px;
-            left: calc(100% - 60px);
+            right: calc(100% - 60px);
             display: flex;
             align-items: left;
             justify-content: center;
-            transition: left .2s ease-in;
+            transition: all .2s ease-in;
             /* color: rgb(0, 153, 255); */
         }
 
@@ -209,8 +209,8 @@
 
     <!-- 搜索条 -->
     <div class="floatcontrol searchstrip" id="searchstrip">
-        <div class="searchicon" onclick="javascript: switchSearch()">&#61442</div>
         <div class="searchinputpanel"></div>
+        <div class="searchicon" onclick="javascript: switchSearch()">&#61442</div>
     </div>
 
     <!-- 普通-卫星地图切换按钮 -->
@@ -253,6 +253,8 @@
         var infoWindow          // 台风信息气泡
 
         var searchPosition = '0px'  // 搜索条的起始位置
+        var searchTop = '5px'
+        var searchRight = '0px'
 
         // string.startsWith()
         if (typeof String.prototype.startsWith != 'function') {
@@ -294,7 +296,7 @@
                     var clientWidth = document.body.clientWidth
                     var clientHeight = document.body.clientHeight
                     searchPosition = (clientWidth - 60) + 'px'
-                    document.getElementById('searchstrip').style.left = searchPosition
+                    document.getElementById('searchstrip').style.right = searchPosition
                 }
 
                 //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
@@ -330,9 +332,7 @@
                         // 关闭图例窗体
                         document.getElementById('volet').style.bottom = '-520px'
                         // 关闭搜索条
-                        document.getElementById('searchstrip').style.left = searchPosition
-                        // 显示台风名称面板
-                        document.getElementById('typhoonNamePanel').style.opacity = 100
+                        searchHide()
                     })
 
                     qq.maps.event.addListener(map, 'dragstart', function () {
@@ -344,7 +344,7 @@
                         }, 50)
                     })
                 }
-                
+
             }
 
             //调用初始化函数地图
@@ -808,6 +808,7 @@
             var showTyphoonName = function () {
                 showingArray = []
                 if (typhoonList.length > 0) {
+                    // 台风名称加入显示数组
                     showingArray.push({
                         no: typhoonList[0].number,
                         name: typhoonList[0].name,
@@ -853,6 +854,9 @@
                     default:
                         break
                 } // end-switch
+                // 计算搜索条垂直位置
+                searchTop = (showingArray.length * 40 + 10 + 4) + 'px'
+                document.getElementById('searchstrip').style.top = searchTop
             } // end-showTyphoonName()
         }
 
@@ -886,15 +890,29 @@
 
         // 切换搜索条
         var switchSearch = function () {
+            if (document.getElementById('searchstrip').style.right !== '0px') {
+                searchShow()
+            } else {
+                searchHide()
+            }
+        }
+
+        // 展开搜索条
+        var searchShow = function () {
             var search = document.getElementById('searchstrip')
             var name = document.getElementById('typhoonNamePanel')
-            if (search.style.left !== '0px'){
-                search.style.left = '0px'
-                name.style.opacity = '0'
-            } else {
-                search.style.left = searchPosition
-                name.style.opacity = '100'
-            }
+            search.style.right = '0px'
+            search.style.top = '5px'
+            name.style.opacity = '0'
+        }
+
+        // 收起搜索条
+        var searchHide = function () {
+            var search = document.getElementById('searchstrip')
+            var name = document.getElementById('typhoonNamePanel')
+            search.style.right = searchPosition
+            search.style.top = searchTop
+            name.style.opacity = '100'
         }
 
         // 显示第一个台风
