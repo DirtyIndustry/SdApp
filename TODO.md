@@ -52,10 +52,16 @@ DONE... typhoon activition judgement
 DONE... fishery map icon position fine tune  
 DONE... fishery map info window height fine tune  
 DONE... typhoon map city map switch to satellite map  
-typhoon map avoid path change  
-typhoon map sort up zindex  
-typhoon map typhoon name panel  
-typhoon map search interface  
+DONE... typhoon map avoid path change  
+DONE... typhoon map sort up zindex  
+DONE... typhoon map typhoon name panel  
+DONE... typhoon map search interface  
+DONE... typhoon map interface enhancement  
+DONE... 台风路径  
+picPlayer  
+responsive ui  
+separate bis logic and general modules  
+citymap and typhoonmap modify methods to new webservices  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.   
 预警报  
@@ -63,7 +69,6 @@ set up Dev document, setting version, storage format version etc.
 天气图  
 卫星云图  
 雷达图  
-台风路径  
 新闻中心  
 webview pages  
 deal with request response error  
