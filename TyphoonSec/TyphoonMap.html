@@ -16,6 +16,7 @@
         body {
             width: 100%;
             height: 100%;
+            overflow: hidden;
         }
 
         * {
@@ -29,16 +30,6 @@
         select,
         textarea {
             font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
-        }
-
-        p {
-            width: 603px;
-            padding-top: 3px;
-            overflow: hidden;
-        }
-
-        .btn {
-            width: 142px;
         }
 
         /* 地图容器 */
@@ -223,14 +214,15 @@
             border-radius: 20px;
             width: 96%;
             max-height: calc(100% - 60px);
-            top: 50px;
+            /* top: 50px; */
+            top: 100%;
             left: 2%;
             flex-direction: column;
             font-family: '微软雅黑';
             font-size: 15px;
             overflow: hidden;
             transition: all .2s ease-in;
-            z-index: 8;
+            z-index: 10;
         }
 
         /* 搜索结果行 */
@@ -267,11 +259,21 @@
         /* 搜索结果表 */
         .searchresult-table {
             /* display: flex; */
+            /* align-items: center; */
+            /* justify-content: center; */
+            width: 100%;
+            /* flex-direction: column; */
+            overflow-y: auto;
+        }
+
+        /* 搜索结果表内衬 */
+        .searchresult-tablecontent {
+            width: 100%;
+            top: 0;
+            left: 0;
             align-items: center;
             justify-content: center;
-            width: 100%;
             flex-direction: column;
-            overflow-y: scroll;
         }
 
         /*卫星图切换*/
@@ -377,107 +379,26 @@
         <!-- <div class="searchconfirm">&#61442</div> -->
     </div>
     <!-- 搜索结果面板 -->
-    <div class="floatcontrol floatcontrol-panel searchresult-panel">
-        <div class="searchresult-row" id="resultempty">未查找到台风信息</div>
+    <div class="floatcontrol floatcontrol-panel searchresult-panel" id="resultpanel">
         <div class="searchresult-row" id="resulthead">
             <div class="searchresult-column">编号</div>
             <div class="searchresult-column">中文名</div>
             <div class="searchresult-column">英文名</div>
         </div>
         <div class="searchresult-narrow" id="resultUp">&#61698</div>
+        <div class="searchresult-row" id="resultempty">未查找到台风信息</div>
         <div class="searchresult-table" id="resulttable" onscroll="javascript: resultScroll()">
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div><div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
-            </div>
-            <div class="searchresult-row">
-                <div class="searchresult-column">201808</div>
-                <div class="searchresult-column">玛莉亚</div>
-                <div class="searchresult-column">Maria</div>
+            <div class="searchresult-tablecontent" id=tablecontent>
+                <div class="searchresult-row">
+                    <div class="searchresult-column">000000</div>
+                    <div class="searchresult-column">玛莉亚</div>
+                    <div class="searchresult-column">Maria</div>
+                </div>
+                <div class="searchresult-row">
+                    <div class="searchresult-column">201808</div>
+                    <div class="searchresult-column">玛莉亚</div>
+                    <div class="searchresult-column">Maria</div>
+                </div>
             </div>
         </div>
         <div class="searchresult-narrow" id="resultDown">&#61699</div>
@@ -608,12 +529,13 @@
                         }, 50)
                     })
                 }
-                // 搜索框回车不重新加载页面
+                // 搜索框回车不重新加载页面 执行搜索 收回键盘
                 document.getElementById('searchform').addEventListener('submit', function (e) {
                     searchRequest()
                     e.preventDefault()
+                    document.getElementById('searchinput').blur()
                 }, false)
-
+                
             }
 
             //调用初始化函数地图
@@ -725,6 +647,7 @@
                 xmlhttp.send(data)
             } // end-startupRequest
 
+            // 关键字搜索
             var searchRequest = function () {
                 var value = document.getElementById('searchinput').value
                 console.log(value)
@@ -752,24 +675,42 @@
                                 })
                             }
                             console.log(res)
-                            if (res.length === 0) {
+                            // document.getElementById('resultpanel').style.display = 'flex'
+                            document.getElementById('resultpanel').style.top = '50px'
+                            if (res.length === 0) { // 返回结果数量为零
                                 document.getElementById('resultempty').style.display = 'flex'
                                 document.getElementById('resulthead').style.display = 'none'
                                 document.getElementById('resulttable').style.display = 'none'
                                 resultScroll()
-                            } else {
+                            } else {                // 返回结果数量不为零
                                 document.getElementById('resultempty').style.display = 'none'
                                 document.getElementById('resulthead').style.display = 'flex'
                                 document.getElementById('resulttable').style.display = 'flex'
+                                document.getElementById('tablecontent').innerHTML = ''
+                                for (var j = 0; j < res.length; j++) {
+                                    var newrow = document.createElement('div')
+                                    newrow.setAttribute('class', 'searchresult-row')
+                                    newrow.setAttribute('onclick', 'javascript: test(\''+res[j].no+'\',\''+res[j].name+'\',\''+res[j].eng+'\',true)')
+                                    var newcol1 = document.createElement('div')
+                                    var newcol2 = document.createElement('div')
+                                    var newcol3 = document.createElement('div')
+                                    newcol1.setAttribute('class', 'searchresult-column')
+                                    newcol2.setAttribute('class', 'searchresult-column')
+                                    newcol3.setAttribute('class', 'searchresult-column')
+                                    newcol1.innerHTML = res[j].no
+                                    newcol2.innerHTML = res[j].name
+                                    newcol3.innerHTML = res[j].eng
+                                    newrow.appendChild(newcol1)
+                                    newrow.appendChild(newcol2)
+                                    newrow.appendChild(newcol3)
+                                    document.getElementById('tablecontent').appendChild(newrow)
+                                    // newelem.innerHTML = '<div class="searchresult-row">< div class="searchresult-column">' + res[j].no + '</div ><div class="searchresult-column">' + res[j].name + '</div><div class="searchresult-column">' + res[j].eng + '</div></div>'
+                                    // document.getElementById('resulttable').appendChild(newelem)
+                                }
+                                // document.getElementById('tablecontent').style.height = 40 * res.length
                                 resultScroll()
                             }
-                            document.getElementById('resulttable').innerHTML = ''
-                            for (var j = 0; j < res.length; j++) {
-                                var newelem = document.createElement("div")
-                                newelem.innerHTML = '<div class="searchresult-row">< div class="searchresult-column">' + res[j].no + '</div ><div class="searchresult-column">' + res[j].name + '</div><div class="searchresult-column">' + res[j].eng + '</div></div>'
-
-                                document.getElementById('resulttable').appendChild(newelem)
-                            }
+                            
                         } else if (xmlhttp.status === 400) {
                             console.log('error 400')
                             alert('There was an error 400')
@@ -783,6 +724,18 @@
                 xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
                 xmlhttp.send(data)
             } // end-searchRequest()
+
+            var test = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
+                // console.log('点击 编号: ' + typhoonNo + ' 名称: ' + typhoonName + ' 英文名: ' + typhoonEng + ' 总是显示: ' + alwaysshow)
+                // 收回搜索面板
+                searchHide()
+                // 清空地图
+                clearMap()
+                // 搜索台风
+                setTimeout(function () {    // 延迟0.2秒保证UI流畅性
+                    requestTyphoonPath(typhoonNo, typhoonName, typhoonEng, alwaysshow)
+                }, 200)
+            }
 
             // 向服务器请求台风路径
             var requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
@@ -873,6 +826,10 @@
                                 requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '美国', res[res.length - 1])
                                 requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '日本', res[res.length - 1])
                                 requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '韩国', res[res.length - 1])
+                            }
+                            // 如果强制显示(搜索该台风)则pan到台风所在地
+                            if (alwaysshow === true) {
+                                panToFirst()
                             }
                         } else if (xmlhttp.status === 400) {
                             console.log('error 400')
@@ -1015,7 +972,8 @@
                     zIndex: 10
                 })
                 var newicon = new qq.maps.MarkerImage(
-                    './Images/tf_center25x25.gif',
+                    // './Images/tf_center25x25.gif',
+                    './Images/tficon2.gif',
                     new qq.maps.Size(29, 29),  // size
                     new qq.maps.Point(0, 0),    // origin
                     new qq.maps.Point(15, 15),   // anchor
@@ -1229,18 +1187,18 @@
             var switchbutton = document.getElementById('switchbutton')
             var legendbutton = document.getElementById('legendbutton')
             var searchbutton = document.getElementById('searchbutton')
-            searchstrip.style.left = '2%'
-            name.style.opacity = '0'
-            switchbutton.style.opacity = '0'
-            legendbutton.style.opacity = '0'
-            searchbutton.style.opacity = '0'
-            document.getElementById('volet').style.bottom = '-520px'
-            document.getElementById('searchinput').focus()
-            setTimeout(function () {
-                name.style.left = '-500px'
-                switchbutton.style.right = '-100px'
-                legendbutton.style.right = '-100px'
-                searchbutton.style.right = '-100px'
+            searchstrip.style.left = '2%'       // 搜索条滑入
+            name.style.opacity = '0'            // 台风名称面板fadeout
+            switchbutton.style.opacity = '0'    // 卫星地图切换按钮fadeout
+            legendbutton.style.opacity = '0'    // 图例按钮fadeout
+            searchbutton.style.opacity = '0'    // 搜索按钮fadeout
+            document.getElementById('volet').style.bottom = '-520px'    // 图例面板滑出
+            document.getElementById('searchinput').focus()              // 弹出键盘
+            setTimeout(function () {                // fadeout结束之后
+                name.style.left = '-500px'          // 移出台风名称面板
+                switchbutton.style.right = '-100px' // 移出卫星地图切换按钮
+                legendbutton.style.right = '-100px' // 移出图例按钮
+                searchbutton.style.right = '-100px' // 移出搜索按钮
             }, 200)
         }
 
@@ -1251,16 +1209,20 @@
             var switchbutton = document.getElementById('switchbutton')
             var legendbutton = document.getElementById('legendbutton')
             var searchbutton = document.getElementById('searchbutton')
-            document.getElementById('searchinput').value = ''
-            search.style.left = '100%'
-            name.style.left = '5px'
-            switchbutton.style.right = '5px'
-            legendbutton.style.right = '5px'
-            searchbutton.style.right = '5px'
-            name.style.opacity = '100'
-            switchbutton.style.opacity = '100'
-            legendbutton.style.opacity = '100'
-            searchbutton.style.opacity = '100'
+            var searchinput = document.getElementById('searchinput')
+            searchinput.value = ''  // 清空输入栏
+            searchinput.blur()      // 收起键盘
+            // document.getElementById('resultpanel').style.display = 'none'
+            document.getElementById('resultpanel').style.top = '100%'   // 收起搜索结果面板
+            search.style.left = '100%'          // 收起搜索条
+            name.style.left = '5px'             // 台风名称面板归位
+            switchbutton.style.right = '5px'    // 卫星地图切换按钮归位
+            legendbutton.style.right = '5px'    // 图例按钮归位
+            searchbutton.style.right = '5px'    // 搜索按钮归位
+            name.style.opacity = '100'          // 台风姓名面板fadein
+            switchbutton.style.opacity = '100'  // 卫星地图切换按钮fadein
+            legendbutton.style.opacity = '100'  // 图例按钮fadein
+            searchbutton.style.opacity = '100'  // 搜索按钮fadein
         }
 
         // 显示第一个台风
@@ -1344,16 +1306,20 @@
         var resultScroll = function () {
             var elem = document.getElementById('resulttable')
             if (elem.scrollTop !== 0) { // not on top
-                document.getElementById('resultUp').style.display = 'flex'
+                // document.getElementById('resultUp').style.display = 'flex'
+                document.getElementById('resultUp').innerHTML = '&#61698'
             } else {
-                console.log('on top.')
-                document.getElementById('resultUp').style.display = 'none'
+                // console.log('on top.')
+                // document.getElementById('resultUp').style.display = 'none'
+                document.getElementById('resultUp').innerHTML = ''
             }
             if (elem.scrollTop + elem.clientHeight !== elem.scrollHeight) { // not on buttom
-                document.getElementById('resultDown').style.display = 'flex'
+                // document.getElementById('resultDown').style.display = 'flex'
+                document.getElementById('resultDown').innerHTML = '&#61699'
             } else {
-                console.log('on bottom')
-                document.getElementById('resultDown').style.display = 'none'
+                // console.log('on bottom')
+                // document.getElementById('resultDown').style.display = 'none'
+                document.getElementById('resultDown').innerHTML = ''
             }
         }
 
