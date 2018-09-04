@@ -65,6 +65,12 @@
 			}
 		},
 		{
+			"path": "pages/weatherimgpage/weatherimgpage",
+			"style": {
+				"navigationBarTitleText": "天气图"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],
@@ -93,7 +99,7 @@
 		}, {
 			"pagePath": "pages/mappage/mappage",
 			"iconPath": "static/Images/bottom_loc_first.png",
-			"selectedIconPath": "static/Images/bottom_loc_first.png",
+			"selectedIconPath": "static/Images/bottom_loc_second.png",
 			"text": "地图"
 		}, {
 			"pagePath": "pages/settingpage/settingpage",

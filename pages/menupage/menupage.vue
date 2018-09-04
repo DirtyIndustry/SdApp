@@ -46,7 +46,7 @@
                 </view>
                 <!-- 第三行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="WeatherimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
                         <view class="menu-button-text">天气图</view>
                     </button>
@@ -112,6 +112,13 @@ export default {
             console.log('天气预报点击')
             uni.navigateTo({
                 url: '../weatherforecast/weatherforecast'
+            })
+        },
+        // 天气图
+        WeatherimgTap (e) {
+            console.log('天气图点击')
+            uni.navigateTo({
+                url: '../weatherimgpage/weatherimgpage'
             })
         },
         // 台风路径
