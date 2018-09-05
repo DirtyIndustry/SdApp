@@ -375,7 +375,7 @@
 				}) // end-request 请求服务器台风列表
 				// 请求服务器海浪预警列表
 				uni.request({
-					url: appsettings.hosturl + 'GetEachWarning_ceshi',
+					url: appsettings.hosturl + 'GetFrontpageWarning_0905',
 					data: {
 						name: 'admin',
 						areaflg: '青岛'
@@ -388,24 +388,14 @@
 							that.completedRequestCount++
 							return false
 						}
-						// TODO： 接口返回值改为json格式
-						// 垃圾接口，就懒得写说明了，改了以后在说
-						let warninglist = res.data.d.toString().split('.html')
-						warninglist.pop()
-						if (warninglist.length > 0) {
-							let firstwarning = warninglist[0].split(',')
-							let warningname
-							let warningdate
-							for (let i = 0; i < firstwarning.length; i++) {
-								if (firstwarning[i] != '') {
-									warningname = firstwarning[i]
-									warningdate = firstwarning[i + 1]
-									break
-								}
-							} // end-for
-							that.warningData.waveWarning =
-								warningname + ',' + warningdate + '……'
-						} // end-if (warninglist.length > 0)
+						var resarr = JSON.parse(res.data.d)
+						// 不为空则取最后一项
+						if (resarr.length > 0) {
+							let warningname = resarr[resarr.length - 1].name
+							let warningdate = resarr[resarr.length - 1].datetime
+							console.log('有海浪警报')
+							that.warningData.waveWarning = warningname + ','+ warningdate + '……'
+						}
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败 返回false

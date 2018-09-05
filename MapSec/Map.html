@@ -1106,7 +1106,7 @@
 
         // 向服务器请求渔场信息
         var loadFisheryInfo = function () {
-            var url = hosturl + 'GetFisheriesForecast'
+            var url = hosturl + 'GetFisheriesForecast_0831'
             var data = 'name=admin&areaflg=山东'
             var xmlhttp = new XMLHttpRequest()
             xmlhttp.onreadystatechange = function () {
@@ -1115,144 +1115,30 @@
                         // console.log(xmlhttp.responseText)
                         var parser = new DOMParser()
                         var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                        //console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
-                        var elements = xmldoc.getElementsByTagName('string')
-                        for (var i = 0; i < elements.length; i++) {
-                            var text = elements[i].innerHTML.substring(0, elements[i].innerHTML.length - 1)
-                            var arr = text.split(',')
-                            switch (arr[1]) {
+                        // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
+                        var res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                        for (var i = 0; i < res.length; i++) {
+                            switch (res[i].FORECASTAREA) {
                                 case '渤海湾渔场':
-                                    infoFisheryBHWan.location = '渤海湾渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisheryBHWan.WAVELVL = arr[3]
-                                            infoFisheryBHWan.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisheryBHWan.WAVELVL48H = arr[3]
-                                            infoFisheryBHWan.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisheryBHWan.WAVELVL72H = arr[3]
-                                            infoFisheryBHWan.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisheryBHWan)
                                     break
                                 case '莱州湾渔场':
-                                    infoFisheryLZWan.location = '莱州湾渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisheryLZWan.WAVELVL = arr[3]
-                                            infoFisheryLZWan.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisheryLZWan.WAVELVL48H = arr[3]
-                                            infoFisheryLZWan.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisheryLZWan.WAVELVL72H = arr[3]
-                                            infoFisheryLZWan.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisheryLZWan)
                                     break
                                 case '烟威渔场':
-                                    infoFisheryYW.location = '烟威渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisheryYW.WAVELVL = arr[3]
-                                            infoFisheryYW.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisheryYW.WAVELVL48H = arr[3]
-                                            infoFisheryYW.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisheryYW.WAVELVL72H = arr[3]
-                                            infoFisheryYW.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisheryYW)
                                     break
                                 case '威东渔场':
-                                    infoFisheryWD.location = '威东渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisheryWD.WAVELVL = arr[3]
-                                            infoFisheryWD.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisheryWD.WAVELVL48H = arr[3]
-                                            infoFisheryWD.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisheryWD.WAVELVL72H = arr[3]
-                                            infoFisheryWD.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisheryWD)
                                     break
                                 case '石东渔场':
-                                    infoFisherySDong.location = '石东渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisherySDong.WAVELVL = arr[3]
-                                            infoFisherySDong.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisherySDong.WAVELVL48H = arr[3]
-                                            infoFisherySDong.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisherySDong.WAVELVL72H = arr[3]
-                                            infoFisherySDong.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisherySDong)
                                     break
                                 case '石岛渔场':
-                                    infoFisherySDao.location = '石岛渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisherySDao.WAVELVL = arr[3]
-                                            infoFisherySDao.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisherySDao.WAVELVL48H = arr[3]
-                                            infoFisherySDao.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisherySDao.WAVELVL72H = arr[3]
-                                            infoFisherySDao.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisherySDao)
                                     break
                                 case '青海渔场':
-                                    infoFisheryQHai.location = '青海渔场'
-                                    switch (arr[2]) {
-                                        case '0-24':
-                                            infoFisheryQHai.WAVELVL = arr[3]
-                                            infoFisheryQHai.WAVEDIR = arr[4]
-                                            break
-                                        case '24-48':
-                                            infoFisheryQHai.WAVELVL48H = arr[3]
-                                            infoFisheryQHai.WAVEDIR48H = arr[4]
-                                            break
-                                        case '48-72':
-                                            infoFisheryQHai.WAVELVL72H = arr[3]
-                                            infoFisheryQHai.WAVEDIR72H = arr[4]
-                                            break
-                                        default:
-                                            break
-                                    }
+                                    setFisheryData(res[i], infoFisheryQHai)
                                     break
                                 default:
                                     break
@@ -1282,6 +1168,16 @@
             xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-loadFisheryInfo()
+        
+        var setFisheryData = function (source, target) {
+            target.location = source.FORECASTAREA
+            target.WAVELVL = source.WAVELVL
+            target.WAVEDIR = source.WAVEDIR
+            target.WAVELVL48H = source.WAVELVL48H
+            target.WAVEDIR48H = source.WAVEDIR48H
+            target.WAVELVL72H = source.WAVELVL72H
+            target.WAVEDIR72H = source.WAVEDIR72H
+        }
 
         // 将####格式时间转为##:##格式
         var timeFormat = function (time) {

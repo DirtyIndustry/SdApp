@@ -44,7 +44,7 @@
 			requestImage (source) {
 				let that = this
 				uni.request({
-					url: appsettings.hosturl + 'GetWeatherMap_20170807',
+					url: appsettings.hosturl + 'GetWeatherMap_0905',
 					data: {name: 'admin', areaflg: '青岛', flg: source},
 					method: 'POST',
 					success: function (res) {
@@ -53,17 +53,15 @@
 							console.log('[服务器]: 返回 天气图 返回值为空')
 							return false
 						}
+						let dataarr = JSON.parse(res.data.d)
+						// 清空现在的数组
 						that.imageArray.length = 0
 						that.dateArray.length = 0
-						for (let i = 0; i < res.data.d.length; i++) {
-							let index = res.data.d[i].indexOf(',')
-							that.imageArray.push(res.data.d[i].substring(0, index))
-
-							let index_2 = res.data.d[i].indexOf('$')
-							that.dateArray.push(res.data.d[i].substring(index + 1, index_2))
+						// 将返回数据填入数组
+						for (let i = 0; i < dataarr.length; i++) {
+							that.imageArray.push(dataarr[i].url)
+							that.dateArray.push(dataarr[i].title)
 						}
-						that.imageArray.reverse()
-						that.dateArray.reverse()
 					}
 				})
 			} // end-requestImage()

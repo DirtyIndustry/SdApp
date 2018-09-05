@@ -69,10 +69,13 @@ DONE... typhoon map typhoon list request
 DONE... typhoon map search request  
 DONE... typhoon map typhoon path request  
 DONE... typhoon map typhoon forecast request  
-GetEachWarning_ceshi  
-index page wave warning request  
-GetFisheriesForecast  
-city map fishery info request  
+DONE... GetEachWarning_ceshi -> GetFrontpageWarning_0905  
+DONE... GetFisheriesForecast_0905  
+DONE... GetWeatherMap_0905  
+DONE... GetSatelliteCloud_ZG_0905  
+DONE... GetRadarImages_0905  
+DONE... index page wave warning request  
+DONE... city map fishery info request  
 picPlayer autoplay logic  
 picPlayer init state  
 picPlayer watch dataarray  
