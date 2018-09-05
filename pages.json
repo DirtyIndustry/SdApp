@@ -71,6 +71,18 @@
 			}
 		},
 		{
+			"path": "pages/satelliteimgpage/satelliteimgpage",
+			"style": {
+				"navigationBarTitleText": "卫星云图"
+			}
+		},
+		{
+			"path": "pages/radarimgpage/radarimgpage",
+			"style": {
+				"navigationBarTitleText": "雷达图"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],

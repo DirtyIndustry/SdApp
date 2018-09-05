@@ -56,14 +56,14 @@
             <view class="uni-flex uni-row menu-row">
                 <!-- 第四行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="SatelliteimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/SatelliteCloudMap_img.png" />
                         <view class="menu-button-text">卫星云图</view>
                     </button>
                 </view>
                 <!-- 第四行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="RadarimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/RadarMap_img.png" />
                         <view class="menu-button-text">雷达图</view>
                     </button>
@@ -119,6 +119,20 @@ export default {
             console.log('天气图点击')
             uni.navigateTo({
                 url: '../weatherimgpage/weatherimgpage'
+            })
+        },
+        // 卫星云图
+        SatelliteimgTap (e) {
+            console.log('卫星云图点击')
+            uni.navigateTo({
+                url: '../satelliteimgpage/satelliteimgpage'
+            })
+        },
+        // 雷达图
+        RadarimgTap (e) {
+            console.log('雷达图点击')
+            uni.navigateTo({
+                url: '../radarimgpage/radarimgpage'
             })
         },
         // 台风路径

@@ -1,32 +1,31 @@
 <template>
-	<view class="wrap">
+	<view class="wrap" @tap="pageTap">
 		<view style="height: 40px;"></view>
 		<view class="choose_source" @tap="showModel">
 			<picker @change="source_change" v-model="cityIndex" :range="sourceArray">
 				<text style="margin-left: 100px;">数据源:&nbsp;&nbsp;</text>
-				<text class="source">{{data_source}}</text>
+				<text class="source">{{data_source}}&nbsp;&nbsp;</text>
+				<text class="source fa fa-angle-down"></text>
 			</picker>
 		</view>
 		<view class="separator"></view>
-		<!-- <picPlayer :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" autoStart="false" interval="2000"></picPlayer> -->
-		<picSwiper :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"></picSwiper>
+		<picSwiper :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
+		 ref="picswiper"></picSwiper>
 	</view>
 </template>
 
 <script>
 	import appsettings from '../../utils/appsettings.js'
-	import picPlayer from '../../components/picPlayer.vue'
 	import picSwiper from '../../components/picSwiper.vue'
 
 	export default {
-		components:{
-			picPlayer,
+		components: {
 			picSwiper
 		},
-		data(){
-			return{
-				cityIndex:0,
-				data_source:'韩国',
+		data() {
+			return {
+				cityIndex: 0,
+				data_source: '韩国',
 				sourceArray: ['韩国', '日本'],
 				imageArray: [],
 				dateArray: [],
@@ -34,18 +33,18 @@
 				autostart: false
 			}
 		},
-		methods:{
+		methods: {
 			//切换数据源
 			source_change(e) {
 				this.data_source = this.sourceArray[e.detail.value]
 				this.requestImage(this.data_source)
 			},
 			// 向服务器请求图片
-			requestImage (source) {
+			requestImage(source) {
 				let that = this
 				uni.request({
 					url: appsettings.hosturl + 'GetWeatherMap_0905',
-					data: {name: 'admin', areaflg: '青岛', flg: source},
+					data: { name: 'admin', areaflg: '青岛', flg: source },
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 天气图')
@@ -64,24 +63,32 @@
 						}
 					}
 				})
-			} // end-requestImage()
+			}, // end-requestImage()
+			// 页面点击
+			pageTap() {
+				this.$refs.picswiper.timerStart()
+			}
 		},
-		onLoad () {
+		onLoad() {
 			this.requestImage(this.data_source)
 		}
 	}
 </script>
 
 <style>
-	Page{
+	@import "../../common/FontAwesome.css";
+
+	Page {
 		width: 100%;
 		height: 100%;
 	}
-	.wrap{
+
+	.wrap {
 		background: #f0eff5;
 		width: 100%;
 		height: 100%;
 	}
+
 	.choose_source {
 		width: 100%;
 		height: 80px;
@@ -97,5 +104,9 @@
 
 	.separator {
 		height: 40px;
+	}
+
+	.font-icon {
+		font-family: 'FontAwesome';
 	}
 </style>

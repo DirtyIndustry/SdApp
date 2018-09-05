@@ -1,4 +1,5 @@
 <script>
+	import appsettings from './utils/appsettings.js'
 	import utils from './utils/utils.js'
 	export default {
 		computed: {
@@ -71,7 +72,7 @@
 						} else {
 							// 尝试连接后台服务器
 							uni.request({
-								url: 'http://123.234.129.238:8001/MyWebService.asmx/GetAndroidUpgrade',
+								url: appsettings.hosturl + 'GetAndroidUpgrade',
 								data: {
 									name: 'admin',
 									areaflg: '青岛'
