@@ -314,7 +314,7 @@
 				// 读取台风信息
 				// 请求服务器台风列表
 				uni.request({
-					url: appsettings.hosturl + 'GetTyphoonList',
+					url: appsettings.hosturl + 'GetTyphoonList_0904',
 					data: {
 						areaflg: '青岛',
 						Typhoonyear: new Date().getFullYear()
@@ -327,18 +327,14 @@
 							that.completedRequestCount++
 							return false
 						}
-						// TODO： 接口返回值改为json格式
-						// 字符串用#,分割
-						let typhoonlist = res.data.d.toString().split('#,')
-						// 获取列表中最后一个（最新）台风的详细信息
-						// 数组[台风编号，台风中文名，台风英文名]
-						let lasttyphoon = typhoonlist[typhoonlist.length - 1].split(',')
+						let resarr = JSON.parse(res.data.d)
+						let lasttyphoon = resarr[resarr.length - 1]
 						// 请求last typhoon详情数据
 						uni.request({
-							url: appsettings.hosturl + 'GetTyphoonPath',
+							url: appsettings.hosturl + 'GetTyphoonPath_0904',
 							data: {
 								areaflg: '青岛',
-								typhoonNumber: lasttyphoon[0] // 台风编号
+								typhoonNumber: lasttyphoon.NUMBER // 台风编号
 							},
 							method: 'POST',
 							success: function (res2) {
@@ -348,13 +344,9 @@
 									that.completedRequestCount++
 									return false
 								}
-								// TODO： 接口返回值改为json格式
-								// 字符串用#$分割
-								let datelist = res2.data.d.toString().split('#$')
-								// 数组中最后一项为空，倒数第二项为最后一个有效值
-								let typhoondate = new Date(
-									datelist[datelist.length - 2].split(',')[0].replace(/-/g, '/')
-								)
+								let respatharr = JSON.parse(res2.data.d)
+								// 日期格式应为yyyy/MM/dd HH:mm:ss
+								let typhoondate = new Date(respatharr[respatharr.length - 1].date.replace(/-/g, '/'))
 								let nowdate = new Date()
 								nowdate.setHours(nowdate.getHours() - 10)
 								if (typhoondate > nowdate) {
@@ -362,9 +354,9 @@
 									console.log('有台风警报')
 									that.warningData.typhoonWarning =
 										'编号:' +
-										lasttyphoon[0] +
+										lasttyphoon.CHN_NAME +
 										'"' +
-										lasttyphoon[1] +
+										lasttyphoon.ENG_NAME +
 										'"正在靠近……'
 								} // end-if (typhoondate > nowdate)
 							}, // end-success-request

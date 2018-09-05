@@ -423,6 +423,8 @@
     <script>
         var map // 地图实体
         var mapdragging = false
+        // var hosturl = 'http://123.234.129.238:8001/MyWebService.asmx/'
+        var hosturl = 'http://123.234.129.237:8001/MyWebService.asmx/'
 
         // 城市地图中的marker
         var markerCityQD,   // 青岛
@@ -475,7 +477,7 @@
             //初始化地图函数  自定义函数名init
             function init() {
                 //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-                map = new qq.maps.Map(document.getElementById("container"), {
+                map = new qq.maps.Map(document.getElementById('container'), {
                     center: new qq.maps.LatLng(36.79898, 120.292059),      // 地图的中心地理坐标。
                     zoom: 6,                                                 // 地图的中心地理坐标。
                     mapTypeControl: false,  // 切换卫星图按钮
@@ -493,7 +495,7 @@
                 {
                     // 青岛城市图标
                     var iconCityQD = new qq.maps.MarkerImage(
-                        "./Images/Qd_location.png",
+                        './Images/Qd_location.png',
                         new qq.maps.Size(49, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -510,7 +512,7 @@
 
                     // 日照城市图标
                     var iconCityRZ = new qq.maps.MarkerImage(
-                        "./Images/Rz_location.png",
+                        './Images/Rz_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -527,7 +529,7 @@
 
                     // 烟台城市图标
                     var iconCityYT = new qq.maps.MarkerImage(
-                        "./Images/Yt_location.png",
+                        './Images/Yt_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -544,7 +546,7 @@
 
                     // 威海城市图标
                     var iconCityWH = new qq.maps.MarkerImage(
-                        "./Images/Wh_location.png",
+                        './Images/Wh_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -561,7 +563,7 @@
 
                     // 潍坊城市图标
                     var iconCityWF = new qq.maps.MarkerImage(
-                        "./Images/Wf_location.png",
+                        './Images/Wf_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -578,7 +580,7 @@
 
                     // 东营城市图标
                     var iconCityDY = new qq.maps.MarkerImage(
-                        "./Images/Dy_location.png",
+                        './Images/Dy_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -595,7 +597,7 @@
 
                     // 滨州城市图标
                     var iconCityBZ = new qq.maps.MarkerImage(
-                        "./Images/Bz_location.png",
+                        './Images/Bz_location.png',
                         new qq.maps.Size(50, 62),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(0, 62),   // anchor
@@ -615,7 +617,7 @@
                 {
                     // 渤海湾渔场图标
                     var iconFishBHWan = new qq.maps.MarkerImage(
-                        "./Images/bhwan_location.png",
+                        './Images/bhwan_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -632,7 +634,7 @@
 
                     // 莱州湾渔场图标
                     var iconFishLZWan = new qq.maps.MarkerImage(
-                        "./Images/lz_location.png",
+                        './Images/lz_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -649,7 +651,7 @@
 
                     // 烟威渔场图标
                     var iconFishYW = new qq.maps.MarkerImage(
-                        "./Images/yw_location.png",
+                        './Images/yw_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -666,7 +668,7 @@
 
                     // 威东渔场图标
                     var iconFishWD = new qq.maps.MarkerImage(
-                        "./Images/wd_location.png",
+                        './Images/wd_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -683,7 +685,7 @@
 
                     // 石岛渔场图标
                     var iconFishSDao = new qq.maps.MarkerImage(
-                        "./Images/sdao_location.png",
+                        './Images/sdao_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -700,7 +702,7 @@
 
                     // 石东渔场图标
                     var iconFishSDong = new qq.maps.MarkerImage(
-                        "./Images/sdong_location.png",
+                        './Images/sdong_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -717,7 +719,7 @@
 
                     // 青海渔场图标
                     var iconFishQHai = new qq.maps.MarkerImage(
-                        "./Images/qhai_location.png",
+                        './Images/qhai_location.png',
                         new qq.maps.Size(80, 52),  // size
                         new qq.maps.Point(0, 0),    // origin
                         new qq.maps.Point(40, 8),   // anchor
@@ -749,7 +751,7 @@
                         path: pathBHWan,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 莱州湾渔场多边形
@@ -773,7 +775,7 @@
                         path: pathLZWan,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 烟威渔场多边形
@@ -800,7 +802,7 @@
                         path: pathYW,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 威东渔场多边形
@@ -815,7 +817,7 @@
                         path: pathWD,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 石东渔场多边形
@@ -836,7 +838,7 @@
                         path: pathSDong,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 石岛渔场多边形
@@ -861,7 +863,7 @@
                         path: pathSDao,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
 
                     // 青海渔场多边形
@@ -888,7 +890,7 @@
                         path: pathQHai,
                         strokeColor: new qq.maps.Color(0, 0, 0, 0.8),
                         strokeWeight: 1,
-                        fillColor: qq.maps.Color.fromHex("#FFFFFF", 0.5)
+                        fillColor: qq.maps.Color.fromHex('#FFFFFF', 0.5)
                     })
                 } // end-渔场多边形
 
@@ -1052,13 +1054,13 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, false)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-requestData()
 
         // 向服务器请求城市信息
         var loadCityInfo = function (city, output) {
-            var url = 'http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018'
+            var url = hosturl + 'GetSDSevenCity_0831'
             var data = 'name=admin&areaflg=山东&city=' + city
             var xmlhttp = new XMLHttpRequest()
             xmlhttp.onreadystatechange = function () {
@@ -1073,60 +1075,19 @@
                         var todaystring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
                         date.setDate(date.getDate() + 1)
                         var tomorrowstring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
-                        var fhtime = ''
-                        var fltime = ''
-                        var shtime = ''
-                        var sltime = ''
-                        var resdata
-                        for (var key in res) {
-                            resdata = res[key]
-                        }
-                        if (resdata.tide[0].FIRSTHIGHTIME === '-') {
-                            fhtime = '-:-'
-                        } else {
-                            fhtime = timeFormat(resdata.tide[0].FIRSTHIGHTIME)
-                        }
-                        if (resdata.tide[0].FIRSTLOWTIME === '-') {
-                            fltime = '-:-'
-                        } else {
-                            fltime = timeFormat(resdata.tide[0].FIRSTLOWTIME)
-                        }
-                        if (resdata.tide[0].SECONDHIGHTIME === '-') {
-                            shtime = '-:-'
-                        } else {
-                            shtime = timeFormat(resdata.tide[0].SECONDHIGHTIME)
-                        }
-                        if (resdata.tide[0].SECONDLOWTIME === '-') {
-                            sltime = '-:-'
-                        } else {
-                            sltime = timeFormat(resdata.tide[0].SECONDLOWTIME)
-                        }
-                        // output = {
-                        //     location: resdata.tide[0].FORECASTAREA,
-                        //     date: todaystring + '~' + tomorrowstring,
-                        //     firsthightime: fhtime,
-                        //     firstlowtime: fltime,
-                        //     secondhightime: shtime,
-                        //     secondlowtime: sltime,
-                        //     firsthigh: resdata.tide[0].FIRSTHIGHLEVEL,
-                        //     firstlow: resdata.tide[0].FIRSTLOWLEVEL,
-                        //     secondhigh: resdata.tide[0].SECONDHIGHLEVEL,
-                        //     secondlow: resdata.tide[0].SECONDLOWLEVEL,
-                        //     waveheight: resdata.wave[0].WAVEHEIGHT,
-                        //     temperature: resdata.temperature[0].WATERTEMPERATURE
-                        // }
-                        output.location = resdata.tide[0].FORECASTAREA,
-                            output.date = todaystring + '~' + tomorrowstring,
-                            output.firsthightime = fhtime,
-                            output.firstlowtime = fltime,
-                            output.secondhightime = shtime,
-                            output.secondlowtime = sltime,
-                            output.firsthigh = resdata.tide[0].FIRSTHIGHLEVEL,
-                            output.firstlow = resdata.tide[0].FIRSTLOWLEVEL,
-                            output.secondhigh = resdata.tide[0].SECONDHIGHLEVEL,
-                            output.secondlow = resdata.tide[0].SECONDLOWLEVEL,
-                            output.waveheight = resdata.wave[0].WAVEHEIGHT,
-                            output.temperature = resdata.temperature[0].WATERTEMPERATURE
+                        
+                        output.location = res.FORECASTAREA
+                        output.date = todaystring + '~' + tomorrowstring
+                        output.firsthightime = res.FIRSTHIGHTIME
+                        output.firstlowtime = res.FIRSTLOWTIME
+                        output.secondhightime = res.SECONDHIGHTIME
+                        output.secondlowtime = res.SECONDLOWTIME
+                        output.firsthigh = res.FIRSTHIGH
+                        output.secondhigh = res.SECONDHIGH
+                        output.firstlow = res.FIRSTLOW
+                        output.secondlow = res.SECONDLOW
+                        output.waveheight = res.WAVEHEIGHT
+                        output.temperature = res.TEMPERATURE
                         // console.log(output)
 
                     } else if (xmlhttp.status === 400) {
@@ -1139,13 +1100,13 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, true)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-loadQD()
 
         // 向服务器请求渔场信息
         var loadFisheryInfo = function () {
-            var url = "http://123.234.129.238:8001/MyWebService.asmx/GetFisheriesForecast"
+            var url = hosturl + 'GetFisheriesForecast'
             var data = 'name=admin&areaflg=山东'
             var xmlhttp = new XMLHttpRequest()
             xmlhttp.onreadystatechange = function () {
@@ -1318,7 +1279,7 @@
                 }
             } // end-xmlhttp.onreadystatechange()
             xmlhttp.open('POST', url, true)
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
         } // end-loadFisheryInfo()
 
@@ -1398,8 +1359,8 @@
         // 顶部城市-渔场按钮切换点击样式用
         /*
         $(function () {
-            $(".option_button").children().click(function () {
-                $(this).addClass("selected").siblings().removeClass("selected")
+            $('.option_button').children().click(function () {
+                $(this).addClass('selected').siblings().removeClass('selected')
             })
         })
         */

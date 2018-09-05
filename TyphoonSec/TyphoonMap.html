@@ -389,7 +389,8 @@
 
     <script>
 
-        var hosturl = 'http://123.234.129.238:8001/MyWebService.asmx/'
+        // var hosturl = 'http://123.234.129.238:8001/MyWebService.asmx/'
+        var hosturl = 'http://123.234.129.237:8001/MyWebService.asmx/'  // 开发服务器
         var map // 地图实例
         var mapdragging = false // 地图是否在拖动状态
         var showingArray = []   // 地图上显示的台风的信息列表
@@ -563,7 +564,7 @@
             // 页面加载时向服务器请求起始数据
             var startupRequest = function () {
                 var year = new Date().getFullYear()
-                var url = hosturl + 'GetTyphoonList'
+                var url = hosturl + 'GetTyphoonList_0904'
                 var data = 'areaflg=山东&Typhoonyear=' + year
                 var res = []
                 var xmlhttp = new XMLHttpRequest()
@@ -574,23 +575,15 @@
                             var parser = new DOMParser()
                             var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
                             // console.log(JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML))
-                            var divarr = xmldoc.getElementsByTagName('string')
-                            // 获取列表
-                            for (var i = 0; i < divarr.length; i++) {
-                                res.push(divarr[i].innerHTML)
-                            }
+                            res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
                             // 大于3?
                             if (res.length >= 3) {
                                 for (var j = 0; j < 3; j++) {
-                                    /* 切割字符串 */
-                                    var resarr = res[res.length - 1 - j].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
+                                    requestTyphoonPath(res[res.length - 1 - j].NUMBER, res[res.length - 1 - j].CHN_NAME, res[res.length - 1 - j].ENG_NAME, false)
                                 }
                             } else {
                                 for (var k = res.length - 1; k > 0; k--) {
-                                    /* 切割字符串 */
-                                    var resarr = res[k].split(',')
-                                    requestTyphoonPath(resarr[0], resarr[1], resarr[2].substr(0, resarr[2].length - 1), false)
+                                    requestTyphoonPath(res[k].NUMBER, res[k].CHN_NAME, res[k].ENG_NAME, false)
                                 }
                             }
                         } else if (xmlhttp.status === 400) {
@@ -615,7 +608,7 @@
                 if (value === '') {
                     return
                 }
-                var url = hosturl + 'GetTyphoonList'
+                var url = hosturl + 'GetTyphoonList_0904'
                 var data = 'areaflg=青岛&Typhoonyear=' + value
                 var xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
@@ -624,16 +617,7 @@
                             // console.log(xmlhttp.responseText)
                             var parser = new DOMParser()
                             var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                            var resarr = xmldoc.getElementsByTagName('string')
-                            var res = []
-                            for (var i = 0; i < resarr.length; i++) {
-                                var strarr = resarr[i].innerHTML.slice(0, -1).split(',')
-                                res.push({
-                                    no: strarr[0],
-                                    name: strarr[1],
-                                    eng: strarr[2]
-                                })
-                            }
+                            var res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
                             console.log(res)
                             // document.getElementById('resultpanel').style.display = 'flex'
                             document.getElementById('resultpanel').style.top = '50px'
@@ -650,16 +634,16 @@
                                 for (var j = 0; j < res.length; j++) {
                                     var newrow = document.createElement('div')
                                     newrow.setAttribute('class', 'searchresult-row')
-                                    newrow.setAttribute('onclick', 'javascript: test(\''+res[j].no+'\',\''+res[j].name+'\',\''+res[j].eng+'\',true)')
+                                    newrow.setAttribute('onclick', 'javascript: test(\''+res[j].NUMBER+'\',\''+res[j].CHN_NAME+'\',\''+res[j].ENG_NAME+'\',true)')
                                     var newcol1 = document.createElement('div')
                                     var newcol2 = document.createElement('div')
                                     var newcol3 = document.createElement('div')
                                     newcol1.setAttribute('class', 'searchresult-column text')
                                     newcol2.setAttribute('class', 'searchresult-column text')
                                     newcol3.setAttribute('class', 'searchresult-column text')
-                                    newcol1.innerHTML = res[j].no
-                                    newcol2.innerHTML = res[j].name
-                                    newcol3.innerHTML = res[j].eng
+                                    newcol1.innerHTML = res[j].NUMBER
+                                    newcol2.innerHTML = res[j].CHN_NAME
+                                    newcol3.innerHTML = res[j].ENG_NAME
                                     newrow.appendChild(newcol1)
                                     newrow.appendChild(newcol2)
                                     newrow.appendChild(newcol3)
@@ -699,7 +683,7 @@
 
             // 向服务器请求台风路径
             var requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
-                var url = hosturl + 'GetTyphoonPath'
+                var url = hosturl + 'GetTyphoonPath_0904'
                 var data = 'areaflg=青岛&typhoonNumber=' + typhoonNo
                 var res = []
                 var active = false
@@ -710,31 +694,13 @@
                             // console.log(xmlhttp.responseText)
                             var parser = new DOMParser()
                             var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
-                            /* 切割字符串 */
-                            var bigarr = xmldoc.getElementsByTagName('string')[0].innerHTML.split('#$')
-                            // 最后一个项为空项
-                            for (var i = 0; i < bigarr.length - 1; i++) {
-                                /* 切割字符串 */
-                                var smallarr = bigarr[i].split(',')
-                                var origindatestring = smallarr[0]
-                                var datestring = origindatestring.replace(/-/g, '/')
-                                var info = {
-                                    number: Number(typhoonNo),              // 台风编号
-                                    name: typhoonName,              // 台风名称
-                                    eng: typhoonEng,                // 台风英文名
-                                    date: datestring,               // 数据日期
-                                    longitude: smallarr[1],         // 经度
-                                    latitude: smallarr[2],          // 纬度
-                                    centerpressure: smallarr[3],    // 中心气压
-                                    centerspeed: smallarr[4],       // 中心风速
-                                    sevencircle: smallarr[5],       // 七级风圈
-                                    tencircle: smallarr[6],         // 十级风圈
-                                    movingspeed: smallarr[7],       // 移动速度
-                                    movingdir: smallarr[8]          // 移动方向
-                                }
-                                res.push(info)
-                            } // end-for
-                            // 获得数据列表
+                            var res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                            for (var i = 0; i < res.length; i++) {
+                                res[i].number = Number(typhoonNo)
+                                res[i].name = typhoonName
+                                res[i].eng = typhoonEng
+                                res[i].date = res[i].date.replace(/-/g, '/')
+                            }
                             // console.log(res)
                             // 判断时效性
                             var today = new Date()
@@ -807,7 +773,7 @@
 
             // 向服务器请求台风路径预测
             var requestPathPrediction = function (typhoonNo, typhoonName, typhoonEng, forecastsite, lastpoint) {
-                var url = hosturl + 'Typhoonforcastpath'
+                var url = hosturl + 'Typhoonforcastpath_0904'
                 var data = 'name=admin&areaflg=青岛&number=' + typhoonNo + '&forcastlestTyphoon=' + forecastsite
                 var res = []
                 var xmlhttp = new XMLHttpRequest()
@@ -824,23 +790,15 @@
                             if (resstring === '当前无台风') {
                                 return
                             }
-                            var bigarr = resstring.split('#$')
-                            // 最后一项为空
-                            for (var i = 0; i < bigarr.length - 1; i++) {
-                                var smallarr = bigarr[i].split(',')
-                                var info = {
-                                    number: Number(typhoonNo),
-                                    name: typhoonName,
-                                    eng: typhoonEng,
-                                    site: forecastsite,
-                                    date: smallarr[0],
-                                    longitude: smallarr[1],
-                                    latitude: smallarr[2],
-                                    centerpressure: smallarr[3] == '' ? '-' : smallarr[3],
-                                    centerspeed: smallarr[4] == '' ? '-' : smallarr[4]
-                                }
-                                res.push(info)
-                            } // end-for
+                            res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
+                            // console.log(res)
+                            for (var i = 0; i < res.length; i++) {
+                                res[i].number = Number(typhoonNo)
+                                res[i].name = typhoonName
+                                res[i].eng = typhoonEng
+                                res[i].site = forecastsite
+                                res[i].date = res[i].date.replace(/-/g, '/')
+                            }
                             // 将预测数据载入地图
                             addPredicToMap(res, lastpoint)
                         } else if (xmlhttp.status === 400) {

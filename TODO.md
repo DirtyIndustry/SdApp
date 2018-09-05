@@ -58,7 +58,27 @@ DONE... typhoon map typhoon name panel
 DONE... typhoon map search interface  
 DONE... typhoon map interface enhancement  
 DONE... 台风路径  
-picPlayer  
+DONE... picPlayer  
+DONE... GetTyphoonList_0904  
+DONE... GetTyphoonPath_0904  
+DONE... TyphoonforcastPath_0904  
+DONE... GetSDSevenCity_0831  
+DONE... index page typhoon warning request  
+DONE... city map city info request  
+DONE... typhoon map typhoon list request  
+DONE... typhoon map search request  
+DONE... typhoon map typhoon path request  
+DONE... typhoon map typhoon forecast request  
+GetEachWarning_ceshi  
+index page wave warning request  
+GetFisheriesForecast  
+city map fishery info request  
+picPlayer autoplay logic  
+picPlayer init state  
+picPlayer watch dataarray  
+picSwiper  
+picSwiper watch startindex  
+picSwiper transition height  
 responsive ui  
 separate bis logic and general modules  
 citymap and typhoonmap modify methods to new webservices  
