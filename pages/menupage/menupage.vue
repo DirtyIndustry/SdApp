@@ -12,7 +12,7 @@
                 </view>
                 <!-- 第一行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="warninglistTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Warning_img.png" />
                         <view class="menu-button-text">预警报</view>
                     </button>
@@ -98,6 +98,13 @@ export default {
             console.log('城市预报点击')
             uni.navigateTo({
                 url: '../cityforecast/cityforecast'
+            })
+        },
+        // 预警报
+        warninglistTap (e) {
+            console.log('预警报点击')
+            uni.navigateTo({
+                url: '../warninglistpage/warninglistpage'
             })
         },
         // 渔场预报

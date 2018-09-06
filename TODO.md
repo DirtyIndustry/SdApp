@@ -84,16 +84,18 @@ DONE... picSwiper watch startindex
 DONE... picSwiper transition height  
 DONE... picSwiper button fade  
 DONE... fiveday forecast wind direction word wrap  
+DONE... fishery forecast page  
+DONE... fishery forecast page styling  
+DONE... citymap and typhoonmap modify methods to new webservices  
+DONE... 渔场预报   
+DONE... 天气图  
+DONE... 卫星云图  
+DONE... 雷达图  
 responsive ui  
 separate bis logic and general modules  
-citymap and typhoonmap modify methods to new webservices  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.   
 预警报  
-渔场预报   
-天气图  
-卫星云图  
-雷达图  
 新闻中心  
 webview pages  
 deal with request response error  

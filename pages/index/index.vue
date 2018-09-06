@@ -227,7 +227,7 @@
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 天气数据')
-						console.log(res.data)
+						// console.log(res.data)
 						if (!res.data.d) { // 返回的值为空
 							console.log('[服务器]: 返回 天气数据 返回值为空')
 							return false

@@ -45,6 +45,13 @@
 			}
 		},
 		{
+			"path": "pages/warninglistpage/warninglistpage",
+			"style": {
+				"navigationBarTitleText": "预警报",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/fisheryforecast/fisheryforecast",
 			"style": {
 				"navigationBarTitleText": "渔场预报",
