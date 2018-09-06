@@ -76,12 +76,14 @@ DONE... GetSatelliteCloud_ZG_0905
 DONE... GetRadarImages_0905  
 DONE... index page wave warning request  
 DONE... city map fishery info request  
-picPlayer autoplay logic  
-picPlayer init state  
-picPlayer watch dataarray  
-picSwiper  
-picSwiper watch startindex  
-picSwiper transition height  
+DONE... picPlayer autoplay logic  
+DONE... picPlayer init state  
+DONE... picPlayer watch dataarray  
+DONE... picSwiper  
+DONE... picSwiper watch startindex  
+DONE... picSwiper transition height  
+DONE... picSwiper button fade  
+DONE... fiveday forecast wind direction word wrap  
 responsive ui  
 separate bis logic and general modules  
 citymap and typhoonmap modify methods to new webservices  

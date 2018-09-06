@@ -22,7 +22,7 @@
             <view class="uni-flex uni-row menu-row">
                 <!-- 第二行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" loading="true">
+                    <button class="menu-button" type="default" @tap="fisheryTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
                         <view class="menu-button-text">渔场预报</view>
                     </button>
@@ -98,6 +98,13 @@ export default {
             console.log('城市预报点击')
             uni.navigateTo({
                 url: '../cityforecast/cityforecast'
+            })
+        },
+        // 渔场预报
+        fisheryTap (e) {
+            console.log('渔场预报点击')
+            uni.navigateTo({
+                url: '../fisheryforecast/fisheryforecast'
             })
         },
         // 趋势预测

@@ -11,7 +11,7 @@
                 <image :src="item.weatherIcon" mode="widthFix" style="width: 50px; height: 50px" />
             </view>
             <view class="flex-cell-quad"> </view>
-            <view class="flex-cell-single">{{item.windDir}}</view>
+            <view class="flex-cell-single" :class="{'small-text': item.windDir.length > 4}">{{item.windDir}}</view>
             <view class="flex-cell-single">{{item.windLvl}}</view>
         </view>
     </view>
@@ -101,4 +101,9 @@ export default {
 		top: 240px;
 		position: absolute;
 	}
+
+    /* 小字体内容 */
+    .small-text {
+        font-size: 27px;
+    }
 </style>

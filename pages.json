@@ -45,6 +45,13 @@
 			}
 		},
 		{
+			"path": "pages/fisheryforecast/fisheryforecast",
+			"style": {
+				"navigationBarTitleText": "渔场预报",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/trendprediction/trendprediction",
 			"style": {
 				"navigationBarTitleText": "趋势预测",
