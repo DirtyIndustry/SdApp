@@ -3,51 +3,79 @@
     <!-- 左边的按钮 -->
     <view class="tabbar tabbar-left" :style="{width: leftTabWidth}">
         <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-            <view class="button-inner">散标项目</view>
+            <view class="button-inner">{{leftLabel}}</view>
         </view>
         <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-            <view class="button-inner border-inner-middle">滚雪球</view>
+            <view class="button-inner border-inner-middle">{{middleLabel}}</view>
         </view>
         <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-            <view class="button-inner">债权转让</view>
+            <view class="button-inner">{{rightLabel}}</view>
         </view>
     </view>
     <!-- 右边的按钮顺 序是反的 右在左 左在右 -->
     <view class="tabbar tabbar-right" :style="{width: rightTabWidth}">
         <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-            <view class="button-inner">债权转让</view>
+            <view class="button-inner">{{rightLabel}}</view>
         </view>
         <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-            <view class="button-inner border-inner-middle">滚雪球</view>
+            <view class="button-inner border-inner-middle">{{middleLabel}}</view>
         </view>
         <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-            <view class="button-inner">散标项目</view>
+            <view class="button-inner">{{leftLabel}}</view>
         </view>
     </view>
     <!-- 底层的按钮 -->
     <view class="tabbar tabbar-background">
         <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}">
-            <view class="button-inner button-inner-background">散标项目</view>
+            <view class="button-inner button-inner-background">{{leftLabel}}</view>
         </view>
         <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}">
-            <view class="button-inner border-inner-middle button-inner-background">滚雪球</view>
+            <view class="button-inner border-inner-middle button-inner-background">{{middleLabel}}</view>
         </view>
         <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}">
-            <view class="button-inner button-inner-background">债权转让</view>
+            <view class="button-inner button-inner-background">{{rightLabel}}</view>
         </view>
     </view>
+    <view class="marker marker-background"></view>
+    <view class="marker marker-left" :style="{width: leftMarkerWidth}"></view>
+    <view class="marker marker-right" :style="{width: rightMarkerWidth}"></view>
 </view>
 </template>
 
 <script>
 export default {
     name: 'flowTabbar',
+    props: {
+        // 左边按钮文字
+        leftLabel: {
+            type: String,
+            default () {
+                return ''
+            }
+        },
+        // 中间按钮文字
+        middleLabel: {
+            type: String,
+            default () {
+                return ''
+            }
+        },
+        // 右边按钮文字
+        rightLabel: {
+            type: String,
+            default () {
+                return ''
+            }
+        }
+    },
     data () {
         return {
             sideButtonWidth: 0,
             midButtonWidth: 0,
             leftTabWidth: '5%',
             rightTabWidth: '65%',
+            leftMarkerWidth: '8%',
+            rightMarkerWidth: '74%',
             show: true
         }
     },
@@ -68,19 +96,25 @@ export default {
         leftButtonTap(){
             this.leftTabWidth = '5%'
             this.rightTabWidth = '65%'
+            this.leftMarkerWidth = '8%'
+            this.rightMarkerWidth = '74%'
         },
         // 中按钮点击
         midButtonTap () {
             this.leftTabWidth = '35%'
             this.rightTabWidth = '35%'
+            this.leftMarkerWidth = '41%'
+            this.rightMarkerWidth = '41%'
         },
         // 右按钮点击
         rightButtonTap () {
             this.leftTabWidth = '65%'
             this.rightTabWidth = '5%'
+            this.leftMarkerWidth = '73%'
+            this.rightMarkerWidth = '9%'
         }
     },
-    onLoad () {
+    mounted () {
         this.setButtonWidth()
     }
 }
@@ -96,33 +130,31 @@ export default {
     background-color: #fff;
     top: 0;
     height: 120px;
+    position: absolute;
     overflow: hidden;
     display: flex;
     flex-shrink: 0;
-    transition: width .4s ease;
+    transition: width .5s ease-out;
 }
 
 .tabbar-left {
     width: 5%;
-    position: absolute;
     flex-direction: row;
     left: 0;
     z-index: 5;
 }
 .tabbar-right {
     width: 65%;
-    position: absolute;
     flex-direction: row-reverse;
-    right: 0;
+    right: 1px;
     z-index: 5;
 }
 
 .tabbar-background {
     width: 100%;
-    position: absolute;
     flex-direction: row;
     left: 0;
-    z-index: 3;
+    z-index: 4;
 }
 
 .tabbar-button {
@@ -152,10 +184,37 @@ export default {
     justify-content: center;
 }
 .border-inner-middle {
-    border-left: 1px solid #666;
-    border-right: 1px solid #666;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
 }
 .button-inner-background {
     color: #0092d4;
+}
+
+.marker {
+    position: absolute;
+    top: 120px;
+    height: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-shrink: 0;
+    transition: width .5s ease-out;
+}
+.marker-background {
+    background-color: #0092d4;
+    width: 100%;
+    z-index: 6;
+}
+.marker-left {
+    background-color: #fff;
+    width: 8%;
+    left: 0;
+    z-index: 7;
+}
+.marker-right {
+    background-color: #fff;
+    width: 74%;
+    right: 0;
+    z-index: 7;
 }
 </style>
