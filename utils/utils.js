@@ -516,6 +516,9 @@ const getLocName = function (STATION) {
 
 // 根据tidedata和markdata生成曲线chart option
 const getOption = function (tidedata, markdata) {
+    // 获取现在时间
+    let now = new Date()
+    now = now.setHours(now.getHours())
     // 获取y轴最大最小值
     let max = -100
     let min = 1000
@@ -594,7 +597,7 @@ const getOption = function (tidedata, markdata) {
                 smooth: true,
                 silent: true,
                 animation: false,
-                symbolSize: 0, // 曲线上数据点小圆圈的大小
+                symbolSize: 1, // 曲线上数据点小圆圈的大小
                 lineStyle: {
                     color: '#1c8d3b', // 曲线颜色
                     width: 1 // 曲线粗细
@@ -620,6 +623,22 @@ const getOption = function (tidedata, markdata) {
                         type: 'dot'
                     },
                     data: markdata
+                },
+                markPoint: {
+                    symbol: 'circle',
+                    symbolSize: 2,
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{b}'
+                    },
+                    itemStyle: {
+                        color: 'blue'
+                    },
+                    data: [
+                        {name:'一个点', x: 100, y: 60},
+                        {name:'另一个点', coord:[tidedata[13][0], tidedata[13][1]]}
+                    ]
                 }
             },
             // 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
