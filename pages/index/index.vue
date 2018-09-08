@@ -207,7 +207,8 @@
 				this.completedRequestCount = 0
 				this.loadWeather(city)
 				this.loadWarning()
-				this.loadAstronomicalTide(city)
+				// this.loadAstronomicalTide(city)
+				this.loadAstroTide(city)
 				this.loadInshore(city)
 				this.loadBaths(city)
 				this.loadRefined(city)
@@ -476,6 +477,119 @@
 					}
 				}) // end-request
 				return true
+			},
+			loadAstroTide(city) {
+				let that = this
+				uni.request({
+					url: appsettings.hosturl + 'GetAstronomicalTide_0907',
+					data: {name:'admin', areaflg:'山东', city:city},
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 潮汐预报数据')
+						if (!res.data.d | res.data.d === '您无权访问此端口') { // 返回的值为空
+							console.log('[服务器]: 返回 潮汐预报数据 返回值为空')
+							return false
+						}
+						let resarr = JSON.parse(res.data.d)
+						if (resarr.length === 0) {
+							console.log('[服务器]: 返回 潮汐预报数据 返回值为空')
+							return false
+						}
+						// 提前展开section
+						if (city === '青岛') {
+							that.tideData.chartTideTwoShow = true
+						}
+						let result = {
+							chartTideOneTitle: '',
+							chartTideTwoTitle: '',
+							chartTideTwoShow: false,
+							optionTideOne: {},
+							optionTideTwo: {}
+						}
+						// 处理第一组数据
+						let tidedataOne = []
+						let markdataOne = []
+						// tidedata
+						for (let i = 0; i < resarr[0].tidedata.length; i++) {
+							let item = resarr[0].tidedata[i]
+							// 添加曲线数据
+							let newdata = {
+								value: [new Date(item.time), Number(item.data)]
+							}
+							// 如果由label值 则添加label数据
+							if (item.label !== '') {
+								newdata.label = {
+									show: true,
+									position: 'top',
+									formatter: item.label + 'cm'
+								}
+							}
+							tidedataOne.push(newdata)
+						}
+						// markdata不需处理直接添加
+						for (let j = 0; j < resarr[0].markdata.length; j++) {
+							let item = resarr[0].markdata[j]
+							markdataOne.push([
+								{
+									coord: [new Date(item.time), Number(item.data)]
+								},
+								{
+									coord: [new Date(item.time), 0]
+								}
+							])
+						}
+						// 第一个chart地区名
+						result.chartTideOneTitle = resarr[0].location
+						// 第一个chart曲线数据
+						result.optionTideOne = utils.getAstroOption(tidedataOne, markdataOne)
+						// 处理第二组数据
+						if (resarr.length > 1) {
+							let tidedataTwo = []
+							let markdataTwo = []
+							for (let k = 0; k < resarr[1].tidedata.length; k++) {
+								let item = resarr[1].tidedata[k]
+								// 添加曲线数据
+								let newdata = {
+									value: [new Date(item.time), Number(item.data)]
+								}
+								// 如果由label值 则添加label数据
+								if (item.label !== '') {
+									newdata.label = {
+										show: true,
+										position: 'top',
+										formatter: item.label + 'cm'
+									}
+								}
+								tidedataTwo.push(newdata)
+							}
+							// markdata不需处理直接添加
+							for (let l = 0; l < resarr[1].markdata.length; l++) {
+								let item = resarr[1].markdata[l]
+								markdataTwo.push([
+									{
+										coord: [new Date(item.time), Number(item.data)]
+									},
+									{
+										coord: [new Date(item.time), 0]
+									}
+								])
+							}
+							// 显示第二个chart
+							result.chartTideTwoShow = true
+							// 第一个chart地区名
+							result.chartTideTwoTitle = resarr[1].location
+							// 第一个chart曲线数据
+							result.optionTideTwo = utils.getAstroOption(tidedataTwo, markdataTwo)
+						} // end-if 有第二组数据
+						// 写入Vuex
+						that.tideData = result
+						// 写入本地缓存
+						utils.storeToLocal('tidedata', JSON.stringify(result))
+					}, // end-success
+					complete: function (res) {
+						that.completedRequestCount++
+					}
+				}) // end-request
 			},
 			// 读取服务器近海预报
 			loadInshore(city) {
