@@ -91,6 +91,12 @@ DONE... 渔场预报
 DONE... 天气图  
 DONE... 卫星云图  
 DONE... 雷达图  
+DONE... change webservice of tide forecast module  
+DONE... modify option of tide forecast module  
+DONE... modify index page tide forecast methods  
+DONE... modify weatherforecast page tide forecast methods  
+DONE... modify cityforecast page tide forecast methods  
+DONE... warning page tabbar  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

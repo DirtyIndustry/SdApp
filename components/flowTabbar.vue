@@ -36,6 +36,7 @@
             <view class="button-inner button-inner-background">{{rightLabel}}</view>
         </view>
     </view>
+    <!-- 蓝色指示器 -->
     <view class="marker marker-background"></view>
     <view class="marker marker-left" :style="{width: leftMarkerWidth}"></view>
     <view class="marker marker-right" :style="{width: rightMarkerWidth}"></view>
@@ -70,13 +71,12 @@ export default {
     },
     data () {
         return {
-            sideButtonWidth: 0,
-            midButtonWidth: 0,
-            leftTabWidth: '5%',
-            rightTabWidth: '65%',
-            leftMarkerWidth: '8%',
-            rightMarkerWidth: '74%',
-            show: true
+            sideButtonWidth: 0, // 两侧按钮的宽度
+            midButtonWidth: 0,  // 中间按钮的宽度
+            leftTabWidth: '6%',         // 左tabbar宽度
+            rightTabWidth: '64%',       // 右tabbar宽度
+            leftMarkerWidth: '8%',      // 左指示器宽度
+            rightMarkerWidth: '74%'     // 右指示器宽度
         }
     },
     computed: {
@@ -88,30 +88,32 @@ export default {
     methods: {
         // 设置按钮宽度
         setButtonWidth () {
-            console.log(this.systemInfo.windowWidth)
-            this.sideButtonWidth = this.systemInfo.windowWidth * 35 / 100
-            this.midButtonWidth = this.systemInfo.windowWidth * 30 / 100
+            this.sideButtonWidth = Math.round(this.systemInfo.windowWidth * 35 / 100)
+            this.midButtonWidth = Math.round(this.systemInfo.windowWidth * 30 / 100)
         },
         // 左按钮点击
         leftButtonTap(){
-            this.leftTabWidth = '5%'
-            this.rightTabWidth = '65%'
+            this.leftTabWidth = '6%'
+            this.rightTabWidth = '64%'
             this.leftMarkerWidth = '8%'
             this.rightMarkerWidth = '74%'
+            this.$emit('buttontap', 0)
         },
         // 中按钮点击
         midButtonTap () {
-            this.leftTabWidth = '35%'
-            this.rightTabWidth = '35%'
+            this.leftTabWidth = '36%'
+            this.rightTabWidth = '36%'
             this.leftMarkerWidth = '41%'
             this.rightMarkerWidth = '41%'
+            this.$emit('buttontap', 1)
         },
         // 右按钮点击
         rightButtonTap () {
-            this.leftTabWidth = '65%'
-            this.rightTabWidth = '5%'
+            this.leftTabWidth = '64%'
+            this.rightTabWidth = '6%'
             this.leftMarkerWidth = '73%'
             this.rightMarkerWidth = '9%'
+            this.$emit('buttontap', 2)
         }
     },
     mounted () {
@@ -121,10 +123,12 @@ export default {
 </script>
 
 <style>
+/* 控件最外城容器 */
 .tabbar-container {
     position: relative;
 }
 
+/* 按钮组 */
 .tabbar {
     /* border: 1px solid #000; */
     background-color: #fff;
@@ -137,19 +141,21 @@ export default {
     transition: width .5s ease-out;
 }
 
+/* 左按钮组 */
 .tabbar-left {
-    width: 5%;
+    width: 6%;
     flex-direction: row;
     left: 0;
     z-index: 5;
 }
+/* 右按钮组 */
 .tabbar-right {
-    width: 65%;
+    width: 64%;
     flex-direction: row-reverse;
-    right: 1px;
+    right: 0;
     z-index: 5;
 }
-
+/* 背景按钮组 */
 .tabbar-background {
     width: 100%;
     flex-direction: row;
@@ -157,6 +163,7 @@ export default {
     z-index: 4;
 }
 
+/* 按钮组中的按钮 */
 .tabbar-button {
     /* border: 1px solid #0f0; */
     height: 120px;
@@ -166,15 +173,18 @@ export default {
     justify-content: center;
 }
 
+/* 左边的按钮 */
 .tabbar-button-left {
     /* border: 1px solid #f00; */
     left: 0;
 }
+/* 右边的按钮 */
 .tabbar-button-right {
     /* border: 1px solid #00f; */
     right: 0;
 }
 
+/* 按钮内层容器 */
 .button-inner {
     /* border: 1px solid #f00; */
     width: 100%;
@@ -183,14 +193,17 @@ export default {
     align-items: center;
     justify-content: center;
 }
+/* 中间按钮内层容器 */
 .border-inner-middle {
     border-left: 1px solid #999999;
     border-right: 1px solid #999999;
 }
+/* 背景按钮组 按钮内层容器 */
 .button-inner-background {
     color: #0092d4;
 }
 
+/* 下方蓝色指示器 */
 .marker {
     position: absolute;
     top: 120px;
@@ -200,17 +213,20 @@ export default {
     flex-shrink: 0;
     transition: width .5s ease-out;
 }
+/* 背景指示器 */
 .marker-background {
     background-color: #0092d4;
     width: 100%;
     z-index: 6;
 }
+/* 左指示器 */
 .marker-left {
     background-color: #fff;
     width: 8%;
     left: 0;
     z-index: 7;
 }
+/* 右指示器 */
 .marker-right {
     background-color: #fff;
     width: 74%;
