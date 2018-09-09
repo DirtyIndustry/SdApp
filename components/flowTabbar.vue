@@ -77,13 +77,22 @@ export default {
             leftTabWidth: '6%',         // 左tabbar宽度
             rightTabWidth: '64%',       // 右tabbar宽度
             leftMarkerWidth: '8%',      // 左指示器宽度
-            rightMarkerWidth: '74%'     // 右指示器宽度
+            rightMarkerWidth: '74%',    // 右指示器宽度
+            selectedIndex: 0    // 当前所选的tabindex
         }
     },
     computed: {
         // 系统信息
         systemInfo: {
             get() {return this.$store.state.Infos.systeminfo}
+        }
+    },
+    watch: {
+        // 所选tab改变
+        selectedIndex: {
+            handler (newVal, oldVal) {
+                this.switchedToTab(newVal)
+            }
         }
     },
     methods: {
@@ -104,13 +113,17 @@ export default {
                 this.rightTabbarRight = '0px'
             }
         },
+        // 将tab选择状态发送出去
+        switchedToTab (index) {
+            this.$emit('tabchange', index)
+        },
         // 左按钮点击
         leftButtonTap(){
             this.leftTabWidth = '6%'
             this.rightTabWidth = '64%'
             this.leftMarkerWidth = '8%'
             this.rightMarkerWidth = '74%'
-            this.$emit('buttontap', 0)
+            this.selectedIndex = 0
         },
         // 中按钮点击
         midButtonTap () {
@@ -118,7 +131,7 @@ export default {
             this.rightTabWidth = '36%'
             this.leftMarkerWidth = '41%'
             this.rightMarkerWidth = '41%'
-            this.$emit('buttontap', 1)
+            this.selectedIndex = 1
         },
         // 右按钮点击
         rightButtonTap () {
@@ -126,12 +139,15 @@ export default {
             this.rightTabWidth = '6%'
             this.leftMarkerWidth = '73%'
             this.rightMarkerWidth = '9%'
-            this.$emit('buttontap', 2)
+            this.selectedIndex = 2
         }
     },
-    mounted () {
+    onLoad () {
         this.setButtonWidth()
         this.setRightTabbarRight()
+    },
+    onShow () {
+        this.switchedToTab(this.selectedIndex)
     }
 }
 </script>

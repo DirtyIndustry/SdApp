@@ -1,7 +1,7 @@
 <template>
 <view class="page-body">
     <image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"/>
-    <flowTabbar leftLabel="风暴潮" middleLabel="海浪警报" rightLabel="海冰警报" @buttontap="switchTab"></flowTabbar>
+    <flowTabbar leftLabel="风暴潮" middleLabel="海浪警报" rightLabel="海冰警报" @tabchange="switchTab"></flowTabbar>
     <view style="height: 160px;" />
     <view>
         <!-- 左列表 -->
@@ -250,7 +250,6 @@ export default {
             title: '加载中',
             mask: true
         })
-        this.switchTab(this.currentIndex)
         this.requestWarning()
         // 10秒后关闭toast
         setTimeout(function () {
