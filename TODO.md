@@ -104,7 +104,8 @@ DONE... warninglist page data flow
 DONE... warningdetail page incoming arguments  
 DONE... warningdetail page  
 DONE... warninglist page three lists   
-warninglist component  
+DONE... warninglist component  
+warninglist page renter tab selected  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

@@ -1,8 +1,8 @@
 <template>
     <view class="panel" :class="{hide: !show}" :style="{left: left}">
         <!-- 列表为空时显示 -->
-        <view class="list-row cell-empty" v-if="list.length === 0">{{placeholder}}</view>
-
+        <view class="list-body list-row cell-empty" v-if="list.length === 0">{{placeholder}}</view>
+        <!-- 内容列表 -->
         <view class="list-body">
             <!-- 列表行 -->
             <view class="list-row" :class="{'border-top': index !== 0}" v-for="(item, index) in list" :key="index" @tap="itemTap(item.filename)">
@@ -15,7 +15,7 @@
                 </view>
                 <!-- 文字列 -->
                 <view class="content-column">
-                    <view class="cell-name">&nbsp;&nbsp;{{item.name}}</view>
+                    <view class="cell-name">&nbsp;{{item.name}}</view>
                     <view class="cell-date">{{item.date}}&nbsp;&nbsp;</view>
                 </view>
             </view>
