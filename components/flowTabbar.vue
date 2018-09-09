@@ -182,6 +182,7 @@ export default {
     flex-direction: row;
     left: 0;
     z-index: 4;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* 按钮组中的按钮 */
