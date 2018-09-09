@@ -471,6 +471,7 @@
 					}, // end-success-request
 					fail: function (res) {
 						// 网络请求失败
+						console.log('[服务器]: 请求 潮汐预报数据 失败')
 					},
 					complete: function (res) {
 						that.completedRequestCount++
@@ -854,6 +855,7 @@
 			this.switchCityByIndex(this.cityIndex)
 			// 10秒后关闭toast
 			setTimeout(function () {
+				uni.hideLoading()
 				uni.hideLoading()
 			}.bind(this), 10000)
 		},

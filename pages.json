@@ -97,6 +97,12 @@
 			}
 		},
 		{
+			"path": "pages/warningdetail/warningdetail",
+			"style": {
+				"navigationBarTitleText": "警报详情"
+			}
+		},
+		{
 			"path": "pages/homepage/homepage"
 		}
 	],

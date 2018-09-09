@@ -1,45 +1,45 @@
 <template>
 <view class="tabbar-container">
     <!-- 左边的按钮 -->
-    <view class="tabbar tabbar-left" :style="{width: leftTabWidth}">
-        <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-            <view class="button-inner">{{leftLabel}}</view>
+        <view class="tabbar tabbar-left" :style="{width: leftTabWidth}">
+            <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
+                <view class="button-inner">{{leftLabel}}</view>
+            </view>
+            <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
+                <view class="button-inner border-inner-middle">{{middleLabel}}</view>
+            </view>
+            <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
+                <view class="button-inner">{{rightLabel}}</view>
+            </view>
         </view>
-        <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-            <view class="button-inner border-inner-middle">{{middleLabel}}</view>
+        <!-- 右边的按钮顺 序是反的 右在左 左在右 -->
+        <view class="tabbar tabbar-right" :style="{width: rightTabWidth, right: rightTabbarRight}">
+            <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
+                <view class="button-inner">{{rightLabel}}</view>
+            </view>
+            <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
+                <view class="button-inner border-inner-middle">{{middleLabel}}</view>
+            </view>
+            <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
+                <view class="button-inner">{{leftLabel}}</view>
+            </view>
         </view>
-        <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-            <view class="button-inner">{{rightLabel}}</view>
+        <!-- 底层的按钮 -->
+        <view class="tabbar tabbar-background">
+            <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}">
+                <view class="button-inner button-inner-background">{{leftLabel}}</view>
+            </view>
+            <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}">
+                <view class="button-inner border-inner-middle button-inner-background">{{middleLabel}}</view>
+            </view>
+            <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}">
+                <view class="button-inner button-inner-background">{{rightLabel}}</view>
+            </view>
         </view>
-    </view>
-    <!-- 右边的按钮顺 序是反的 右在左 左在右 -->
-    <view class="tabbar tabbar-right" :style="{width: rightTabWidth}">
-        <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-            <view class="button-inner">{{rightLabel}}</view>
-        </view>
-        <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-            <view class="button-inner border-inner-middle">{{middleLabel}}</view>
-        </view>
-        <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-            <view class="button-inner">{{leftLabel}}</view>
-        </view>
-    </view>
-    <!-- 底层的按钮 -->
-    <view class="tabbar tabbar-background">
-        <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}">
-            <view class="button-inner button-inner-background">{{leftLabel}}</view>
-        </view>
-        <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}">
-            <view class="button-inner border-inner-middle button-inner-background">{{middleLabel}}</view>
-        </view>
-        <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}">
-            <view class="button-inner button-inner-background">{{rightLabel}}</view>
-        </view>
-    </view>
-    <!-- 蓝色指示器 -->
-    <view class="marker marker-background"></view>
-    <view class="marker marker-left" :style="{width: leftMarkerWidth}"></view>
-    <view class="marker marker-right" :style="{width: rightMarkerWidth}"></view>
+        <!-- 蓝色指示器 -->
+        <view class="marker marker-background"></view>
+        <view class="marker marker-left" :style="{width: leftMarkerWidth}"></view>
+        <view class="marker marker-right" :style="{width: rightMarkerWidth}"></view>
 </view>
 </template>
 
@@ -73,6 +73,7 @@ export default {
         return {
             sideButtonWidth: 0, // 两侧按钮的宽度
             midButtonWidth: 0,  // 中间按钮的宽度
+            rightTabbarRight: '1px',    // 右按钮组的右边距
             leftTabWidth: '6%',         // 左tabbar宽度
             rightTabWidth: '64%',       // 右tabbar宽度
             leftMarkerWidth: '8%',      // 左指示器宽度
@@ -90,6 +91,18 @@ export default {
         setButtonWidth () {
             this.sideButtonWidth = Math.round(this.systemInfo.windowWidth * 35 / 100)
             this.midButtonWidth = Math.round(this.systemInfo.windowWidth * 30 / 100)
+        },
+        // 设置右按钮组右边距
+        setRightTabbarRight () {
+            // console.log(this.systemInfo.windowWidth)
+            // console.log(this.systemInfo.screenWidth)
+            // console.log(this.systemInfo.system)
+            // console.log(this.systemInfo.platform)
+            if (this.systemInfo.platform === 'android') {
+                this.rightTabbarRight = '1px'
+            } else {
+                this.rightTabbarRight = '0px'
+            }
         },
         // 左按钮点击
         leftButtonTap(){
@@ -118,6 +131,7 @@ export default {
     },
     mounted () {
         this.setButtonWidth()
+        this.setRightTabbarRight()
     }
 }
 </script>
@@ -125,8 +139,15 @@ export default {
 <style>
 /* 控件最外城容器 */
 .tabbar-container {
-    position: relative;
+    /* border: 1px solid #000; */
+    /* position: relative; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
 }
+
 
 /* 按钮组 */
 .tabbar {
@@ -152,7 +173,7 @@ export default {
 .tabbar-right {
     width: 64%;
     flex-direction: row-reverse;
-    right: 0;
+    right: 0px;
     z-index: 5;
 }
 /* 背景按钮组 */

@@ -97,6 +97,14 @@ DONE... modify index page tide forecast methods
 DONE... modify weatherforecast page tide forecast methods  
 DONE... modify cityforecast page tide forecast methods  
 DONE... warning page tabbar  
+DONE... GetDangeWarning_0816 modify server ip  
+DONE... warninglist page single list  
+DONE... warninglist page icon  
+DONE... warninglist page data flow  
+DONE... warningdetail page incoming arguments  
+DONE... warningdetail page  
+DONE... warninglist page three lists   
+warninglist component  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
