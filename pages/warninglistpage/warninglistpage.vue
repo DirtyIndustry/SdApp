@@ -5,71 +5,11 @@
     <view style="height: 160px;" />
     <view>
         <!-- 左列表 -->
-        <view class="panel panel-left" :style="{left: listLeftLeft}">
-            <!-- 列表为空时显示 -->
-            <view class="warning-row cell-empty" v-if="listLeft.length === 0" >近期没有风暴潮警报</view>
-            <!-- 列表行 -->
-            <view class="warning-row" :class="{'border-top': index !== 0}" v-for="(item, index) in listLeft" :key="index" @tap="warningTap(item.filename)">
-                <!-- 图标列 -->
-                <view class="cell-icon">
-                    <!-- 解除警报图标 -->
-                    <view v-if="item.dismiss" class="fa fa-bell-slash-o dismiss"></view>
-                    <!-- 警报图标 -->
-                    <view v-else class="fa" :class="{'fa-exclamation-triangle rouge': item.level==='红色', 'fa-exclamation-triangle orange': item.level==='橙色', 'fa-exclamation-circle jeune': item.level==='黄色', 'fa-exclamation-circle bleu': item.level==='蓝色'}"></view>
-                </view>
-                <!-- 文字列 -->
-                <view class="content-column">
-                    <view class="cell-name">{{item.name}}</view>
-                    <view class="cell-date">{{item.date}}</view>
-                </view>
-            </view>
-            <!-- 列表底部占位 -->
-            <view v-if="listLeft.length !== 0" style="height: 40px;" />
-        </view>
+        <slideList :list="listLeft" :left="listLeftLeft" :show="listLeftShow" placeholder="近期没有风暴潮警报" @itemTap="warningTap"></slideList>
         <!-- 中列表 -->
-        <view class="panel panel-middle" :style="{left: listMiddleLeft}">
-            <!-- 列表为空时显示 -->
-            <view class="warning-row cell-empty" v-if="listMiddle.length === 0" >近期没有海浪警报</view>
-            <!-- 列表行 -->
-            <view class="warning-row" :class="{'border-top': index !== 0}" v-for="(item, index) in listMiddle" :key="index" @tap="warningTap(item.filename)">
-                <!-- 图标列 -->
-                <view class="cell-icon">
-                    <!-- 解除警报图标 -->
-                    <view v-if="item.dismiss" class="fa fa-bell-slash-o dismiss"></view>
-                    <!-- 警报图标 -->
-                    <view v-else class="fa" :class="{'fa-exclamation-triangle rouge': item.level==='红色', 'fa-exclamation-triangle orange': item.level==='橙色', 'fa-exclamation-circle jeune': item.level==='黄色', 'fa-exclamation-circle bleu': item.level==='蓝色'}"></view>
-                </view>
-                <!-- 文字列 -->
-                <view class="content-column">
-                    <view class="cell-name">{{item.name}}</view>
-                    <view class="cell-date">{{item.date}}</view>
-                </view>
-            </view>
-            <!-- 列表底部占位 -->
-            <view v-if="listMiddle.length !== 0" style="height: 40px;" />
-        </view>
+        <slideList :list="listMiddle" :left="listMiddleLeft" :show="listMiddleShow" placeholder="近期没有海浪警报" @itemTap="warningTap"></slideList>
         <!-- 右列表 -->
-        <view class="panel panel-right" :style="{left: listRightLeft}">
-            <!-- 列表为空时显示 -->
-            <view class="warning-row cell-empty" v-if="listRight.length === 0" >近期没有海冰警报</view>
-            <!-- 列表行 -->
-            <view class="warning-row" :class="{'border-top': index !== 0}" v-for="(item, index) in listRight" :key="index" @tap="warningTap(item.filename)">
-                <!-- 图标列 -->
-                <view class="cell-icon">
-                    <!-- 解除警报图标 -->
-                    <view v-if="item.dismiss" class="fa fa-bell-slash-o dismiss"></view>
-                    <!-- 警报图标 -->
-                    <view v-else class="fa" :class="{'fa-exclamation-triangle rouge': item.level==='红色', 'fa-exclamation-triangle orange': item.level==='橙色', 'fa-exclamation-circle jeune': item.level==='黄色', 'fa-exclamation-circle bleu': item.level==='蓝色'}"></view>
-                </view>
-                <!-- 文字列 -->
-                <view class="content-column">
-                    <view class="cell-name">{{item.name}}</view>
-                    <view class="cell-date">{{item.date}}</view>
-                </view>
-            </view>
-            <!-- 列表底部占位 -->
-            <view v-if="listRight.length !== 0" style="height: 40px;" />
-        </view>
+        <slideList :list="listRight" :left="listRightLeft" :show="listRightShow" placeholder="近期没有海冰警报" @itemTap="warningTap"></slideList>
     </view>
 </view>
 </template>
@@ -78,9 +18,11 @@
 import appsettings from '../../utils/appsettings.js'
 import utils from '../../utils/utils.js'
 import flowTabbar from '../../components/flowTabbar.vue'
+import slideList from '../../components/slideList.vue'
 export default {
     components: {
-        flowTabbar
+        flowTabbar,
+        slideList
     },
     data () {
         return {
@@ -90,9 +32,12 @@ export default {
             listMiddle: [],
             listRight: [],
             currentIndex: 0,    // 当前显示的tab页
-            listLeftLeft: '5%',     // 三个页面的左边距
-            listMiddleLeft: '100%',
-            listRightLeft: '100%',
+            listLeftLeft: '5%',     // 三个tab页的左边距
+            listMiddleLeft: '105%',
+            listRightLeft: '200%',
+            listLeftShow: true,     // tab页是否显示
+            listMiddleShow: false,
+            listRightShow: false
         }
     },
     computed: {
@@ -180,6 +125,7 @@ export default {
         },
         // 点击列表中的警报
         warningTap (filename) {
+            console.log('clicked! ' + filename)
             let that = this
             uni.request({
                 url: appsettings.hosturl + 'GetDangeWarning_0816',
@@ -191,6 +137,8 @@ export default {
                         console.log('[服务器]: 返回 预警报地址 返回值为空')
                         return false
                     }
+                    // 打开详细警报页面
+                    console.log('[界面]: 跳转至 警报详情页面')
                     uni.navigateTo({
                         url: '../warningdetail/warningdetail?data=' + res.data.d
                     })
@@ -217,21 +165,49 @@ export default {
         },
         // 显示左tab页
         showLeftTab () {
+            // 控制显隐
+            this.listLeftShow = true
+            this.listMiddleShow = true
+            // 控制移动
             this.listLeftLeft = '5%'
-            this.listMiddleLeft = '100%'
-            this.listRightLeft = '100%'
+            this.listMiddleLeft = '105%'
+            this.listRightLeft = '200%'
+            // 控制显隐
+            setTimeout(function () {
+                this.listMiddleShow = false
+                this.listRightShow = false
+            }.bind(this), 520)
         },
         // 显示中tab页
         showMiddleTab () {
-            this.listLeftLeft = '-100%'
+            // 控制显隐
+            this.listLeftShow = true
+            this.listMiddleShow = true
+            this.listRightShow = true
+            // 控制移动
+            this.listLeftLeft = '-105%'
             this.listMiddleLeft = '5%'
-            this.listRightLeft = '100%'
+            this.listRightLeft = '105%'
+            // 控制显隐
+            setTimeout(function () {
+                this.listLeftShow = false
+                this.listRightShow = false
+            }.bind(this), 520)
         },
         // 显示右tab页
         showRightTab () {
-            this.listLeftLeft = '-100%'
-            this.listMiddleLeft = '-100%'
+            // 控制显隐
+            this.listMiddleShow = true
+            this.listRightShow = true
+            // 控制移动
+            this.listLeftLeft = '-200%'
+            this.listMiddleLeft = '-105%'
             this.listRightLeft = '5%'
+            // 控制显隐
+            setTimeout(function () {
+                this.listLeftShow = false
+                this.listMiddleShow = false
+            }.bind(this), 520)
         },
         // 根据警报名称判断警报类型
         getType (name) {
@@ -292,7 +268,6 @@ export default {
 </script>
 
 <style>
-@import "../../common/FontAwesome.css";
 
 .page-body {
     /* border: 1px solid #f00; */
@@ -303,108 +278,4 @@ export default {
     overflow-x: hidden;
 }
 
-.page-section {
-    margin-bottom: 60px;
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
-.uni-flex {
-    display: flex;
-    flex-direction: row;
-}
-
-.uni-row {
-    flex-direction: row;
-}
-
-.uni-column {
-    flex-direction: column;
-}
-
-.list-container {
-    border: 1px solid #000;
-}
-
-.panel {
-    /* border: 1px solid #000; */
-    position: absolute;
-    width: 90%;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-    transition: left .5s ease-out;
-}
-
-.panel-left {
-    left: 5%;
-}
-.panel-middle {
-    left: 100%;
-}
-.panel-right {
-    left: 100%;
-}
-
-.warning-row {
-    /* border: 1px solid #000; */
-    background-color: rgba(250, 250, 250, 0.8);
-    width: 100%;
-    height: 100px;
-    display: flex;
-    flex-direction: row;
-}
-.border-top {
-    border-top: 1px solid #000;
-}
-
-.cell-icon {
-    height: 100px;
-    width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.content-column {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.cell-name {
-    /* border-bottom: 1px solid #f00; */
-    flex: 2;
-    font-size: 38px;
-}
-
-.cell-date {
-    flex: 1;
-    /* border-left: 1px solid #0f0;
-    border-right: 1px solid #0f0; */
-    font-size: 23px;
-    text-align: right;
-}
-
-.cell-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-    color: #0092d4;
-}
-
-.rouge {
-    color: red
-}
-.orange {
-    color: orange
-}
-.jeune {
-    color: #ffcc55;
-}
-.bleu {
-    color: #004499
-}
-.dismiss {
-    color: #009955
-}
 </style>
