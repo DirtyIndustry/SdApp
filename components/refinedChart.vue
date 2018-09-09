@@ -2,7 +2,7 @@
     <view class="refinedChart-body">
         <!-- 地名 -->
         <view v-if="data.length > 0">{{data[0].loc}}</view>
-        <scroll-view scroll-x="true" @scroll="handleScroll">
+        <scroll-view scroll-x="true" scroll-with-animation="true" @scroll="handleScroll">
             <view class="chart">
                 <myChart :option="option" :canvasId="canvasId" />
             </view>
@@ -202,6 +202,7 @@
             },
             // 图标滚动事件
             handleScroll(e) {
+                // console.log(e.detail.scrollLeft)
                 // utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
                 this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatus)
             },
