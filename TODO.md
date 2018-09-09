@@ -26,7 +26,7 @@ DONE... optimize tide chart, switch v-show earlier than change option
 DONE... vuex optimize  
 DONE... 趋势预测  
 DONE... optimize debug console log  
-DONE... use local storage to speed up *startup->localstore->netrequest->localstore*  
+DONE... use local storage to speed up  *startup->localstore->netrequest->localstore*  
 DONE... auto location, default location setting  
 DONE... bug: baths shows in all city  
 DONE... 城市预报  
@@ -105,16 +105,17 @@ DONE... warningdetail page incoming arguments
 DONE... warningdetail page  
 DONE... warninglist page three lists   
 DONE... warninglist component  
-warninglist page renter tab selected  
+DONE... warninglist page renter tab selected  
+DONE... current time pointer  
+DONE... 预警报  
+DONE... 新闻中心  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
 set up Dev document, setting version, storage format version etc.   
-预警报  
-新闻中心  
 webview pages  
 deal with request response error  
 deal with request response fail  
 navibar city selection  
 selection panel with mask, for city pick  
-current time pointer  
+bienvenu page  

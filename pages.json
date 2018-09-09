@@ -97,6 +97,13 @@
 			}
 		},
 		{
+			"path": "pages/newscenter/newscenter",
+			"style": {
+				"navigationBarTitleText": "新闻中心",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/warningdetail/warningdetail",
 			"style": {
 				"navigationBarTitleText": "警报详情"
