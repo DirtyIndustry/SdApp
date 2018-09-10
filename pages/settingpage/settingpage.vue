@@ -18,6 +18,7 @@
 			<view class="separator-horizontal"></view>
 			<view class="text">清理缓存</view>
 			<view class="right-column text">
+				<view v-if="cachesize === ''" class="fa fa-angle-right font-icon"></view>
 				{{cachesize}}
 			</view>
 			<view class="separator-horizontal"></view>
@@ -109,6 +110,9 @@
 			// 关于
 			aboutTap () {
 				console.log('about clicked.')
+				uni.navigateTo({
+					url: '../aboutpage/aboutpage'
+				})
 			},
 			// 检查更新
 			checkupdateTap () {

@@ -597,7 +597,7 @@ const getOption = function (tidedata, markdata) {
                 smooth: true,
                 silent: true,
                 animation: false,
-                symbolSize: 1, // 曲线上数据点小圆圈的大小
+                symbolSize: 0, // 曲线上数据点小圆圈的大小
                 lineStyle: {
                     color: '#1c8d3b', // 曲线颜色
                     width: 1 // 曲线粗细

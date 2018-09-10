@@ -109,6 +109,16 @@ DONE... warninglist page renter tab selected
 DONE... current time pointer  
 DONE... 预警报  
 DONE... 新闻中心  
+DONE... setting page layout  
+DONE... clear cache  
+DONE... contact us page layout  
+DONE... contact us page validation  
+DONE... contact us page daily limitation  
+DONE... contact us page submit  
+DONE... about page layout  
+DONE... about page prevent scroll  
+warning detail html width fits  
+check update  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
