@@ -13,6 +13,7 @@
 			<view class="text-small">请在手机设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view>
 			<view class="separator-horizontal"></view>
 		</view>
+		<!-- 清理缓存 -->
 		<view class="stripbutton" @tap="cachebuttonTap">
 			<view class="separator-horizontal"></view>
 			<view class="text">清理缓存</view>
@@ -21,7 +22,9 @@
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
+		<!-- 小分隔条 -->
 		<view class="separator-vertical-small"></view>
+		<!-- 联系我们 -->
 		<view class="stripbutton" @tap="contactusTap">
 			<view class="separator-horizontal"></view>
 			<view class="text">联系我们</view>
@@ -30,7 +33,9 @@
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
+		<!-- 小分隔条 -->
 		<view class="separator-vertical-small"></view>
+		<!-- 关于 -->
 		<view class="stripbutton" @tap="aboutTap">
 			<view class="separator-horizontal"></view>
 			<view class="text">关于</view>
@@ -39,8 +44,9 @@
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
-		
+		<!-- 小分隔条 -->
 		<view class="separator-vertical-small"></view>
+		<!-- 检查更新 -->
 		<view class="stripbutton" @tap="checkupdateTap">
 			<view class="separator-horizontal"></view>
 			<view class="text">检查更新</view>
@@ -56,7 +62,7 @@
 	import utils from '../../utils/utils.js'
 	export default {
 		data: {
-			cachesize: '0Kb'
+			cachesize: ''
 		},
 		methods: {
 			// 获取当前缓存占用空间 单位kb
@@ -81,21 +87,24 @@
 			},
 			// 清理缓存
 			cachebuttonTap () {
-				uni.showLoading({
-					title: '清理中',
-					mask: true
-				})
 				try {
 					uni.clearStorageSync()
 				} catch (e) {
 					console.log('[缓存]: 清理缓存出错')
 				}
 				this.getCacheSize()
-				uni.hideLoading()
+				uni.showModal({
+					title: '提示',
+					content: '清理缓存成功',
+					showCancel: false
+				})
 			},
 			// 联系我们
 			contactusTap () {
 				console.log('contact us clicked.')
+				uni.navigateTo({
+					url: '../contactus/contactus'
+				})
 			},
 			// 关于
 			aboutTap () {

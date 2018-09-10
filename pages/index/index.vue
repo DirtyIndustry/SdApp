@@ -207,8 +207,8 @@
 				this.completedRequestCount = 0
 				this.loadWeather(city)
 				this.loadWarning()
-				// this.loadAstronomicalTide(city)
-				this.loadAstroTide(city)
+				this.loadAstronomicalTide(city)
+				// this.loadAstroTide(city)
 				this.loadInshore(city)
 				this.loadBaths(city)
 				this.loadRefined(city)
