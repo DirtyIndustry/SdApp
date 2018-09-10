@@ -4,15 +4,15 @@
 		<view class="separator-vertical"></view>
         <form @submit="formSubmit">
             <!-- 联系人姓名 -->
-            <input name="input_name" class="input input-small" v-model="postername" placeholder=" 联系人姓名" focus/>
+            <input name="input_name" class="input input-small" v-model="postername" placeholder="联系人姓名" :focus="inputnameFocus" @confirm="inputnameConfirm"/>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 联系方式 -->
-            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder=" 联系方式（推荐使用邮箱）" />
+            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系方式（推荐使用邮箱）" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 留言内容 -->
-            <textarea name="input_content" class="input input-big" v-model="postcontent" placeholder=" 请输入留言*"></textarea>
+            <textarea name="input_content" class="input input-big" v-model="postcontent" placeholder="请输入留言*" :focus="inputcontentFocus"></textarea>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 提交按钮 -->
@@ -27,14 +27,17 @@ import utils from '../../utils/utils.js'
 export default {
 data () {
     return {
-        lastpostdate: '',
-        postcounter: 0,
-        postername: '',
-        postercontact: '',
-        postcontent: '',
-        limited: false,
-        postvalid: false,
-        buttonText: '提交'
+        lastpostdate: '',       // 最后提交日期
+        postcounter: 0,         // 提交计数
+        postername: '',         // 联系人姓名
+        postercontact: '',      // 联系人联系方式
+        postcontent: '',        // 留言内容
+        limited: false,         // 是否达到每日提交次数上限
+        postvalid: false,       // 是否可以提交
+        buttonText: '提交',     // 提交按钮字样
+        inputnameFocus: true,       // 联系人姓名获得焦点
+        inputcontactFocus: false,   // 联系方式获得焦点
+        inputcontentFocus: false,   // 留言正文获得焦点
     }
 },
 watch: {
@@ -55,13 +58,18 @@ watch: {
     // 每日留言限制
     limited: {
         handler (newVal, oldVal) {
-            if (newVal) {
-                if (newVal === true) {
-                    this.buttonText = '已达到每日提交次数上限'
-                } else {
-                    this.buttonText = '提交'
-                }
+            if (newVal === true) {
+                this.buttonText = '已达到每日提交次数上限'
+                this.postvalid = false
+            } else {
+                this.buttonText = '提交'
             }
+        }
+    },
+    // 留言计数
+    postcounter: {
+        handler (newVal, oldVal) {
+            this.setLimitation()
         }
     }
 },
@@ -88,24 +96,70 @@ methods: {
     },
     // 提交表单
     formSubmit (e) {
-        console.log(this.lastpostdate)
-        console.log(this.postcounter)
-        console.log(this.postername)
-        console.log(this.postercontact)
-        console.log(this.postcontent)
-        this.lastpostdate = new Date()
-        this.postcounter++
-        utils.storeToLocal('lastpostdate', this.lastpostdate)
-        utils.storeToLocal('postcounter', this.postcounter)
-        setLimitation()
+        if (this.postcontent.trim() === '') {
+            console.log('[界面]: 提交内容为空')
+            return
+        }
+        // 显示loading toast
+        uni.showLoading({
+            title: '提交中',
+            mask: true
+        })
+        let that = this
+        uni.request({
+            url: appsettings.hosturl + 'GetBolMessage_0104',
+            data: {
+                name: 'admin',
+                areaflg: '山东',
+                MESSAGE_NAME: that.postername,
+                iphonenumber: that.postercontact,
+                messagelanage: that.postcontent
+            },
+            method: 'POST',
+            success: function (res) {
+                console.log('[服务器]: 提交用户留言成功')
+                // 关闭loading toast
+                uni.hideLoading()
+                // 更新最后提交时间和提交计数器
+                that.lastpostdate = new Date()
+                that.postcounter++
+                // 写入本地缓存
+                utils.storeToLocal('lastpostdate', that.lastpostdate)
+                utils.storeToLocal('postcounter', that.postcounter)
+                // 弹出提示窗口
+                uni.showModal({
+					title: '成功',
+					content: '用户留言提交成功',
+                    showCancel: false,
+                    success: function (e) {
+                        if (e.confirm) {
+                            console.log('[界面]: 用户点击了确定')
+                            // 点击确定关闭页面
+                            uni.navigateBack()
+                        }
+                    }
+				})
+            }, // end-success-request
+            fail: function (res) {
+                console.log('[服务器]: 提交用户留言失败')
+                // 关闭loading toast
+                uni.hideLoading()
+                // 弹出提示窗口
+                uni.showModal({
+					title: '失败',
+					content: '用户留言提交失败',
+					showCancel: false
+				})
+            } // end-fail-request
+        })
     },
     // 检查是否是同一天
     checkDate (today, record) {
-        if (today == '' | record === '') {
+        if (today === 0 | record === '') {
             return true
         }
         let recorddate = new Date(record)
-        if (today.getFullYear() === recorddate.getFullYear() & today.getMonth() === recorddate.getMonth() & today.getDate() === recorddate.getMonth()) {
+        if (today.getFullYear() === recorddate.getFullYear() & today.getMonth() === recorddate.getMonth() & today.getDate() === recorddate.getDate()) {
             return true
         } else {
             return false
@@ -123,11 +177,20 @@ methods: {
             this.limited = false
             this.postcounter = 0
         }
+    },
+    // 姓名输入栏点击确定
+    inputnameConfirm () {
+        this.inputnameFocus = false
+        this.inputcontactFocus = true
+    },
+    // 联系方式输入栏点击确定
+    inputcontactConfirm () {
+        this.inputcontactFocus = false
+        this.inputcontentFocus = true
     }
 },
 onShow () {
     this.getLastPostLocalStorage()
-    this.setLimitation()
 }
 }
 </script>
@@ -155,7 +218,7 @@ onShow () {
 
 .input {
     border: 1px solid #999;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: #fff;
     position: relative;
     display: flex;
