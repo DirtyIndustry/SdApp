@@ -33,11 +33,11 @@
 			<view style="height: 20px;" />
 			<!-- #endif -->
 			<!-- 天气预报模块 -->
-			<view class="page-section">
-				<weatherSection :weatherData="weatherData" />
-			</view>
+			<!-- <view class="page-section"> -->
+				<realtimeWeather :weatherData="weatherData" />
+			<!-- </view> -->
 			<!-- 警报模块 -->
-			<view class="page-section">
+			<view class="page-section warning-section">
 				<!-- 台风警报 -->
 				<view class="text" v-if="warningData.typhoonWarning != ''">
 					{{warningData.typhoonWarning}}
@@ -98,6 +98,7 @@
 	import utils from '../../utils/utils.js'
 	import myChart from '../../components/myChart.vue'
 	import weatherSection from '../../components/weatherSection.vue'
+	import realtimeWeather from '../../components/realtimeWeather.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
@@ -108,6 +109,7 @@
 		components: {
 			myChart,
 			weatherSection,
+			realtimeWeather,
 			fivedayForcast,
 			inshoreTable,
 			bathsTable,
@@ -905,7 +907,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	@import "../../common/uni.css";
 
 	.page-body {
@@ -923,7 +925,7 @@
 	}
 
 	.header {
-		background-color: #fff;
+		/* background-color: #fff; */
 		left: 0;
 		width: 100%;
 		height: 80px;
@@ -937,6 +939,10 @@
 	.page-section {
 		margin-bottom: 60px;
 		background-color: rgba(255, 255, 255, 0.8);
+	}
+
+	.warning-section {
+		position: sticky;
 	}
 
 	.uni-list-cell {
