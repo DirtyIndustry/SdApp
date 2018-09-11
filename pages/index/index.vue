@@ -6,7 +6,7 @@
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
-			<!-- <view class="page-section"> -->
+			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
 				<view class="uni-list">
 					<view class="uni-list-cell">
@@ -27,6 +27,11 @@
 			</view>
 			<!-- 占位空白模块 -->
 			<view style="height: 100px;" />
+			<!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="header">{{cityName}}地区预报</view>
+			<view style="height: 20px;" />
+			<!-- #endif -->
 			<!-- 天气预报模块 -->
 			<view class="page-section">
 				<weatherSection :weatherData="weatherData" />
@@ -915,6 +920,18 @@
 		background-size: contain;
 		background-attachment: fixed;
 		*/
+	}
+
+	.header {
+		background-color: #fff;
+		left: 0;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		color: #0092d4;
+		font-size: 37px;
+		font-weight: bold;
 	}
 
 	.page-section {
