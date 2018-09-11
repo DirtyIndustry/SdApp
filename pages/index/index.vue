@@ -1,7 +1,7 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
-		<myPicker ref="citypicker"></myPicker>
+		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
@@ -829,6 +829,23 @@
 						that.completedRequestCount++
 					}
 				}) // end-request
+			},
+			// 自定义picker选择
+			mypickerSelect(index, item) {
+				// 弹出loading toast
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				})
+				// 写入Vuex和缓存
+				this.cityIndex = index
+				utils.storeToLocal('cityindex', index)
+				this.switchCityByIndex(index)
+
+				// 10秒后关闭toast
+				setTimeout(function () {
+					uni.hideLoading()
+				}.bind(this), 10000)
 			}
 		}, // end-methods
 		watch: {
