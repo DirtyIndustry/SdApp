@@ -117,8 +117,11 @@ DONE... contact us page daily limitation
 DONE... contact us page submit  
 DONE... about page layout  
 DONE... about page prevent scroll  
-warning detail html width fits  
-check update  
+DONE... warning detail html templates  
+DONE... warning detail html width fits  
+DONE... check update android  
+DONE... check update comfirm button text  
+DONE... check update up to date message window  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

@@ -60,6 +60,7 @@
 </template>
 
 <script>
+	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	export default {
 		data: {
@@ -117,6 +118,64 @@
 			// 检查更新
 			checkupdateTap () {
 				console.log('check update clicked.')
+				let that = this
+				uni.request({
+					url: appsettings.hosturl + 'GetAndroidUpgrade_0911',
+					data: {name: 'admin', areaflg: '山东'},
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 安卓升级数据')
+						if (!res.data.d) {
+							console.log('[服务器]: 返回 安卓升级数据 返回值为空')
+							return false
+						}
+						let result = JSON.parse(res.data.d)
+						if (result.length === 0) {
+							console.log('[服务器]: 返回 安卓升级数据 返回值为空')
+							return false
+						}
+						for (let i = 0; i < result.length; i++) {
+							let resversion = result[i].version
+							let resappname = result[i].appname
+							// 检查app名称是否相同
+							if (resappname === appsettings.appname) {
+								if (that.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+									// 弹窗提示
+									uni.showModal({
+										title: '发现新版本',
+										content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
+										confirmText: '立即升级',
+										cancelText: '取消',
+										success: function (res) {
+											if (res.confirm) {
+												console.log('用户确认升级')
+												plus.runtime.openURL(result[i].url)
+											} else {
+												console.log('用户取消升级')
+											}
+										}
+									})
+								} else {	// 不需要升级
+									uni.showModal({
+										content: '当前已是最新版本',
+										showCancel: false
+									})
+								}
+							}
+						}
+					}
+				})
+			},
+			// 检查版本
+			needUpdate (oldVal, newVal) {
+				let oldarr = oldVal.split('.')
+				let newarr = newVal.split('.')
+				for (let i = 0; i < oldarr.length; i++) {
+					if (oldarr[i] < newarr[i]) {
+						return true
+					}
+				}
+				return false
 			}
 		},
 		onLoad () {
