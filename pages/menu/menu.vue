@@ -79,10 +79,16 @@
                     </button>
                 </view>
                 <!-- 第五行右 -->
-                <view class="menu-cell menu-column">
+                <!-- <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="newscenterTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/news_img.png" />
                         <view class="menu-button-text">新闻中心</view>
+                    </button>
+                </view> -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="oceanforecastTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
+                        <view class="menu-button-text">海区预报</view>
                     </button>
                 </view>
             </view>
@@ -161,6 +167,13 @@ export default {
             console.log('新闻中心点击')
             uni.navigateTo({
                 url: '../newscenter/newscenter'
+            })
+        },
+        // 海区预报
+        oceanforecastTap (e) {
+            console.log('海区预报点击')
+            uni.navigateTo({
+                url: '../oceanforecast/oceanforecast'
             })
         }
     }

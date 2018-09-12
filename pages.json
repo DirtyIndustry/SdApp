@@ -104,6 +104,13 @@
 			}
 		},
 		{
+			"path": "pages/oceanforecast/oceanforecast",
+			"style": {
+				"navigationBarTitleText": "海区预报",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/warningdetail/warningdetail",
 			"style": {
 				"navigationBarTitleText": "警报详情"

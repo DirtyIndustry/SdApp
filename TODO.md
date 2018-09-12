@@ -127,8 +127,12 @@ DONE... mypicker animation
 DONE... mypicker on index page  
 DONE... realtime weather module  
 DONE... realtime weather module styling  
-warning module animation  
-warning module component  
+DONE... warning module animation  
+DONE... warning module component  
+DONE... GetSeaAreaforecastWX_0912  
+DONE... oceanforecast table component  
+DONE... oceanforecast page  
+DONE... oceanforecast page styling  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
