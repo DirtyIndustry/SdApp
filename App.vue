@@ -193,10 +193,10 @@
 		}, // end-methods
 		onLaunch: function () {
 			console.log('App Launch')
-			uni.showLoading({
-				title: '加载中',
-				mask: true
-			})
+			// uni.showLoading({
+			// 	title: '加载中',
+			// 	mask: true
+			// })
 			
 			//#ifdef APP-PLUS
 			/* 5+环境锁定屏幕方向 */

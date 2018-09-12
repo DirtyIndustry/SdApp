@@ -1,6 +1,14 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页
 		{
+			"path": "pages/bienvenu/bienvenu",
+			"style": {
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "山东海洋预报",
