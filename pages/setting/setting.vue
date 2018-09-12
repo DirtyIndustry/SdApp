@@ -112,7 +112,7 @@
 			aboutTap () {
 				console.log('about clicked.')
 				uni.navigateTo({
-					url: '../aboutpage/aboutpage'
+					url: '../about/about'
 				})
 			},
 			// 检查更新

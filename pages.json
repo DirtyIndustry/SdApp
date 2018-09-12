@@ -20,19 +20,19 @@
 			}
 		},
 		{
-			"path": "pages/menupage/menupage",
+			"path": "pages/menu/menu",
 			"style": {
 				"navigationBarTitleText": "菜单"
 			}
 		},
 		{
-			"path": "pages/mappage/mappage",
+			"path": "pages/map/map",
 			"style": {
 				"navigationBarTitleText": "地图"
 			}
 		},
 		{
-			"path": "pages/settingpage/settingpage",
+			"path": "pages/setting/setting",
 			"style": {
 				"navigationBarTitleText": "设置"
 			}
@@ -45,7 +45,7 @@
 			}
 		},
 		{
-			"path": "pages/warninglistpage/warninglistpage",
+			"path": "pages/warninglist/warninglist",
 			"style": {
 				"navigationBarTitleText": "预警报",
 				"enablePullDownRefresh": true
@@ -79,19 +79,19 @@
 			}
 		},
 		{
-			"path": "pages/weatherimgpage/weatherimgpage",
+			"path": "pages/weatherimg/weatherimg",
 			"style": {
 				"navigationBarTitleText": "天气图"
 			}
 		},
 		{
-			"path": "pages/satelliteimgpage/satelliteimgpage",
+			"path": "pages/satelliteimg/satelliteimg",
 			"style": {
 				"navigationBarTitleText": "卫星云图"
 			}
 		},
 		{
-			"path": "pages/radarimgpage/radarimgpage",
+			"path": "pages/radarimg/radarimg",
 			"style": {
 				"navigationBarTitleText": "雷达图"
 			}
@@ -116,7 +116,7 @@
 			}
 		},
 		{
-			"path": "pages/aboutpage/aboutpage",
+			"path": "pages/about/about",
 			"style": {
 				"navigationBarTitleText": "关于"
 			}
@@ -143,17 +143,17 @@
 			"selectedIconPath": "static/Images/bottom_left_second.png",
 			"text": "主页"
 		}, {
-			"pagePath": "pages/menupage/menupage",
+			"pagePath": "pages/menu/menu",
 			"iconPath": "static/Images/bottom_middle_first.png",
 			"selectedIconPath": "static/Images/bottom_middle_second.png",
 			"text": "菜单"
 		}, {
-			"pagePath": "pages/mappage/mappage",
+			"pagePath": "pages/map/map",
 			"iconPath": "static/Images/bottom_loc_first.png",
 			"selectedIconPath": "static/Images/bottom_loc_second.png",
 			"text": "地图"
 		}, {
-			"pagePath": "pages/settingpage/settingpage",
+			"pagePath": "pages/setting/setting",
 			"iconPath": "static/Images/bottom_right_first.png",
 			"selectedIconPath": "static/Images/bottom_right_second.png",
 			"text": "设置"

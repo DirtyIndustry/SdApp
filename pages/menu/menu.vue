@@ -104,7 +104,7 @@ export default {
         warninglistTap (e) {
             console.log('预警报点击')
             uni.navigateTo({
-                url: '../warninglistpage/warninglistpage'
+                url: '../warninglist/warninglist'
             })
         },
         // 渔场预报
@@ -132,21 +132,21 @@ export default {
         weatherimgTap (e) {
             console.log('天气图点击')
             uni.navigateTo({
-                url: '../weatherimgpage/weatherimgpage'
+                url: '../weatherimg/weatherimg'
             })
         },
         // 卫星云图
         satelliteimgTap (e) {
             console.log('卫星云图点击')
             uni.navigateTo({
-                url: '../satelliteimgpage/satelliteimgpage'
+                url: '../satelliteimg/satelliteimg'
             })
         },
         // 雷达图
         radarimgTap (e) {
             console.log('雷达图点击')
             uni.navigateTo({
-                url: '../radarimgpage/radarimgpage'
+                url: '../radarimg/radarimg'
             })
         },
         // 台风路径
