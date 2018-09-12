@@ -15,8 +15,8 @@
             <view class="row">
                 <view class="icon">
                     <view class="cell">
-                        <view class="fa fa-leaf font-icon" :class="{vert: weatherData.airconDesc === '优', jeune: weatherData.airconDesc === '良', orange: weatherData.airconDesc === '轻度污染', red: weatherData.airconDesc === '重度污染'}">
-                            <view class="text-mini">AQI</view>
+                        <view class="fa fa-leaf font-icon" :class="{vert: weatherData.airconDesc === '优', jeune: weatherData.airconDesc === '良', orange: weatherData.airconDesc === '轻度污染', rouge: weatherData.airconDesc === '重度污染'}">
+                            <view class="text-mini-icon">AQI</view>
                         </view>
                     </view>
                 </view>
@@ -28,7 +28,7 @@
                 </view>
                 <view class="content text">
                     {{weatherData.pm25}}
-                    <view class="text-mini">&nbsp;&nbsp;μg/m³</view>
+                    <view class="text-mini-content">&nbsp;&nbsp;μg/m³</view>
                 </view>
             </view>
         </view>
@@ -112,10 +112,15 @@ export default {
 .text {
     font-size: 38px;
 }
-.text-mini {
+.text-mini-icon {
     /* border: 1px solid #000; */
     height: 55%;
     line-height: 400%;
+    font-size: 20px;
+}
+.text-mini-content {
+    height: 55%;
+    line-height: 350%;
     font-size: 20px;
 }
 /* 空气质量优 */
@@ -125,12 +130,12 @@ export default {
 
 /* 空气质量良 */
 .very {
-    color: yellow;
+    color: goldenrod;
 }
 
 /* 空气质量轻度污染 */
 .bad {
-    color: orange;
+    color: Chocolate;
 }
 
 /* 空气质量重度污染 */
@@ -142,12 +147,12 @@ export default {
     color: green;
 }
 .jeune {
-    color: yellow;
+    color: goldenrod;
 }
 .orange {
-    color: orange;
+    color: Chocolate;
 }
-.red {
+.rouge {
     color: red;
 }
 </style>

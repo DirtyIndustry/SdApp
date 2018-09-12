@@ -122,6 +122,13 @@ DONE... warning detail html width fits
 DONE... check update android  
 DONE... check update comfirm button text  
 DONE... check update up to date message window  
+DONE... mypicker  
+DONE... mypicker animation  
+DONE... mypicker on index page  
+DONE... realtime weather module  
+DONE... realtime weather module styling  
+warning module animation  
+warning module component  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

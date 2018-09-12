@@ -39,11 +39,14 @@
 			<!-- 警报模块 -->
 			<view class="page-section warning-section">
 				<!-- 台风警报 -->
-				<view class="text" v-if="warningData.typhoonWarning != ''">
+				<view class="text warning-banner" v-if="warningData.typhoonWarning != ''">
+					{{warningData.typhoonWarning}}
+				</view>
+				<view class="text warning-banner warning-banner-follow" v-if="warningData.typhoonWarning != ''">
 					{{warningData.typhoonWarning}}
 				</view>
 				<!-- 海浪警报 -->
-				<view class="text" v-if="warningData.waveWarning != ''">
+				<view class="text warning-banner" v-if="warningData.waveWarning != ''">
 					{{warningData.waveWarning}}
 				</view>
 			</view>
@@ -942,7 +945,38 @@
 	}
 
 	.warning-section {
-		position: sticky;
+		border: 1px solid #999;
+		height: 60px;
+  		position: relative;
+		overflow: hidden;
+		/* --marqueeWidth--: -12em; */
+	}
+	.warning-banner {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 60px;
+		font-size: 28rpx;
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		animation-name: around;
+		animation-duration: 10s;  /*过渡时间*/
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+	}
+	.warning-banner-follow {
+		margin-left: 100%;
+		animation-delay: 5s;
+	}
+	@keyframes around {
+		from {
+			margin-left: 100%;
+		}
+		to {
+			/* margin-left: var(--marqueeWidth--); */
+			margin-left: -100%;
+		}
 	}
 
 	.uni-list-cell {
@@ -961,17 +995,6 @@
 	.sidebar {
 		display: table-cell;
 		width: 150px;
-	}
-
-	.text {
-		margin: 10px;
-		padding: 0 20px;
-		background-color: #ebebeb;
-		height: 70px;
-		line-height: 70px;
-		text-align: center;
-		color: #cfcfcf;
-		font-size: 26px;
 	}
 
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
