@@ -37,18 +37,8 @@
 				<realtimeWeather :weatherData="weatherData" />
 			<!-- </view> -->
 			<!-- 警报模块 -->
-			<view class="page-section warning-section">
-				<!-- 台风警报 -->
-				<view class="text warning-banner" v-if="warningData.typhoonWarning != ''">
-					{{warningData.typhoonWarning}}
-				</view>
-				<view class="text warning-banner warning-banner-follow" v-if="warningData.typhoonWarning != ''">
-					{{warningData.typhoonWarning}}
-				</view>
-				<!-- 海浪警报 -->
-				<view class="text warning-banner" v-if="warningData.waveWarning != ''">
-					{{warningData.waveWarning}}
-				</view>
+			<view class="page-section">
+				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap" @waveTap="waveWarningTap"/>
 			</view>
 			<!-- 潮汐预报模块 -->
 			<!-- 第一个图表 -->
@@ -102,6 +92,7 @@
 	import myChart from '../../components/myChart.vue'
 	import weatherSection from '../../components/weatherSection.vue'
 	import realtimeWeather from '../../components/realtimeWeather.vue'
+	import warningSection from '../../components/warningSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
@@ -113,6 +104,7 @@
 			myChart,
 			weatherSection,
 			realtimeWeather,
+			warningSection,
 			fivedayForcast,
 			inshoreTable,
 			bathsTable,
@@ -127,7 +119,8 @@
 				// 警报数据
 				warningData: {
 					typhoonWarning: '',
-					waveWarning: ''
+					waveWarning: '',
+					waveUrl: ''
 				},
 			}
 		},
@@ -364,12 +357,13 @@
 								if (typhoondate > nowdate) {
 									// 有台风警报
 									console.log('有台风警报')
-									that.warningData.typhoonWarning =
-										'编号:' +
+									that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
+										lasttyphoon.NUMBER + 
+										'号台风"' +
 										lasttyphoon.CHN_NAME +
-										'"' +
+										'(' +
 										lasttyphoon.ENG_NAME +
-										'"正在靠近……'
+										')"正在接近……'
 								} // end-if (typhoondate > nowdate)
 							}, // end-success-request
 							fail: function (res) {
@@ -407,6 +401,7 @@
 							let warningdate = resarr[resarr.length - 1].datetime
 							console.log('有海浪警报')
 							that.warningData.waveWarning = warningname + ','+ warningdate + '……'
+							that.warningData.waveUrl = resarr[resarr.length - 1].Url
 						}
 					}, // end-success-request
 					fail: function (res) {
@@ -856,6 +851,21 @@
 				setTimeout(function () {
 					uni.hideLoading()
 				}.bind(this), 10000)
+			},
+			// 台风警报点击
+			typhoonWarningTap () {
+				console.log('[界面]: 点击台风警报')
+				uni.navigateTo({
+					url: '../typhoonmap/typhoonmap'
+				})
+			},
+			// 海浪警报点击
+			waveWarningTap () {
+				console.log('[界面]: 点击海浪警报')
+				let that = this
+				uni.navigateTo({
+					url: '../warningdetail/warningdetail?data=' + that.warningData.waveUrl
+				})
 			}
 		}, // end-methods
 		watch: {
@@ -944,6 +954,7 @@
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
+	
 	.warning-section {
 		border: 1px solid #999;
 		height: 60px;
