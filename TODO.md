@@ -133,6 +133,13 @@ DONE... GetSeaAreaforecastWX_0912
 DONE... oceanforecast table component  
 DONE... oceanforecast page  
 DONE... oceanforecast page styling  
+DONE... navibar city selection  
+DONE... selection panel with mask, for city pick  
+DONE... bienvenu page  
+DONE... bienvenu page skip  
+table styling  
+chart styling  
+slide ball  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
@@ -140,6 +147,3 @@ set up Dev document, setting version, storage format version etc.
 webview pages  
 deal with request response error  
 deal with request response fail  
-navibar city selection  
-selection panel with mask, for city pick  
-bienvenu page  
