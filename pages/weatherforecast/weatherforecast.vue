@@ -1,11 +1,12 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
+		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
-			<!-- <view class="page-section"> -->
+			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
 				<view class="uni-list">
 					<view class="uni-list-cell">
@@ -26,9 +27,14 @@
 			</view>
 			<!-- 占位空白模块 -->
 			<view style="height: 100px;" />
+			<!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="header">{{cityName}}地区预报</view>
+			<view style="height: 20px;" />
+			<!-- #endif -->
 			<!-- 天气预报模块 -->
 			<view class="page-section">
-				<weatherSection :weatherData="weatherData" />
+				<realtimeWeather :weatherData="weatherData" />
 			</view>
 			<!-- 五日天气预报 -->
 			<view class="page-section">
@@ -36,7 +42,7 @@
 					<view class="uni-flex uni-row">
 						<!-- 依据fivedayWeather生成列 -->
 						<view class="fiveday-column uni-flex uni-column" :class="{'fiveday-column-left': index < 4}" v-for="(item, index) in fivedayData.fivedayWeather"
-						 :key="index">
+							:key="index">
 							<!-- 自上而下分别为 周，日期，天气，天气图标，折线空格，风向，风力 -->
 							<view class="flex-cell-single">{{item.week}}</view>
 							<view class="flex-cell-single">{{item.date}}</view>
@@ -62,6 +68,8 @@
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	import weatherSection from '../../components/weatherSection.vue'
+	import realtimeWeather from '../../components/realtimeWeather.vue'
+	import myPicker from '../../components/myPicker.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -70,6 +78,8 @@
 	export default {
 		components: {
 			weatherSection,
+			realtimeWeather,
+			myPicker,
 			mpvueEcharts
 		},
 		data() {
@@ -696,7 +706,24 @@
 				canvas.setChart(chartFiveday)
 				chartFiveday.setOption(this.fivedayData.optionFiveday, true)
 				return chartFiveday
-			}
+			},
+			// 自定义picker选择
+			mypickerSelect(index, item) {
+				// 弹出loading toast
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				})
+				// 写入Vuex和缓存
+				this.cityIndex = index
+				utils.storeToLocal('cityindex', index)
+				this.switchCityByIndex(index)
+
+				// 10秒后关闭toast
+				setTimeout(function () {
+					uni.hideLoading()
+				}.bind(this), 10000)
+			},
 		}, // end-methods
 		watch: {
 			// 完成的request
@@ -748,11 +775,15 @@
 			setTimeout(function () {
 				uni.stopPullDownRefresh()
 			}.bind(this), 10000)
+		},
+		onNavigationBarButtonTap() {
+			console.log('navibar button tapped.')
+			this.$refs.citypicker.switchDialog()
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	@import "../../common/uni.css";
 
 	.page-body {
@@ -774,6 +805,18 @@
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
+	.header {
+		/* background-color: #fff; */
+		left: 0;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		color: #0092d4;
+		font-size: 37px;
+		font-weight: bold;
+	}
+
 	.uni-list-cell {
 		justify-content: flex-start;
 	}
@@ -790,17 +833,6 @@
 	.sidebar {
 		display: table-cell;
 		width: 150px;
-	}
-
-	.text {
-		margin: 10px;
-		padding: 0 20px;
-		background-color: #ebebeb;
-		height: 70px;
-		line-height: 70px;
-		text-align: center;
-		color: #cfcfcf;
-		font-size: 26px;
 	}
 
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */

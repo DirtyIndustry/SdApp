@@ -1,11 +1,12 @@
 <template>
 	<!-- <view style="background-image: url(../../static/Images/back_images.jpg); background-repeat: no-repeat; background-size: contain; background-attachment: scroll;"> -->
 	<view>
+		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
 			/>
 			<!-- 地区选择模块 -->
-			<!-- <view class="page-section"> -->
+			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
 				<view class="uni-list">
 					<view class="uni-list-cell">
@@ -26,6 +27,11 @@
 			</view>
 			<!-- 占位空白模块 -->
 			<view style="height: 100px;" />
+			<!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="header">{{cityName}}地区预报</view>
+			<view style="height: 20px;" />
+			<!-- #endif -->
 			<!-- 潮汐预报模块 -->
 			<!-- 第一个图表 -->
 			<view class="page-section">
@@ -208,6 +214,7 @@
 	import utils from '../../utils/utils.js'
 	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
+	import myPicker from '../../components/myPicker.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -224,6 +231,7 @@
 		components: {
 			inshoreTable,
 			bathsTable,
+			myPicker,
 			mpvueEcharts
 		},
 		data() {
@@ -1043,13 +1051,30 @@
             handleScrollRefinedTwo(e) {
                 // utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
                 this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedTwo)
-            }
+			},
+			// 自定义picker选择
+			mypickerSelect(index, item) {
+				// 弹出loading toast
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				})
+				// 写入Vuex和缓存
+				this.cityIndex = index
+				utils.storeToLocal('cityindex', index)
+				this.switchCityByIndex(index)
+
+				// 10秒后关闭toast
+				setTimeout(function () {
+					uni.hideLoading()
+				}.bind(this), 10000)
+			}
 		}, // end-methods
 		watch: {
 			// 完成的request
 			completedRequestCount: {
 				handler(newVal, oldVal) {
-					if (newVal === 6) {
+					if (newVal === 5) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					}
@@ -1149,6 +1174,10 @@
 			setTimeout(function () {
 				uni.stopPullDownRefresh()
 			}.bind(this), 10000)
+		},
+		onNavigationBarButtonTap() {
+			console.log('navibar button tapped.')
+			this.$refs.citypicker.switchDialog()
 		}
 	}
 </script>
@@ -1175,6 +1204,18 @@
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
+	.header {
+		/* background-color: #fff; */
+		left: 0;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		color: #0092d4;
+		font-size: 37px;
+		font-weight: bold;
+	}
+
 	.uni-list-cell {
 		justify-content: flex-start;
 	}
@@ -1191,17 +1232,6 @@
 	.sidebar {
 		display: table-cell;
 		width: 150px;
-	}
-
-	.text {
-		margin: 10px;
-		padding: 0 20px;
-		background-color: #ebebeb;
-		height: 70px;
-		line-height: 70px;
-		text-align: center;
-		color: #cfcfcf;
-		font-size: 26px;
 	}
 
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
