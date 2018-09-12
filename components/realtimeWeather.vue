@@ -1,9 +1,9 @@
 <template>
     <view class="body">
-        <view class="column">
+        <view class="column column-left">
             <view class="cell text-big">{{weatherData.temperature}}℃</view>
         </view>
-        <view class="column">
+        <view class="column column-right">
             <view class="row">
                 <view class="icon">
                     <view class="cell">
@@ -66,9 +66,14 @@ export default {
 }
 
 .column {
-    flex: 1;
     display: flex;
     flex-direction: column;
+}
+.column-left {
+    flex: 4;
+}
+.column-right {
+    flex: 3;
 }
 
 .row {
@@ -103,7 +108,7 @@ export default {
 
 .text-big {
     color: #0092d4;
-    font-size: 100px;
+    font-size: 120px;
     font-weight: bold;
 }
 .text-bold {
