@@ -112,7 +112,7 @@ button {
 }
 .skipbutton {
     position: fixed;
-    bottom: 11%;
+    bottom: 10%;
     left: 30%;
     width: 40%;
     display: flex;

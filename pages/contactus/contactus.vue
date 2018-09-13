@@ -14,7 +14,7 @@
             <!-- 留言内容 -->
             <textarea name="input_content" class="input input-big" v-model="postcontent" placeholder="请输入留言*" :focus="inputcontentFocus"></textarea>
             <!-- 分隔条 -->
-            <view class="separator-vertical-small"></view>
+            <view class="separator-vertical"></view>
             <!-- 提交按钮 -->
             <button class="submit-button" type="primary" formType="submit" :disabled="!postvalid">{{buttonText}}</button>
         </form>

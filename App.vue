@@ -216,24 +216,14 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	/* 这是页面的公用css */
 
 	page {
 		background-color: #F8F8F8;
 		height: 100%;
-		font-size: 32px;
+		font-size: 30px;
 		line-height: 1.6;
-	}
-
-	checkbox,
-	radio {
-		margin-right: 10px;
-	}
-
-	button {
-		margin-top: 20px;
-		margin-bottom: 20px;
 	}
 
 	form {

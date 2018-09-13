@@ -10,7 +10,7 @@
                         <image :src="weatherData.weatherIcon" mode="widthFix" style="width: 75px; height: 70px;" />
                     </view>
                 </view>
-                <view class="content text-large">{{weatherData.weather}}</view>
+                <view class="content" :class="{'text-large': weatherData.airconDesc.length < 5, text: weatherData.airconDesc.length > 4}">{{weatherData.weather}}</view>
             </view>
             <view class="row">
                 <view class="icon">
@@ -20,7 +20,7 @@
                         </view>
                     </view>
                 </view>
-                <view class="content text-large">{{weatherData.aircondition}}&nbsp;{{weatherData.airconDesc}}</view>
+                <view class="content" :class="{'text-large': weatherData.airconDesc.length < 3, text: weatherData.airconDesc.length > 2}">{{weatherData.aircondition}}&nbsp;{{weatherData.airconDesc}}</view>
             </view>
             <view class="row">
                 <view class="icon">

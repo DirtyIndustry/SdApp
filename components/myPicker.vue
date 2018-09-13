@@ -125,6 +125,7 @@
         color: #007eff;
         font-size: 32rpx;
         border-bottom: #d8d8d8 2rpx solid;
+        /* border-radius: 0; */
     }
 
     .chooseItem:last-child {

@@ -32,7 +32,7 @@ export default {
     methods: {
         // 禁止页面滚动
         stopscroll () {
-            //
+            
         }
     }
 }
