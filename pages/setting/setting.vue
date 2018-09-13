@@ -5,20 +5,20 @@
 		<!-- 推送按钮 -->
 		<view class="stripbutton">
 			<view class="separator-horizontal"></view>
-			<view class="text">推送</view>
+			<view class="text text-gray">推送</view>
 		</view>
 		<!-- 推送下方说明文字 -->
 		<view class="detail">
 			<view class="separator-horizontal"></view>
-			<view class="text-small">请在手机设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view>
+			<view class="text-small text-gray">请在手机设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view>
 			<view class="separator-horizontal"></view>
 		</view>
 		<!-- 清理缓存 -->
 		<view class="stripbutton" @tap="cachebuttonTap">
 			<view class="separator-horizontal"></view>
-			<view class="text">清理缓存</view>
+			<view class="text text-gray">清理缓存</view>
 			<view class="right-column text">
-				<view v-if="cachesize === ''" class="fa fa-angle-right font-icon"></view>
+				<view v-if="cachesize === ''" class="fa fa-angle-right font-icon text-gray"></view>
 				{{cachesize}}
 			</view>
 			<view class="separator-horizontal"></view>
@@ -28,9 +28,9 @@
 		<!-- 联系我们 -->
 		<view class="stripbutton" @tap="contactusTap">
 			<view class="separator-horizontal"></view>
-			<view class="text">联系我们</view>
+			<view class="text text-gray">联系我们</view>
 			<view class="right-column">
-				<view class="fa fa-angle-right font-icon"></view>
+				<view class="fa fa-angle-right font-icon text-gray"></view>
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
@@ -39,9 +39,9 @@
 		<!-- 关于 -->
 		<view class="stripbutton" @tap="aboutTap">
 			<view class="separator-horizontal"></view>
-			<view class="text">关于</view>
+			<view class="text text-gray">关于</view>
 			<view class="right-column">
-				<view class="fa fa-angle-right font-icon"></view>
+				<view class="fa fa-angle-right font-icon text-gray"></view>
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
@@ -50,9 +50,9 @@
 		<!-- 检查更新 -->
 		<view class="stripbutton" @tap="checkupdateTap">
 			<view class="separator-horizontal"></view>
-			<view class="text">检查更新</view>
+			<view class="text text-gray">检查更新</view>
 			<view class="right-column">
-				<view class="fa fa-angle-right font-icon"></view>
+				<view class="fa fa-angle-right font-icon text-gray"></view>
 			</view>
 			<view class="separator-horizontal"></view>
 		</view>
@@ -186,6 +186,7 @@
 
 <style>
 @import "../../common/FontAwesome.css";
+@import "../../common/text.css";
 
 .page-body {
 	background-color: #eeeeee;
@@ -226,10 +227,6 @@
 	flex: 1;
 	display: flex;
 	align-items: center;
-	/* justify-content: center; */
-	color: gray;
-	font-size: 32px;
-	font-family: '微软雅黑';
 }
 
 .text-small {
@@ -237,9 +234,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: gray;
-	font-size: 24px;
-	font-family: '微软雅黑';
 }
 
 .right-column {
@@ -252,6 +246,5 @@
 
 .font-icon {
 	font-size: 50px;
-	color: gray;
 }
 </style>
