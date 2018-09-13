@@ -7,14 +7,14 @@
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="cityforeTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/city_img.png" />
-                        <view class="menu-button-text">城市预报</view>
+                        <view class="text-large text-blue">城市预报</view>
                     </button>
                 </view>
                 <!-- 第一行右 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="warninglistTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Warning_img.png" />
-                        <view class="menu-button-text">预警报</view>
+                        <view class="text-large text-blue">预警报</view>
                     </button>
                 </view>
             </view>
@@ -24,14 +24,14 @@
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="fisheryTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
-                        <view class="menu-button-text">渔场预报</view>
+                        <view class="text-large text-blue">渔场预报</view>
                     </button>
                 </view>
                 <!-- 第二行右 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="trendTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/trendPrediction_img.png" />
-                        <view class="menu-button-text">趋势预测</view>
+                        <view class="text-large text-blue">趋势预测</view>
                     </button>
                 </view>
             </view>
@@ -41,14 +41,14 @@
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="weatherTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
-                        <view class="menu-button-text">天气预报</view>
+                        <view class="text-large text-blue">天气预报</view>
                     </button>
                 </view>
                 <!-- 第三行右 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="weatherimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
-                        <view class="menu-button-text">天气图</view>
+                        <view class="text-large text-blue">天气图</view>
                     </button>
                 </view>
             </view>
@@ -58,14 +58,14 @@
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="satelliteimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/SatelliteCloudMap_img.png" />
-                        <view class="menu-button-text">卫星云图</view>
+                        <view class="text-large text-blue">卫星云图</view>
                     </button>
                 </view>
                 <!-- 第四行右 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="radarimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/RadarMap_img.png" />
-                        <view class="menu-button-text">雷达图</view>
+                        <view class="text-large text-blue">雷达图</view>
                     </button>
                 </view>
             </view>
@@ -75,20 +75,20 @@
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="typhoonpathTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
-                        <view class="menu-button-text">台风路径</view>
+                        <view class="text-large text-blue">台风路径</view>
                     </button>
                 </view>
                 <!-- 第五行右 -->
                 <!-- <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="newscenterTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/news_img.png" />
-                        <view class="menu-button-text">新闻中心</view>
+                        <view class="text-large text-blue">新闻中心</view>
                     </button>
                 </view> -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="oceanforecastTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
-                        <view class="menu-button-text">海区预报</view>
+                        <view class="text-large text-blue">海区预报</view>
                     </button>
                 </view>
             </view>
@@ -181,16 +181,17 @@ export default {
 </script>
 
 <style>
-	@import "../../common/uni.css";
+    @import "../../common/uni.css";
+    @import "../../common/text.css";
 
 	.page-body {
-		height: 100%;
-		padding: 0 30px;
 		flex-grow: 1;
-		overflow-x: hidden;
+		overflow: hidden;
 	}
 
     .menu-page {
+        height: 100%;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -198,7 +199,7 @@ export default {
 
     .menu-table {
         height: 85%;
-        width: 98%;
+        width: 90%;
         /* border: 1px solid #f00; */
     }
 
@@ -220,10 +221,12 @@ export default {
 
     .menu-button {
         width: 300px;
+        height: 90px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #0092d4;
+        /* border-color: #0092d4; */
     }
 
     .menu-button-icon {
@@ -232,8 +235,4 @@ export default {
         /* border: 1px solid #f00; */
     }
 
-    .menu-button-text {
-        color: #0092d4;
-        /* border: 1px solid #000; */
-    }
 </style>
