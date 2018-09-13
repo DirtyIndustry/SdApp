@@ -140,6 +140,8 @@ DONE... bienvenu page skip
 table styling  
 chart styling  
 slide ball  
+combine webservices  
+baths forecast availability  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

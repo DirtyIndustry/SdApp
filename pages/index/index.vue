@@ -41,6 +41,7 @@
 				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap" @waveTap="waveWarningTap"/>
 			</view>
 			<!-- 潮汐预报模块 -->
+			<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
 			<!-- 第一个图表 -->
 			<view class="page-section">
 				<text>{{tideData.chartTideOneTitle}}</text>
@@ -60,10 +61,12 @@
 				</scroll-view>
 			</view>
 			<!-- 近海预报 -->
+			<tableTitle title="青岛近海" date="" icon="../../static/Images/top_left_img_newS.png" />
 			<view class="page-section">
 				<inshoreTable :inshoreData="inshoreData" />
 			</view>
 			<!-- 浴场预报 -->
+			<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
 			<view class="page-section" v-if="bathsData.showBaths">
 				<bathsTable :bathsData="bathsData.data" />
 			</view>
@@ -78,6 +81,8 @@
 				</view>
 			</view>
 			<!-- 五日天气预报 -->
+			<tableTitle title="天气预报" />
+			<view style="height: 20px;" />
 			<view class="page-section">
 				<fivedayForcast :option="fivedayData.optionFiveday" :fivedayWeather="fivedayData.fivedayWeather" canvasId="fiveday"/>
 			</view>
@@ -98,6 +103,7 @@
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
 	import myPicker from '../../components/myPicker.vue'
+	import tableTitle from '../../components/tableTitle.vue'
 
 	export default {
 		components: {
@@ -109,7 +115,8 @@
 			inshoreTable,
 			bathsTable,
 			refinedChart,
-			myPicker
+			myPicker,
+			tableTitle
 		},
 		data() {
 			return {

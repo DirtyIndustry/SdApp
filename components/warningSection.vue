@@ -144,7 +144,7 @@ export default {
     }
     to {
         /* margin-left: var(--mywidth); */
-        margin-left: -160%;
+        margin-left: -180%;
     }
 }
 </style>
