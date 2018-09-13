@@ -95,6 +95,8 @@
 </script>
 
 <style scoped>
+    @import "../common/text.css";
+    
     .uni-flex {
         display: flex;
         flex-direction: row;
@@ -184,10 +186,4 @@
         border-bottom: 1px solid #000;
     }
 
-    .text {
-        
-    }
-    .text-small {
-        font-size: 26px;
-    }
 </style>

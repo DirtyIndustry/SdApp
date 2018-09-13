@@ -1,7 +1,7 @@
 <template>
     <view class="body">
         <view class="column column-left">
-            <view class="cell text-big">{{weatherData.temperature}}℃</view>
+            <view class="cell text-huge">{{weatherData.temperature}}℃</view>
         </view>
         <view class="column column-right">
             <view class="row">
@@ -10,7 +10,7 @@
                         <image :src="weatherData.weatherIcon" mode="widthFix" style="width: 75px; height: 70px;" />
                     </view>
                 </view>
-                <view class="content text">{{weatherData.weather}}</view>
+                <view class="content text-large">{{weatherData.weather}}</view>
             </view>
             <view class="row">
                 <view class="icon">
@@ -20,13 +20,13 @@
                         </view>
                     </view>
                 </view>
-                <view class="content text">{{weatherData.aircondition}}&nbsp;{{weatherData.airconDesc}}</view>
+                <view class="content text-large">{{weatherData.aircondition}}&nbsp;{{weatherData.airconDesc}}</view>
             </view>
             <view class="row">
                 <view class="icon">
                     <view class="cell text-bold" :class="weatherData.pm25Style">PM2.5</view>
                 </view>
-                <view class="content text">
+                <view class="content text-large">
                     {{weatherData.pm25}}
                     <view class="text-mini-content">&nbsp;&nbsp;μg/m³</view>
                 </view>
@@ -58,6 +58,7 @@ export default {
 
 <style scoped>
 @import "../common/FontAwesome.css";
+@import "../common/text.css";
 
 .body {
     display: flex;
@@ -106,16 +107,10 @@ export default {
     justify-content: center;
 }
 
-.text-big {
+.text-huge {
     color: #0092d4;
     font-size: 120px;
     font-weight: bold;
-}
-.text-bold {
-    font-weight: bold;
-}
-.text {
-    font-size: 38px;
 }
 .text-mini-icon {
     /* border: 1px solid #000; */

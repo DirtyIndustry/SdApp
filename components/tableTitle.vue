@@ -1,12 +1,12 @@
 <template>
     <view class="uni-flex uni-row title-section">
         <!-- 标题 -->
-        <view class="title bold-text">
+        <view class="title text-large text-bold text-blue">
             <image v-if="icon !== ''" class="title-icon" :src="icon" mode="widthFix" />
             &nbsp;{{title}}
         </view>
         <!-- 日期 -->
-        <view class="date small-text">{{date}}</view>
+        <view class="date text-small">{{date}}</view>
     </view>
 </template>
 
@@ -40,6 +40,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../common/text.css";
 .uni-flex {
     display: flex;
     flex-direction: row;
@@ -62,8 +63,6 @@ export default {
     height: 60px;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
-    color: #0092d4;
 }
 /* 标题图标 */
 .title-icon {
@@ -78,14 +77,5 @@ export default {
     height: 80px;
     line-height: 125px;
     text-align: right;
-}
-/* 粗体字体 */
-.bold-text {
-    font-size: 37px;
-    font-weight: bold;
-}
-/* 较小字体 */
-.small-text {
-    font-size: 26px;
 }
 </style>

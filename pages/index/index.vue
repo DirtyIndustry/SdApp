@@ -28,7 +28,7 @@
 			<view style="height: 100px;" />
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
-			<view class="page-section header">{{cityName}}地区预报</view>
+			<view class="page-section header text-large text-bold text-blue">{{cityName}}地区预报</view>
 			<view style="height: 20px;" />
 			<!-- #endif -->
 			<!-- 天气预报模块 -->
@@ -47,7 +47,7 @@
 				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
 				<view class="section-body">
-					<text>{{tideData.chartTideOneTitle}}</text>
+					<text class="text">{{tideData.chartTideOneTitle}}</text>
 					<scroll-view scroll-x="true">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
@@ -56,7 +56,7 @@
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
 				<view class="section-body" v-show="tideData.chartTideTwoShow">
-					<text>{{tideData.chartTideTwoTitle}}</text>
+					<text class="text">{{tideData.chartTideTwoTitle}}</text>
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
@@ -936,6 +936,7 @@
 
 <style scoped>
 	@import "../../common/uni.css";
+	@import "../../common/text.css";
 
 	.page-body {
 		position: relative;
@@ -953,9 +954,6 @@
 		height: 80px;
 		display: flex;
 		align-items: center;
-		color: #0092d4;
-		font-size: 37px;
-		font-weight: bold;
 	}
 
 	.page-section {

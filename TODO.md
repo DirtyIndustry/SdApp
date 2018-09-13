@@ -138,6 +138,7 @@ DONE... selection panel with mask, for city pick
 DONE... bienvenu page  
 DONE... bienvenu page skip  
 DONE... index page demargin  
+unify font in a generic css file  
 table styling  
 chart styling  
 slide ball  

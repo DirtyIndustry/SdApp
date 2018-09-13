@@ -5,14 +5,14 @@
             <view class="warning-header">
                 <image class="warning-header-icon" src="../../static/Images/bugle.png" mode="aspectFit"/>
                 <view class="warning-header-text-container">
-                    <view class="warning-header-text">台风</view>
+                    <view class="warning-header-text text-mini">&nbsp;台风&nbsp;</view>
                 </view>
             </view>
             <view class="warning-fader warning-fader-left"></view>
-            <view class="warning-banner" >
+            <view class="warning-banner text" >
                 {{typhoon}}
             </view>
-            <view class="warning-banner warning-banner-follow" >
+            <view class="warning-banner warning-banner-follow text" >
                 {{typhoon}}
             </view>
             <view class="warning-fader warning-fader-right"></view>
@@ -24,14 +24,14 @@
             <view class="warning-header">
                 <image class="warning-header-icon" src="../../static/Images/warning.png" mode="aspectFit"/>
                 <view class="warning-header-text-container">
-                    <view class="warning-header-text">海浪</view>
+                    <view class="warning-header-text text-mini">&nbsp;海浪&nbsp;</view>
                 </view>
             </view>
             <view class="warning-fader warning-fader-left"></view>
-            <view class="warning-banner" >
+            <view class="warning-banner text" >
                 {{wave}}
             </view>
-            <view class="warning-banner warning-banner-follow" >
+            <view class="warning-banner warning-banner-follow text" >
                 {{wave}}
             </view>
             <view class="warning-fader warning-fader-right"></view>
@@ -67,6 +67,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../common/text.css";
 .warning-section {
     border: 1px solid #999;
     height: 60px;
@@ -101,7 +102,9 @@ export default {
     border: 1px solid #000;
     border-radius: 10px;
     height: 38px;
-    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .warning-fader {
     position: absolute;
@@ -123,7 +126,6 @@ export default {
     top: 0;
     left: 0;
     height: 60px;
-    font-size: 28rpx;
     display: flex;
     align-items: center;
     white-space: nowrap;

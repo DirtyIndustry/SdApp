@@ -1,0 +1,21 @@
+.text {
+    font-size: 30px;
+}
+.text-mini {
+    font-size: 20px;
+}
+.text-small {
+    font-size: 24px;
+}
+.text-large {
+    font-size: 37px;
+}
+.text-bold {
+    font-weight: bold;
+}
+.text-blue {
+    color: #0092d4;
+}
+.text-gray {
+    color: #666;
+}
