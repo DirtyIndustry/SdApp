@@ -3,8 +3,7 @@
 	<view>
 		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
-			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
-			/>
+			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" />
 			<!-- 地区选择模块 -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
@@ -29,64 +28,79 @@
 			<view style="height: 100px;" />
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
-			<view class="header">{{cityName}}地区预报</view>
+			<view class="page-section header">{{cityName}}地区预报</view>
 			<view style="height: 20px;" />
 			<!-- #endif -->
 			<!-- 天气预报模块 -->
-			<!-- <view class="page-section"> -->
+			<view class="page-section">
 				<realtimeWeather :weatherData="weatherData" />
-			<!-- </view> -->
+			</view>
+			<view class="separator" />
 			<!-- 警报模块 -->
 			<view class="page-section">
-				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap" @waveTap="waveWarningTap"/>
+				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap"
+				 @waveTap="waveWarningTap" />
 			</view>
+			<view class="separator" />
 			<!-- 潮汐预报模块 -->
-			<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
-			<!-- 第一个图表 -->
 			<view class="page-section">
-				<text>{{tideData.chartTideOneTitle}}</text>
-				<scroll-view scroll-x="true">
-					<view class="chart-tide">
-						<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
-					</view>
-				</scroll-view>
-			</view>
-			<!-- 第二个图表 只在青岛地区显示 -->
-			<view class="page-section" v-show="tideData.chartTideTwoShow">
-				<text>{{tideData.chartTideTwoTitle}}</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
-					<view class="chart-tide">
-						<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
-					</view>
-				</scroll-view>
-			</view>
-			<!-- 近海预报 -->
-			<tableTitle title="青岛近海" date="" icon="../../static/Images/top_left_img_newS.png" />
-			<view class="page-section">
-				<inshoreTable :inshoreData="inshoreData" />
-			</view>
-			<!-- 浴场预报 -->
-			<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
-			<view class="page-section" v-if="bathsData.showBaths">
-				<bathsTable :bathsData="bathsData.data" />
-			</view>
-			<!-- 精细化预报 -->
-			<view class="page-section" v-show="refinedData.show">
-				<view>精细化预报</view>
-				<refinedChart :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
-				<!-- 两个图表之间的空白 -->
-				<view style="height: 60px" v-if="refinedData.showTwo"/>
-				<view v-show="refinedData.showTwo">
-					<refinedChart :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
+				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
+				<!-- 第一个图表 -->
+				<view class="section-body">
+					<text>{{tideData.chartTideOneTitle}}</text>
+					<scroll-view scroll-x="true">
+						<view class="chart-tide">
+							<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
+						</view>
+					</scroll-view>
+				</view>
+				<!-- 第二个图表 只在青岛地区显示 -->
+				<view class="section-body" v-show="tideData.chartTideTwoShow">
+					<text>{{tideData.chartTideTwoTitle}}</text>
+					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
+						<view class="chart-tide">
+							<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
+						</view>
+					</scroll-view>
 				</view>
 			</view>
-			<!-- 五日天气预报 -->
-			<tableTitle title="天气预报" />
-			<view style="height: 20px;" />
+			<view class="separator" />
+			<!-- 近海预报 -->
 			<view class="page-section">
-				<fivedayForcast :option="fivedayData.optionFiveday" :fivedayWeather="fivedayData.fivedayWeather" canvasId="fiveday"/>
+				<tableTitle :title="inshoreData.location" date="" icon="../../static/Images/top_left_img_newS.png" />
+				<view class="section-body">
+					<inshoreTable :inshoreData="inshoreData" />
+				</view>
 			</view>
-			<!-- <view class="page-section" /> -->
+			<view class="separator" />
+			<!-- 浴场预报 -->
+			<view class="page-section" v-if="bathsData.showBaths">
+				<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
+				<view class="section-body">
+					<bathsTable :bathsData="bathsData.data" />
+				</view>
+			</view>
+			<view class="separator" />
+			<!-- 精细化预报 -->
+			<view class="page-section" v-show="refinedData.show">
+				<view class="section-body">
+					<refinedChart :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
+					<!-- 两个图表之间的空白 -->
+					<view style="height: 60px" v-if="refinedData.showTwo" />
+					<view v-show="refinedData.showTwo">
+						<refinedChart :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
+					</view>
+				</view>
+			</view>
+			<view class="separator" />
+			<!-- 五日天气预报 -->
+			<view class="page-section">
+				<tableTitle title="天气预报" />
+				<view class="section-body">
+					<fivedayForcast :option="fivedayData.optionFiveday" :fivedayWeather="fivedayData.fivedayWeather" canvasId="fiveday" />
+				</view>
+			</view>
+			<view class="separator" />
 		</view>
 	</view>
 </template>
@@ -122,7 +136,7 @@
 			return {
 				// 完成的request计数
 				completedRequestCount: 0,
-				
+
 				// 警报数据
 				warningData: {
 					typhoonWarning: '',
@@ -133,31 +147,31 @@
 		},
 		computed: {
 			// 城市选择列表
-			cityArray () { return this.$store.state.Infos.cityarray },
+			cityArray() { return this.$store.state.Infos.cityarray },
 			// 城市选择列表 所选index
 			cityIndex: {
-				get () { return this.$store.state.Infos.cityindex },
-				set (value) { this.$store.dispatch('setCityIndex', value) }
+				get() { return this.$store.state.Infos.cityindex },
+				set(value) { this.$store.dispatch('setCityIndex', value) }
 			},
 			// 当前城市名称
 			cityName: {
-				get () { return this.$store.state.Datas.cityname },
-				set (value) { this.$store.dispatch('setCityName', value) }
+				get() { return this.$store.state.Datas.cityname },
+				set(value) { this.$store.dispatch('setCityName', value) }
 			},
 			// 实时天气
 			weatherData: {
-				get () {return this.$store.state.Datas.weatherdata},
-				set (value) {this.$store.dispatch('setWeatherData', value)}
+				get() { return this.$store.state.Datas.weatherdata },
+				set(value) { this.$store.dispatch('setWeatherData', value) }
 			},
 			// 潮汐预报
 			tideData: {
-				get () {return this.$store.state.Datas.tidedata},
-				set (value) {this.$store.dispatch('setTideData', value)}
+				get() { return this.$store.state.Datas.tidedata },
+				set(value) { this.$store.dispatch('setTideData', value) }
 			},
 			// 近海预报
 			inshoreData: {
-				get () {return this.$store.state.Datas.inshoredata},
-				set (value) {this.$store.dispatch('setInshoreData', value)}
+				get() { return this.$store.state.Datas.inshoredata },
+				set(value) { this.$store.dispatch('setInshoreData', value) }
 			},
 			// 浴场预报
 			bathsData: {
@@ -176,8 +190,8 @@
 			},
 			// 威海专项
 			weihaiData: {
-				get () { return this.$store.state.Datas.weihaidata },
-				set (value) { this.$store.dispatch('setWeihaiData', value) }
+				get() { return this.$store.state.Datas.weihaidata },
+				set(value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -199,12 +213,12 @@
 				}.bind(this), 10000)
 			},
 			// 根据index切换城市 允许自动定位 不写入缓存
-			switchCityByIndex (index) {
+			switchCityByIndex(index) {
 				// 切换城市
 				utils.switchCity(this.cityArray[index], this.switchCityByName)
 			},
 			// 根据name切换城市 写入缓存
-			switchCityByName (city) {
+			switchCityByName(city) {
 				// 写入Vuex和缓存
 				this.cityName = city
 				utils.storeToLocal('cityname', city)
@@ -254,7 +268,7 @@
 						// 空气质量数值
 						weatherresult.aircondition = result.result.data.pm25.pm25.curPm
 						// 空气质量文字描述
-						weatherresult.airconDesc =	result.result.data.pm25.pm25.quality
+						weatherresult.airconDesc = result.result.data.pm25.pm25.quality
 						// pm2.5数值
 						weatherresult.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
@@ -365,7 +379,7 @@
 									// 有台风警报
 									console.log('有台风警报')
 									that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
-										lasttyphoon.NUMBER + 
+										lasttyphoon.NUMBER +
 										'号台风"' +
 										lasttyphoon.CHN_NAME +
 										'(' +
@@ -407,7 +421,7 @@
 							let warningname = resarr[resarr.length - 1].name
 							let warningdate = resarr[resarr.length - 1].datetime
 							console.log('有海浪警报')
-							that.warningData.waveWarning = warningname + ','+ warningdate + '……'
+							that.warningData.waveWarning = warningname + ',' + warningdate + '……'
 							that.warningData.waveUrl = resarr[resarr.length - 1].Url
 						}
 					}, // end-success-request
@@ -495,7 +509,7 @@
 				let that = this
 				uni.request({
 					url: appsettings.hosturl + 'GetAstronomicalTide_0907',
-					data: {name:'admin', areaflg:'山东', city:city},
+					data: { name: 'admin', areaflg: '山东', city: city },
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 潮汐预报数据')
@@ -765,10 +779,10 @@
 				let that = this
 				let result = {
 					show: false,
-					first: {show: false},
-					second: {show: false},
-					third: {show: false},
-					fourth: {show: false}
+					first: { show: false },
+					second: { show: false },
+					third: { show: false },
+					fourth: { show: false }
 				}
 				// 不是威海则没有此项
 				if (cityname !== '威海') {
@@ -860,14 +874,14 @@
 				}.bind(this), 10000)
 			},
 			// 台风警报点击
-			typhoonWarningTap () {
+			typhoonWarningTap() {
 				console.log('[界面]: 点击台风警报')
 				uni.navigateTo({
 					url: '../typhoonmap/typhoonmap'
 				})
 			},
 			// 海浪警报点击
-			waveWarningTap () {
+			waveWarningTap() {
 				console.log('[界面]: 点击海浪警报')
 				let that = this
 				uni.navigateTo({
@@ -893,7 +907,7 @@
 		onReady() {
 			console.log('index page ready.')
 		},
-		mounted () {
+		mounted() {
 			console.log('index vue mounted.')
 			// 根据index切换城市 允许自动定位 不写入缓存 
 			this.switchCityByIndex(this.cityIndex)
@@ -913,15 +927,6 @@
 		},
 		onNavigationBarButtonTap() {
 			console.log('navibar button tapped.')
-			// uni.showActionSheet({
-			// 	itemList: ['自动', '青岛', '烟台', '潍坊', '威海', '日照'],
-			// 	success: function (res) {
-			// 		console.log('选中了第' + (res.tapIndex + 1) + '个按钮')
-			// 	},
-			// 	fail: function (res) {
-			// 		console.log(res.errMsg)
-			// 	}
-			// })
 			this.$refs.citypicker.switchDialog()
 		}
 	}
@@ -931,17 +936,12 @@
 	@import "../../common/uni.css";
 
 	.page-body {
+		position: relative;
 		/* width: 100%; */
 		height: 100%;
-		padding: 0 30px;
-		/* margin: 0 30px; */
+		/* padding: 0 30px; */
 		flex-grow: 1;
 		overflow-x: hidden;
-		/*
-		background-repeat: no-repeat;
-		background-size: contain;
-		background-attachment: fixed;
-		*/
 	}
 
 	.header {
@@ -957,44 +957,13 @@
 	}
 
 	.page-section {
-		margin-bottom: 60px;
-		background-color: rgba(255, 255, 255, 0.8);
+		position: relative;
+		width: 90%;
+		left: 5%;
 	}
 
-	
-	.warning-section {
-		border: 1px solid #999;
-		height: 60px;
-  		position: relative;
-		overflow: hidden;
-		/* --marqueeWidth--: -12em; */
-	}
-	.warning-banner {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 60px;
-		font-size: 28rpx;
-		display: flex;
-		align-items: center;
-		white-space: nowrap;
-		animation-name: around;
-		animation-duration: 10s;  /*过渡时间*/
-		animation-iteration-count: infinite;
-		animation-timing-function: linear;
-	}
-	.warning-banner-follow {
-		margin-left: 100%;
-		animation-delay: 5s;
-	}
-	@keyframes around {
-		from {
-			margin-left: 100%;
-		}
-		to {
-			/* margin-left: var(--marqueeWidth--); */
-			margin-left: -100%;
-		}
+	.section-body {
+		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	.uni-list-cell {
@@ -1020,5 +989,9 @@
 		width: 290%;
 		height: 250px;
 		border: 1px solid #000;
+	}
+	/* 分隔符 */
+	.separator {
+		height: 60px;
 	}
 </style>

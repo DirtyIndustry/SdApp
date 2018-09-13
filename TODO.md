@@ -137,6 +137,7 @@ DONE... navibar city selection
 DONE... selection panel with mask, for city pick  
 DONE... bienvenu page  
 DONE... bienvenu page skip  
+DONE... index page demargin  
 table styling  
 chart styling  
 slide ball  
