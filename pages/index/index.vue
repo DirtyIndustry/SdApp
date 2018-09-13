@@ -939,10 +939,6 @@
 	@import "../../common/text.css";
 
 	.page-body {
-		position: relative;
-		/* width: 100%; */
-		height: 100%;
-		/* padding: 0 30px; */
 		flex-grow: 1;
 		overflow-x: hidden;
 	}

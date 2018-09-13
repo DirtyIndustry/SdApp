@@ -3,8 +3,7 @@
 	<view>
 		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
-			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"
-			/>
+			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" />
 			<!-- 地区选择模块 -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
@@ -29,56 +28,67 @@
 			<view style="height: 100px;" />
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
-			<view class="header">{{cityName}}地区预报</view>
+			<view class="page-section header text-large text-bold text-blue">{{cityName}}地区预报</view>
 			<view style="height: 20px;" />
 			<!-- #endif -->
 			<!-- 潮汐预报模块 -->
-			<!-- 第一个图表 -->
 			<view class="page-section">
-				<text>{{tideData.chartTideOneTitle}}</text>
-				<scroll-view scroll-x="true">
-					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasIdTideOne" ref="echartsRefTideOne"></mpvue-echarts>
-					</view>
-				</scroll-view>
+				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
+				<!-- 第一个图表 -->
+				<view class="section-body">
+					<text class="text">{{tideData.chartTideOneTitle}}</text>
+					<scroll-view scroll-x="true">
+						<view class="chart-tide">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasIdTideOne" ref="echartsRefTideOne"></mpvue-echarts>
+						</view>
+					</scroll-view>
+				</view>
+				<!-- 第二个图表 只在青岛地区显示 -->
+				<view class="section-body" v-show="tideData.chartTideTwoShow">
+					<text class="text">{{tideData.chartTideTwoTitle}}</text>
+					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
+						<view class="chart-tide">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasIdTideTwo" ref="echartsRefTideTwo"></mpvue-echarts>
+						</view>
+					</scroll-view>
+				</view>
 			</view>
-			<!-- 第二个图表 只在青岛地区显示 -->
-			<view class="page-section" v-show="tideData.chartTideTwoShow">
-				<text>{{tideData.chartTideTwoTitle}}</text>
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
-					<view class="chart-tide">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasIdTideTwo" ref="echartsRefTideTwo"></mpvue-echarts>
-					</view>
-				</scroll-view>
-			</view>
+			<view class="separator" />
 			<!-- 近海预报 -->
 			<view class="page-section">
-				<inshoreTable :inshoreData="inshoreData" />
+				<tableTitle :title="inshoreData.location" date="" icon="../../static/Images/top_left_img_newS.png" />
+				<view class="section-body">
+					<inshoreTableNew :inshoreData="inshoreData" />
+				</view>
 			</view>
+			<view class="separator" />
 			<!-- 浴场预报 -->
 			<view class="page-section" v-if="bathsData.showBaths">
-				<bathsTable :bathsData="bathsData.data" />
+				<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
+				<view class="section-body">
+					<bathsTable :bathsData="bathsData.data" />
+				</view>
 			</view>
+			<view class="separator" />
 			<!-- 精细化预报 -->
-			<view class="page-section" v-show="refinedData.show">
-				<view>精细化预报</view>
+			<view class="page-section section-body" v-show="refinedData.show">
 				<view class="refinedChart-body">
 					<!-- 地名 -->
-					<view v-if="refinedData.dataOne.length > 0">{{refinedData.dataOne[0].loc}}</view>
+					<view v-if="refinedData.dataOne.length > 0" class="text">{{refinedData.dataOne[0].loc}}</view>
 					<scroll-view scroll-x="true" @scroll="handleScrollRefinedOne">
 						<view class="chart-refined">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedOne" canvasId="canvasIdRefinedOne" ref="echartsRefRefinedOne"></mpvue-echarts>
 						</view>
 						<!-- 滑动的日期球，Move属性决定球是否显示 -->
 						<view class="balltrack">
-							<view class="dateball slideball-Snd" v-if="ballStatusRefinedOne.sndballMove">{{sndballText}}</view>
-							<view class="dateball slideball-Trd" v-if="ballStatusRefinedOne.trdballMove">{{trdballText}}</view>
+							<view class="dateball slideball-Snd text-mini" v-if="ballStatusRefinedOne.sndballMove">{{sndballText}}</view>
+							<view class="dateball slideball-Trd text-mini" v-if="ballStatusRefinedOne.trdballMove">{{trdballText}}</view>
 						</view>
 						<!-- 信息面板 -->
 						<view class="infopanel">
 							<view class="infopanel-day" v-for="(item, index) in refinedData.dataOne" :key="index">
-								<view class="infocolumn infocolumn-left">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
-								<view class="infocolumn">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
+								<view class="infocolumn infocolumn-left text-mini">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
+								<view class="infocolumn text-mini">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
 							</view>
 						</view>
 					</scroll-view>
@@ -86,10 +96,10 @@
 					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
 					<view class="balltrack-fix">
-						<view class="dateball fixball-Fst" :class="{'dateball-active': ballStatusRefinedOne.fstballActive}">{{fstballText}}</view>
-						<view class="dateball fixball-Snd" :class="{'dateball-active': ballStatusRefinedOne.sndballActive, 'fixball-Snd-left': ballStatusRefinedOne.sndballLeft}"
+						<view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatusRefinedOne.fstballActive}">{{fstballText}}</view>
+						<view class="dateball fixball-Snd text-mini" :class="{'dateball-active': ballStatusRefinedOne.sndballActive, 'fixball-Snd-left': ballStatusRefinedOne.sndballLeft}"
 						 v-if="ballStatusRefinedOne.sndballMove == false">{{sndballText}}</view>
-						<view class="dateball fixball-Trd" :class="{'dateball-active': ballStatusRefinedOne.trdballActive, 'fixball-Trd-lone': ballStatusRefinedOne.sndballMove, 'fixball-Trd-left': ballStatusRefinedOne.trdballLeft}"
+						<view class="dateball fixball-Trd text-mini" :class="{'dateball-active': ballStatusRefinedOne.trdballActive, 'fixball-Trd-lone': ballStatusRefinedOne.sndballMove, 'fixball-Trd-left': ballStatusRefinedOne.trdballLeft}"
 						 v-if="!ballStatusRefinedOne.trdballMove">{{trdballText}}</view>
 					</view>
 				</view>
@@ -98,21 +108,21 @@
 				<view v-show="refinedData.showTwo">
 					<view class="refinedChart-body">
 						<!-- 地名 -->
-						<view v-if="refinedData.dataTwo.length > 0">{{refinedData.dataTwo[0].loc}}</view>
+						<view v-if="refinedData.dataTwo.length > 0" class="text">{{refinedData.dataTwo[0].loc}}</view>
 						<scroll-view scroll-x="true" @scroll="handleScrollRefinedTwo">
 							<view class="chart-refined">
 								<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedTwo" canvasId="canvasIdRefinedTwo" ref="echartsRefRefinedTwo"></mpvue-echarts>
 							</view>
 							<!-- 滑动的日期球，Move属性决定球是否显示 -->
 							<view class="balltrack">
-								<view class="dateball slideball-Snd" v-if="ballStatusRefinedTwo.sndballMove">{{sndballText}}</view>
-								<view class="dateball slideball-Trd" v-if="ballStatusRefinedTwo.trdballMove">{{trdballText}}</view>
+								<view class="dateball slideball-Snd text-mini" v-if="ballStatusRefinedTwo.sndballMove">{{sndballText}}</view>
+								<view class="dateball slideball-Trd text-mini" v-if="ballStatusRefinedTwo.trdballMove">{{trdballText}}</view>
 							</view>
 							<!-- 信息面板 -->
 							<view class="infopanel">
 								<view class="infopanel-day" v-for="(item, index) in refinedData.dataTwo" :key="index">
-									<view class="infocolumn infocolumn-left">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
-									<view class="infocolumn">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
+									<view class="infocolumn infocolumn-left text-mini">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
+									<view class="infocolumn text-mini">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
 								</view>
 							</view>
 						</scroll-view>
@@ -120,91 +130,103 @@
 						Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
 						特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
 						<view class="balltrack-fix">
-							<view class="dateball fixball-Fst" :class="{'dateball-active': ballStatusRefinedTwo.fstballActive}">{{fstballText}}</view>
-							<view class="dateball fixball-Snd" :class="{'dateball-active': ballStatusRefinedTwo.sndballActive, 'fixball-Snd-left': ballStatusRefinedTwo.sndballLeft}"
+							<view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatusRefinedTwo.fstballActive}">{{fstballText}}</view>
+							<view class="dateball fixball-Snd text-mini" :class="{'dateball-active': ballStatusRefinedTwo.sndballActive, 'fixball-Snd-left': ballStatusRefinedTwo.sndballLeft}"
 							 v-if="ballStatusRefinedTwo.sndballMove == false">{{sndballText}}</view>
-							<view class="dateball fixball-Trd" :class="{'dateball-active': ballStatusRefinedTwo.trdballActive, 'fixball-Trd-lone': ballStatusRefinedTwo.sndballMove, 'fixball-Trd-left': ballStatusRefinedTwo.trdballLeft}"
+							<view class="dateball fixball-Trd text-mini" :class="{'dateball-active': ballStatusRefinedTwo.trdballActive, 'fixball-Trd-lone': ballStatusRefinedTwo.sndballMove, 'fixball-Trd-left': ballStatusRefinedTwo.trdballLeft}"
 							 v-if="!ballStatusRefinedTwo.trdballMove">{{trdballText}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
+			<view class="separator" />
 			<!-- 威海专项预报 -->
 			<view class="page-section" v-show="weihaiData.show">
-				<view>威海专项预报</view>
 				<!-- 第一部分 -->
 				<view v-show="weihaiData.first.show">
-					<view>{{weihaiData.first.REPORTAREA}}</view>
+					<tableTitle :title="weihaiData.first.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
-					<view class="chart-weihai">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiOne" canvasId="canvasIdWeihaiOne" ref="echartsRefWeihaiOne"></mpvue-echarts>
-					</view>
-					<view class="weihai-infopanel">
-						<view class="weihai-infocolumn-side" />
-						<view class="weihai-infocolumn">
-							<view>水温:{{weihaiData.first.WATERTEMP}}℃</view>
+					<view class="section-body">
+						<view class="chart-weihai">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiOne" canvasId="canvasIdWeihaiOne" ref="echartsRefWeihaiOne"></mpvue-echarts>
 						</view>
-						<view class="weihai-infocolumn">
-							<view>浪高:{{weihaiData.first.WAVEHEIGHT}}米</view>
+						<view class="weihai-infopanel">
+							<view class="weihai-infocolumn-side" />
+							<view class="weihai-infocolumn">
+								<view class="text">水温:{{weihaiData.first.WATERTEMP}}℃</view>
+							</view>
+							<view class="weihai-infocolumn">
+								<view class="text">浪高:{{weihaiData.first.WAVEHEIGHT}}米</view>
+							</view>
+							<view class="weihai-infocolumn-side" />
 						</view>
-						<view class="weihai-infocolumn-side" />
 					</view>
 				</view>
+				<view class="separator" />
 				<!-- 第二部分 -->
 				<view v-show="weihaiData.second.show">
-					<view>{{weihaiData.second.REPORTAREA}}</view>
+					<tableTitle :title="weihaiData.second.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
-					<view class="chart-weihai">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiTwo" canvasId="canvasIdWeihaiTwo" ref="echartsRefWeihaiTwo"></mpvue-echarts>
-					</view>
-					<view class="weihai-infopanel">
-						<view class="weihai-infocolumn-side" />
-						<view class="weihai-infocolumn">
-							<view>水温:{{weihaiData.second.WATERTEMP}}℃</view>
+					<view class="section-body">
+						<view class="chart-weihai">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiTwo" canvasId="canvasIdWeihaiTwo" ref="echartsRefWeihaiTwo"></mpvue-echarts>
 						</view>
-						<view class="weihai-infocolumn">
-							<view>浪高:{{weihaiData.second.WAVEHEIGHT}}米</view>
+						<view class="weihai-infopanel">
+							<view class="weihai-infocolumn-side" />
+							<view class="weihai-infocolumn">
+								<view class="text">水温:{{weihaiData.second.WATERTEMP}}℃</view>
+							</view>
+							<view class="weihai-infocolumn">
+								<view class="text">浪高:{{weihaiData.second.WAVEHEIGHT}}米</view>
+							</view>
+							<view class="weihai-infocolumn-side" />
 						</view>
-						<view class="weihai-infocolumn-side" />
 					</view>
 				</view>
+				<view class="separator" />
 				<!-- 第三部分 -->
 				<view v-show="weihaiData.third.show">
-					<view>{{weihaiData.third.REPORTAREA}}</view>
+					<tableTitle :title="weihaiData.third.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
-					<view class="chart-weihai">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiThree" canvasId="canvasIdWeihaiThree" ref="echartsRefWeihaiThree"></mpvue-echarts>
-					</view>
-					<view class="weihai-infopanel">
-						<view class="weihai-infocolumn-side" />
-						<view class="weihai-infocolumn">
-							<view>水温:{{weihaiData.third.WATERTEMP}}℃</view>
+					<view class="section-body">
+						<view class="chart-weihai">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiThree" canvasId="canvasIdWeihaiThree" ref="echartsRefWeihaiThree"></mpvue-echarts>
 						</view>
-						<view class="weihai-infocolumn">
-							<view>浪高:{{weihaiData.third.WAVEHEIGHT}}米</view>
+						<view class="weihai-infopanel">
+							<view class="weihai-infocolumn-side" />
+							<view class="weihai-infocolumn">
+								<view class="text">水温:{{weihaiData.third.WATERTEMP}}℃</view>
+							</view>
+							<view class="weihai-infocolumn">
+								<view class="text">浪高:{{weihaiData.third.WAVEHEIGHT}}米</view>
+							</view>
+							<view class="weihai-infocolumn-side" />
 						</view>
-						<view class="weihai-infocolumn-side" />
 					</view>
 				</view>
+				<view class="separator" />
 				<!-- 第四部分 -->
 				<view v-show="weihaiData.fourth.show">
-					<view>{{weihaiData.fourth.REPORTAREA}}</view>
+					<tableTitle :title="weihaiData.fourth.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
-					<view class="chart-weihai">
-						<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiFour" canvasId="canvasIdWeihaiFour" ref="echartsRefWeihaiFour"></mpvue-echarts>
-					</view>
-					<view class="weihai-infopanel">
-						<view class="weihai-infocolumn-side" />
-						<view class="weihai-infocolumn">
-							<view>水温:{{weihaiData.fourth.WATERTEMP}}℃</view>
+					<view class="section-body">
+						<view class="chart-weihai">
+							<mpvue-echarts :echarts="echarts" :onInit="handleInitWeihaiFour" canvasId="canvasIdWeihaiFour" ref="echartsRefWeihaiFour"></mpvue-echarts>
 						</view>
-						<view class="weihai-infocolumn">
-							<view>浪高:{{weihaiData.fourth.WAVEHEIGHT}}米</view>
+						<view class="weihai-infopanel">
+							<view class="weihai-infocolumn-side" />
+							<view class="weihai-infocolumn">
+								<view class="text">水温:{{weihaiData.fourth.WATERTEMP}}℃</view>
+							</view>
+							<view class="weihai-infocolumn">
+								<view class="text">浪高:{{weihaiData.fourth.WAVEHEIGHT}}米</view>
+							</view>
+							<view class="weihai-infocolumn-side" />
 						</view>
-						<view class="weihai-infocolumn-side" />
 					</view>
 				</view>
 			</view>
+			<view class="separator" />
 		</view>
 	</view>
 </template>
@@ -215,6 +237,8 @@
 	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import myPicker from '../../components/myPicker.vue'
+	import tableTitle from '../../components/tableTitle.vue'
+	import inshoreTableNew from '../../components/inshoreTableNew.vue'
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
@@ -232,36 +256,38 @@
 			inshoreTable,
 			bathsTable,
 			myPicker,
+			tableTitle,
+			inshoreTableNew,
 			mpvueEcharts
 		},
 		data() {
 			return {
 				// 完成的request计数
 				completedRequestCount: 0,
-                // 日期球的日期文字
-                fstballText: '1st',
-                sndballText: '2nd',
-                trdballText: '3rd',
-                // 日期球控制参数
-                ballStatusRefinedOne: {
-                    fstballActive: true,	// 第一个球是否激活（显示为蓝色）
-                    sndballActive: false,	// 第二个球是否激活（显示为蓝色）
-                    sndballMove: false,		// 第二个球是否滑动
-                    sndballLeft: false,		// 第二个球是否位于左端
-                    trdballActive: false,	// 第三个球是否激活（显示为蓝色）
-                    trdballMove: false,		// 第三个球是否滑动
-                    trdballLeft: false,		// 第三个球是否位于左端
-                },
-                // 日期球控制参数
-                ballStatusRefinedTwo: {
-                    fstballActive: true,	// 第一个球是否激活（显示为蓝色）
-                    sndballActive: false,	// 第二个球是否激活（显示为蓝色）
-                    sndballMove: false,		// 第二个球是否滑动
-                    sndballLeft: false,		// 第二个球是否位于左端
-                    trdballActive: false,	// 第三个球是否激活（显示为蓝色）
-                    trdballMove: false,		// 第三个球是否滑动
-                    trdballLeft: false,		// 第三个球是否位于左端
-                },
+				// 日期球的日期文字
+				fstballText: '1st',
+				sndballText: '2nd',
+				trdballText: '3rd',
+				// 日期球控制参数
+				ballStatusRefinedOne: {
+					fstballActive: true,	// 第一个球是否激活（显示为蓝色）
+					sndballActive: false,	// 第二个球是否激活（显示为蓝色）
+					sndballMove: false,		// 第二个球是否滑动
+					sndballLeft: false,		// 第二个球是否位于左端
+					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
+					trdballMove: false,		// 第三个球是否滑动
+					trdballLeft: false,		// 第三个球是否位于左端
+				},
+				// 日期球控制参数
+				ballStatusRefinedTwo: {
+					fstballActive: true,	// 第一个球是否激活（显示为蓝色）
+					sndballActive: false,	// 第二个球是否激活（显示为蓝色）
+					sndballMove: false,		// 第二个球是否滑动
+					sndballLeft: false,		// 第二个球是否位于左端
+					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
+					trdballMove: false,		// 第三个球是否滑动
+					trdballLeft: false,		// 第三个球是否位于左端
+				},
 				echarts
 			}
 		},
@@ -312,8 +338,8 @@
 			},
 			// 威海专项
 			weihaiData: {
-				get () { return this.$store.state.Datas.weihaidata },
-				set (value) { this.$store.dispatch('setWeihaiData', value) }
+				get() { return this.$store.state.Datas.weihaidata },
+				set(value) { this.$store.dispatch('setWeihaiData', value) }
 			}
 		},
 		methods: {
@@ -388,7 +414,7 @@
 						// 空气质量数值
 						weatherresult.aircondition = result.result.data.pm25.pm25.curPm
 						// 空气质量文字描述
-						weatherresult.airconDesc =	result.result.data.pm25.pm25.quality
+						weatherresult.airconDesc = result.result.data.pm25.pm25.quality
 						// pm2.5数值
 						weatherresult.pm25 = result.result.data.pm25.pm25.pm25
 						// 天气情况
@@ -528,7 +554,7 @@
 				let that = this
 				uni.request({
 					url: appsettings.hosturl + 'GetAstronomicalTide_0907',
-					data: {name:'admin', areaflg:'山东', city:city},
+					data: { name: 'admin', areaflg: '山东', city: city },
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 潮汐预报数据')
@@ -798,10 +824,10 @@
 				let that = this
 				let result = {
 					show: false,
-					first: {show: false},
-					second: {show: false},
-					third: {show: false},
-					fourth: {show: false}
+					first: { show: false },
+					second: { show: false },
+					third: { show: false },
+					fourth: { show: false }
 				}
 				// 不是威海则没有此项
 				if (cityname !== '威海') {
@@ -899,24 +925,24 @@
 				return chartTideTwo
 			},
 			// 初始化精细化预报图表一
-            handleInitRefinedOne(canvas, width, height) {
-                chartRefinedOne = echarts.init(canvas, null, {
-                    width: width,
-                    height: height
-                })
-                canvas.setChart(chartRefinedOne)
-                chartRefinedOne.setOption(this.refinedData.optionOne, true)
-                return chartRefinedOne
+			handleInitRefinedOne(canvas, width, height) {
+				chartRefinedOne = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartRefinedOne)
+				chartRefinedOne.setOption(this.refinedData.optionOne, true)
+				return chartRefinedOne
 			},
 			// 初始化精细化预报图表二
-            handleInitRefinedTwo(canvas, width, height) {
-                chartRefinedTwo = echarts.init(canvas, null, {
-                    width: width,
-                    height: height
-                })
-                canvas.setChart(chartRefinedTwo)
-                chartRefinedTwo.setOption(this.refinedData.optionTwo, true)
-                return chartRefinedTwo
+			handleInitRefinedTwo(canvas, width, height) {
+				chartRefinedTwo = echarts.init(canvas, null, {
+					width: width,
+					height: height
+				})
+				canvas.setChart(chartRefinedTwo)
+				chartRefinedTwo.setOption(this.refinedData.optionTwo, true)
+				return chartRefinedTwo
 			},
 			// 初始化威海专项图表一
 			handleInitWeihaiOne(canvas, width, height) {
@@ -959,98 +985,98 @@
 				return chartWeihaiFour
 			},
 			// 设置曲线图下方日期球的日期
-            setDateballText() {
-                let now = new Date()
-                function formatDate(date) { // 格式化日期为MM-dd
-                    let month = date.getMonth() + 1
-                    let day = date.getDate()
-                    if (month < 10) {
-                        month = '0' + month
-                    }
-                    if (day < 10) {
-                        day = '0' + day
-                    }
-                    return month + '-' + day
-                } // end-function formatDate
-                // 三个球分别显示今天，明天和后天的日期
-                this.fstballText = formatDate(now)
-                now = new Date(now.setDate(now.getDate() + 1))
-                this.sndballText = formatDate(now)
-                now = new Date(now.setDate(now.getDate() + 1))
-                this.trdballText = formatDate(now)
-            },
-            // 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
-            setDateballStatus (scrollLeft, windowWidth, ballObj) {
-                //开始滚动 scrollLeft为0
-                if (scrollLeft < 45) {
-                    // 刚开始滚动 还不足以让第二个球开始动
-                    ballObj.fstballActive = true
-                    ballObj.sndballActive = false
-                    ballObj.trdballActive = false
-                    ballObj.sndballMove = false
-                    ballObj.sndballLeft = false
-                    ballObj.trdballMove = false
-                    ballObj.trdballLeft = false
-                    // } else if (scrollLeft < windowWidth * 0.966) {  // 290 360*0.805
-                } else if (scrollLeft < windowWidth * 0.80555) {
-                    // 第二个球开始动
-                    ballObj.fstballActive = true
-                    ballObj.sndballActive = false
-                    ballObj.trdballActive = false
-                    ballObj.sndballMove = true
-                    ballObj.sndballLeft = false
-                    ballObj.trdballMove = false
-                    ballObj.trdballLeft = false
-                    // } else if (scrollLeft < windowWidth * 1.066) {  // 320 360*0.888
-                } else if (scrollLeft < windowWidth * 0.88888) {
-                    // 第二个球停在最左边 第三个球还没开始动
-                    ballObj.fstballActive = false
-                    ballObj.sndballActive = true
-                    ballObj.trdballActive = false
-                    ballObj.sndballMove = false
-                    ballObj.sndballLeft = true
-                    ballObj.trdballMove = false
-                    ballObj.trdballLeft = false
-                    // } else if (scrollLeft < windowWidth * 1.166) {  // 350 360*0.972
-                } else if (scrollLeft < windowWidth * 0.97222) {
-                    // 第三个球开始动
-                    ballObj.fstballActive = false
-                    ballObj.sndballActive = true
-                    ballObj.trdballActive = false
-                    ballObj.sndballMove = false
-                    ballObj.sndballLeft = true
-                    ballObj.trdballMove = true
-                    ballObj.trdballLeft = false
-                    // } else if (scrollLeft < windowWidth * 1.9) {    // 570 360*1.583
-                } else if (scrollLeft < windowWidth * 1.58333) {
-                    // 第三个球动
-                    ballObj.fstballActive = false
-                    ballObj.sndballActive = true
-                    ballObj.trdballActive = false
-                    ballObj.sndballMove = false
-                    ballObj.sndballLeft = true
-                    ballObj.trdballMove = true
-                    ballObj.trdballLeft = false
-                } else {
-                    // 第三个球停在最左边
-                    ballObj.fstballActive = false
-                    ballObj.sndballActive = false
-                    ballObj.trdballActive = true
-                    ballObj.sndballMove = false
-                    ballObj.sndballLeft = true
-                    ballObj.trdballMove = false
-                    ballObj.trdballLeft = true
-                }
+			setDateballText() {
+				let now = new Date()
+				function formatDate(date) { // 格式化日期为MM-dd
+					let month = date.getMonth() + 1
+					let day = date.getDate()
+					if (month < 10) {
+						month = '0' + month
+					}
+					if (day < 10) {
+						day = '0' + day
+					}
+					return month + '-' + day
+				} // end-function formatDate
+				// 三个球分别显示今天，明天和后天的日期
+				this.fstballText = formatDate(now)
+				now = new Date(now.setDate(now.getDate() + 1))
+				this.sndballText = formatDate(now)
+				now = new Date(now.setDate(now.getDate() + 1))
+				this.trdballText = formatDate(now)
+			},
+			// 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
+			setDateballStatus(scrollLeft, windowWidth, ballObj) {
+				//开始滚动 scrollLeft为0
+				if (scrollLeft < 45) {
+					// 刚开始滚动 还不足以让第二个球开始动
+					ballObj.fstballActive = true
+					ballObj.sndballActive = false
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = false
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+					// } else if (scrollLeft < windowWidth * 0.966) {  // 290 360*0.805
+				} else if (scrollLeft < windowWidth * 0.80555) {
+					// 第二个球开始动
+					ballObj.fstballActive = true
+					ballObj.sndballActive = false
+					ballObj.trdballActive = false
+					ballObj.sndballMove = true
+					ballObj.sndballLeft = false
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+					// } else if (scrollLeft < windowWidth * 1.066) {  // 320 360*0.888
+				} else if (scrollLeft < windowWidth * 0.88888) {
+					// 第二个球停在最左边 第三个球还没开始动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = false
+					// } else if (scrollLeft < windowWidth * 1.166) {  // 350 360*0.972
+				} else if (scrollLeft < windowWidth * 0.97222) {
+					// 第三个球开始动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = true
+					ballObj.trdballLeft = false
+					// } else if (scrollLeft < windowWidth * 1.9) {    // 570 360*1.583
+				} else if (scrollLeft < windowWidth * 1.58333) {
+					// 第三个球动
+					ballObj.fstballActive = false
+					ballObj.sndballActive = true
+					ballObj.trdballActive = false
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = true
+					ballObj.trdballLeft = false
+				} else {
+					// 第三个球停在最左边
+					ballObj.fstballActive = false
+					ballObj.sndballActive = false
+					ballObj.trdballActive = true
+					ballObj.sndballMove = false
+					ballObj.sndballLeft = true
+					ballObj.trdballMove = false
+					ballObj.trdballLeft = true
+				}
 			},
 			// 精细化图标一滚动事件
-            handleScrollRefinedOne(e) {
-                // utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
-                this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedOne)
+			handleScrollRefinedOne(e) {
+				// utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
+				this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedOne)
 			},
 			// 精细化图表二滚动事件
-            handleScrollRefinedTwo(e) {
-                // utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
-                this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedTwo)
+			handleScrollRefinedTwo(e) {
+				// utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
+				this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedTwo)
 			},
 			// 自定义picker选择
 			mypickerSelect(index, item) {
@@ -1159,7 +1185,7 @@
 		mounted() {
 			console.log('cityforecast vue mounted.')
 			// 加载时根据当前日期设置日期球文字
-            this.setDateballText()
+			this.setDateballText()
 			// 根据index切换城市 允许自动定位 不写入缓存 
 			// this.switchCityByIndex(this.cityIndex)
 			// 10秒后关闭toast
@@ -1184,36 +1210,28 @@
 
 <style>
 	@import "../../common/uni.css";
+	@import "../../common/text.css";
 
 	.page-body {
-		/* width: 100%; */
-		height: 100%;
-		padding: 0 30px;
-		/* margin: 0 30px; */
 		flex-grow: 1;
 		overflow-x: hidden;
-		/*
-		background-repeat: no-repeat;
-		background-size: contain;
-		background-attachment: fixed;
-		*/
 	}
 
 	.page-section {
-		margin-bottom: 60px;
+		position: relative;
+		width: 90%;
+		left: 5%;
+	}
+
+	.section-body {
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	.header {
 		/* background-color: #fff; */
-		left: 0;
-		width: 100%;
 		height: 80px;
 		display: flex;
 		align-items: center;
-		color: #0092d4;
-		font-size: 37px;
-		font-weight: bold;
 	}
 
 	.uni-list-cell {
@@ -1242,139 +1260,137 @@
 	}
 
 	/* 整个精细化组件的容器 */
-    .refinedChart-body {
-        position: relative;
-    }
+	.refinedChart-body {
+		position: relative;
+	}
 
 	/* 曲线图的容器 必须设置宽度和高度 */
-    .chart-refined {
-        width: 290%;
-        height: 250px;
-        border: 1px solid #000000;
-    }
+	.chart-refined {
+		width: 290%;
+		height: 250px;
+		border: 1px solid #000000;
+	}
 
-    /* 日期球的外观样式 */
-    .dateball {
-        display: flex;
-        width: 62px;
-        height: 62px;
-        background-color: rgba(148, 148, 148, 0.8);
-        border-radius: 62px;
-        font-size: 20px;
-        align-items: center;
-        justify-content: center;
-    }
+	/* 日期球的外观样式 */
+	.dateball {
+		display: flex;
+		width: 62px;
+		height: 62px;
+		background-color: rgba(148, 148, 148, 0.8);
+		border-radius: 62px;
+		align-items: center;
+		justify-content: center;
+	}
 
-    /* 日期球激活状态时现时为蓝色 */
-    .dateball-active {
-        background-color: rgba(0, 148, 255, 0.8);
-    }
+	/* 日期球激活状态时现时为蓝色 */
+	.dateball-active {
+		background-color: rgba(0, 148, 255, 0.8);
+	}
 
-    /* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
-    .slideball-Snd {
-        position: relative;
-        top: 10px;
-        left: 96%;
-    }
+	/* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
+	.slideball-Snd {
+		position: relative;
+		top: 10px;
+		left: 96%;
+	}
 
-    /* 第三个球滑动时的定位 */
-    .slideball-Trd {
-        position: relative;
-        top: 10px;
-        left: 188%;
-    }
+	/* 第三个球滑动时的定位 */
+	.slideball-Trd {
+		position: relative;
+		top: 10px;
+		left: 188%;
+	}
 
-    /* 第一个球固定时的定位 */
-    .fixball-Fst {
-        position: relative;
-        bottom: 11px;
-        left: 0%;
-    }
+	/* 第一个球固定时的定位 */
+	.fixball-Fst {
+		position: relative;
+		bottom: 11px;
+		left: 0%;
+	}
 
-    /* 第二个球固定时的定位 */
-    .fixball-Snd {
-        position: relative;
-        bottom: 11px;
-        left: 74%;
-    }
+	/* 第二个球固定时的定位 */
+	.fixball-Snd {
+		position: relative;
+		bottom: 11px;
+		left: 74%;
+	}
 
-    /* 第二个球固定在左端时的定位 */
-    .fixball-Snd-left {
-        left: 0%;
-    }
+	/* 第二个球固定在左端时的定位 */
+	.fixball-Snd-left {
+		left: 0%;
+	}
 
-    /* 第三个球固定时的定位 */
-    .fixball-Trd {
-        position: relative;
-        bottom: 11px;
-        left: 74%;
-    }
+	/* 第三个球固定时的定位 */
+	.fixball-Trd {
+		position: relative;
+		bottom: 11px;
+		left: 74%;
+	}
 
-    /* 当第二个球滑动时，第三个球需要调整定位 */
-    .fixball-Trd-lone {
-        left: 82.7%;
-    }
+	/* 当第二个球滑动时，第三个球需要调整定位 */
+	.fixball-Trd-lone {
+		left: 82.7%;
+	}
 
-    /* 第三个球固定在左端时的定位 */
-    .fixball-Trd-left {
-        left: 0%;
-    }
+	/* 第三个球固定在左端时的定位 */
+	.fixball-Trd-left {
+		left: 0%;
+	}
 
-    /* 滑动的小球的容器 flex属性能让小球水平排列，height为必须 */
-    .balltrack {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        height: 80px;
-    }
+	/* 滑动的小球的容器 flex属性能让小球水平排列，height为必须 */
+	.balltrack {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		height: 80px;
+	}
 
-    /* 固定的小球的容器 */
-    .balltrack-fix {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        position: absolute;
-        bottom: 0px;
-    }
+	/* 固定的小球的容器 */
+	.balltrack-fix {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		position: absolute;
+		bottom: 0px;
+	}
 
-    /* 图表下方显示信息的面板 */
-    .infopanel {
-        position: absolute;
-        top: 260px;
-        width: 290%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        height: 80px;
-    }
+	/* 图表下方显示信息的面板 */
+	.infopanel {
+		position: absolute;
+		top: 260px;
+		width: 290%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		height: 80px;
+	}
 
-    /* 信息面板中一天的部分 */
-    .infopanel-day {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
+	/* 信息面板中一天的部分 */
+	.infopanel-day {
+		flex: 1;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
 
-    /* 信息面板的列 */
-    .infocolumn {
-        flex: 1;
-        font-size: 20px;
-        padding: 10px;
-        white-space: pre-wrap;
-    }
+	/* 信息面板的列 */
+	.infocolumn {
+		flex: 1;
+		padding: 10px;
+		white-space: pre-wrap;
+	}
 
-    /* 左边的列 文字水平靠右 */
-    .infocolumn-left {
-        text-align: right;
-    }
+	/* 左边的列 文字水平靠右 */
+	.infocolumn-left {
+		text-align: right;
+	}
 
 	/* 威海专项图表 */
 	.chart-weihai {
 		width: 100%;
-        height: 250px;
-        border: 1px solid #000000;
+		height: 250px;
+		/* border: 1px solid #000000; */
 	}
 
 	/* 威海专项 图表下信息面板 */
@@ -1382,20 +1398,25 @@
 		width: 100%;
 		height: 50px;
 		display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+		flex-direction: row;
+		flex-wrap: nowrap;
 	}
 
 	/* 威海专项 信息面板的列 */
 	.weihai-infocolumn {
 		flex: 2;
 		display: flex;
-        align-items: center;
-        justify-content: center;
+		align-items: center;
+		justify-content: center;
 	}
 
 	/* 威海专项 信息面板两侧留白列 */
 	.weihai-infocolumn-side {
 		flex: 1;
+	}
+
+	/* 分隔符 */
+	.separator {
+		height: 60px;
 	}
 </style>
