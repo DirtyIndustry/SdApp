@@ -72,17 +72,17 @@
 					<inshoreTableNew :inshoreData="inshoreData" />
 				</view>
 			</view>
-			<view class="separator" />
 			<!-- 浴场预报 -->
 			<view class="page-section" v-if="bathsData.showBaths">
+				<view class="separator" />
 				<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
 				<view class="section-body">
 					<bathsTable :bathsData="bathsData.data" />
 				</view>
 			</view>
-			<view class="separator" />
 			<!-- 精细化预报 -->
 			<view class="page-section" v-show="refinedData.show">
+				<view class="separator" />
 				<view class="section-body">
 					<refinedChart :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
 					<!-- 两个图表之间的空白 -->
@@ -969,7 +969,7 @@
 	.chart-tide {
 		width: 290%;
 		height: 250px;
-		border: 1px solid #000;
+		/* border: 1px solid #000; */
 	}
 
 </style>

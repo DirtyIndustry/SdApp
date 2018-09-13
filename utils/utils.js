@@ -556,9 +556,13 @@ const getOption = function (tidedata, markdata) {
         // 图表距离外围div的padding
         grid: {
             top: '4%',
-            left: '0%',
-            right: '2%',
+            left: '-2.6%',
+            right: '0%',
             bottom: '20%',
+            // top: '4%',
+            // left: '0%',
+            // right: '2%',
+            // bottom: '20%',
             containLabel: true
         },
         // 横坐标轴
@@ -571,17 +575,31 @@ const getOption = function (tidedata, markdata) {
                 // 横坐标刻度数值
                 show: true,
                 inside: true,
-                rotate: 90,
+                // rotate: 90,
+                fontSize: '14',
+                align: 'left',
+                padding: [0,0,30,0],
+                color: 'red',
+                // formatter: function (value, index) {
+                //     // 格式化为'月-日'，只在第一个刻度显示年份
+                //     let date = new Date(value)
+                //     let texts = [date.getMonth() + 1, date.getDate()]
+                //     if (index === 0) {
+                //         texts.unshift(date.getFullYear())
+                //     }
+                //     return '\n' + texts.join('-')
+                // } // end-formatter-axisLabel
                 formatter: function (value, index) {
-                    // 格式化为'月-日'，只在第一个刻度显示年份
                     let date = new Date(value)
-                    let texts = [date.getMonth() + 1, date.getDate()]
-                    if (index === 0) {
-                        texts.unshift(date.getFullYear())
-                    }
-                    return '\n' + texts.join('-')
-                } // end-formatter-axisLabel
+                    return date.getDate() + '日'
+                }
             }, // end-axisLabel
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            }
         },
         yAxis: {
             show: false,
