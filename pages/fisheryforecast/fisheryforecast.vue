@@ -6,47 +6,39 @@
         <view class="separator"></view>
         <!-- 标题部分 -->
         <view class="page-section">
-            <view class="uni-flex uni-row title-section">
-                <!-- 标题 -->
-                <view class="title">
-                    <image class="title-icon" src="../../static/Images/left_fishery.png" mode="widthFix" />
-                    &nbsp;渔场预报
-                </view>
-                <!-- 日期 -->
-                <view class="date small-text">{{forecastDate}}</view>
-            </view>
+            <tableTitle title=" 渔场预报" :date="forecastDate" icon="../../static/Images/left_fishery.png" />
             <!-- 标题下方空白 -->
             <view class="separator"></view>
             <!-- 表格部分 -->
             <view class="uni-flex uni-column">
                 <!-- 表头 -->
                 <view class="uni-flex uni-row fishery-header">
-                    <view class="fishery-column-left fishery-cell">渔场名称</view>
-                    <view class="fishery-column-left fishery-cell">时效(h)</view>
-                    <view class="fishery-column-right fishery-column-middle fishery-cell">波高(m)</view>
-                    <view class="fishery-column-right fishery-cell">浪向</view>
+                    <view class="fishery-column-left fishery-cell text">渔场名称</view>
+                    <view class="fishery-column-left fishery-cell text">时效(h)</view>
+                    <view class="fishery-column-right fishery-column-middle fishery-cell text">波高(m)</view>
+                    <view class="fishery-column-right fishery-cell text">浪向</view>
                 </view>
                 <!-- 表正文 -->
                 <view class="uni-flex uni-row fishery-row" v-for="(item, index) in fisheryData" :key="index">
                     <!-- 第一列 渔场名 -->
-                    <view class="fishery-column-left fishery-cell" :class="{'small-text': item.FORECASTAREA.length > 4}">{{item.FORECASTAREA}}</view>
+                    <view class="fishery-column-left fishery-cell text" :class="{'text-small': item.FORECASTAREA.length > 4}">{{item.FORECASTAREA}}</view>
                     <!-- 第二列 时效 -->
                     <view class="fishery-column-left">
-                        <view class="fishery-cell">24</view>
-                        <view class="fishery-cell">48</view>
-                        <view class="fishery-cell">72</view>
+                        <view class="fishery-cell text">24</view>
+                        <view class="fishery-cell text">48</view>
+                        <view class="fishery-cell text">72</view>
                     </view>
                     <!-- 第三列 浪高 -->
                     <view class="fishery-column-right fishery-column-middle">
-                        <view class="fishery-cell">{{item.WAVELVL}}</view>
-                        <view class="fishery-cell">{{item.WAVELVL48H}}</view>
-                        <view class="fishery-cell">{{item.WAVELVL72H}}</view>
+                        <view class="fishery-cell text">{{item.WAVELVL}}</view>
+                        <view class="fishery-cell text">{{item.WAVELVL48H}}</view>
+                        <view class="fishery-cell text">{{item.WAVELVL72H}}</view>
                     </view>
                     <!-- 第四列 浪向 -->
                     <view class="fishery-column-right">
-                        <view class="fishery-cell">{{item.WAVEDIR}}</view>
-                        <view class="fishery-cell">{{item.WAVEDIR48H}}</view>
-                        <view class="fishery-cell">{{item.WAVEDIR72H}}</view>
+                        <view class="fishery-cell text">{{item.WAVEDIR}}</view>
+                        <view class="fishery-cell text">{{item.WAVEDIR48H}}</view>
+                        <view class="fishery-cell text">{{item.WAVEDIR72H}}</view>
                     </view>
                 </view>
             </view>
@@ -58,8 +50,12 @@
 
 <script>
 import appsettings from '../../utils/appsettings.js'
+import tableTitle from '../../components/tableTitle.vue'
 
 export default {
+    components: {
+        tableTitle
+    },
     data () {
         return {
             fisheryData: [],
@@ -129,15 +125,17 @@ export default {
 </script>
 
 <style>
+    @import "../../common/text.css";
+
     .page-body {
-        /* border: 1px solid #f00; */
-		padding: 0 30px;
 		flex-grow: 1;
 		overflow-x: hidden;
 	}
 
 	.page-section {
-		height: 1480px;
+        position: relative;
+        left: 5%;
+        width: 90%;
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
@@ -154,46 +152,9 @@ export default {
         flex-direction: column;
     }
 
-    /* 标题部分容器 */
-    .title-section {
-        border-bottom: 1px solid #000;
-        height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* 标题图标+渔场预报字样 */
-    .title {
-        /* border: 1px solid #f00; */
-        flex: 3;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 37px;
-        font-weight: bold;
-        color: #0092d4;
-    }
-
-    /* 标题图标 */
-    .title-icon {
-        width: 60px;
-        height: 60px;
-    }
-
-    /* 标题日期 */
-    .date {
-        /* border: 1px solid #000; */
-        flex: 5;
-        height: 80px;
-        line-height: 125px;
-        text-align: right;
-    }
-
     /* 分隔空白 */
     .separator {
-        height: 30px;
+        height: 5vw;
     }
 
     /* 表格表头 */
@@ -240,9 +201,5 @@ export default {
         border-right: 1px solid #999999;
     }
 
-    /* 较小字体 */
-    .small-text {
-        font-size: 26px;
-    }
 </style>
 

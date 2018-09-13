@@ -269,8 +269,6 @@ export default {
 <style>
 
 .page-body {
-    /* border: 1px solid #f00; */
-    /* padding: 0 30px; */
     width: 100%;
     height: 100%;
     flex-grow: 1;
