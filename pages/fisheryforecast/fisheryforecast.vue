@@ -124,20 +124,8 @@ export default {
 }
 </script>
 
-<style>
-    @import "../../common/text.css";
-
-    .page-body {
-		flex-grow: 1;
-		overflow-x: hidden;
-	}
-
-	.page-section {
-        position: relative;
-        left: 5%;
-        width: 90%;
-		background-color: rgba(255, 255, 255, 0.8);
-	}
+<style scoped>
+    @import "../../common/generic.css";
 
     .uni-flex {
         display: flex;
@@ -150,11 +138,6 @@ export default {
 
     .uni-column {
         flex-direction: column;
-    }
-
-    /* 分隔空白 */
-    .separator {
-        height: 5vw;
     }
 
     /* 表格表头 */

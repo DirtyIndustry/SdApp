@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style scoped>
-    @import "../common/text.css";
+    @import "../common/generic.css";
 
     .uni-flex {
         display: flex;
@@ -55,9 +55,6 @@ export default {
         position: relative;
         width: 90%;
         left: 5%;
-    }
-    .separator {
-        height: 5vw;
     }
 
     /* 浴场预报表格的行 */

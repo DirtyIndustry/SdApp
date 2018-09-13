@@ -216,7 +216,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	/* 这是页面的公用css */
 
 	page {

@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../common/text.css";
+@import "../common/generic.css";
 .warning-section {
     border: 1px solid #999;
     height: 60px;

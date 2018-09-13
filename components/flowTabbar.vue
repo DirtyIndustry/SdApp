@@ -152,7 +152,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* 控件最外城容器 */
 .tabbar-container {
     /* border: 1px solid #000; */

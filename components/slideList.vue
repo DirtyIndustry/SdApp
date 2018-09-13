@@ -64,7 +64,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     @import "../common/FontAwesome.css";
 
     /* 最外层容器 */

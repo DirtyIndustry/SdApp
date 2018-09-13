@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../common/text.css";
+@import "../common/generic.css";
 .uni-flex {
     display: flex;
     flex-direction: row;

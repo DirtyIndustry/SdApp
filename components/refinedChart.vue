@@ -210,7 +210,7 @@
 </script>
 
 <style scoped>
-    @import "../common/text.css";
+    @import "../common/generic.css";
 
     /* 整个组件的容器 */
     .refinedChart-body {

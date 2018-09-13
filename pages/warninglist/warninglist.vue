@@ -266,7 +266,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .page-body {
     width: 100%;

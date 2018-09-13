@@ -167,7 +167,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.pic_title {
 		width: 100%;
 		height: 80px;

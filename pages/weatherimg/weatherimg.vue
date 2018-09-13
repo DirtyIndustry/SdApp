@@ -75,9 +75,9 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	@import "../../common/FontAwesome.css";
-	@import "../../common/text.css";
+	@import "../../common/generic.css";
 
 	Page {
 		width: 100%;
@@ -99,10 +99,6 @@
 
 	.choose-source-header {
 		margin-left: 100px;
-	}
-
-	.separator {
-		height: 40px;
 	}
 
 </style>

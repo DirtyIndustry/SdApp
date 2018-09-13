@@ -134,7 +134,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	
 
 	.img_box {

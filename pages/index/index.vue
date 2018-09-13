@@ -936,12 +936,7 @@
 
 <style scoped>
 	@import "../../common/uni.css";
-	@import "../../common/text.css";
-
-	.page-body {
-		flex-grow: 1;
-		overflow-x: hidden;
-	}
+	@import "../../common/generic.css";
 
 	.header {
 		/* background-color: #fff; */
@@ -950,16 +945,6 @@
 		height: 80px;
 		display: flex;
 		align-items: center;
-	}
-
-	.page-section {
-		position: relative;
-		width: 90%;
-		left: 5%;
-	}
-
-	.section-body {
-		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	.uni-list-cell {
@@ -986,8 +971,5 @@
 		height: 250px;
 		border: 1px solid #000;
 	}
-	/* 分隔符 */
-	.separator {
-		height: 60px;
-	}
+
 </style>

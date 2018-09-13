@@ -95,7 +95,7 @@
 </script>
 
 <style scoped>
-    @import "../common/text.css";
+    @import "../common/generic.css";
     
     .uni-flex {
         display: flex;
@@ -123,11 +123,7 @@
         width: 90%;
         left: 5%;
     }
-
-    .separator {
-        height: 5vw
-    }
-
+    
     /* 近海预报表格的行 */
     .inshore-row {
         flex: 1;

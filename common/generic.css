@@ -1,3 +1,18 @@
+.page-body {
+    flex-grow: 1;
+    overflow-x: hidden;
+}
+.page-section {
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
+.section-body {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.separator {
+    height: 5vw;
+}
 .text {
     font-size: 30px;
 }

@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 	/* 威海专项图表 */
 	.chart-weihai {
 		width: 100%;

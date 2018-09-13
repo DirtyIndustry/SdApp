@@ -195,7 +195,7 @@ onShow () {
 }
 </script>
 
-<style>
+<style scoped>
 .page-body {
 	background-color: #eeeeee;
 	width: 100%;

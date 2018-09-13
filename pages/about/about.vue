@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .page-body {
     width: 100%;
     height: 100%;

@@ -184,9 +184,9 @@
 	}
 </script>
 
-<style>
+<style scoped>
 @import "../../common/FontAwesome.css";
-@import "../../common/text.css";
+@import "../../common/generic.css";
 
 .page-body {
 	background-color: #eeeeee;

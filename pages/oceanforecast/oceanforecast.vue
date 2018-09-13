@@ -150,25 +150,7 @@ export default {
 </script>
 
 <style scoped>
-    @import "../../common/text.css";
-
-    .page-body {
-        /* border: 1px solid #f00; */
-		flex-grow: 1;
-		overflow-x: hidden;
-	}
-
-	.page-section {
-        position: relative;
-        top: 0;
-        left: 5%;
-        width: 90%;
-		/* height: 1480px; */
-    }
-    
-    .section-body {
-        background-color: rgba(255, 255, 255, 0.8);
-    }
+    @import "../../common/generic.css";
 
     .uni-flex {
         display: flex;
@@ -211,11 +193,6 @@ export default {
         height: 80px;
         line-height: 125px;
         text-align: right;
-    }
-
-    /* 分隔空白 */
-    .separator {
-        height: 30px;
     }
 
 </style>

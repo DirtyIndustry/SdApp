@@ -180,14 +180,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     @import "../../common/uni.css";
-    @import "../../common/text.css";
-
-	.page-body {
-		flex-grow: 1;
-		overflow: hidden;
-	}
+    @import "../../common/generic.css";
 
     .menu-page {
         height: 100%;

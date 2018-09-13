@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../common/text.css";
+@import "../common/generic.css";
 
 .table-container {
     position: relative;

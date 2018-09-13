@@ -87,7 +87,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .layer {
         position: fixed;
         left: 0;

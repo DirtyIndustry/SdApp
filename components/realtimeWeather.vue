@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
 @import "../common/FontAwesome.css";
-@import "../common/text.css";
+@import "../common/generic.css";
 
 .body {
     display: flex;
