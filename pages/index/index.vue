@@ -69,7 +69,7 @@
 			<view class="page-section">
 				<tableTitle :title="inshoreData.location" date="" icon="../../static/Images/top_left_img_newS.png" />
 				<view class="section-body">
-					<inshoreTable :inshoreData="inshoreData" />
+					<inshoreTableNew :inshoreData="inshoreData" />
 				</view>
 			</view>
 			<view class="separator" />
@@ -114,6 +114,7 @@
 	import warningSection from '../../components/warningSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
 	import inshoreTable from '../../components/inshoreTable.vue'
+	import inshoreTableNew from '../../components/inshoreTableNew.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
 	import myPicker from '../../components/myPicker.vue'
@@ -127,6 +128,7 @@
 			warningSection,
 			fivedayForcast,
 			inshoreTable,
+			inshoreTableNew,
 			bathsTable,
 			refinedChart,
 			myPicker,
