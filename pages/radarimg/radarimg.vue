@@ -3,9 +3,9 @@
         <view style="height: 40px;"></view>
         <view class="choose_source" @tap="showModel">
             <picker @change="source_change" :value="cityIndex" :range="sourceArray">
-                <text style="margin-left: 100px;">数据源:&nbsp;&nbsp;</text>
-                <text class="source">{{sourceArray[cityIndex]}}&nbsp;&nbsp;</text>
-                <text class="source fa fa-angle-down"></text>
+                <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
+                <text class="text text-blue">{{sourceArray[cityIndex]}}&nbsp;&nbsp;</text>
+                <text class="text text-blue fa fa-angle-down"></text>
             </picker>
         </view>
         <view class="separator"></view>
@@ -122,6 +122,7 @@
 
 <style>
     @import "../../common/FontAwesome.css";
+    @import "../../common/text.css";
 
     Page {
         width: 100%;
@@ -139,19 +140,14 @@
         height: 80px;
         background-color: #fff;
         line-height: 80px;
-        font-size: 28px;
-        color: #000;
     }
 
-    .source {
-        color: #0092D4;
+    .choose-source-header {
+        margin-left: 100px;
     }
-
+    
     .separator {
         height: 40px;
     }
 
-    .font-icon {
-        font-family: 'FontAwesome';
-    }
 </style>
