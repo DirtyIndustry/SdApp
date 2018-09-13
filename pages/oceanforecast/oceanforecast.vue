@@ -9,37 +9,43 @@
 
             <view class="uni-flex uni-row title-section">
                 <!-- 标题 -->
-                <view class="title">
+                <view class="title text text-bold text-blue">
                     &nbsp;24小时海区预报
                 </view>
                 <!-- 日期 -->
-                <view class="date small-text">{{forecastdate24h}}</view>
+                <view class="date text-small">{{forecastdate24h}}</view>
             </view>
-            <oceanTable :data="oceantable24h"></oceanTable>
+            <view class="section-body">
+                <oceanTable :data="oceantable24h"></oceanTable>
+            </view>
             <!-- 表格下方空白 -->
             <view class="separator"></view>
         
             <view class="uni-flex uni-row title-section">
                 <!-- 标题 -->
-                <view class="title">
+                <view class="title text text-bold text-blue">
                     &nbsp;48小时海区预报
                 </view>
                 <!-- 日期 -->
-                <view class="date small-text">{{forecastdate48h}}</view>
+                <view class="date text-small">{{forecastdate48h}}</view>
             </view>
-            <oceanTable :data="oceantable48h"></oceanTable>
+            <view class="section-body">
+                <oceanTable :data="oceantable48h"></oceanTable>
+            </view>
             <!-- 表格下方空白 -->
             <view class="separator"></view>
 
             <view class="uni-flex uni-row title-section">
                 <!-- 标题 -->
-                <view class="title">
+                <view class="title text text-bold text-blue">
                     &nbsp;72小时海区预报
                 </view>
                 <!-- 日期 -->
-                <view class="date small-text">{{forecastdate72h}}</view>
+                <view class="date text-small">{{forecastdate72h}}</view>
             </view>
-            <oceanTable :data="oceantable72h"></oceanTable>
+            <view class="section-body">
+                <oceanTable :data="oceantable72h"></oceanTable>
+            </view>
             
             <!-- 页脚空白 -->
             <view class="separator"></view>
@@ -144,6 +150,8 @@ export default {
 </script>
 
 <style scoped>
+    @import "../../common/text.css";
+
     .page-body {
         /* border: 1px solid #f00; */
 		flex-grow: 1;
@@ -156,7 +164,11 @@ export default {
         left: 5%;
         width: 90%;
 		/* height: 1480px; */
-	}
+    }
+    
+    .section-body {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 
     .uni-flex {
         display: flex;
@@ -184,9 +196,6 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 33px;
-        font-weight: bold;
-        color: #0092d4;
     }
 
     /* 标题图标 */
@@ -209,9 +218,5 @@ export default {
         height: 30px;
     }
 
-    /* 较小字体 */
-    .small-text {
-        font-size: 26px;
-    }
 </style>
 

@@ -73,7 +73,7 @@ export default {
 /* 标题日期 */
 .date {
     /* border: 1px solid #000; */
-    flex: 5;
+    flex: 4;
     height: 80px;
     line-height: 125px;
     text-align: right;

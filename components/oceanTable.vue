@@ -1,5 +1,6 @@
 <template>
     <view class="table-container">
+        <view class="separator" />
         <view class="table-body">
             <view class="table-row">
                 <view class="table-cell border-top border-left text">海区</view>
@@ -14,6 +15,7 @@
                 <view class="table-cell text">{{item.undercurrent}}</view>
             </view>
         </view>
+        <view class="separator" />
     </view>
 </template>
 
@@ -33,18 +35,19 @@ export default {
 </script>
 
 <style scoped>
+@import "../common/text.css";
+
 .table-container {
     position: relative;
     top: 0;
     left: 0;
-    padding: 3.5%;
 	flex-grow: 1;
-	background-color: rgba(255, 255, 255, 0.8);
 }
 .table-body {
     /* border: 1px solid #000; */
     position: relative;
-    width: 100%;
+    left: 3.5%;
+    width: 93%;
     display: flex;
     flex-direction: column;
 }
@@ -67,7 +70,7 @@ export default {
     align-items: center;
     justify-content: center;
 }
-.text {
-
+.separator {
+    height: 3.5vw;
 }
 </style>
