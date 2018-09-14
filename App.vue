@@ -8,6 +8,8 @@
 				get() {return this.$store.state.Infos.systeminfo},
 				set(value) {this.$store.dispatch('setSystemInfo', value)}
 			},
+			// 城市选择列表
+			cityArray() { return this.$store.state.Infos.cityarray },
 			// 城市选择列表 所选index
 			cityIndex: {
 				get () { return this.$store.state.Infos.cityindex },
@@ -190,6 +192,19 @@
 					}
 				})
 			}, // end-getLocalStorage()
+			// 根据index切换城市 允许自动定位 不写入缓存
+			switchCityByIndex(index) {
+				// 切换城市
+				utils.switchCity(this.cityArray[index], this.switchCityByName)
+			},
+			// 根据name切换城市 写入缓存
+			switchCityByName(city) {
+				// 写入Vuex和缓存
+				this.cityName = city
+				utils.storeToLocal('cityname', city)
+				// 根据城市向服务器申请数据
+				this.loadShandongData(city)
+			},
 			// 读取山东预报数据 包括天气 潮汐 近海 浴场 精细化 五日 威海专项
 			loadShandongData (cityname) {
 				let that = this
@@ -365,7 +380,7 @@
 			this.checkNetwork()
 			this.getSystemInfo()
 			this.getLocalStorage()
-			this.loadShandongData(this.cityName)
+			this.switchCityByIndex(this.cityIndex)
 		},
 		onShow: function () {
 			console.log('App Show')

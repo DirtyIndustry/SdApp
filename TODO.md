@@ -138,12 +138,22 @@ DONE... selection panel with mask, for city pick
 DONE... bienvenu page  
 DONE... bienvenu page skip  
 DONE... index page demargin  
-unify font in a generic css file  
-table styling  
+DONE... unify font in a generic css file  
+DONE... table styling  
+DONE... combine webservices  
+DONE... apply combined webservice to index city weather page  
+DONE... move request to App.vue  
+DONE... baths forecast availability  
+DONE... App.vue auto select city  
+combine index page warning webservices  
+different chart different color  
+inshore table different date position  
+weihai sp chart option tweak  
+refined forecast location name update  
+chart deborder  
+page-section shadow  
 chart styling  
 slide ball  
-combine webservices  
-baths forecast availability  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
