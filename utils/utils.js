@@ -1246,8 +1246,8 @@ const switchCity = function (city, operate) {
 }
 
 // 服务器请求山东预报数据
-const loadShandongData = function (cityname, weatherData, tideData, inshoreData, bathsData, refinedData, fivedayData, weihaiData, counter) {
-    let that = this
+const loadShandongData = function (cityname, weatherData, tideData, inshoreDataSet, bathsData, refinedData, fivedayData, weihaiData, questcounter) {
+    let inshore = inshoreDataSet
     uni.request({
         url: appsettings.hosturl + 'GetShandongData',
         data: {name: 'admin', city: cityname},
@@ -1294,7 +1294,7 @@ const loadShandongData = function (cityname, weatherData, tideData, inshoreData,
 
             // 近海预报
             // 写入Vuex
-            inshoreData = res.inshoreData
+            this.inshoreDataSet = res.inshoreData
 
             // 浴场预报
             // 判断月份和城市
@@ -1397,10 +1397,10 @@ const loadShandongData = function (cityname, weatherData, tideData, inshoreData,
         }, // success-request
         fail: function () {
             console.log('[服务器]: 请求 山东预报数据 失败')
-            counter++
+            questcounter++
         },
         complete: function () {
-            counter++
+            questcounter++
         }
     })
 }
