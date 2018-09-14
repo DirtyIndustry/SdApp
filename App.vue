@@ -189,7 +189,7 @@
 						that.weihaiData = JSON.parse(res.data)
 					}
 				})
-			} // end-getLocalStorage()
+			}, // end-getLocalStorage()
 		}, // end-methods
 		onLaunch: function () {
 			console.log('App Launch')
@@ -206,6 +206,7 @@
 			this.checkNetwork()
 			this.getSystemInfo()
 			this.getLocalStorage()
+			utils.loadShandongData(this.cityName, this.weatherData, this.tideData, this.inshoreData, this.bathsData, this.refinedData, this.fivedayData, this.weihaiData)
 		},
 		onShow: function () {
 			console.log('App Show')

@@ -4,9 +4,9 @@
         <!-- 近海预报表格 固定三列 -->
         <view class="table-body">
             <view class="uni-flex uni-column">
-                <view class="uni-flex uni-row inshore-row" :class="{'inshore-row-top': index == 0}" v-for="(item, index) in inshoreData.data"
+                <view class="inshore-row" :class="{'inshore-row-top': index == 0}" v-for="(item, index) in inshoreData.data"
                     :key="index">
-                    <view class="inshore-cell inshore-column text">{{item.loc}}</view>
+                    <view class="inshore-cell inshore-column-head text">{{item.loc}}</view>
                     <view class="inshore-cell inshore-column inshore-column-right text">{{item.wave}}</view>
                     <view class="inshore-cell inshore-column inshore-column-right text">{{item.temp}}</view>
                 </view>
@@ -19,25 +19,20 @@
             <!-- 表头部分 -->
             <view class="table-body">
                 <view class="uni-flex uni-column">
-                    <view class="uni-flex uni-row inshore-row inshore-row-top">
-                        <view class="inshore-cell inshore-column text">青岛海域</view>
+                    <view class="inshore-row inshore-row-top">
+                        <view class="inshore-cell inshore-column-head text">青岛海域</view>
                         <view class="inshore-cell inshore-column inshore-column-right text">浪高(m)</view>
                         <view class="inshore-cell inshore-column inshore-column-right text">表层水温(℃)</view>
                     </view>
-                </view>
-                <!-- 四列 第一列为青岛近海 第二列为48h,72h 第三列为海浪48h,72h 第四列为水温48h,72h -->
-                <view class="uni-flex uni-row">
-                    <view class="uni-flex uni-column inshore-column border-left">
-                        <view class="inshore-cell inshore-row-clean text">{{daytwo}}</view>
-                        <view class="inshore-cell inshore-row-clean border-vertical text">{{daythree}}</view>
+                    <view class="inshore-row">
+                        <view class="inshore-cell inshore-column-head text">{{daytwo}}</view>
+                        <view class="inshore-cell inshore-column inshore-column-right text">{{inshoreData.extrawave48h}}</view>
+                        <view class="inshore-cell inshore-column inshore-column-right text">{{inshoreData.extratemp48h}}</view>
                     </view>
-                    <view class="uni-flex uni-column inshore-column">
-                        <view class="inshore-cell inshore-row-clean border-horizontal text">{{inshoreData.extra.wave48h}}</view>
-                        <view class="inshore-cell inshore-row-clean border-horizontal border-vertical text">{{inshoreData.extra.wave72h}}</view>
-                    </view>
-                    <view class="uni-flex uni-column inshore-column">
-                        <view class="inshore-cell inshore-row-clean text" style="border-right: 1px solid #000;">{{inshoreData.extra.temp48h}}</view>
-                        <view class="inshore-cell inshore-row-clean border-vertical text" style="border-right: 1px solid #000;">{{inshoreData.extra.temp72h}}</view>
+                    <view class="inshore-row">
+                        <view class="inshore-cell inshore-column-head text">{{daythree}}</view>
+                        <view class="inshore-cell inshore-column inshore-column-right text">{{inshoreData.extrawave72h}}</view>
+                        <view class="inshore-cell inshore-column inshore-column-right text">{{inshoreData.extratemp72h}}</view>
                     </view>
                 </view>
             </view>
@@ -97,25 +92,14 @@
 <style scoped>
     @import "../common/generic.css";
     
-    .uni-flex {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .uni-row {
-        flex-direction: row;
-    }
-
-    .uni-column {
-        flex-direction: column;
-    }
-
     .table-date {
         position: relative;
         width: 90%;
         left: 5%;
         min-height: 5vw;
         text-align: right;
+        display: flex;
+        flex-direction: column;
     }
 
     .table-body {
@@ -131,6 +115,8 @@
         border-left: 1px solid #000;
         border-right: 1px solid #000;
         border-bottom: 1px solid #000;
+        display: flex;
+        flex-direction: row;
     }
 
     /* 近海预报表格的最底行 */
@@ -138,20 +124,14 @@
         border-top: 1px solid #000;
     }
 
-    /* 近海预报表格的行 不带边框 */
-    .inshore-row-clean {
+    /* 最左列 */
+    .inshore-column-head {
         flex: 1;
-        height: 70px;
     }
 
     /* 近海预报表格的列 */
     .inshore-column {
         flex: 1;
-    }
-
-    /* 两倍宽的列 */
-    .inshore-column-dual {
-        flex: 2;
     }
 
     /* 近海预报表格的非首列 */
@@ -164,22 +144,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .border-left {
-        border-left: 1px solid #000;
-    }
-
-    /* 左右边框 */
-    .border-horizontal {
-        border-left: 1px solid #000;
-        border-right: 1px solid #000;
-    }
-
-    /* 上下边框 */
-    .border-vertical {
-        border-top: 1px solid #000;
-        border-bottom: 1px solid #000;
     }
 
 </style>

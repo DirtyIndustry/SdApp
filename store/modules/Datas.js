@@ -6,7 +6,6 @@ var state = {
         temperature: '25', // 气温
         aircondition: '35', // 空气质量
         airconDesc: '优',
-        airconIcon: '../../static/Images/right_leaf_sev.png', // 空气质量绿叶图标
         weather: '晴',
         weatherIcon: '../../static/Images/right_weather_fine.png', // 天气图表
         pm25: '8', // PM2.5
@@ -52,12 +51,10 @@ var state = {
             }
         ],
         showextra: true,
-        extra: {
-            wave48h: "",
-            temp48h: "",
-            wave72h: "",
-            temp72h: ""
-        }
+        extrawave48h: "",
+        extratemp48h: "",
+        extrawave72h: "",
+        extratemp72h: ""
     },
     // 浴场预报
     bathsdata: {

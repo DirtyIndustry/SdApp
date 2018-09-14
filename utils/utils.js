@@ -1,3 +1,5 @@
+import appsettings from './appsettings.js'
+
 // 根据天气设置图标
 const setWeatherIcon = function (weather) {
     switch (weather) {
@@ -212,6 +214,75 @@ const setFivedayChartOption = function (higharr, lowarr) {
             high = higharr[i]
         }
     }
+    // 生成option
+    let option = {
+        // chart距离容器边框的距离
+        grid: {
+            top: '4%',
+            left: '0%',
+            right: '1%',
+            bottom: '0%',
+            containLabel: false
+        },
+        xAxis: {
+            show: false,
+            data: ['one', 'two', 'three', 'four', 'five']
+        },
+        yAxis: {
+            show: false,
+            boundaryGap: ['1%', '1%'],
+            max: high + 2,  // 设置纵轴显示范围的上限
+            min: low - 1    // 显示范围的下限
+        },
+        series: [
+            // 高温折线
+            {
+                name: '高温',
+                type: 'line',
+                animation: anim,
+                // 折线上方的温度文字
+                label: {
+                    show: true,
+                    formatter: '{c}℃',  // 文字内容
+                    color: '#000000',   // 文字颜色
+                },
+                symbol: 'circle',   // 折线拐点设置为实心圆
+                itemStyle: {
+                    color: '#458B00'    // 拐点颜色
+                },
+                lineStyle: {
+                    color: '#EEC900'    // 折线颜色
+                },
+                data: higharr
+            },
+            // 低温折线
+            {
+                name: '低温',
+                type: 'line',
+                animation: anim,
+                // 折线上方的温度文字
+                label: {
+                    show: true,
+                    formatter: '{c}℃',  // 文字内容
+                    color: '#000000',   // 文字颜色
+                },
+                symbol: 'circle',   // 折线拐点设置为实心圆
+                itemStyle: {
+                    color: '#CD2626'    // 拐点颜色
+                },
+                lineStyle: {
+                    color: '#5CACEE'    // 折线颜色
+                },
+                data: lowarr
+            }
+        ] // end-series
+    } // end-option
+    return option
+}
+
+// 由高低温数据生成五日预报气温chart option
+const setFivedayChartOptionNew = function (higharr, lowarr, high, low) {
+    let anim = false // 是否显示动画
     // 生成option
     let option = {
         // chart距离容器边框的距离
@@ -951,6 +1022,152 @@ const getAstroOption = function (tidedata, markdata) {
     return option
 }
 
+// 根据包含label信息的tidedata生成潮汐预报chart option
+const getAstroOptionNew = function (tidedata, markdata, max, min) {
+    // 获取现在时间
+    let now = new Date()
+    let nowtime = new Date()
+    let nowdata = 0
+    let showmarkpoint = 0
+    if (tidedata.length > 13) {
+        showmarkpoint = 1
+        for (let j = 0; j < tidedata.length; j++) {
+            if (tidedata[j].value[0].getHours() === now.getHours()) {
+                nowtime = tidedata[j].value[0]
+                nowdata = tidedata[j].value[1]
+                break
+            }
+        }
+    }
+    
+    let option = {
+        // 图表距离外围div的padding
+        grid: {
+            top: '4%',
+            left: '-2.6%',
+            right: '0%',
+            bottom: '20%',
+            containLabel: true
+        },
+        // 横坐标轴
+        xAxis: {
+            type: 'time',
+            offset: 0,
+            interval: 24*60*60*1000,
+            axisLabel: {
+                // 横坐标刻度数值
+                show: true,
+                inside: true,
+                fontSize: '14',
+                align: 'left',
+                padding: [0,0,30,0],
+                color: 'red',
+                formatter: function (value, index) {
+                    let date = new Date(value)
+                    return date.getDate() + '日'
+                }
+            }, // end-axisLabel
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            show: false,
+            boundaryGap: ['20%', '20%'], // 纵坐标轴的范围，比有效数字上下多出20%
+            min: 0,
+            // max: max + 110
+        },
+        series: [
+            // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线底部时间label
+            {
+                name: '潮汐',
+                type: 'line',
+                smooth: 0.3,
+                silent: true,
+                animation: false,
+                symbolSize: 0.0001, // 曲线上数据点小圆圈的大小 不能设为0否则label不显示
+                lineStyle: {
+                    color: '#1c8d3b', // 曲线颜色
+                    width: 1 // 曲线粗细
+                },
+                itemStyle: {
+                    color: '#1c8d3b'    // 与曲线同色
+                },
+                label: {
+                    color: '#000000'
+                },
+                data: tidedata,
+                markLine: {
+                    symbolSize: 0.1,    // 标线一端箭头的大小 不能设为0否则label不显示
+                    silent: true,
+                    animation: false,
+                    label: {
+                        show: true,
+                        position: 'end',
+                        formatter: function (param) {
+                            // 返回mm:ss格式的时间
+                            let date = new Date(param.data.coord[0])
+                            let hour = date.getHours()
+                            if (hour < 10) {
+                                hour = '0' + hour
+                            }
+                            let minute = date.getMinutes()
+                            if (minute < 10) {
+                                minute = '0' + minute
+                            }
+                            return hour + ':' + minute
+                        },
+                        textStyle: {
+                            color: '#000000',
+                        }
+                        
+                    }, // end-label-markLine
+                    lineStyle: {
+                        type: 'dot',
+                        color: '#999999'
+                    },
+                    data: markdata
+                }, // end-markLine
+                /*
+                markPoint: {
+                    symbol: 'circle',
+                    symbolSize: 4,
+                    itemStyle: {
+                        color: 'red',
+                        opacity: showmarkpoint
+                    },
+                    data: [
+                        {coord:[nowtime, nowdata]}
+                    ]
+                }
+                */
+            },
+            // 第二组series： 两条水平标线 表示三天最高和最低的潮位
+            {
+                name: '最值横线',
+                type: 'line',
+                markLine: {
+                    symbolSize: 0,
+                    silent: true,
+                    animation: false,
+                    lineStyle: {
+                        type: 'dashed',
+                        color: '#999999'
+                    },
+                    label: {
+                        show: false
+                    },
+                    data: [{ yAxis: max }, { yAxis: min }]
+                } // end-markLine
+            }
+        ] // end-series
+    } // end-option
+    return option
+}
+
 // 将数据存入本地缓存
 const storeToLocal = function (key, value) {
     // 判断value是不是object
@@ -1028,6 +1245,203 @@ const switchCity = function (city, operate) {
     }
 }
 
+// 服务器请求山东预报数据
+const loadShandongData = function (cityname, weatherData, tideData, inshoreData, bathsData, refinedData, fivedayData, weihaiData, counter) {
+    let that = this
+    uni.request({
+        url: appsettings.hosturl + 'GetShandongData',
+        data: {name: 'admin', city: cityname},
+        method: 'POST',
+        success: function (res) {
+            console.log('[服务器]: 返回 山东预报数据')
+            // 判断返回数据有效性
+            if (!res.data.d | res.data.d === '无权访问该接口' | res.data.d === '无该地区数据') { // 返回的值为空
+                console.log('[服务器]: 返回 山东预报数据 返回值为空')
+                return false
+            }
+            res = JSON.parse(res.data.d)
+            // 天气预报
+            // 写入Vuex
+            weatherData = res.weatherData
+            // 天气图标 pm2.5字体颜色
+            weatherData.weatherIcon = setWeatherIcon(res.weatherData.weather)
+            weatherData.pm25Style = setAirconClass(res.weatherData.airconDesc)
+
+            // 潮汐预报
+            if (res.astroDatas.length > 1) {	// 如果是青岛
+                tideData.chartTideTwoShow = true
+                tideData.chartTideOneTitle = '第一海水浴场'
+                tideData.chartTideTwoTitle = '金沙滩'
+                for (let i = 0; i < res.astroDatas.length; i++) {
+                    let tide = buildTidedata(res.astroDatas[i].tidedata)
+                    let mark = buildMarkdata(res.astroDatas[i].markdata)
+                    if (res.astroDatas[i].location === '第一海水浴场') {
+                        tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+                    } else {
+                        tideData.optionTideTwo = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+                    }
+                }
+            } else {	// 如果是青岛以外的城市
+                tideData.chartTideTwoShow = false
+                tideData.chartTideOneTitle = ''
+                tideData.chartTideTwoTitle = ''
+                for (let i = 0; i < res.astroDatas.length; i++) {
+                    let tide = buildTidedata(res.astroDatas[i].tidedata)
+                    let mark = buildMarkdata(res.astroDatas[i].markdata)
+                    tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+                }
+            } // if-else 是否是青岛
+
+            // 近海预报
+            // 写入Vuex
+            inshoreData = res.inshoreData
+
+            // 浴场预报
+            // 判断月份和城市
+            if (new Date().getMonth() > 5 & new Date().getMonth() < 9 & cityname === '青岛') {
+                bathsData.showBaths = true
+            } else {
+                bathsData.showBaths = false
+            }
+            // 写入Vuex
+            bathsData.data = res.bathsDatas
+
+            // 精细化预报
+            // 判断城市
+            if (cityname === '滨州') {
+                refinedData.show = false
+            } else {
+                refinedData.show = true
+            }
+            if (res.refinedDatas.length > 1) {	// 如果是青岛
+                refinedData.showTwo = true
+                for (let i = 0; i < res.refinedDatas.length; i++) {
+                    let tide = buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
+                    let mark = buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+                    if (res.refinedDatas[i].tideinfo.location === 'DJKP') {
+                        refinedData.optionOne = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+                        res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
+                        refinedData.dataOne = res.refinedDatas[i].extrainfo
+                    } else {
+                        refinedData.optionTwo = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+                        res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
+                        refinedData.dataTwo = res.refinedDatas[i].extrainfo
+                    }
+                }
+            } else {	// 如果是青岛以外的城市
+                refinedData.showTwo = false
+                for (let i = 0; i < res.refinedDatas.length; i++) {
+                    let tide = buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
+                    let mark = buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+                    refinedData.optionOne = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+                    res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
+                    refinedData.dataOne = res.refinedDatas[i].extrainfo
+                }
+            }
+
+            // 五日天气预报
+            let fivedaydata = {
+                fivedayWeather: res.fivedayData.fivedayWeathers,
+                optionFiveday: setFivedayChartOptionNew(res.fivedayData.higharr, res.fivedayData.lowarr, res.fivedayData.max, res.fivedayData.min)
+            }
+            for (let i = 0; i < fivedaydata.fivedayWeather.length; i++) {
+                fivedaydata.fivedayWeather[i].weatherIcon = setWeatherIcon(fivedaydata.fivedayWeather[i].weather)
+            }
+            // 写入Vuex
+            fivedayData = fivedaydata
+
+            // 威海专项
+            // 判断城市
+            if (res.weihaiDatas.length > 0) {	// 如果是威海
+                weihaiData.show = true
+                for (let i = 0; i < res.weihaiDatas.length; i++) {
+                    let data = {
+                        show: res.weihaiDatas[i].show,
+                        REPORTAREA: res.weihaiDatas[i].REPORTAREA,
+                        FORECASTDATE: res.weihaiDatas[i].FORECASTDATE,
+                        WAVEHEIGHT: res.weihaiDatas[i].WAVEHEIGHT,
+                        WATERTEMP: res.weihaiDatas[i].WATERTEMP,
+                    }
+                    let tide = buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
+                    let mark = buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
+                    data.option = getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
+                    switch (res.weihaiDatas[i].REPORTAREA) {
+                        case '成山头':
+                            weihaiData.first = data
+                            break
+                        case '乳山':
+                            weihaiData.second = data
+                            break
+                        case '石岛':
+                            weihaiData.third = data
+                            break
+                        case '文登':
+                            weihaiData.fourth = data
+                            break
+                        default:
+                            break
+                    }
+                } // end-for res.weihaiDatas
+            } else {	// 如果是威海以外的城市
+                weihaiData.show = false
+            }
+            // 写入本地缓存
+            storeToLocal('weatherdata', JSON.stringify(res.weatherData))
+            storeToLocal('tidedata', JSON.stringify(tideData))
+            storeToLocal('inshoredata', JSON.stringify(res.inshoreData))
+            storeToLocal('bathsdata', JSON.stringify(bathsData))
+            storeToLocal('refineddata', JSON.stringify(refinedData))
+            storeToLocal('fivedaydata', JSON.stringify(fivedayData))
+            storeToLocal('weihaidata', JSON.stringify(weihaiData))
+
+        }, // success-request
+        fail: function () {
+            console.log('[服务器]: 请求 山东预报数据 失败')
+            counter++
+        },
+        complete: function () {
+            counter++
+        }
+    })
+}
+// 构建tidedata
+const buildTidedata = function (raw) {
+    let result = []
+    for (let i = 0; i < raw.length; i++) {
+        let item = raw[i]
+        // 添加曲线数据
+        let newdata = {
+            value: [new Date(item.time), Number(item.data)]
+        }
+        // 如果由label值 则添加label数据
+        if (item.label !== '') {
+            newdata.label = {
+                show: true,
+                position: 'top',
+                formatter: item.label + 'cm'
+            }
+        }
+        result.push(newdata)
+    }
+    return result
+}
+// 构建markdata
+const buildMarkdata = function (raw) {
+    let result = []
+    for (let l = 0; l < raw.length; l++) {
+        let item = raw[l]
+        result.push([
+            {
+                coord: [new Date(item.time), Number(item.data)]
+            },
+            {
+                coord: [new Date(item.time), 0]
+            }
+        ])
+    }
+    return result
+}
+
 // 在console显示object内部的属性
 const deepEquals = function (x, y, layer) {
     if (layer > 6) {
@@ -1053,6 +1467,7 @@ module.exports = {
     setAirconClass: setAirconClass, // pm2.5 class
     setTideChartOption: setTideChartOption, // 潮汐chart option
     setFivedayChartOption: setFivedayChartOption, // 五日高低温chart option
+    setFivedayChartOptionNew: setFivedayChartOptionNew,
     setInshoreTableData: setInshoreTableData,   // 近海预报数据
     setRefinedChartOption: setRefinedChartOption, // 精细化预报chart option
     setRefinedData: setRefinedData, // 精细化预报图表下方数据
@@ -1063,6 +1478,8 @@ module.exports = {
     storeToLocal: storeToLocal, //将数据存入本地缓存
     getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
     getAstroOption: getAstroOption, // 根据包含Label的tidedata和markdata生成潮汐chart option
+    getAstroOptionNew: getAstroOptionNew,
+    loadShandongData: loadShandongData,
     switchCity: switchCity, // 切换城市 包括自动定位
     deepEquals: deepEquals
 }
