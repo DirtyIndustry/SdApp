@@ -1,14 +1,15 @@
 <template>
     <view v-show="showBaths">
-        <view>浴场预报</view>
-        <view class="uni-flex uni-column">
+        <view class="separator" />
+        <view class="uni-flex uni-column table-body">
             <view class="uni-flex uni-row baths-row" :class="{'baths-row-top': index == 0}" v-for="(item, index) in bathsData" :key="index">
-                <view class="baths-cell baths-column-dual">{{bathsData[index].BathsName}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaveHeight}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].WaterTemp}}</view>
-                <view class="baths-cell baths-column baths-column-right">{{bathsData[index].Swimming}}</view>
+                <view class="baths-cell baths-column-dual text">{{item.BathsName}}</view>
+                <view class="baths-cell baths-column baths-column-right text">{{item.WaveHeight}}</view>
+                <view class="baths-cell baths-column baths-column-right text">{{item.WaterTemp}}</view>
+                <view class="baths-cell baths-column baths-column-right text">{{item.Swimming}}</view>
             </view>
         </view>
+        <view class="separator" />
     </view>
 </template>
 
@@ -19,11 +20,11 @@ export default {
         bathsData: {
             type: Array,
             default: [{
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             }]
         },
         showBaths: {
@@ -35,6 +36,8 @@ export default {
 </script>
 
 <style scoped>
+    @import "../common/generic.css";
+
     .uni-flex {
         display: flex;
         flex-direction: row;
@@ -48,10 +51,16 @@ export default {
         flex-direction: column;
     }
 
+    .table-body {
+        position: relative;
+        width: 90%;
+        left: 5%;
+    }
+
     /* 浴场预报表格的行 */
     .baths-row {
         flex: 1;
-        height: 100px;
+        height: 70px;
         border-left: 1px solid #000;
         border-right: 1px solid #000;
         border-bottom: 1px solid #000;
@@ -64,12 +73,12 @@ export default {
 
     /* 浴场预报表格的列 */
     .baths-column {
-        flex: 1;
+        flex: 4;
     }
 
     /* 两倍宽的列 */
     .baths-column-dual {
-        flex: 2;
+        flex: 7;
     }
 
     /* 浴场预报表格的非首列 */

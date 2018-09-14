@@ -364,6 +364,55 @@ const setRefinedChartOption = function (arr) {
     return getOption(tidedata, markdata)
 }
 
+// 根据地区数据生成威海专项预报chart option
+const setWeihaiChartOption = function (obj) {
+    let tidedata = []
+    let markdata = []
+    // 格式化日期
+    let reportdate = new Date(obj.FORECASTDATE)
+    let reportdatestring = reportdate.getFullYear() + '/' + (reportdate.getMonth() + 1) + '/' + reportdate.getDate()
+    let fhtime = reportdatestring + ' ' + obj.FIRSTHIGHTIME + ':00'
+    let fltime = reportdatestring + ' ' + obj.FIRSTLOWTIME + ':00'
+    let shtime = reportdatestring + ' ' + obj.SECONDHIGHTIME + ':00'
+    let sltime = reportdatestring + ' ' + obj.SECONDLOWTIME + ':00'
+    // 如果数据不为空则填入数组
+    if (obj.FIRSTHIGHLEVEL !== '') {
+        tidedata.push([new Date(fhtime), Number(obj.FIRSTHIGH)])
+        markdata.push([
+            { coord: [new Date(fhtime), Number(obj.FIRSTHIGH)] },
+            { coord: [new Date(fhtime), 0] }
+        ])
+    }
+    if (obj.FIRSTLOWLEVEL !== '') {
+        tidedata.push([new Date(fltime), Number(obj.FIRSTLOW)])
+        markdata.push([
+            { coord: [new Date(fltime), Number(obj.FIRSTLOW)] },
+            { coord: [new Date(fltime), 0] }
+        ])
+    }
+    if (obj.SECONDHIGHLEVEL !== '') {
+        tidedata.push([new Date(shtime), Number(obj.SECONDHIGH)])
+        markdata.push([
+            { coord: [new Date(shtime), Number(obj.SECONDHIGH)] },
+            { coord: [new Date(shtime), 0] }
+        ])
+    }
+    if (obj.SECONDLOWLEVEL !== '') {
+        tidedata.push([new Date(sltime), Number(obj.SECONDLOW)])
+        markdata.push([
+            { coord: [new Date(sltime), Number(obj.SECONDLOW)] },
+            { coord: [new Date(sltime), 0] }
+        ])
+    }
+    // 曲线数据按照日期排序
+    function SortByFirst (x, y) {
+        return x[0] - y[0]
+    }
+    tidedata.sort(SortByFirst)
+    // 根据曲线和标线数据生成chart option
+    return getOption(tidedata, markdata)
+}
+
 // 根据精细化数据object生成精细化数据object
 const setRefinedData = function (obj) {
     let result = []
@@ -467,9 +516,12 @@ const getLocName = function (STATION) {
 
 // 根据tidedata和markdata生成曲线chart option
 const getOption = function (tidedata, markdata) {
+    // 获取现在时间
+    let now = new Date()
+    now = now.setHours(now.getHours())
     // 获取y轴最大最小值
     let max = -100
-    let min = 100
+    let min = 1000
     for (let i = 0; i < markdata.length; i++) {
         let value = Number(markdata[i][0].coord[1])
         if (value > max) {
@@ -504,33 +556,56 @@ const getOption = function (tidedata, markdata) {
         // 图表距离外围div的padding
         grid: {
             top: '4%',
-            left: '0%',
-            right: '2%',
+            left: '-2.6%',
+            right: '0%',
             bottom: '20%',
+            // top: '4%',
+            // left: '0%',
+            // right: '2%',
+            // bottom: '20%',
             containLabel: true
         },
         // 横坐标轴
         xAxis: {
             type: 'time',
+            // show: false,
+            offset: 0,
+            interval: 24*60*60*1000,
             axisLabel: {
                 // 横坐标刻度数值
                 show: true,
                 inside: true,
-                rotate: 90,
+                // rotate: 90,
+                fontSize: '14',
+                align: 'left',
+                padding: [0,0,30,0],
+                color: 'red',
+                // formatter: function (value, index) {
+                //     // 格式化为'月-日'，只在第一个刻度显示年份
+                //     let date = new Date(value)
+                //     let texts = [date.getMonth() + 1, date.getDate()]
+                //     if (index === 0) {
+                //         texts.unshift(date.getFullYear())
+                //     }
+                //     return '\n' + texts.join('-')
+                // } // end-formatter-axisLabel
                 formatter: function (value, index) {
-                    // 格式化为'月-日'，只在第一个刻度显示年份
                     let date = new Date(value)
-                    let texts = [date.getMonth() + 1, date.getDate()]
-                    if (index === 0) {
-                        texts.unshift(date.getFullYear())
-                    }
-                    return '\n' + texts.join('-')
-                } // end-formatter-axisLabel
+                    return date.getDate() + '日'
+                }
             }, // end-axisLabel
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            }
         },
         yAxis: {
             show: false,
-            boundaryGap: ['20%', '20%'] // 纵坐标轴的范围，比有效数字上下多出20%
+            boundaryGap: ['20%', '20%'], // 纵坐标轴的范围，比有效数字上下多出20%
+            min: 0,
+            // max: max + 110
         },
         series: [
             // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线顶部数字label
@@ -566,7 +641,25 @@ const getOption = function (tidedata, markdata) {
                         type: 'dot'
                     },
                     data: markdata
+                },
+                /*
+                markPoint: {
+                    symbol: 'circle',
+                    symbolSize: 2,
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{b}'
+                    },
+                    itemStyle: {
+                        color: 'blue'
+                    },
+                    data: [
+                        {name:'一个点', x: 100, y: 60},
+                        {name:'另一个点', coord:[tidedata[13][0], tidedata[13][1]]}
+                    ]
                 }
+                */
             },
             // 第二组series: 高低潮垂直标线（透明度为0） + 标线底部时间label
             {
@@ -627,6 +720,314 @@ const getOption = function (tidedata, markdata) {
     return option
 }
 
+// 根据包含label信息的tidedata生成潮汐预报chart option
+const getAstroOption = function (tidedata, markdata) {
+    // 获取现在时间
+    let now = new Date()
+    let nowtime = new Date()
+    let nowdata = 0
+    let showmarkpoint = 0
+    if (tidedata.length > 13) {
+        showmarkpoint = 1
+        for (let j = 0; j < tidedata.length; j++) {
+            if (tidedata[j].value[0].getHours() === now.getHours()) {
+                nowtime = tidedata[j].value[0]
+                nowdata = tidedata[j].value[1]
+                break
+            }
+        }
+    }
+    // 获取y轴最大最小值
+    let max = -100
+    let min = 1000
+    for (let i = 0; i < markdata.length; i++) {
+        let value = Number(markdata[i][0].coord[1])
+        if (value > max) {
+            max = value
+        }
+        if (value < min) {
+            min = value
+        }
+    }
+    // 为了让x轴的长度显示完整三天，需要在tidedata首尾添加数据
+    // 获取x轴最大最小值
+    // 第一个和最后一个tidedata的日期时间 得到第一天0点和最后一天23点59分59秒的日期
+    let firstrecord = new Date(tidedata[0].value[0])
+    let lastrecord = new Date(tidedata[tidedata.length - 1].value[0])
+    let headdate = new Date(firstrecord.getFullYear() + '/' + (firstrecord.getMonth() + 1) + '/' + firstrecord.getDate() + ' 00:00:00')
+    let taildate = new Date(lastrecord.getFullYear() + '/' + (lastrecord.getMonth() + 1) + '/' + lastrecord.getDate() + ' 23:59:59')
+    // tidedata时间与与首尾之间的差值 秒
+    let deltahead = Math.round(Number(firstrecord - headdate) / 1000)
+    let deltatail = Math.round(Number(taildate - lastrecord) / 1000)
+    // 倒数一二个tidedata的值
+    let valuelast1 = tidedata[tidedata.length - 1].value[1]
+    let valuelast2 = tidedata[tidedata.length - 2].value[1]
+    // 最后一天23:59:59的值
+    let tailvalue = ''
+    // tidedata多于13组数据则是青岛地区
+    if (tidedata.length > 13) {
+        if (valuelast1 <= valuelast2) { // 曲线末尾下坠
+            // 如果尾部差值小于59分59秒 则最后数据点为极值
+            if (deltatail < 3599) {
+                // 尾部上扬
+                tailvalue = valuelast1 + Math.round(deltatail / 120)
+            } else {
+                // 尾部下坠
+                tailvalue = valuelast1 - Math.round(deltatail / 120)
+            }
+        } else {    // 曲线末尾上扬
+            // 如果尾部差值小于59分59秒 则最后数据点为极值
+            if (deltatail < 3599) {
+                // 尾部下坠
+                tailvalue = valuelast1 - Math.round(deltatail / 120)
+            } else {
+                tailvalue = valuelast1 + Math.round(deltatail / 120)
+            }
+        }
+    } else {    // 青岛以外的城市
+        if (valuelast1 <= valuelast2) { // 曲线末尾下坠
+            // 尾部上扬
+            tailvalue = valuelast1 + Math.round(deltatail / 120)
+        } else {    // 曲线末尾上扬
+            tailvalue = valuelast1 - Math.round(deltatail / 120)
+        }
+    }
+    if (tailvalue > max) {
+        tailvalue = max
+    }
+    if (tailvalue < min) {
+        tailvalue = min
+    }
+    // 向tidedata结尾添加数据
+    tidedata.push({
+        value: [taildate, tailvalue]
+    })
+    // 如果第一个tidedata的时间与0点有差值 则需要在tidedata开头插入数据
+    if (deltahead !== 0) {
+        // 第一二个tidedata的值
+        let value1 = tidedata[0].value[1]
+        let value2 = tidedata[1].value[1]
+        // 第一天0点的值
+        let headvalue = ''
+        if (value1 <= value2) { // 第一点小于第二点 说明第一点为低潮 0点数值高于第一点
+            headvalue = value1 + Math.round(deltahead / 120)
+        } else {    // 第一点大于第二点 说明第一点为高潮 0点数值低于第一点
+            headvalue = value1 - Math.round(deltahead / 120)
+        }
+        if (headvalue > max) {
+            headvalue = max
+        }
+        if (headvalue < min) {
+            headvalue = min
+        }
+        // 向tidedata开头添加数据
+        tidedata.unshift({
+            value: [headdate, headvalue]
+        })
+    }
+    
+    let option = {
+        // 图表距离外围div的padding
+        grid: {
+            top: '4%',
+            left: '0%',
+            right: '2%',
+            bottom: '20%',
+            containLabel: true
+        },
+        // 横坐标轴
+        xAxis: {
+            type: 'time',
+            // show: false,
+            offset: 0,
+            interval: 24 * 60 * 60 * 1000,
+            axisLabel: {
+                // 横坐标刻度数值
+                show: true,
+                inside: true,
+                rotate: 90,
+                formatter: function (value, index) {
+                    // 格式化为'月-日'，只在第一个刻度显示年份
+                    let date = new Date(value)
+                    let texts = [date.getMonth() + 1, date.getDate()]
+                    if (index === 0) {
+                        texts.unshift(date.getFullYear())
+                    }
+                    return '\n' + texts.join('-')
+                } // end-formatter-axisLabel
+            }, // end-axisLabel
+        },
+        yAxis: {
+            show: false,
+            boundaryGap: ['20%', '20%'], // 纵坐标轴的范围，比有效数字上下多出20%
+            min: 0,
+            // max: max + 110
+        },
+        series: [
+            // 第一组series： 曲线数据 + 高低潮垂直标线 + 标线底部时间label
+            {
+                name: '潮汐',
+                type: 'line',
+                smooth: 0.3,
+                silent: true,
+                animation: false,
+                symbolSize: 0.0001, // 曲线上数据点小圆圈的大小 不能设为0否则label不显示
+                lineStyle: {
+                    color: '#1c8d3b', // 曲线颜色
+                    width: 1 // 曲线粗细
+                },
+                itemStyle: {
+                    color: '#1c8d3b'    // 与曲线同色
+                },
+                label: {
+                    color: '#000000'
+                },
+                data: tidedata,
+                markLine: {
+                    symbolSize: 0.1,    // 标线一端箭头的大小 不能设为0否则label不显示
+                    silent: true,
+                    animation: false,
+                    label: {
+                        show: true,
+                        position: 'end',
+                        formatter: function (param) {
+                            // 返回mm:ss格式的时间
+                            let date = new Date(param.data.coord[0])
+                            let hour = date.getHours()
+                            if (hour < 10) {
+                                hour = '0' + hour
+                            }
+                            let minute = date.getMinutes()
+                            if (minute < 10) {
+                                minute = '0' + minute
+                            }
+                            return hour + ':' + minute
+                        },
+                        textStyle: {
+                            color: '#000000',
+                        }
+                        
+                    }, // end-label-markLine
+                    lineStyle: {
+                        type: 'dot',
+                        color: '#999999'
+                    },
+                    data: markdata
+                }, // end-markLine
+                /*
+                markPoint: {
+                    symbol: 'circle',
+                    symbolSize: 4,
+                    itemStyle: {
+                        color: 'red',
+                        opacity: showmarkpoint
+                    },
+                    data: [
+                        {coord:[nowtime, nowdata]}
+                    ]
+                }
+                */
+            },
+            // 第二组series： 两条水平标线 表示三天最高和最低的潮位
+            {
+                name: '最值横线',
+                type: 'line',
+                markLine: {
+                    symbolSize: 0,
+                    silent: true,
+                    animation: false,
+                    lineStyle: {
+                        type: 'dashed',
+                        color: '#999999'
+                    },
+                    label: {
+                        show: false
+                    },
+                    data: [{ yAxis: max }, { yAxis: min }]
+                } // end-markLine
+            }
+        ] // end-series
+    } // end-option
+    return option
+}
+
+// 将数据存入本地缓存
+const storeToLocal = function (key, value) {
+    // 判断value是不是object
+    // if (typeof value === 'object') {
+    //     value = JSON.stringify(value)
+    // }
+    // console.log ('store '+key+': '+value)
+    uni.setStorage({
+        key: key,
+        data: value,
+        success: function () {
+            console.log('[缓存]: <- ' + key)
+        }
+    })
+}
+
+// 切换城市（包含自动）所进行的操作
+const switchCity = function (city, operate) {
+    if (city === '自动') {
+        // 获取当前经纬度
+        uni.getLocation({
+            success: function (res) {
+                console.log('[设备]: 获取 地理位置信息')
+                let lati = res.latitude // 纬度
+                let longi = res.longitude // 经度
+                // 申请百度地图位置服务
+                uni.request({
+                    url: 'http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + lati + ',' + longi + '&coordtype=wgs84ll&output=json&pois=0&ak=' +'lRNKq2t9caNdkxY4jsbPR7j9B8lsSqu6',
+                    method: 'GET',
+                    success: function (mapres) {
+                        // 去除首尾无效字符
+                        // let mapresobj = JSON.parse(mapres.data.substr(29, mapres.data.length - 30))
+                        let mapresobj = JSON.parse(mapres.data.substring(29, mapres.data.length - 1))
+                        // TODO: 可能有必要一层层判断undefined
+                        let autocity = mapresobj.result.addressComponent.city
+                        // 去掉结尾的'市'字
+                        if (autocity.substring(autocity.length - 1) === '市') {
+                            autocity = autocity.substring(0, autocity.length - 1)
+                        }
+                        // 判断是否在列表中
+                        let contains = false
+                        switch (autocity) {
+                            case '青岛': 
+                            case '烟台':
+                            case '潍坊':
+                            case '威海':
+                            case '日照':
+                            case '东营':
+                            case '滨州':
+                                contains = true
+                                break
+                            default:
+                                break
+                        }
+                        if (contains === false) {
+                            console.log('当前城市不在可选列表中')
+                            autocity = '青岛'
+                        }
+                        console.log('[设备]: 自动定位城市为 ' + autocity)
+                        operate(autocity)
+                    }, // end-success-request map.baidu.com
+                    fail: function () {
+                        console.log('自动定位失败')
+                        operate('青岛')
+                    }
+                }) // end-request map.baidu.com
+            }, // end-success-uni.getLocation
+            fail: function() {
+                console.log('[设备]: 获取 地理位置信息 失败')
+                operate('青岛')
+            }
+        }) // end-uni.getLocation
+    } else {
+        operate(city)
+    }
+}
+
 // 在console显示object内部的属性
 const deepEquals = function (x, y, layer) {
     if (layer > 6) {
@@ -655,9 +1056,13 @@ module.exports = {
     setInshoreTableData: setInshoreTableData,   // 近海预报数据
     setRefinedChartOption: setRefinedChartOption, // 精细化预报chart option
     setRefinedData: setRefinedData, // 精细化预报图表下方数据
+    setWeihaiChartOption: setWeihaiChartOption, // 威海专项预报chart option
     getTideReqData: getTideReqData, // 潮汐预报request的url和data
     getInshoreReqData: getInshoreReqData,   // 近海预报的request的url和data
     getLocName: getLocName, // 根据潮汐预报STATION生成对应的地名
+    storeToLocal: storeToLocal, //将数据存入本地缓存
     getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
+    getAstroOption: getAstroOption, // 根据包含Label的tidedata和markdata生成潮汐chart option
+    switchCity: switchCity, // 切换城市 包括自动定位
     deepEquals: deepEquals
 }

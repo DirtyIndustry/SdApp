@@ -4,15 +4,15 @@
         <!-- 依据fivedayWeather生成列 -->
         <view class="fiveday-column uni-flex uni-column" :class="{'fiveday-column-left': index<4}" v-for="(item, index) in fivedayWeather" :key="index">
             <!-- 自上而下分别为 周，日期，天气，天气图标，折线空格，风向，风力 -->
-            <view class="flex-cell-single">{{item.week}}</view>
-            <view class="flex-cell-single">{{item.date}}</view>
-            <view class="flex-cell-single">{{item.weather}}</view>
+            <view class="flex-cell-single text">{{item.week}}</view>
+            <view class="flex-cell-single text">{{item.date}}</view>
+            <view class="flex-cell-single text">{{item.weather}}</view>
             <view class="flex-cell-single">
                 <image :src="item.weatherIcon" mode="widthFix" style="width: 50px; height: 50px" />
             </view>
             <view class="flex-cell-quad"> </view>
-            <view class="flex-cell-single">{{item.windDir}}</view>
-            <view class="flex-cell-single">{{item.windLvl}}</view>
+            <view class="flex-cell-single text" :class="{'text-small': item.windDir.length > 4}">{{item.windDir}}</view>
+            <view class="flex-cell-single text">{{item.windLvl}}</view>
         </view>
     </view>
     <view class="chart-fiveday">
@@ -51,6 +51,8 @@ export default {
 </script>
 
 <style scoped>
+    @import "../common/generic.css";
+
     .uni-flex {
         display: flex;
         flex-direction: row;
@@ -101,4 +103,5 @@ export default {
 		top: 240px;
 		position: absolute;
 	}
+
 </style>

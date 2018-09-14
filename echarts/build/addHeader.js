@@ -17,97 +17,167 @@
 * under the License.
 */
 
-const glob = require('glob');
+
 const fs = require('fs');
+const preamble = require('./preamble');
+const pathTool = require('path');
+const {color} = require('zrender/build/helper');
 
-const headerStr = `/*
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+// In the `.headerignore`, each line is a pattern in RegExp.
+// all relative path (based on the echarts base directory) is tested.
+// The pattern should match the relative path completely.
+const excludesPath = pathTool.join(__dirname, '../.headerignore');
+const ecBasePath = pathTool.join(__dirname, '../');
 
-`;
+const isVerbose = process.argv[2] === '--verbose';
 
-const lists = [
-    '../src/**/*.js',
-    '../build/*.js',
-    '../benchmark/src/*.js',
-    '../benchmark/src/gulpfile.js',
-    '../extension-src/**/*.js',
-    '../extension/**/*.js',
-    '../map/js/**/*.js',
-    '../test/build/**/*.js',
-    '../test/node/**/*.js',
-    '../test/ut/core/*.js',
-    '../test/ut/spe/*.js',
-    '../test/ut/ut.js',
-    '../test/*.js',
-    '../theme/*.js',
-    '../theme/tool/**/*.js',
-    '../echarts.all.js',
-    '../echarts.blank.js',
-    '../echarts.common.js',
-    '../echarts.simple.js',
-    '../index.js',
-    '../index.common.js',
-    '../index.simple.js'
-];
+// const lists = [
+//     '../src/**/*.js',
+//     '../build/*.js',
+//     '../benchmark/src/*.js',
+//     '../benchmark/src/gulpfile.js',
+//     '../extension-src/**/*.js',
+//     '../extension/**/*.js',
+//     '../map/js/**/*.js',
+//     '../test/build/**/*.js',
+//     '../test/node/**/*.js',
+//     '../test/ut/core/*.js',
+//     '../test/ut/spe/*.js',
+//     '../test/ut/ut.js',
+//     '../test/*.js',
+//     '../theme/*.js',
+//     '../theme/tool/**/*.js',
+//     '../echarts.all.js',
+//     '../echarts.blank.js',
+//     '../echarts.common.js',
+//     '../echarts.simple.js',
+//     '../index.js',
+//     '../index.common.js',
+//     '../index.simple.js'
+// ];
 
-function extractLicense(str) {
-    str = str.trim();
-    const regex = new RegExp('/\\*[\\S\\s]*?\\*/', 'm');
-    const res = regex.exec(str);
-    const commentText = res && res[0];
-    if (commentText) {
-        if(commentText.toLowerCase().includes('apache license') || commentText.toLowerCase().includes('apache commons')) {
-            return 'Apache';
+function run() {
+    const updatedFiles = [];
+    const passFiles = [];
+    const pendingFiles = [];
+
+    eachFile(function (absolutePath, fileExt) {
+        const fileStr = fs.readFileSync(absolutePath, 'utf-8');
+
+        const existLicense = preamble.extractLicense(fileStr, fileExt);
+
+        if (existLicense) {
+            passFiles.push(absolutePath);
+            return;
         }
-        else if(commentText.toUpperCase().includes('BSD')) {
-            return 'BSD';
+
+        // Conside binary files, only add for files with known ext.
+        if (!preamble.hasPreamble(fileExt)) {
+            pendingFiles.push(absolutePath);
+            return;
         }
-        else if(commentText.toUpperCase().includes('LGPL')) {
-            return 'LGPL';
+
+        fs.writeFileSync(absolutePath, preamble.addPreamble(fileStr, fileExt), 'utf-8');
+        updatedFiles.push(absolutePath);
+    });
+
+    console.log('\n');
+    console.log('----------------------------');
+    console.log(' Files that exists license: ');
+    console.log('----------------------------');
+    if (passFiles.length) {
+        if (isVerbose) {
+            passFiles.forEach(function (path) {
+                console.log(color('fgGreen', 'dim')(path));
+            });
         }
-        else if(commentText.toUpperCase().includes('GPL')) {
-            return 'GPL';
+        else {
+            console.log(color('fgGreen', 'dim')(passFiles.length + ' files. (use argument "--verbose" see details)'));
         }
-        else if(commentText.toLowerCase().includes('mozilla public')) {
-            return 'Mozilla';
+    }
+    else {
+        console.log('Nothing.');
+    }
+
+    console.log('\n');
+    console.log('--------------------');
+    console.log(' License added for: ');
+    console.log('--------------------');
+    if (updatedFiles.length) {
+        updatedFiles.forEach(function (path) {
+            console.log(color('fgGreen', 'bright')(path));
+        });
+    }
+    else {
+        console.log('Nothing.');
+    }
+
+    console.log('\n');
+    console.log('----------------');
+    console.log(' Pending files: ');
+    console.log('----------------');
+    if (pendingFiles.length) {
+        pendingFiles.forEach(function (path) {
+            console.log(color('fgRed', 'dim')(path));
+        });
+    }
+    else {
+        console.log('Nothing.');
+    }
+
+    console.log('\nDone.');
+}
+
+function eachFile(visit) {
+
+    const excludePatterns = [];
+    const extReg = /\.([a-zA-Z0-9_-]+)$/;
+
+    prepareExcludePatterns();
+    travel('./');
+
+    function travel(relativePath) {
+        if (isExclude(relativePath)) {
+            return;
         }
-        else if(commentText.toLowerCase().includes('mit license')) {
-            return 'MIT';
+
+        const absolutePath = pathTool.join(ecBasePath, relativePath);
+        const stat = fs.statSync(absolutePath);
+
+        if (stat.isFile()) {
+            visit(absolutePath, getExt(absolutePath));
+        }
+        else if (stat.isDirectory()) {
+            fs.readdirSync(relativePath).forEach(function (file) {
+                travel(pathTool.join(relativePath, file));
+            });
+        }
+    }
+
+    function prepareExcludePatterns() {
+        const content = fs.readFileSync(excludesPath, {encoding: 'utf-8'});
+        content.replace(/\r/g, '\n').split('\n').forEach(function (line) {
+            line = line.trim();
+            if (line && line.charAt(0) !== '#') {
+                excludePatterns.push(new RegExp(line));
+            }
+        });
+    }
+
+    function isExclude(relativePath) {
+        for (let i = 0; i < excludePatterns.length; i++) {
+            if (excludePatterns[i].test(relativePath)) {
+                return true;
+            }
+        }
+    }
+
+    function getExt(path) {
+        if (path) {
+            const mathResult = path.match(extReg);
+            return mathResult && mathResult[1];
         }
     }
 }
 
-lists.forEach(function (pattern) {
-    glob(pattern, function (err, fileList) {
-        if (err) {
-            throw new Error();
-        }
-        fileList.forEach(function (fileUrl) {
-            const str = fs.readFileSync(fileUrl, 'utf-8');
-
-            const existLicense = extractLicense(str);
-            if (existLicense) {
-                console.log('File ' + fileUrl + ' already have license ' + existLicense);
-                return;
-            }
-
-            fs.writeFileSync(fileUrl, headerStr + str, 'utf-8');
-        });
-    });
-});
+run();

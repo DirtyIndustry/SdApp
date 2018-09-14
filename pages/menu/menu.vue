@@ -1,0 +1,233 @@
+<template>
+    <view class="page-body menu-page">
+        <view class="uni-flex uni-column menu-table">
+            <!-- 第一行 -->
+            <view class="uni-flex uni-row menu-row">
+                <!-- 第一行左 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="cityforeTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/city_img.png" />
+                        <view class="text-large text-blue">城市预报</view>
+                    </button>
+                </view>
+                <!-- 第一行右 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="warninglistTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Warning_img.png" />
+                        <view class="text-large text-blue">预警报</view>
+                    </button>
+                </view>
+            </view>
+            <!-- 第二行 -->
+            <view class="uni-flex uni-row menu-row">
+                <!-- 第二行左 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="fisheryTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
+                        <view class="text-large text-blue">渔场预报</view>
+                    </button>
+                </view>
+                <!-- 第二行右 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="trendTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/trendPrediction_img.png" />
+                        <view class="text-large text-blue">趋势预测</view>
+                    </button>
+                </view>
+            </view>
+            <!-- 第三行 -->
+            <view class="uni-flex uni-row menu-row">
+                <!-- 第三行左 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="weatherTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
+                        <view class="text-large text-blue">天气预报</view>
+                    </button>
+                </view>
+                <!-- 第三行右 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="weatherimgTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
+                        <view class="text-large text-blue">天气图</view>
+                    </button>
+                </view>
+            </view>
+            <!-- 第四行 -->
+            <view class="uni-flex uni-row menu-row">
+                <!-- 第四行左 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="satelliteimgTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/SatelliteCloudMap_img.png" />
+                        <view class="text-large text-blue">卫星云图</view>
+                    </button>
+                </view>
+                <!-- 第四行右 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="radarimgTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/RadarMap_img.png" />
+                        <view class="text-large text-blue">雷达图</view>
+                    </button>
+                </view>
+            </view>
+            <!-- 第五行 -->
+            <view class="uni-flex uni-row menu-row">
+                <!-- 第五行左 -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="typhoonpathTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
+                        <view class="text-large text-blue">台风路径</view>
+                    </button>
+                </view>
+                <!-- 第五行右 -->
+                <!-- <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="newscenterTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/news_img.png" />
+                        <view class="text-large text-blue">新闻中心</view>
+                    </button>
+                </view> -->
+                <view class="menu-cell menu-column">
+                    <button class="menu-button" type="default" @tap="oceanforecastTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
+                        <view class="text-large text-blue">海区预报</view>
+                    </button>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+export default {
+    methods: {
+        // 城市预报
+        cityforeTap (e) {
+            console.log('城市预报点击')
+            uni.navigateTo({
+                url: '../cityforecast/cityforecast'
+            })
+        },
+        // 预警报
+        warninglistTap (e) {
+            console.log('预警报点击')
+            uni.navigateTo({
+                url: '../warninglist/warninglist'
+            })
+        },
+        // 渔场预报
+        fisheryTap (e) {
+            console.log('渔场预报点击')
+            uni.navigateTo({
+                url: '../fisheryforecast/fisheryforecast'
+            })
+        },
+        // 趋势预测
+        trendTap (e) {
+            console.log('趋势预测点击')
+            uni.navigateTo({
+                url: '../trendprediction/trendprediction'
+            })
+        },
+        // 天气预报
+        weatherTap (e) {
+            console.log('天气预报点击')
+            uni.navigateTo({
+                url: '../weatherforecast/weatherforecast'
+            })
+        },
+        // 天气图
+        weatherimgTap (e) {
+            console.log('天气图点击')
+            uni.navigateTo({
+                url: '../weatherimg/weatherimg'
+            })
+        },
+        // 卫星云图
+        satelliteimgTap (e) {
+            console.log('卫星云图点击')
+            uni.navigateTo({
+                url: '../satelliteimg/satelliteimg'
+            })
+        },
+        // 雷达图
+        radarimgTap (e) {
+            console.log('雷达图点击')
+            uni.navigateTo({
+                url: '../radarimg/radarimg'
+            })
+        },
+        // 台风路径
+        typhoonpathTap (e) {
+            console.log('台风路径点击')
+            uni.navigateTo({
+                url: '../typhoonmap/typhoonmap'
+            })
+        },
+        // 新闻中心
+        newscenterTap (e) {
+            console.log('新闻中心点击')
+            uni.navigateTo({
+                url: '../newscenter/newscenter'
+            })
+        },
+        // 海区预报
+        oceanforecastTap (e) {
+            console.log('海区预报点击')
+            uni.navigateTo({
+                url: '../oceanforecast/oceanforecast'
+            })
+        }
+    }
+}
+</script>
+
+<style scoped>
+    @import "../../common/uni.css";
+    @import "../../common/generic.css";
+
+    .menu-page {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-table {
+        height: 85%;
+        width: 90%;
+        /* border: 1px solid #f00; */
+    }
+
+    .menu-row {
+        flex: 1;
+        /* border: 1px solid #000; */
+    }
+
+    .menu-column {
+        flex: 1;
+        /* border: 1px solid #0f0; */
+    }
+
+    .menu-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-button {
+        width: 300px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #0092d4;
+        /* border-color: #0092d4; */
+    }
+
+    .menu-button-icon {
+        width: 50px;
+        height: 50px;
+        /* border: 1px solid #f00; */
+    }
+
+</style>
