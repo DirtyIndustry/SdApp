@@ -56,10 +56,9 @@ export default {
                     console.log('[缓存]: 获取 跳过欢迎页')
                     if (res.data === true) {
                         // 跳往首页
-                        setTimeout(function () {
+                        // setTimeout(function () {
                             that.gotoIndex()
-                        }.bind(that), 100)
-                        // that.gotoIndex()
+                        // }.bind(that), 100)
                     }
                 }
             })

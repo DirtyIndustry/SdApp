@@ -1,5 +1,3 @@
-import appsettings from './appsettings.js'
-
 // 根据天气设置图标
 const setWeatherIcon = function (weather) {
     switch (weather) {
@@ -1245,165 +1243,6 @@ const switchCity = function (city, operate) {
     }
 }
 
-// 服务器请求山东预报数据
-const loadShandongData = function (cityname, weatherData, tideData, inshoreDataSet, bathsData, refinedData, fivedayData, weihaiData, questcounter) {
-    let inshore = inshoreDataSet
-    uni.request({
-        url: appsettings.hosturl + 'GetShandongData',
-        data: {name: 'admin', city: cityname},
-        method: 'POST',
-        success: function (res) {
-            console.log('[服务器]: 返回 山东预报数据')
-            // 判断返回数据有效性
-            if (!res.data.d | res.data.d === '无权访问该接口' | res.data.d === '无该地区数据') { // 返回的值为空
-                console.log('[服务器]: 返回 山东预报数据 返回值为空')
-                return false
-            }
-            res = JSON.parse(res.data.d)
-            // 天气预报
-            // 写入Vuex
-            weatherData = res.weatherData
-            // 天气图标 pm2.5字体颜色
-            weatherData.weatherIcon = setWeatherIcon(res.weatherData.weather)
-            weatherData.pm25Style = setAirconClass(res.weatherData.airconDesc)
-
-            // 潮汐预报
-            if (res.astroDatas.length > 1) {	// 如果是青岛
-                tideData.chartTideTwoShow = true
-                tideData.chartTideOneTitle = '第一海水浴场'
-                tideData.chartTideTwoTitle = '金沙滩'
-                for (let i = 0; i < res.astroDatas.length; i++) {
-                    let tide = buildTidedata(res.astroDatas[i].tidedata)
-                    let mark = buildMarkdata(res.astroDatas[i].markdata)
-                    if (res.astroDatas[i].location === '第一海水浴场') {
-                        tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
-                    } else {
-                        tideData.optionTideTwo = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
-                    }
-                }
-            } else {	// 如果是青岛以外的城市
-                tideData.chartTideTwoShow = false
-                tideData.chartTideOneTitle = ''
-                tideData.chartTideTwoTitle = ''
-                for (let i = 0; i < res.astroDatas.length; i++) {
-                    let tide = buildTidedata(res.astroDatas[i].tidedata)
-                    let mark = buildMarkdata(res.astroDatas[i].markdata)
-                    tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
-                }
-            } // if-else 是否是青岛
-
-            // 近海预报
-            // 写入Vuex
-            this.inshoreDataSet = res.inshoreData
-
-            // 浴场预报
-            // 判断月份和城市
-            if (new Date().getMonth() > 5 & new Date().getMonth() < 9 & cityname === '青岛') {
-                bathsData.showBaths = true
-            } else {
-                bathsData.showBaths = false
-            }
-            // 写入Vuex
-            bathsData.data = res.bathsDatas
-
-            // 精细化预报
-            // 判断城市
-            if (cityname === '滨州') {
-                refinedData.show = false
-            } else {
-                refinedData.show = true
-            }
-            if (res.refinedDatas.length > 1) {	// 如果是青岛
-                refinedData.showTwo = true
-                for (let i = 0; i < res.refinedDatas.length; i++) {
-                    let tide = buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
-                    let mark = buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
-                    if (res.refinedDatas[i].tideinfo.location === 'DJKP') {
-                        refinedData.optionOne = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-                        res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
-                        refinedData.dataOne = res.refinedDatas[i].extrainfo
-                    } else {
-                        refinedData.optionTwo = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-                        res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
-                        refinedData.dataTwo = res.refinedDatas[i].extrainfo
-                    }
-                }
-            } else {	// 如果是青岛以外的城市
-                refinedData.showTwo = false
-                for (let i = 0; i < res.refinedDatas.length; i++) {
-                    let tide = buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
-                    let mark = buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
-                    refinedData.optionOne = getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-                    res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
-                    refinedData.dataOne = res.refinedDatas[i].extrainfo
-                }
-            }
-
-            // 五日天气预报
-            let fivedaydata = {
-                fivedayWeather: res.fivedayData.fivedayWeathers,
-                optionFiveday: setFivedayChartOptionNew(res.fivedayData.higharr, res.fivedayData.lowarr, res.fivedayData.max, res.fivedayData.min)
-            }
-            for (let i = 0; i < fivedaydata.fivedayWeather.length; i++) {
-                fivedaydata.fivedayWeather[i].weatherIcon = setWeatherIcon(fivedaydata.fivedayWeather[i].weather)
-            }
-            // 写入Vuex
-            fivedayData = fivedaydata
-
-            // 威海专项
-            // 判断城市
-            if (res.weihaiDatas.length > 0) {	// 如果是威海
-                weihaiData.show = true
-                for (let i = 0; i < res.weihaiDatas.length; i++) {
-                    let data = {
-                        show: res.weihaiDatas[i].show,
-                        REPORTAREA: res.weihaiDatas[i].REPORTAREA,
-                        FORECASTDATE: res.weihaiDatas[i].FORECASTDATE,
-                        WAVEHEIGHT: res.weihaiDatas[i].WAVEHEIGHT,
-                        WATERTEMP: res.weihaiDatas[i].WATERTEMP,
-                    }
-                    let tide = buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
-                    let mark = buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
-                    data.option = getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
-                    switch (res.weihaiDatas[i].REPORTAREA) {
-                        case '成山头':
-                            weihaiData.first = data
-                            break
-                        case '乳山':
-                            weihaiData.second = data
-                            break
-                        case '石岛':
-                            weihaiData.third = data
-                            break
-                        case '文登':
-                            weihaiData.fourth = data
-                            break
-                        default:
-                            break
-                    }
-                } // end-for res.weihaiDatas
-            } else {	// 如果是威海以外的城市
-                weihaiData.show = false
-            }
-            // 写入本地缓存
-            storeToLocal('weatherdata', JSON.stringify(res.weatherData))
-            storeToLocal('tidedata', JSON.stringify(tideData))
-            storeToLocal('inshoredata', JSON.stringify(res.inshoreData))
-            storeToLocal('bathsdata', JSON.stringify(bathsData))
-            storeToLocal('refineddata', JSON.stringify(refinedData))
-            storeToLocal('fivedaydata', JSON.stringify(fivedayData))
-            storeToLocal('weihaidata', JSON.stringify(weihaiData))
-
-        }, // success-request
-        fail: function () {
-            console.log('[服务器]: 请求 山东预报数据 失败')
-            questcounter++
-        },
-        complete: function () {
-            questcounter++
-        }
-    })
-}
 // 构建tidedata
 const buildTidedata = function (raw) {
     let result = []
@@ -1479,7 +1318,8 @@ module.exports = {
     getOption: getOption,   // 根据tidedata和markdata生成曲线chart option
     getAstroOption: getAstroOption, // 根据包含Label的tidedata和markdata生成潮汐chart option
     getAstroOptionNew: getAstroOptionNew,
-    loadShandongData: loadShandongData,
+    buildTidedata: buildTidedata,
+    buildMarkdata: buildMarkdata,
     switchCity: switchCity, // 切换城市 包括自动定位
     deepEquals: deepEquals
 }

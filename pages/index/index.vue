@@ -233,7 +233,7 @@
 				this.completedRequestCount = 0
 				this.loadWarning()
 
-				utils.loadShandongData(city, this.weatherData, this.tideData, this.inshoreData, this.bathsData, this.refinedData, this.fivedayData, this.weihaiData, this.completedRequestCount)
+				this.loadShandongData(city)
 			},
 			
 			// 读取服务器台风和海浪警报
@@ -364,8 +364,8 @@
 							that.tideData.chartTideOneTitle = '第一海水浴场'
 							that.tideData.chartTideTwoTitle = '金沙滩'
 							for (let i = 0; i < res.astroDatas.length; i++) {
-								let tide = that.buildTidedata(res.astroDatas[i].tidedata)
-								let mark = that.buildMarkdata(res.astroDatas[i].markdata)
+								let tide = utils.buildTidedata(res.astroDatas[i].tidedata)
+								let mark = utils.buildMarkdata(res.astroDatas[i].markdata)
 								if (res.astroDatas[i].location === '第一海水浴场') {
 									that.tideData.optionTideOne = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
 								} else {
@@ -377,8 +377,8 @@
 							that.tideData.chartTideOneTitle = ''
 							that.tideData.chartTideTwoTitle = ''
 							for (let i = 0; i < res.astroDatas.length; i++) {
-								let tide = that.buildTidedata(res.astroDatas[i].tidedata)
-								let mark = that.buildMarkdata(res.astroDatas[i].markdata)
+								let tide = utils.buildTidedata(res.astroDatas[i].tidedata)
+								let mark = utils.buildMarkdata(res.astroDatas[i].markdata)
 								that.tideData.optionTideOne = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
 							}
 						} // if-else 是否是青岛
@@ -407,8 +407,8 @@
 						if (res.refinedDatas.length > 1) {	// 如果是青岛
 							that.refinedData.showTwo = true
 							for (let i = 0; i < res.refinedDatas.length; i++) {
-								let tide = that.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
-								let mark = that.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
+								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
 								if (res.refinedDatas[i].tideinfo.location === 'DJKP') {
 									that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
 									res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
@@ -422,8 +422,8 @@
 						} else {	// 如果是青岛以外的城市
 							that.refinedData.showTwo = false
 							for (let i = 0; i < res.refinedDatas.length; i++) {
-								let tide = that.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
-								let mark = that.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
+								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
 								that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
 								res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
 								that.refinedData.dataOne = res.refinedDatas[i].extrainfo
@@ -453,8 +453,8 @@
 									WAVEHEIGHT: res.weihaiDatas[i].WAVEHEIGHT,
 									WATERTEMP: res.weihaiDatas[i].WATERTEMP,
 								}
-								let tide = that.buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
-								let mark = that.buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
+								let tide = utils.buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
+								let mark = utils.buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
 								data.option = utils.getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
 								switch (res.weihaiDatas[i].REPORTAREA) {
 									case '成山头':
@@ -494,43 +494,6 @@
 						that.completedRequestCount++
 					}
 				})
-			},
-			// 构建tidedata
-			buildTidedata (raw) {
-				let result = []
-				for (let i = 0; i < raw.length; i++) {
-					let item = raw[i]
-					// 添加曲线数据
-					let newdata = {
-						value: [new Date(item.time), Number(item.data)]
-					}
-					// 如果由label值 则添加label数据
-					if (item.label !== '') {
-						newdata.label = {
-							show: true,
-							position: 'top',
-							formatter: item.label + 'cm'
-						}
-					}
-					result.push(newdata)
-				}
-				return result
-			},
-			// 构建markdata
-			buildMarkdata (raw) {
-				let result = []
-				for (let l = 0; l < raw.length; l++) {
-					let item = raw[l]
-					result.push([
-						{
-							coord: [new Date(item.time), Number(item.data)]
-						},
-						{
-							coord: [new Date(item.time), 0]
-						}
-					])
-				}
-				return result
 			},
 			// 自定义picker选择
 			mypickerSelect(index, item) {

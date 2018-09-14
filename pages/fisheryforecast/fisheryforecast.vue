@@ -10,7 +10,7 @@
             <!-- 标题下方空白 -->
             <view class="separator"></view>
             <!-- 表格部分 -->
-            <view class="uni-flex uni-column">
+            <view class="uni-flex uni-column section-body">
                 <!-- 表头 -->
                 <view class="uni-flex uni-row fishery-header">
                     <view class="fishery-column-left fishery-cell text">渔场名称</view>
