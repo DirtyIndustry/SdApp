@@ -40,7 +40,8 @@
 					</scroll-view>
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
-				<view class="section-body" v-show="tideData.chartTideTwoShow">
+				<!-- <view class="section-body" v-show="tideData.chartTideTwoShow"> -->
+				<view class="section-body" :class="{hide: !tideData.chartTideTwoShow}">
 					<text class="text">{{tideData.chartTideTwoTitle}}</text>
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
@@ -67,7 +68,8 @@
 			</view>
 			<view class="separator" />
 			<!-- 精细化预报 -->
-			<view class="page-section section-body" v-show="refinedData.show">
+			<!-- <view class="page-section section-body" v-show="refinedData.show"> -->
+			<view class="page-section section-body" :class="{hide: !refinedData.show}">
 				<view class="refinedChart-body">
 					<!-- 地名 -->
 					<view v-if="refinedData.dataOne.length > 0" class="text">{{refinedData.dataOne[0].loc}}</view>
@@ -101,7 +103,8 @@
 				</view>
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="refinedData.showTwo" />
-				<view v-if="refinedData.showTwo">
+				<!-- <view v-if="refinedData.showTwo"> -->
+				<view :class="{hide: !refinedData.showTwo}">
 					<view class="refinedChart-body">
 						<!-- 地名 -->
 						<view v-if="refinedData.dataTwo.length > 0" class="text">{{refinedData.dataTwo[0].loc}}</view>
@@ -137,9 +140,11 @@
 			</view>
 			<view class="separator" />
 			<!-- 威海专项预报 -->
-			<view class="page-section" v-show="weihaiData.show">
+			<!-- <view class="page-section" v-show="weihaiData.show"> -->
+			<view class="page-section" :class="{hide: !weihaiData.show}">
 				<!-- 第一部分 -->
-				<view v-show="weihaiData.first.show">
+				<!-- <view v-show="weihaiData.first.show"> -->
+				<view :class="{hide: !weihaiData.first.show}">
 					<tableTitle :title="weihaiData.first.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
 					<view class="section-body">
@@ -160,7 +165,8 @@
 				</view>
 				<view class="separator" />
 				<!-- 第二部分 -->
-				<view v-show="weihaiData.second.show">
+				<!-- <view v-show="weihaiData.second.show"> -->
+				<view :class="{hide: !weihaiData.second.show}">
 					<tableTitle :title="weihaiData.second.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
 					<view class="section-body">
@@ -181,7 +187,8 @@
 				</view>
 				<view class="separator" />
 				<!-- 第三部分 -->
-				<view v-show="weihaiData.third.show">
+				<!-- <view v-show="weihaiData.third.show"> -->
+				<view :class="{hide: !weihaiData.third.show}">
 					<tableTitle :title="weihaiData.third.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
 					<view class="section-body">
@@ -202,7 +209,8 @@
 				</view>
 				<view class="separator" />
 				<!-- 第四部分 -->
-				<view v-show="weihaiData.fourth.show">
+				<!-- <view v-show="weihaiData.fourth.show"> -->
+				<view :class="{hide: !weihaiData.fourth.show}">
 					<tableTitle :title="weihaiData.fourth.REPORTAREA" icon="../../static/Images/top_left_img_newS.png" />
 					<!-- 图表部分 -->
 					<view class="section-body">
@@ -851,7 +859,7 @@
 					if (chartRefinedOne !== undefined) {
 						if (newVal) {
 							chartRefinedOne.setOption(newVal, true)
-							// this.$refs.echartsRefTideOne.init()
+							// this.$refs.echartsRefRefinedOne.init()
 						}
 					}
 				}
@@ -861,9 +869,8 @@
 				handler (newVal, oldVal) {
 					if (chartRefinedTwo !== undefined) {
 						if (newVal) {
-							console.log('更新了')
 							// chartRefinedTwo.setOption(newVal, true)
-							this.$refs.echartsRefTideTwo.init()
+							this.$refs.echartsRefRefinedTwo.init()
 						}
 					}
 				}
@@ -873,8 +880,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiOne !== undefined) {
 						if (newVal) {
-							// chartWeihaiOne.setOption(newVal, true)
-							this.$refs.echartsRefWeihaiOne.init()
+							chartWeihaiOne.setOption(newVal, true)
+							// this.$refs.echartsRefWeihaiOne.init()
 						}
 					}
 				}
@@ -884,8 +891,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiTwo !== undefined) {
 						if (newVal) {
-							// chartWeihaiTwo.setOption(newVal, true)
-							this.$refs.echartsRefWeihaiTwo.init()
+							chartWeihaiTwo.setOption(newVal, true)
+							// this.$refs.echartsRefWeihaiTwo.init()
 						}
 					}
 				}
@@ -895,8 +902,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiThree !== undefined) {
 						if (newVal) {
-							// chartWeihaiThree.setOption(newVal, true)
-							this.$refs.echartsRefWeihaiThree.init()
+							chartWeihaiThree.setOption(newVal, true)
+							// this.$refs.echartsRefWeihaiThree.init()
 						}
 					}
 				}
@@ -906,8 +913,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiFour !== undefined) {
 						if (newVal) {
-							// chartWeihaiFour.setOption(newVal, true)
-							this.$refs.echartsRefWeihaiFour.init()
+							chartWeihaiFour.setOption(newVal, true)
+							// this.$refs.echartsRefWeihaiFour.init()
 						}
 					}
 				}
@@ -947,6 +954,11 @@
 
 <style scoped>
 	@import "../../common/generic.css";
+
+	.hide {
+		position: fixed;
+		left: 105%;
+	}
 
 	.header {
 		/* background-color: #fff; */
