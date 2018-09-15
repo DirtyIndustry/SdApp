@@ -433,6 +433,75 @@
 					}
 				})
 			},
+			// 根据城市设置各面板显隐
+			setPageLayout (cityname) {
+				switch (cityname) {
+					case '青岛':
+						// 显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = true
+						// 潮汐预报地区名称
+						this.tideData.chartTideOneTitle = '第一海水浴场'
+						this.tideData.chartTideTwoTitle = '金沙滩'
+						// 显示精细化
+						this.refinedData.show = true
+						// 显示第二个精细化曲线
+						this.refinedData.showTwo = true
+						// 7到9月份显示浴场预报
+						this.bathsData.showBaths = new Date().getMonth() > 5 & new Date().getMonth() < 9 ? true : false
+						// 不显示威海专项预报
+						this.weihaiData.show = false
+						break
+					case '威海':
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 显示精细化
+						this.refinedData.show = true
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = true
+						this.weihaiData.first.show = true
+						this.weihaiData.second.show = true
+						this.weihaiData.third.show = true
+						this.weihaiData.fourth.show = true
+						break
+					case '滨州':
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 不显示精细化
+						this.refinedData.show = false
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = false
+						break
+					default:
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 显示精细化
+						this.refinedData.show = true
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = false
+						break
+				}
+			},
 			// 自定义picker选择
 			mypickerSelect(index, item) {
 				// 弹出loading toast

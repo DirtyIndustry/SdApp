@@ -148,6 +148,8 @@ DONE... App.vue auto select city
 DONE... combine index page warning webservices  
 DONE... apply new warning service to index page  
 DONE... different chart different colors  
+city forecast page refined chart two debug  
+use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
 inshore table different date position  
 weihai sp chart option tweak  

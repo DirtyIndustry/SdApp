@@ -238,10 +238,10 @@
 	import * as echarts from 'echarts'
 	import mpvueEcharts from 'mpvue-echarts'
 
-	let chartTideOne
-	let chartTideTwo
-	let chartRefinedOne
-	let chartRefinedTwo
+	let chartTideOne = undefined
+	let chartTideTwo = undefined
+	let chartRefinedOne = undefined
+	let chartRefinedTwo = undefined
 	let chartWeihaiOne = undefined
 	let chartWeihaiTwo = undefined
 	let chartWeihaiThree = undefined
@@ -336,7 +336,18 @@
 			weihaiData: {
 				get() { return this.$store.state.Datas.weihaidata },
 				set(value) { this.$store.dispatch('setWeihaiData', value) }
-			}
+			},
+			// 潮汐预报chart option
+			tideDataOptionOne () { return this.$store.state.Datas.tidedata.optionTideOne },
+			tideDataOptionTwo () { return this.$store.state.Datas.tidedata.optionTideTwo },
+			// 精细化预报chart option
+			refinedDataOptionOne () { return this.$store.state.Datas.refineddata.optionOne },
+			refinedDataOptionTwo () { return this.$store.state.Datas.refineddata.optionTwo },
+			// 威海专项chart option
+			weihaiDataOptionOne () { return this.$store.state.Datas.weihaidata.first.option },
+			weihaiDataOptionTwo () { return this.$store.state.Datas.weihaidata.second.option },
+			weihaiDataOptionThree () { return this.$store.state.Datas.weihaidata.third.option },
+			weihaiDataOptionFour () { return this.$store.state.Datas.weihaidata.fourth.option }
 		},
 		methods: {
 			// 地区选择菜单操作
@@ -373,6 +384,7 @@
 			requestData(city) {
 				// 任务计数器归零
 				this.completedRequestCount = 0
+				this.setPageLayout(city)
 				this.loadShandongData(city)
 			},
 			// 读取山东预报数据 包括天气 潮汐 近海 浴场 精细化 五日 威海专项
@@ -486,6 +498,10 @@
 						// 判断城市
 						if (res.weihaiDatas.length > 0) {	// 如果是威海
 							that.weihaiData.show = true
+							that.weihaiData.first.show = true
+							that.weihaiData.second.show = true
+							that.weihaiData.third.show = true
+							that.weihaiData.fourth.show = true
 							for (let i = 0; i < res.weihaiDatas.length; i++) {
 								let data = {
 									show: res.weihaiDatas[i].show,
@@ -535,6 +551,75 @@
 						that.completedRequestCount++
 					}
 				})
+			},
+			// 根据城市设置各面板显隐
+			setPageLayout (cityname) {
+				switch (cityname) {
+					case '青岛':
+						// 显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = true
+						// 潮汐预报地区名称
+						this.tideData.chartTideOneTitle = '第一海水浴场'
+						this.tideData.chartTideTwoTitle = '金沙滩'
+						// 显示精细化
+						this.refinedData.show = true
+						// 显示第二个精细化曲线
+						this.refinedData.showTwo = true
+						// 7到9月份显示浴场预报
+						this.bathsData.showBaths = new Date().getMonth() > 5 & new Date().getMonth() < 9 ? true : false
+						// 不显示威海专项预报
+						this.weihaiData.show = false
+						break
+					case '威海':
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 显示精细化
+						this.refinedData.show = true
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = true
+						this.weihaiData.first.show = true
+						this.weihaiData.second.show = true
+						this.weihaiData.third.show = true
+						this.weihaiData.fourth.show = true
+						break
+					case '滨州':
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 不显示精细化
+						this.refinedData.show = false
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = false
+						break
+					default:
+						// 不显示第二个潮汐曲线
+						this.tideData.chartTideTwoShow = false
+						// 潮汐预报不显示地区名称
+						this.tideData.chartTideOneTitle = ''
+						this.tideData.chartTideTwoTitle = ''
+						// 显示精细化
+						this.refinedData.show = true
+						// 不显示第二个精细化
+						this.refinedData.showTwo = false
+						// 不显示浴场预报
+						this.bathsData.showBaths = false
+						// 显示威海专项预报
+						this.weihaiData.show = false
+						break
+				}
 			},
 			// 初始化潮汐预报图表一
 			handleInitTideOne(canvas, width, height) {
@@ -738,64 +823,90 @@
 					}
 				}
 			},
-			// 潮汐预报模块的两个chart更新
-			tideData: {
-				handler(newVal, oldVal) {
+			// 潮汐预报第一个chart更新
+			tideDataOptionOne: {
+				handler (newVal, oldVal) {
 					if (chartTideOne !== undefined) {
 						if (newVal) {
-							chartTideOne.setOption(newVal.optionTideOne, true)
+							chartTideOne.setOption(newVal, true)
 							// this.$refs.echartsRefTideOne.init()
 						}
 					}
+				}
+			},
+			// 潮汐预报第二个chart更新
+			tideDataOptionTwo: {
+				handler (newVal, oldVal) {
 					if (chartTideTwo !== undefined) {
 						if (newVal) {
-							// chartTideTwo.setOption(newVal.optionTideTwo, true)
+							// chartTideTwo.setOption(newVal, true)
 							this.$refs.echartsRefTideTwo.init()
 						}
 					}
 				}
 			},
-			// 精细化预报的两个chart更新
-			refinedData: {
-				handler(newVal, oldVal) {
+			// 精细化预报第一个chart更新
+			refinedDataOptionOne: {
+				handler (newVal, oldVal) {
 					if (chartRefinedOne !== undefined) {
 						if (newVal) {
-							chartRefinedOne.setOption(newVal.optionOne, true)
+							chartRefinedOne.setOption(newVal, true)
 							// this.$refs.echartsRefTideOne.init()
-						}
-					}
-					if (chartRefinedTwo !== undefined) {
-						if (newVal) {
-							chartRefinedTwo.setOption(newVal.optionTwo, true)
-							// this.$refs.echartsRefTideTwo.init()
 						}
 					}
 				}
 			},
-			// 威海专项四个chart更新
-			weihaiData: {
-				handler(newVal, oldVal) {
+			// 精细化预报第二个chart更新
+			refinedDataOptionTwo: {
+				handler (newVal, oldVal) {
+					if (chartRefinedTwo !== undefined) {
+						if (newVal) {
+							console.log('更新了')
+							// chartRefinedTwo.setOption(newVal, true)
+							this.$refs.echartsRefTideTwo.init()
+						}
+					}
+				}
+			},
+			// 威海专项第一个chart更新
+			weihaiDataOptionOne: {
+				handler (newVal, oldVal) {
 					if (chartWeihaiOne !== undefined) {
 						if (newVal) {
-							// chartWeihaiOne.setOption(newVal.first.option, true)
+							// chartWeihaiOne.setOption(newVal, true)
 							this.$refs.echartsRefWeihaiOne.init()
 						}
 					}
+				}
+			},
+			// 威海专项第二个chart更新
+			weihaiDataOptionTwo: {
+				handler (newVal, oldVal) {
 					if (chartWeihaiTwo !== undefined) {
 						if (newVal) {
-							// chartWeihaiTwo.setOption(newVal.second.option, true)
+							// chartWeihaiTwo.setOption(newVal, true)
 							this.$refs.echartsRefWeihaiTwo.init()
 						}
 					}
+				}
+			},
+			// 威海专项第三个chart更新
+			weihaiDataOptionThree: {
+				handler (newVal, oldVal) {
 					if (chartWeihaiThree !== undefined) {
 						if (newVal) {
-							// chartWeihaiThree.setOption(newVal.third.option, true)
+							// chartWeihaiThree.setOption(newVal, true)
 							this.$refs.echartsRefWeihaiThree.init()
 						}
 					}
+				}
+			},
+			// 威海专项第四个chart更新
+			weihaiDataOptionFour: {
+				handler (newVal, oldVal) {
 					if (chartWeihaiFour !== undefined) {
 						if (newVal) {
-							// chartWeihaiFour.setOption(newVal.fourth.option, true)
+							// chartWeihaiFour.setOption(newVal, true)
 							this.$refs.echartsRefWeihaiFour.init()
 						}
 					}
@@ -878,7 +989,7 @@
 	.chart-tide {
 		width: 290%;
 		height: 250px;
-		border: 1px solid #000;
+		/* border: 1px solid #000; */
 	}
 
 	/* 整个精细化组件的容器 */
@@ -890,7 +1001,7 @@
 	.chart-refined {
 		width: 290%;
 		height: 250px;
-		border: 1px solid #000000;
+		/* border: 1px solid #000000; */
 	}
 
 	/* 日期球的外观样式 */
