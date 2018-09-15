@@ -80,11 +80,11 @@
 			<view class="page-section" v-show="refinedData.show">
 				<view class="separator" />
 				<view class="section-body">
-					<refinedChart :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
+					<refinedChartAlt :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
 					<!-- 两个图表之间的空白 -->
 					<view style="height: 60px" v-if="refinedData.showTwo" />
 					<view v-show="refinedData.showTwo">
-						<refinedChart :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
+						<refinedChartAlt :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
 					</view>
 				</view>
 			</view>
@@ -113,6 +113,7 @@
 	import inshoreTableNew from '../../components/inshoreTableNew.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
+	import refinedChartAlt from '../../components/refinedChartAlt.vue'
 	import myPicker from '../../components/myPicker.vue'
 	import tableTitle from '../../components/tableTitle.vue'
 
@@ -127,6 +128,7 @@
 			inshoreTableNew,
 			bathsTable,
 			refinedChart,
+			refinedChartAlt,
 			myPicker,
 			tableTitle
 		},
