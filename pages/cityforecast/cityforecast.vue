@@ -955,11 +955,6 @@
 <style scoped>
 	@import "../../common/generic.css";
 
-	.hide {
-		position: fixed;
-		left: 105%;
-	}
-
 	.header {
 		/* background-color: #fff; */
 		height: 80px;

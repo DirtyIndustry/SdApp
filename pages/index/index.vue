@@ -63,7 +63,7 @@
 			<view class="separator" />
 			<!-- 近海预报 -->
 			<view class="page-section">
-				<tableTitle :title="inshoreData.location" date="" icon="../../static/Images/top_left_img_newS.png" />
+				<tableTitle :title="inshoreData.location" :date="inshoreTitleDate" icon="../../static/Images/top_left_img_newS.png" />
 				<view class="section-body">
 					<inshoreTableNew :inshoreData="inshoreData" />
 				</view>
@@ -71,7 +71,7 @@
 			<!-- 浴场预报 -->
 			<view class="page-section" v-if="bathsData.showBaths">
 				<view class="separator" />
-				<tableTitle title="浴场预报" date="9月13日0时至9月12日0时" icon="../../static/Images/top_left_img_newS.png" />
+				<tableTitle title="浴场预报" :date="bathsTitleDate" icon="../../static/Images/top_left_img_newS.png" />
 				<view class="section-body">
 					<bathsTable :bathsData="bathsData.data" />
 				</view>
@@ -141,6 +141,11 @@
 					waveWarning: '',
 					waveUrl: ''
 				},
+
+				// 近海预报日期字符串
+				inshoreTitleDate: '',
+				// 浴场预报日期字符串
+				bathsTitleDate: '',
 			}
 		},
 		computed: {
@@ -227,6 +232,8 @@
 			requestData(city) {
 				// 任务计数器归零
 				this.completedRequestCount = 0
+				this.setPageLayout(city)
+				this.setTitleDates(city)
 				this.loadAlarmData()
 				this.loadShandongData(city)
 			},
@@ -502,6 +509,27 @@
 						break
 				}
 			},
+			// 根据城市名称设置近海和浴场预报表头时间
+			setTitleDates (cityname) {
+				let now = new Date()
+				let one = (now.getMonth() + 1) + '月' + now.getDate() + '日'
+				now.setDate(now.getDate() + 1)
+				let two = (now.getMonth() + 1) + '月' + now.getDate() + '日'
+				now.setDate(now.getDate() + 1)
+				let three = (now.getMonth() + 1) + '月' + now.getDate() + '日'
+				now.setDate(now.getDate() + 1)
+				let four = (now.getMonth() + 1) + '月' + now.getDate() + '日'
+				switch (cityname) {
+					case '青岛':
+						this.inshoreTitleDate = ''
+						this.bathsTitleDate = one + '0时到' + two + '0时'
+						break
+					default:
+						this.inshoreTitleDate = one + '0时到' + four + '0时'
+						this.bathsTitleDate = ''
+						break
+				}
+			},
 			// 自定义picker选择
 			mypickerSelect(index, item) {
 				// 弹出loading toast
@@ -554,6 +582,7 @@
 				mask: true
 			})
 			this.completedRequestCount = 1
+			this.setTitleDates(this.cityName)
 			this.loadAlarmData()
 		},
 		onReady() {
