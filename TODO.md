@@ -159,7 +159,8 @@ DONE... contact us email check
 DONE... refined forecast location name update  
 DONE... chart styling  
 DONE... slide ball  
-weihai sp watch method  
+DONE... weihai sp watch method  
+clear storage logic change  
 manifest  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  

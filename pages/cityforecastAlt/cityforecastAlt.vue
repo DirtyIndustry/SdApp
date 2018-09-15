@@ -885,8 +885,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiOne !== undefined) {
 						if (newVal) {
-							chartWeihaiOne.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiOne.init()
+							// chartWeihaiOne.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiOne.init()
 						}
 					}
 				}
@@ -896,8 +896,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiTwo !== undefined) {
 						if (newVal) {
-							chartWeihaiTwo.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiTwo.init()
+							// chartWeihaiTwo.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiTwo.init()
 						}
 					}
 				}
@@ -907,8 +907,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiThree !== undefined) {
 						if (newVal) {
-							chartWeihaiThree.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiThree.init()
+							// chartWeihaiThree.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiThree.init()
 						}
 					}
 				}
@@ -918,8 +918,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiFour !== undefined) {
 						if (newVal) {
-							chartWeihaiFour.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiFour.init()
+							// chartWeihaiFour.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiFour.init()
 						}
 					}
 				}
