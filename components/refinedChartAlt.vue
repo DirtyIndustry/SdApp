@@ -16,11 +16,11 @@
         </scroll-view>
         <!-- 日期球 -->
         <view class="speed-up balltrack-fix">
-            <view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatus.fstballActive}">{{fstballText}}</view>
-            <view class="speed-up dateball fixball-Snd text-mini" :class="{'dateball-active': ballStatus.sndballActive}"
-                :style="{left: sndballLeft + 'px'}">{{sndballText}}</view>
-            <view class="speed-up dateball fixball-Trd text-mini" :class="{'dateball-active': ballStatus.trdballActive}"
-                :style="{left: trdballLeft + 'px'}">{{trdballText}}</view>
+            <view class="dateball text-mini" :class="{'dateball-active': ballStatus.fstballActive}">{{fstballText}}</view>
+            <view class="speed-up dateball text-mini" :class="{'dateball-active': ballStatus.sndballActive}"
+                :style="{left: ballStatus.sndballLeft + 'px'}">{{sndballText}}</view>
+            <view class="speed-up dateball text-mini" :class="{'dateball-active': ballStatus.trdballActive}"
+                :style="{left: ballStatus.trdballLeft + 'px'}">{{trdballText}}</view>
         </view>
     </view>
 </template>
@@ -88,9 +88,9 @@
                     fstballActive: true,	// 第一个球是否激活（显示为蓝色）
                     sndballActive: false,	// 第二个球是否激活（显示为蓝色）
                     trdballActive: false,	// 第三个球是否激活（显示为蓝色）
+                    sndballLeft: 0,         // 第二个球距左端的距离
+                    trdballLeft: 0          // 第三个球距左端的距离
                 },
-                sndballLeft: 0,         // 第二个球距左端的距离
-                trdballLeft: 0,         // 第三个球距左端的距离
                 trackwidth: 0,          // 滑轨的长度
                 scrollwidth: 0,         // 能滚动的最大长度
                 sndRightPos: 0,         // 第二个小球的右边位置
@@ -133,8 +133,8 @@
             setDateballLeft() {
                 this.trackwidth = this.systemInfo.windowWidth * 90 / 100
                 this.scrollwidth = Math.round(this.trackwidth * 190 / 100) + 1
-                this.sndballLeft = this.trackwidth - 57
-                this.trdballLeft = this.trackwidth - 28
+                this.ballStatus.sndballLeft = this.trackwidth - 57
+                this.ballStatus.trdballLeft = this.trackwidth - 28
                 this.sndRightPos = this.trackwidth - 57
                 this.trdRightPos = this.trackwidth - 28
                 this.stageOne = this.trackwidth - 29
@@ -144,19 +144,19 @@
             setDateballStatus (scrollLeft) {
                 // 第二个球
                 if (scrollLeft < 57) {
-                    this.sndballLeft = this.sndRightPos
+                    this.ballStatus.sndballLeft = this.sndRightPos
                 } else if (scrollLeft > this.stageOne) {
-                    this.sndballLeft = 29
+                    this.ballStatus.sndballLeft = 29
                 } else {
-                    this.sndballLeft = this.trackwidth - scrollLeft
+                    this.ballStatus.sndballLeft = this.trackwidth - scrollLeft
                 }
                 // 第三个球
                 if (scrollLeft < this.trackwidth) {
-                    this.trdballLeft = this.trdRightPos
+                    this.ballStatus.trdballLeft = this.trdRightPos
                 } else if (scrollLeft > this.stageTwo) {
-                    this.trdballLeft = 58
+                    this.ballStatus.trdballLeft = 58
                 } else {
-                    this.trdballLeft = this.scrollwidth - scrollLeft
+                    this.ballStatus.trdballLeft = this.scrollwidth - scrollLeft
                 }
                 // 颜色
                 if (scrollLeft < this.stageOne) {
@@ -209,20 +209,13 @@
         border-bottom: 1px solid #666;
     }
 
-    .speed-up {
-        -webkit-transform: translateZ(0);
-        -moz-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        -o-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-
     /* 日期球的外观样式 */
     .dateball {
         display: flex;
         width: 62px;
         height: 62px;
         position: absolute;
+        bottom: 11px;
         background-color: rgba(148, 148, 148, 0.8);
         border-radius: 62px;
         align-items: center;
@@ -232,24 +225,6 @@
     /* 日期球激活状态时现时为蓝色 */
     .dateball-active {
         background-color: rgba(0, 148, 255, 0.8);
-    }
-
-    /* 第一个球固定时的定位 */
-    .fixball-Fst {
-        bottom: 11px;
-        left: 0%;
-    }
-
-    /* 第二个球固定时的定位 */
-    .fixball-Snd {
-        bottom: 11px;
-        left: 74%;
-    }
-
-    /* 第三个球固定时的定位 */
-    .fixball-Trd {
-        bottom: 11px;
-        left: 74%;
     }
 
     /* 固定的小球的容器 */
