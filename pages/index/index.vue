@@ -33,7 +33,7 @@
 			</view>
 			<view class="separator" />
 			<!-- 警报模块 -->
-			<view class="page-section">
+			<view class="page-section section-body">
 				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap"
 				 @waveTap="waveWarningTap" />
 			</view>
@@ -227,110 +227,50 @@
 			requestData(city) {
 				// 任务计数器归零
 				this.completedRequestCount = 0
-				this.loadWarning()
-
+				this.loadAlarmData()
 				this.loadShandongData(city)
 			},
-			
-			// 读取服务器台风和海浪警报
-			loadWarning() {
+			loadAlarmData () {
 				let that = this
-				// 读取台风信息
-				// 请求服务器台风列表
 				uni.request({
-					url: appsettings.hosturl + 'GetTyphoonList_0904',
-					data: {
-						areaflg: '青岛',
-						Typhoonyear: new Date().getFullYear()
-					},
+					url: appsettings.hosturl + 'GetAlarm ',
+					data: {name: 'admin', areaflg: '山东'},
 					method: 'POST',
 					success: function (res) {
-						console.log('[服务器]: 返回 台风列表')
-						if (!res.data.d) { // 返回的值为空
-							console.log('[服务器]: 返回 台风列表 返回值为空')
-							that.completedRequestCount++
+						console.log('[服务器]: 返回 警报数据')
+						// 判断返回数据有效性
+						if (!res.data.d | res.data.d === '无权访问该接口' | res.data.d === '无该地区数据') { // 返回的值为空
+							console.log('[服务器]: 返回 警报数据 返回值为空')
 							return false
 						}
-						let resarr = JSON.parse(res.data.d)
-						let lasttyphoon = resarr[resarr.length - 1]
-						// 请求last typhoon详情数据
-						uni.request({
-							url: appsettings.hosturl + 'GetTyphoonPath_0904',
-							data: {
-								areaflg: '青岛',
-								typhoonNumber: lasttyphoon.NUMBER // 台风编号
-							},
-							method: 'POST',
-							success: function (res2) {
-								console.log('[服务器]: 返回 台风详情')
-								if (!res2.data.d) { // 返回的值为空
-									console.log('[服务器]: 返回 台风详情 返回值为空')
-									that.completedRequestCount++
-									return false
-								}
-								let respatharr = JSON.parse(res2.data.d)
-								// 日期格式应为yyyy/MM/dd HH:mm:ss
-								let typhoondate = new Date(respatharr[respatharr.length - 1].date.replace(/-/g, '/'))
-								let nowdate = new Date()
-								nowdate.setHours(nowdate.getHours() - 10)
-								if (typhoondate > nowdate) {
-									// 有台风警报
-									console.log('有台风警报')
-									that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
-										lasttyphoon.NUMBER +
-										'号台风"' +
-										lasttyphoon.CHN_NAME +
-										'(' +
-										lasttyphoon.ENG_NAME +
-										')"正在接近……'
-								} // end-if (typhoondate > nowdate)
-							}, // end-success-request
-							fail: function (res) {
-								// 网络请求失败 返回false
-								that.completedRequestCount++
-								return false
-							}
-						}) // end-request 请求服务器台风详情
-					}, // end-success-request
-					fail: function (res) {
-						// 网络请求失败 返回false
-						that.completedRequestCount++
-						return false
-					}
-				}) // end-request 请求服务器台风列表
-				// 请求服务器海浪预警列表
-				uni.request({
-					url: appsettings.hosturl + 'GetFrontpageWarning_0905',
-					data: {
-						name: 'admin',
-						areaflg: '青岛'
+						let resdata = JSON.parse(res.data.d)
+						if (resdata.Typhoon !== {}) {
+							console.log('[服务器]: 有台风警报')
+							let nowdate = new Date()
+							that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
+								resdata.Typhoon.NUMBER +
+								'号台风"' +
+								resdata.Typhoon.CHN_NAME +
+								'(' +
+								resdata.Typhoon.ENG_NAME +
+								')"正在接近……'
+						}
+						if (resdata.Ocean.length > 0) {
+							console.log('[服务器]: 有海洋警报')
+							let name = resdata.Ocean[resdata.Ocean.length - 1].name
+							let date = resdata.Ocean[resdata.Ocean.length - 1].datetime
+							let url = resdata.Ocean[resdata.Ocean.length - 1].Url
+							that.warningData.waveWarning = name + ',' + date + '……'
+							that.warningData.waveUrl = url
+						}
+					}, // end-success
+					fail: function () {
+						console.log('[服务器]: 请求 警报数据 失败')
 					},
-					method: 'POST',
-					success: function (res) {
-						console.log('[服务器]: 返回 海浪预警列表')
-						if (!res.data.d) { // 返回的值为空
-							console.log('[服务器]: 返回 海浪预警列表 返回值为空')
-							that.completedRequestCount++
-							return false
-						}
-						var resarr = JSON.parse(res.data.d)
-						// 不为空则取最后一项
-						if (resarr.length > 0) {
-							let warningname = resarr[resarr.length - 1].name
-							let warningdate = resarr[resarr.length - 1].datetime
-							console.log('有海浪警报')
-							that.warningData.waveWarning = warningname + ',' + warningdate + '……'
-							that.warningData.waveUrl = resarr[resarr.length - 1].Url
-						}
-					}, // end-success-request
-					fail: function (res) {
-						// 网络请求失败 返回false
+					complete: function () {
 						that.completedRequestCount++
-						return false
 					}
-				}) // end-request 请求海浪预警
-				that.completedRequestCount++
-				return true
+				})
 			},
 			// 读取山东预报数据 包括天气 潮汐 近海 浴场 精细化 五日 威海专项
 			loadShandongData (cityname) {
@@ -529,7 +469,7 @@
 			completedRequestCount: {
 				handler(newVal, oldVal) {
 					// 服务器请求任务的总数
-					if (newVal === 1) {
+					if (newVal === 2) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					}
@@ -538,8 +478,12 @@
 		},
 		onLoad() {
 			console.log('index page onload.')
-			// 根据index切换城市 允许自动定位 不写入缓存 
-			// this.switchCityByIndex(this.cityIndex)
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			})
+			this.completedRequestCount = 1
+			this.loadAlarmData()
 		},
 		onReady() {
 			console.log('index page ready.')

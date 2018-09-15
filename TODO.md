@@ -145,7 +145,9 @@ DONE... apply combined webservice to index city weather page
 DONE... move request to App.vue  
 DONE... baths forecast availability  
 DONE... App.vue auto select city  
-combine index page warning webservices  
+DONE... combine index page warning webservices  
+DONE... apply new warning service to index page  
+weather webservice new data bug  
 different chart different color  
 inshore table different date position  
 weihai sp chart option tweak  
