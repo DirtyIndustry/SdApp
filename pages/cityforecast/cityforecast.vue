@@ -408,7 +408,9 @@
 								if (res.astroDatas[i].location === '第一海水浴场') {
 									that.tideData.optionTideOne = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
 								} else {
-									that.tideData.optionTideTwo = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+									let optiontwo = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+									optiontwo.series[0].lineStyle.color = "#0092d4"
+									that.tideData.optionTideTwo = optiontwo
 								}
 							}
 						} else {	// 如果是青岛以外的城市

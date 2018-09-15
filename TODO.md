@@ -147,13 +147,14 @@ DONE... baths forecast availability
 DONE... App.vue auto select city  
 DONE... combine index page warning webservices  
 DONE... apply new warning service to index page  
-weather webservice new data bug  
-different chart different color  
+DONE... different chart different colors  
+weather webservice deal with daily limit response  
 inshore table different date position  
 weihai sp chart option tweak  
 refined forecast location name update  
 chart deborder  
 page-section shadow  
+contact us email check  
 chart styling  
 slide ball  
 responsive ui  
