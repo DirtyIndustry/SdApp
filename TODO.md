@@ -154,11 +154,11 @@ DONE... baths table date
 DONE... weihai sp chart option tweak  
 DONE... chart deborder  
 DONE... refined chart title shorter inner split line  
+DONE... page-section shadow  
+DONE... contact us email check  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
 refined forecast location name update  
-page-section shadow  
-contact us email check  
 chart styling  
 slide ball  
 responsive ui  
