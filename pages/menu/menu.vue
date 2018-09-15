@@ -1,8 +1,8 @@
 <template>
     <view class="page-body menu-page">
-        <view class="uni-flex uni-column menu-table">
+        <view class="menu-table">
             <!-- 第一行 -->
-            <view class="uni-flex uni-row menu-row">
+            <view class="menu-row">
                 <!-- 第一行左 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="cityforeTap">
@@ -19,7 +19,7 @@
                 </view>
             </view>
             <!-- 第二行 -->
-            <view class="uni-flex uni-row menu-row">
+            <view class="menu-row">
                 <!-- 第二行左 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="fisheryTap">
@@ -36,7 +36,7 @@
                 </view>
             </view>
             <!-- 第三行 -->
-            <view class="uni-flex uni-row menu-row">
+            <view class="menu-row">
                 <!-- 第三行左 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="weatherTap">
@@ -53,7 +53,7 @@
                 </view>
             </view>
             <!-- 第四行 -->
-            <view class="uni-flex uni-row menu-row">
+            <view class="menu-row">
                 <!-- 第四行左 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="satelliteimgTap">
@@ -70,7 +70,7 @@
                 </view>
             </view>
             <!-- 第五行 -->
-            <view class="uni-flex uni-row menu-row">
+            <view class="menu-row">
                 <!-- 第五行左 -->
                 <view class="menu-cell menu-column">
                     <button class="menu-button" type="default" @tap="typhoonpathTap">
@@ -181,7 +181,6 @@ export default {
 </script>
 
 <style scoped>
-    @import "../../common/uni.css";
     @import "../../common/generic.css";
 
     .menu-page {
@@ -195,17 +194,18 @@ export default {
     .menu-table {
         height: 85%;
         width: 90%;
-        /* border: 1px solid #f00; */
+        display: flex;
+        flex-direction: column;
     }
 
     .menu-row {
         flex: 1;
-        /* border: 1px solid #000; */
+        display: flex;
+        flex-direction: row;
     }
 
     .menu-column {
         flex: 1;
-        /* border: 1px solid #0f0; */
     }
 
     .menu-cell {
@@ -221,13 +221,11 @@ export default {
         align-items: center;
         justify-content: center;
         border: 1px solid #0092d4;
-        /* border-color: #0092d4; */
     }
 
     .menu-button-icon {
         width: 50px;
         height: 50px;
-        /* border: 1px solid #f00; */
     }
 
 </style>

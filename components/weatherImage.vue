@@ -136,7 +136,6 @@
 
 <style scoped>
 	
-
 	.img_box {
 		width: 100%;
 	}

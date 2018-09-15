@@ -7,20 +7,16 @@
 			<!-- 地区选择模块 -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
-				<view class="uni-list">
-					<view class="uni-list-cell">
-						<!-- 布局右侧宽度固定，左侧自适应 -->
-						<view class="container">
-							<view class="main">
-								{{cityName}}地区预报
-							</view>
-							<view class="sidebar">
-								<!-- 切换城市按钮 -->
-								<picker @change="bindPickerChange" :value="cityIndex" :range="cityArray">
-									<view class="uni-input">切换城市</view>
-								</picker>
-							</view>
-						</view>
+				<!-- 布局右侧宽度固定，左侧自适应 -->
+				<view class="container section-body">
+					<view class="main text-large text-bold text-blue">
+						{{cityName}}地区预报
+					</view>
+					<view class="sidebar">
+						<!-- 切换城市按钮 -->
+						<picker class="city-picker" @change="bindPickerChange" :value="cityIndex" :range="cityArray">
+							<view class="sidebar-cell">切换城市</view>
+						</picker>
 					</view>
 				</view>
 			</view>
@@ -572,41 +568,49 @@
 </script>
 
 <style scoped>
-	@import "../../common/uni.css";
 	@import "../../common/generic.css";
 
+	/* 页面顶端城市名称容器 */
 	.header {
-		/* background-color: #fff; */
-		left: 0;
-		width: 100%;
 		height: 80px;
 		display: flex;
 		align-items: center;
 	}
 
-	.uni-list-cell {
-		justify-content: flex-start;
-	}
-
+	/* 微信小程序城市选择器 */
 	.container {
-		display: table;
+		display: flex;
+		height: 80px;
 		width: 100%;
 	}
-
 	.main {
-		display: table-cell;
+		flex: 1;
+		height: 100%;
+		display: flex;
+		align-items: center;
 	}
-
 	.sidebar {
-		display: table-cell;
 		width: 150px;
+		height: 100%;
+	}
+	.city-picker {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.sidebar-cell {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
 		width: 290%;
 		height: 250px;
-		/* border: 1px solid #000; */
 	}
 
 </style>
