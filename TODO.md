@@ -149,12 +149,13 @@ DONE... combine index page warning webservices
 DONE... apply new warning service to index page  
 DONE... different chart different colors  
 DONE... city forecast page refined chart two debug  
+DONE... inshore table different date position  
+DONE... baths table date  
+DONE... weihai sp chart option tweak  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
-inshore table different date position  
-baths table date  
-weihai sp chart option tweak  
 refined forecast location name update  
+refined chart title shorter inner split line  
 chart deborder  
 page-section shadow  
 contact us email check  

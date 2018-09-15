@@ -221,7 +221,6 @@
     .chart {
         width: 290%;
         height: 250px;
-        border: 1px solid #000000;
     }
 
     /* 日期球的外观样式 */

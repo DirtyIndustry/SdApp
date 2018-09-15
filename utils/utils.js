@@ -1042,8 +1042,8 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
         // 图表距离外围div的padding
         grid: {
             top: '4%',
-            left: '-2.6%',
-            right: '0%',
+            left: '-2%',
+            right: '1%',
             bottom: '20%',
             containLabel: true
         },
@@ -1055,6 +1055,7 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
             axisLabel: {
                 // 横坐标刻度数值
                 show: true,
+                showMaxLabel: false,
                 inside: true,
                 fontSize: '14',
                 align: 'left',

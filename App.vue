@@ -327,6 +327,13 @@
 								let tide = utils.buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
 								data.option = utils.getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
+								data.option.grid = {
+									top: '4%',
+									left: '-3%',
+									right: '5%',
+									bottom: '20%',
+									containLabel: true
+								}
 								switch (res.weihaiDatas[i].REPORTAREA) {
 									case '成山头':
 										that.weihaiData.first = data

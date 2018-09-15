@@ -147,10 +147,10 @@
 				utils.storeToLocal('cityindex', e.target.value)
 				this.switchCityByIndex(e.target.value)
 
-				// 10秒后关闭toast
-				setTimeout(function () {
-					uni.hideLoading()
-				}.bind(this), 10000)
+				// // 10秒后关闭toast
+				// setTimeout(function () {
+				// 	uni.hideLoading()
+				// }.bind(this), 10000)
 			},
 			// 根据index切换城市 允许自动定位 不写入缓存
 			switchCityByIndex(index) {
@@ -293,6 +293,13 @@
 								let tide = utils.buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
 								data.option = utils.getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
+								data.option.grid = {
+									top: '4%',
+									left: '-3%',
+									right: '5%',
+									bottom: '20%',
+									containLabel: true
+								}
 								switch (res.weihaiDatas[i].REPORTAREA) {
 									case '成山头':
 										that.weihaiData.first = data
@@ -424,9 +431,9 @@
 				this.switchCityByIndex(index)
 
 				// 10秒后关闭toast
-				setTimeout(function () {
-					uni.hideLoading()
-				}.bind(this), 10000)
+				// setTimeout(function () {
+				// 	uni.hideLoading()
+				// }.bind(this), 10000)
 			},
 		}, // end-methods
 		watch: {
@@ -461,18 +468,18 @@
 			console.log('weatherforecast vue mounted.')
 			// 根据index切换城市 允许自动定位 不写入缓存 
 			// this.switchCityByIndex(this.cityIndex)
-			// 10秒后关闭toast
-			setTimeout(function () {
-				uni.hideLoading()
-			}.bind(this), 10000)
+			// // 10秒后关闭toast
+			// setTimeout(function () {
+			// 	uni.hideLoading()
+			// }.bind(this), 10000)
 		},
 		onPullDownRefresh() {
 			console.log('pull down refresh.')
 			this.requestData(this.cityName)
-			// 10秒后关闭提示
-			setTimeout(function () {
-				uni.stopPullDownRefresh()
-			}.bind(this), 10000)
+			// // 10秒后关闭提示
+			// setTimeout(function () {
+			// 	uni.stopPullDownRefresh()
+			// }.bind(this), 10000)
 		},
 		onNavigationBarButtonTap() {
 			console.log('navibar button tapped.')
