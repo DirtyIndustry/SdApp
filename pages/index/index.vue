@@ -33,16 +33,16 @@
 			</view>
 			<view class="separator" />
 			<!-- 警报模块 -->
-			<view class="page-section section-body">
+			<view class="page-section">
 				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap"
 				 @waveTap="waveWarningTap" />
 			</view>
 			<view class="separator" />
 			<!-- 潮汐预报模块 -->
-			<view class="page-section">
+			<view class="page-section section-body">
 				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="section-body chart-container">
+				<view class="chart-container">
 					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
 					<scroll-view scroll-x="true">
 						<view class="chart-tide">
@@ -51,7 +51,7 @@
 					</scroll-view>
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
-				<view class="section-body chart-container" :class="{hide: !tideData.chartTideTwoShow}">
+				<view class="chart-container" :class="{hide: !tideData.chartTideTwoShow}">
 					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">

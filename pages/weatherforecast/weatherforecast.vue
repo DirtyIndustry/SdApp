@@ -56,6 +56,7 @@
 					</view>
 				</view>
 			</view>
+			<view class="separator" />
 		</view>
 	</view>
 </template>
