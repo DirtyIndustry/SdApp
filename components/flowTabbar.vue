@@ -1,5 +1,5 @@
 <template>
-<view class="tabbar-container">
+<view class="tabbar-container speed-up">
     <!-- 左边的按钮 -->
         <view class="tabbar tabbar-left" :style="{width: leftTabWidth}">
             <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
@@ -153,6 +153,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../common/generic.css";
 /* 控件最外城容器 */
 .tabbar-container {
     /* border: 1px solid #000; */

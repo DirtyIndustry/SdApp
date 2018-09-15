@@ -156,11 +156,12 @@ DONE... chart deborder
 DONE... refined chart title shorter inner split line  
 DONE... page-section shadow  
 DONE... contact us email check  
+DONE... refined forecast location name update  
+DONE... chart styling  
+DONE... slide ball  
+manifest  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
-refined forecast location name update  
-chart styling  
-slide ball  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

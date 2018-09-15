@@ -1,5 +1,5 @@
 <template>
-    <view class="panel" :class="{hide: !show}" :style="{left: left}">
+    <view class="panel speed-up" :class="{hide: !show}" :style="{left: left}">
         <!-- 列表为空时显示 -->
         <view class="list-body list-row cell-empty" v-if="list.length === 0">{{placeholder}}</view>
         <!-- 内容列表 -->
@@ -66,6 +66,7 @@
 
 <style scoped>
     @import "../common/FontAwesome.css";
+    @import "../common/generic.css";
 
     /* 最外层容器 */
     .panel {

@@ -1,9 +1,9 @@
 <template>
     <view>
         <!-- 背景蒙板 -->
-        <view class="layer masklayer" v-show="panelshow" :style="{opacity: maskopacity}"  ></view>
+        <view class="layer masklayer speed-up" v-show="panelshow" :style="{opacity: maskopacity}"  ></view>
         
-        <view class="layer buttonlayer" v-show="panelshow" :style="{top: paneltop, opacity: panelopacity}" @tap="closeDialog" catchtouchmove="stopscroll">
+        <view class="layer buttonlayer speed-up" v-show="panelshow" :style="{top: paneltop, opacity: panelopacity}" @tap="closeDialog" catchtouchmove="stopscroll">
             <!-- 选项按钮组 -->
             <view class="choose_box">
                 <view class="chooseItem" v-for="(item, index) in items" :key="index" @tap="itemTap(index, item)">{{item}}</view>
@@ -41,7 +41,8 @@
                 handler (newVal, oldVal) {
                     if (newVal === true) {
                         this.panelshow = true
-                        setTimeout(function () {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
                             this.paneltop = '0'
                             this.panelopacity = 100
                             this.maskopacity = 100
@@ -49,7 +50,8 @@
                     } else {
                         this.panelopacity = 0
                         this.maskopacity = 0
-                        setTimeout(function () {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
                             this.paneltop = '100%'
                             this.panelshow = false
                         }.bind(this), 300)
@@ -75,7 +77,8 @@
             // 选项点击
             itemTap(index, item) {
                 // this.show = false
-                setTimeout(function(){
+                let timer = setTimeout(function(){
+                    clearTimeout(timer)
                     this.$emit('itemSelected', index, item)
                 }.bind(this), 300)
             },
@@ -88,6 +91,7 @@
 </script>
 
 <style scoped>
+    @import "../common/generic.css";
     .layer {
         position: fixed;
         left: 0;

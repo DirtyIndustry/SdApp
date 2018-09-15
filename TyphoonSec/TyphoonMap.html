@@ -485,7 +485,8 @@
                         mapdragging = true
                     })
                     qq.maps.event.addListener(map, 'dragend', function () {
-                        setTimeout(function () {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
                             mapdragging = false
                         }, 50)
                     })
@@ -676,7 +677,8 @@
                 // 清空地图
                 clearMap()
                 // 搜索台风
-                setTimeout(function () {    // 延迟0.2秒保证UI流畅性
+                let timer = setTimeout(function () {    // 延迟0.2秒保证UI流畅性
+                    clearTimeout(timer)
                     requestTyphoonPath(typhoonNo, typhoonName, typhoonEng, alwaysshow)
                 }, 200)
             }
@@ -1113,7 +1115,8 @@
             searchbutton.style.opacity = '0'    // 搜索按钮fadeout
             document.getElementById('volet').style.bottom = '-520px'    // 图例面板滑出
             document.getElementById('searchinput').focus()              // 弹出键盘
-            setTimeout(function () {                // fadeout结束之后
+            let timer = setTimeout(function () {                // fadeout结束之后
+                clearTimeout(timer)
                 name.style.left = '-500px'          // 移出台风名称面板
                 switchbutton.style.right = '-100px' // 移出卫星地图切换按钮
                 legendbutton.style.right = '-100px' // 移出图例按钮

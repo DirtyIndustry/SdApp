@@ -88,17 +88,17 @@ export default {
             mask: true
         })
         this.requestNews()
-        // 10秒后关闭toast
-        setTimeout(function () {
-            uni.hideLoading()
-        }.bind(this), 10000)
+        // // 10秒后关闭toast
+        // setTimeout(function () {
+        //     uni.hideLoading()
+        // }.bind(this), 10000)
     },
     onPullDownRefresh() {
         this.requestNews()
-        // 10秒后关闭提示
-        setTimeout(function () {
-            uni.stopPullDownRefresh()
-        }.bind(this), 10000)
+        // // 10秒后关闭提示
+        // setTimeout(function () {
+        //     uni.stopPullDownRefresh()
+        // }.bind(this), 10000)
     }
 }
 </script>

@@ -905,7 +905,8 @@
                         mapdragging = true
                     })
                     qq.maps.event.addListener(map, 'dragend', function () {
-                        setTimeout(function () {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
                             mapdragging = false
                         }, 50)
                     })
