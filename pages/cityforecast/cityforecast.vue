@@ -101,7 +101,7 @@
 				</view>
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="refinedData.showTwo" />
-				<view v-show="refinedData.showTwo">
+				<view v-if="refinedData.showTwo">
 					<view class="refinedChart-body">
 						<!-- 地名 -->
 						<view v-if="refinedData.dataTwo.length > 0" class="text">{{refinedData.dataTwo[0].loc}}</view>
