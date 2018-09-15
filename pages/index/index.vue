@@ -522,10 +522,10 @@
 				switch (cityname) {
 					case '青岛':
 						this.inshoreTitleDate = ''
-						this.bathsTitleDate = one + '0时到' + two + '0时'
+						this.bathsTitleDate = one + '0时至' + two + '0时'
 						break
 					default:
-						this.inshoreTitleDate = one + '0时到' + four + '0时'
+						this.inshoreTitleDate = one + '0时至' + four + '0时'
 						this.bathsTitleDate = ''
 						break
 				}
