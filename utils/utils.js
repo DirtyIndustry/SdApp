@@ -569,13 +569,13 @@ const getLocName = function (STATION) {
         case 'WFDJQ':
             return '潍坊度假区'
         case 'DYFP':
-            return '东营渔港'
+            return '胶州东营渔港'
         case 'WHXQ':
             return '威海新区'
         case 'YTQQ':
             return '烟台清泉'
         case 'DJKP':
-            return '董家口'
+            return '董家口港'
         case 'RZTHD':
             return '日照桃花岛'
         default:

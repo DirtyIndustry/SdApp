@@ -32,7 +32,8 @@ export default {
         startbuttonTap (e) {
             console.log('[界面]: 点击开始按钮')
             this.containeropacity = 0
-            setTimeout(function () {
+            let timer = setTimeout(function () {
+                clearTimeout(timer)
                 this.gotoIndex()
             }.bind(this), 200)
             // this.gotoIndex()
@@ -42,7 +43,8 @@ export default {
             console.log('[界面]: 跳过按钮点击')
             this.containeropacity = 0
             utils.storeToLocal('skipbienvenu', true)
-            setTimeout(function () {
+            let timer = setTimeout(function () {
+                clearTimeout(timer)
                 this.gotoIndex()
             }.bind(this), 200)
             // this.gotoIndex()

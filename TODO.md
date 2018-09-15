@@ -152,11 +152,11 @@ DONE... city forecast page refined chart two debug
 DONE... inshore table different date position  
 DONE... baths table date  
 DONE... weihai sp chart option tweak  
+DONE... chart deborder  
+DONE... refined chart title shorter inner split line  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
 refined forecast location name update  
-refined chart title shorter inner split line  
-chart deborder  
 page-section shadow  
 contact us email check  
 chart styling  

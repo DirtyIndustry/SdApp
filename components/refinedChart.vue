@@ -1,7 +1,7 @@
 <template>
     <view class="refinedChart-body">
         <!-- 地名 -->
-        <view v-if="data.length > 0">{{data[0].loc}}</view>
+        <view class="chart-title" v-if="data.length > 0">{{data[0].loc}}</view>
         <scroll-view scroll-x="true" scroll-with-animation="true" @scroll="handleScroll">
             <view class="chart">
                 <myChart :option="option" :canvasId="canvasId" />
@@ -221,6 +221,14 @@
     .chart {
         width: 290%;
         height: 250px;
+    }
+
+    /* 图表上方的地名 */
+    .chart-title {
+        position: relative;
+        width: 95%;
+        left: 2.5%;
+        border-bottom: 1px solid #666;
     }
 
     /* 日期球的外观样式 */

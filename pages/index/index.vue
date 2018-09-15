@@ -42,8 +42,8 @@
 			<view class="page-section">
 				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="section-body">
-					<text class="text">{{tideData.chartTideOneTitle}}</text>
+				<view class="section-body chart-container">
+					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
 					<scroll-view scroll-x="true">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
@@ -51,8 +51,8 @@
 					</scroll-view>
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
-				<view class="section-body" v-show="tideData.chartTideTwoShow">
-					<text class="text">{{tideData.chartTideTwoTitle}}</text>
+				<view class="section-body chart-container" :class="{hide: !tideData.chartTideTwoShow}">
+					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
@@ -658,10 +658,22 @@
 		justify-content: center;
 	}
 
+	/* 潮汐曲线容器 */
+	.chart-container {
+		display: flex;
+		flex-direction: column;
+	}
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
 		width: 290%;
 		height: 250px;
 	}
 
+	/* 潮汐曲线上方的地名 */
+	.chart-title {
+		position: relative;
+        width: 95%;
+		left: 2.5%;
+        border-bottom: 1px solid #666;
+	}
 </style>

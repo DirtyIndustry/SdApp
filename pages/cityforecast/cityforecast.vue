@@ -29,10 +29,10 @@
 			<!-- #endif -->
 			<!-- 潮汐预报模块 -->
 			<view class="page-section">
-				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
+				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="section-body">
-					<text class="text">{{tideData.chartTideOneTitle}}</text>
+				<view class="section-body chart-container">
+					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
 					<scroll-view scroll-x="true">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasIdTideOne" ref="echartsRefTideOne"></mpvue-echarts>
@@ -41,8 +41,8 @@
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
 				<!-- <view class="section-body" v-show="tideData.chartTideTwoShow"> -->
-				<view class="section-body" :class="{hide: !tideData.chartTideTwoShow}">
-					<text class="text">{{tideData.chartTideTwoTitle}}</text>
+				<view class="section-body chart-container" :class="{hide: !tideData.chartTideTwoShow}">
+					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
 					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasIdTideTwo" ref="echartsRefTideTwo"></mpvue-echarts>
@@ -72,7 +72,7 @@
 			<view class="page-section section-body" :class="{hide: !refinedData.show}">
 				<view class="refinedChart-body">
 					<!-- 地名 -->
-					<view v-if="refinedData.dataOne.length > 0" class="text">{{refinedData.dataOne[0].loc}}</view>
+					<view v-if="refinedData.dataOne.length > 0" class="chart-title text">{{refinedData.dataOne[0].loc}}</view>
 					<scroll-view scroll-x="true" @scroll="handleScrollRefinedOne">
 						<view class="chart-refined">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedOne" canvasId="canvasIdRefinedOne" ref="echartsRefRefinedOne"></mpvue-echarts>
@@ -107,7 +107,7 @@
 				<view :class="{hide: !refinedData.showTwo}">
 					<view class="refinedChart-body">
 						<!-- 地名 -->
-						<view v-if="refinedData.dataTwo.length > 0" class="text">{{refinedData.dataTwo[0].loc}}</view>
+						<view v-if="refinedData.dataTwo.length > 0" class="chart-title text">{{refinedData.dataTwo[0].loc}}</view>
 						<scroll-view scroll-x="true" @scroll="handleScrollRefinedTwo">
 							<view class="chart-refined">
 								<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedTwo" canvasId="canvasIdRefinedTwo" ref="echartsRefRefinedTwo"></mpvue-echarts>
@@ -1024,6 +1024,20 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	/* 潮汐曲线容器 */
+	.chart-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* 潮汐曲线上方的地名 */
+	.chart-title {
+		position: relative;
+        width: 95%;
+		left: 2.5%;
+        border-bottom: 1px solid #666;
 	}
 
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
