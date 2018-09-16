@@ -31,23 +31,29 @@
 			<view class="page-section section-body">
 				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="chart-container">
+				<view class="chart-container chart-container-one">
 					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
-					<scroll-view scroll-x="true">
+					<scroll-view scroll-x="true" @scroll="scrollTideOne">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasIdTideOne" ref="echartsRefTideOne"></mpvue-echarts>
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
+					<view v-if="tideOneChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideOneChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
 				<!-- <view class="section-body" v-show="tideData.chartTideTwoShow"> -->
 				<view class="chart-container" :class="{hide: !tideData.chartTideTwoShow}">
 					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
-					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
+					<scroll-view scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasIdTideTwo" ref="echartsRefTideTwo"></mpvue-echarts>
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
+					<view v-if="tideTwoChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideTwoChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 			</view>
 			<view class="separator" />
@@ -93,6 +99,9 @@
 						<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedOne.trdballActive}"
 						    :style="{left: ballStatusRefinedOne.trdballLeft + 'px'}">{{trdballText}}</view>
 					</view>
+					<!-- 左右指示箭头 -->
+					<view v-if="ballStatusRefinedOne.chevronRightShow" class="chevron-refined chevron-right fa fa-chevron-right" />
+					<view v-if="ballStatusRefinedOne.chevronLeftShow" class="chevron-refined chevron-left fa fa-chevron-left" />
 				</view>
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="refinedData.showTwo" />
@@ -121,6 +130,9 @@
 							<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedTwo.trdballActive}"
 							    :style="{left: ballStatusRefinedTwo.trdballLeft + 'px'}">{{trdballText}}</view>
 						</view>
+						<!-- 左右指示箭头 -->
+						<view v-if="ballStatusRefinedTwo.chevronRightShow" class="chevron-refined chevron-right fa fa-chevron-right" />
+						<view v-if="ballStatusRefinedTwo.chevronLeftShow" class="chevron-refined chevron-left fa fa-chevron-left" />
 					</view>
 				</view>
 			</view>
@@ -263,6 +275,9 @@
 					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
 					sndballLeft: 0,		// 第二个球是否位于左端
 					trdballLeft: 0,		// 第三个球是否位于左端
+					// 左右三角箭头是否显示
+					chevronRightShow: true,
+					chevronLeftShow: false
 				},
 				// 日期球控制参数
 				ballStatusRefinedTwo: {
@@ -271,6 +286,9 @@
 					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
 					sndballLeft: 0,		// 第二个球是否位于左端
 					trdballLeft: 0,		// 第三个球是否位于左端
+					// 左右三角箭头是否显示
+					chevronRightShow: true,
+					chevronLeftShow: false
                 },
                 // 精细化滑动小球
                 trackwidth: 0,          // 滑轨的长度
@@ -278,7 +296,12 @@
                 sndRightPos: 0,         // 第二个小球的右边位置
                 trdRightPos: 0,         // 第三个小球的右边位置
                 stageOne: 0,            // 第二个小球到达左边
-                stageTwo: 0,            // 第三个小球到达左边
+				stageTwo: 0,            // 第三个小球到达左边
+				// 潮汐预报左右三角箭头
+				tideOneChevronRightShow: true,
+				tideOneChevronLeftShow: false,
+				tideTwoChevronRightShow: true,
+				tideTwoChevronLeftShow: false,
 				// 近海预报日期字符串
 				inshoreTitleDate: '',
 				// 浴场预报日期字符串
@@ -781,22 +804,54 @@
                 } else {
                     ballObj.trdballLeft = this.scrollwidth - scrollLeft
                 }
-                // 颜色
+                // 颜色 箭头
                 if (scrollLeft < this.stageOne) {
-                    ballObj.fstballActive = true
+					// 颜色
+					ballObj.fstballActive = true
                     ballObj.sndballActive = false
-                    ballObj.trdballActive = false
+					ballObj.trdballActive = false
+					// 箭头
+					ballObj.chevronLeftShow = false
                 } else if (scrollLeft < this.stageTwo) {
-                    ballObj.fstballActive = false
+					// 颜色
+					ballObj.fstballActive = false
                     ballObj.sndballActive = true
-                    ballObj.trdballActive = false
+					ballObj.trdballActive = false
+					// 箭头
+					ballObj.chevronLeftShow = true
+					ballObj.chevronRightShow = true
                 } else {
+					// 颜色
                     ballObj.fstballActive = false
                     ballObj.sndballActive = false
-                    ballObj.trdballActive = true
-                }
+					ballObj.trdballActive = true
+					// 箭头
+					ballObj.chevronRightShow = false
+				}
 			},
-			// 精细化图标一滚动事件
+			// 潮汐图表一滚动事件
+			scrollTideOne (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideOneChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideOneChevronLeftShow = true
+					this.tideOneChevronRightShow = true
+				} else {
+					this.tideOneChevronRightShow = false
+				}
+			},
+			// 潮汐图表二滚动事件
+			scrollTideTwo (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideTwoChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideTwoChevronLeftShow = true
+					this.tideTwoChevronRightShow = true
+				} else {
+					this.tideTwoChevronRightShow = false
+				}
+			},
+			// 精细化图表一滚动事件
 			handleScrollRefinedOne(e) {
 				// utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
 				this.setDateballStatus(e.detail.scrollLeft, this.ballStatusRefinedOne)
@@ -957,6 +1012,7 @@
 </script>
 
 <style scoped>
+	@import "../../common/FontAwesome.css";
 	@import "../../common/generic.css";
 
 	.header {
@@ -1000,6 +1056,9 @@
 	.chart-container {
 		display: flex;
 		flex-direction: column;
+	}
+	.chart-container-one {
+		position: relative;
 	}
 
 	/* 潮汐曲线上方的地名 */
@@ -1115,4 +1174,22 @@
 		flex: 1;
 	}
 
+	/* 潮汐曲线上左右箭头 */
+	.chevron {
+		position: absolute;
+		bottom: 125px;
+		color: #666;
+	}
+	/* 精细化曲线上左右箭头 */
+	.chevron-refined {
+		position: absolute;
+		bottom: 205px;
+		color: #666;
+	}
+	.chevron-right {
+		right: 2.5%;
+	}
+	.chevron-left {
+		left: 2.5%;
+	}
 </style>

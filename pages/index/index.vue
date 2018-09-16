@@ -61,6 +61,7 @@
 							<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
 					<view v-if="tideTwoChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
 					<view v-if="tideTwoChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>

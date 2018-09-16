@@ -283,7 +283,7 @@
         text-align: right;
     }
 
-    /* 潮汐曲线上左右箭头 */
+    /* 曲线上左右箭头 */
 	.chevron {
 		position: absolute;
 		bottom: 205px;
