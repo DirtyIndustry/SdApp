@@ -9,18 +9,18 @@
 			</picker>
 		</view>
 		<view class="separator"></view>
-		<picSwiper :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
-		 ref="picswiper"></picSwiper>
+		<picSwiperAlt :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
+		 ref="picswiper"></picSwiperAlt>
 	</view>
 </template>
 
 <script>
 	import appsettings from '../../utils/appsettings.js'
-	import picSwiper from '../../components/picSwiper.vue'
+	import picSwiperAlt from '../../components/picSwiperAlt.vue'
 
 	export default {
 		components: {
-			picSwiper
+			picSwiperAlt
 		},
 		data() {
 			return {

@@ -6,18 +6,18 @@
             <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
         </view>
         <view class="separator"></view>
-        <picSwiper :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
-            ref="picswiper"></picSwiper>
+        <picSwiperAlt :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
+            ref="picswiper"></picSwiperAlt>
     </view>
 </template>
 
 <script>
     import appsettings from '../../utils/appsettings.js'
-    import picSwiper from '../../components/picSwiper.vue'
+    import picSwiperAlt from '../../components/picSwiperAlt.vue'
 
     export default {
         components: {
-            picSwiper
+            picSwiperAlt
         },
         data() {
             return {

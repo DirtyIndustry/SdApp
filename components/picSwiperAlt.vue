@@ -1,5 +1,5 @@
 <template>
-    <view >
+    <view class="swiper-body">
         <!-- 图片上方标题 -->
         <view class="pic_title" :class="{pic_title_active: titleArray.length > 0}">{{pictureTitle}}</view>
         <!-- 图片 -->
@@ -16,14 +16,14 @@
         <!-- 播放控制按钮 -->
         <view class="btn_panel" :class="{ btn_panel_hide: isButtonHide }">
             <view class="btn_box">
-                <view class="prev" @tap="prev">
-                    <image src="../../static/Images/btn_prev.png" mode="widthFix" />
+                <view class="button prev" :class="{btn_click: prevbtnclick}" @tap="prev">
+                    <view class="prev-icon fa fa-backward" />
                 </view>
-                <view class="play_stop">
-                    <image :src="playButtonImg" mode="widthFix" @tap="play_pause" />
+                <view class="button play_stop" :class="{btn_click: playbtnclick}" @tap="play_pause">
+                    <view class="fa" :class="{'play-icon fa-play': !isPlaying, 'fa-pause': isPlaying}" />
                 </view>
-                <view class="next" @tap="next">
-                    <image src="../../static/Images/btn_next.png" mode="widthFix" />
+                <view class="button next" :class="{btn_click: nextbtnclick}" @tap="next">
+                    <view class="next-icon fa fa-forward" />
                 </view>
             </view>
         </view>
@@ -32,7 +32,7 @@
 
 <script>
     export default {
-        name: 'picSwiper',
+        name: 'picSwiperAlt',
         props: {
             // 图片列表
             imgArray: {
@@ -77,7 +77,10 @@
                 isPlaying: false,
                 isButtonHide: false,
                 viewHeight: '538px',
-                btnTimer: undefined
+                btnTimer: undefined,
+                playbtnclick: false,
+                nextbtnclick: false,
+                prevbtnclick: false
             }
         },
         computed: {
@@ -137,6 +140,13 @@
                 } else {
                     this.isPlaying = true
                 }
+                if (this.playbtnclick !== true) {
+                    this.playbtnclick = true
+                    let timer = setTimeout(function () {
+                        clearTimeout(timer)
+                        this.playbtnclick = false
+                    }.bind(this), 80)
+                }
             },
             // 上一张
             prev() {
@@ -147,6 +157,13 @@
                         this.imgindex--
                     }
                     this.initTitle()
+                    if (this.prevbtnclick !== true) {
+                        this.prevbtnclick = true
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
+                            this.prevbtnclick = false
+                        }.bind(this), 80)
+                    }
                 }
             },
             // 下一张
@@ -158,6 +175,13 @@
                         this.imgindex = 0
                     }
                     this.initTitle()
+                    if (this.nextbtnclick !== true) {
+                        this.nextbtnclick = true
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
+                            this.nextbtnclick = false
+                        }.bind(this), 80)
+                    }
                 }
             },
             // 初始化图片标题
@@ -212,6 +236,12 @@
 </script>
 
 <style scoped>
+    @import "../common/FontAwesome.css";
+
+    .swiper-body {
+        overflow: hidden;
+    }
+    
     .pic_title {
         width: 100%;
         height: 80px;
@@ -246,9 +276,10 @@
     }
 
     .btn_panel_hide {
-        transition: opacity 2s ease, bottom 0s ease 2s;
+        transition: opacity 2s ease, bottom 0s ease 2s, position 0s ease 2s;
         opacity: 0;
         bottom: -200px;
+        position: fixed;
     }
 
     .btn_box {
@@ -262,21 +293,52 @@
         justify-content: space-around;
     }
 
-    .btn_box image {
-        width: 100%;
+    .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        color: #666;
+        background: -webkit-radial-gradient(#fff, #eee, #fff); /* Safari 5.1 - 6.0 */
+        background: -o-radial-gradient#fff, (#eee, #fff); /* Opera 11.6 - 12.0 */
+        background: -moz-radial-gradient(#fff, #eee, #fff); /* Firefox 3.6 - 15 */
+        background: radial-gradient(#fff, #eee, #fff); /* 标准的语法 */
     }
-
+    .btn_click {
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
+        background: -webkit-radial-gradient(#fff, #ddd, #ccc); /* Safari 5.1 - 6.0 */
+        background: -o-radial-gradient#fff, (#ddd, #ccc); /* Opera 11.6 - 12.0 */
+        background: -moz-radial-gradient(#fff, #ddd, #ccc); /* Firefox 3.6 - 15 */
+        background: radial-gradient(#fff, #ddd, #ccc); /* 标准的语法 */
+    }
     .prev,
     .next {
         /* border: 1px solid #f00; */
+        border-radius: 55px;
         width: 110px;
         height: 110px;
+        font-size: 38px;
     }
 
     .play_stop {
         /* border: 1px solid #0f0; */
+        border-radius: 70px;
         width: 140px;
         height: 140px;
+        font-size: 55px;
+    }
+
+    .prev-icon {
+        position: relative;
+        right: 5px;
+    }
+    .next-icon {
+        position: relative;
+        left: 5px;
+    }
+    .play-icon {
+        position: relative;
+        left: 5px;
     }
 
     .imgswiper {
