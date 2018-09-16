@@ -80,19 +80,30 @@
 						}
 					},
 					fail: function (res) {
-						console.log('fail')
-					},
-					complete: function (res) {
-						console.log('complete')
+						console.log('[缓存]: 获取缓存占用空间 失败')
 					}
 				})
 			},
 			// 清理缓存
 			cachebuttonTap () {
+				// try {
+				// 	uni.clearStorageSync()
+				// } catch (e) {
+				// 	console.log('[缓存]: 清理缓存出错')
+				// }
 				try {
-					uni.clearStorageSync()
+					uni.removeStorageSync('cityindex')
+					uni.removeStorageSync('cityname')
+					uni.removeStorageSync('weatherdata')
+					uni.removeStorageSync('tidedata')
+					uni.removeStorageSync('inshoredata')
+					uni.removeStorageSync('bathsdata')
+					uni.removeStorageSync('refineddata')
+					uni.removeStorageSync('fivedaydata')
+					uni.removeStorageSync('weihaidata')
 				} catch (e) {
-					console.log('[缓存]: 清理缓存出错')
+					console.log('[缓存]: 删除键值出错')
+					console.log(JSON.stringify(e))
 				}
 				this.getCacheSize()
 				uni.showModal({

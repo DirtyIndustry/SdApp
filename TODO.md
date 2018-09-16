@@ -160,11 +160,11 @@ DONE... refined forecast location name update
 DONE... chart styling  
 DONE... slide ball  
 DONE... weihai sp watch method  
-clear storage logic change  
+DONE... picswiper page init index  
+DONE... clear storage logic change  
 show bienvenu page setting  
 map page refresh  
 chart right chevron mark  
-picswiper page init index  
 manifest  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  

@@ -9,7 +9,7 @@
                 <view class="chooseItem" v-for="(item, index) in items" :key="index" @tap="itemTap(index, item)">{{item}}</view>
             </view>
             <!-- 取消按钮 -->
-            <view class="cancel" @tap="cancelTap">取消</view>
+            <view class="cancel">取消</view>
         </view>
     </view>
 </template>
@@ -61,11 +61,9 @@
         },
         methods: {
             showDialog() {
-                console.log('picker show')
                 this.show = true
             },
             closeDialog() {
-                console.log('picker hide')
                 this.show = false
             },
             switchDialog() {
@@ -81,10 +79,6 @@
                     clearTimeout(timer)
                     this.$emit('itemSelected', index, item)
                 }.bind(this), 300)
-            },
-            // 取消点击
-            cancelTap () {
-                // this.show = false
             }
         }
     }
