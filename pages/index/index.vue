@@ -42,22 +42,26 @@
 			<view class="page-section section-body">
 				<tableTitle title="潮汐预报" date="" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="chart-container">
+				<view class="chart-container chart-container-one">
 					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
-					<scroll-view scroll-x="true">
+					<scroll-view scroll-x="true" @scroll="scrollTideOne">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
 						</view>
 					</scroll-view>
+					<view v-if="tideOneChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideOneChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
 				<view class="chart-container" :class="{hide: !tideData.chartTideTwoShow}">
 					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
-					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
+					<scroll-view scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<myChart :option="tideData.optionTideTwo" canvasId="tideTwo" />
 						</view>
 					</scroll-view>
+					<view v-if="tideTwoChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideTwoChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 			</view>
 			<view class="separator" />
@@ -144,6 +148,12 @@
 				inshoreTitleDate: '',
 				// 浴场预报日期字符串
 				bathsTitleDate: '',
+				// 潮汐预报一左右三角箭头显隐
+				tideOneChevronLeftShow: false,
+				tideOneChevronRightShow: true,
+				// 潮汐预报二左右三角箭头显隐
+				tideTwoChevronLeftShow: false,
+				tideTwoChevronRightShow: true
 			}
 		},
 		computed: {
@@ -566,6 +576,28 @@
 				uni.navigateTo({
 					url: '../warningdetail/warningdetail?data=' + that.warningData.waveUrl
 				})
+			},
+			// 潮汐预报一滚动
+			scrollTideOne (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideOneChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideOneChevronLeftShow = true
+					this.tideOneChevronRightShow = true
+				} else {
+					this.tideOneChevronRightShow = false
+				}
+			},
+			// 潮汐预报二滚动
+			scrollTideTwo (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideTwoChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideTwoChevronLeftShow = true
+					this.tideTwoChevronRightShow = true
+				} else {
+					this.tideTwoChevronRightShow = false
+				}
 			}
 		}, // end-methods
 		watch: {
@@ -616,6 +648,7 @@
 </script>
 
 <style scoped>
+	@import "../../common/FontAwesome.css";
 	@import "../../common/generic.css";
 
 	/* 页面顶端城市名称容器 */
@@ -660,17 +693,34 @@
 		display: flex;
 		flex-direction: column;
 	}
+	.chart-container-one {
+		position: relative;
+	}
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
 		width: 290%;
 		height: 250px;
 	}
-
 	/* 潮汐曲线上方的地名 */
 	.chart-title {
 		position: relative;
         width: 95%;
 		left: 2.5%;
         border-bottom: 1px solid #666;
+	}
+	/* 潮汐曲线上左右箭头 */
+	.chevron {
+		position: absolute;
+		bottom: 125px;
+		color: #666;
+	}
+	.chevron-right {
+		right: 2.5%;
+	}
+	.chevron-left {
+		left: 2.5%;
+	}
+	.chevron-hide {
+		opacity: 0;
 	}
 </style>
