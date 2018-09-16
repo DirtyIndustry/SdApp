@@ -138,12 +138,41 @@ DONE... selection panel with mask, for city pick
 DONE... bienvenu page  
 DONE... bienvenu page skip  
 DONE... index page demargin  
-unify font in a generic css file  
-table styling  
-chart styling  
-slide ball  
-combine webservices  
-baths forecast availability  
+DONE... unify font in a generic css file  
+DONE... table styling  
+DONE... combine webservices  
+DONE... apply combined webservice to index city weather page  
+DONE... move request to App.vue  
+DONE... baths forecast availability  
+DONE... App.vue auto select city  
+DONE... combine index page warning webservices  
+DONE... apply new warning service to index page  
+DONE... different chart different colors  
+DONE... city forecast page refined chart two debug  
+DONE... inshore table different date position  
+DONE... baths table date  
+DONE... weihai sp chart option tweak  
+DONE... chart deborder  
+DONE... refined chart title shorter inner split line  
+DONE... page-section shadow  
+DONE... contact us email check  
+DONE... refined forecast location name update  
+DONE... chart styling  
+DONE... slide ball  
+DONE... weihai sp watch method  
+DONE... picswiper page init index  
+DONE... clear storage logic change  
+DONE... show bienvenu page setting  
+DONE... map page refresh  
+DONE... image page pull down refresh  
+DONE... chart right chevron mark  
+DONE... refined chart line label and time color  
+DONE... contact us email address placeholder  
+picswiper button change to font icon  
+move bienvenu to index page  
+manifest  
+use opacity and position to show and hide blocks  
+weather webservice deal with daily limit response  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  

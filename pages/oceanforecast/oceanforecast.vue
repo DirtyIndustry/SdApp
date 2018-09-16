@@ -141,7 +141,7 @@ export default {
         this.loadOceanData()
     },
     onPullDownRefresh() {
-        console.log('pull down refresh.')
+        console.log('[界面]: 海区预报 下拉刷新')
         this.loadOceanData()
         // 关闭提示
         uni.stopPullDownRefresh()

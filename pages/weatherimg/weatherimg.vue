@@ -9,18 +9,18 @@
 			</picker>
 		</view>
 		<view class="separator"></view>
-		<picSwiper :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
-		 ref="picswiper"></picSwiper>
+		<picSwiperAlt :imgArray="imageArray" :titleArray="dateArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
+		 ref="picswiper"></picSwiperAlt>
 	</view>
 </template>
 
 <script>
 	import appsettings from '../../utils/appsettings.js'
-	import picSwiper from '../../components/picSwiper.vue'
+	import picSwiperAlt from '../../components/picSwiperAlt.vue'
 
 	export default {
 		components: {
-			picSwiper
+			picSwiperAlt
 		},
 		data() {
 			return {
@@ -53,14 +53,15 @@
 							return false
 						}
 						let dataarr = JSON.parse(res.data.d)
-						// 清空现在的数组
-						that.imageArray.length = 0
-						that.dateArray.length = 0
 						// 将返回数据填入数组
+						let imgarr = []
+						let datearr = []
 						for (let i = 0; i < dataarr.length; i++) {
-							that.imageArray.push(dataarr[i].url)
-							that.dateArray.push(dataarr[i].title)
+							imgarr.push(dataarr[i].url)
+							datearr.push(dataarr[i].title)
 						}
+						that.imageArray = imgarr
+						that.dateArray = datearr
 					}
 				})
 			}, // end-requestImage()
@@ -71,7 +72,12 @@
 		},
 		onLoad() {
 			this.requestImage(this.data_source)
-		}
+		},
+		onPullDownRefresh() {
+			console.log('[界面]: 天气图 下拉刷新')
+			this.requestImage(this.data_source)
+			uni.stopPullDownRefresh()
+		},
 	}
 </script>
 

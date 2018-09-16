@@ -173,7 +173,8 @@ export default {
             this.listMiddleLeft = '105%'
             this.listRightLeft = '200%'
             // 控制显隐
-            setTimeout(function () {
+            let timer = setTimeout(function () {
+                clearTimeout(timer)
                 this.listMiddleShow = false
                 this.listRightShow = false
             }.bind(this), 520)
@@ -189,7 +190,8 @@ export default {
             this.listMiddleLeft = '5%'
             this.listRightLeft = '105%'
             // 控制显隐
-            setTimeout(function () {
+            let timer = setTimeout(function () {
+                clearTimeout(timer)
                 this.listLeftShow = false
                 this.listRightShow = false
             }.bind(this), 520)
@@ -204,7 +206,8 @@ export default {
             this.listMiddleLeft = '-105%'
             this.listRightLeft = '5%'
             // 控制显隐
-            setTimeout(function () {
+            let timer = setTimeout(function () {
+                clearTimeout(timer)
                 this.listLeftShow = false
                 this.listMiddleShow = false
             }.bind(this), 520)
@@ -251,17 +254,17 @@ export default {
             mask: true
         })
         this.requestWarning()
-        // 10秒后关闭toast
-        setTimeout(function () {
-            uni.hideLoading()
-        }.bind(this), 10000)
+        // // 10秒后关闭toast
+        // setTimeout(function () {
+        //     uni.hideLoading()
+        // }.bind(this), 10000)
     },
     onPullDownRefresh() {
         this.requestWarning()
-        // 10秒后关闭提示
-        setTimeout(function () {
-            uni.stopPullDownRefresh()
-        }.bind(this), 10000)
+        // // 10秒后关闭提示
+        // setTimeout(function () {
+        //     uni.stopPullDownRefresh()
+        // }.bind(this), 10000)
     }
 }
 </script>

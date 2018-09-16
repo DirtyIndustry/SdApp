@@ -8,7 +8,7 @@
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 联系方式 -->
-            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系方式（推荐使用邮箱）" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
+            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 留言内容 -->
@@ -16,7 +16,7 @@
             <!-- 分隔条 -->
             <view class="separator-vertical"></view>
             <!-- 提交按钮 -->
-            <button class="submit-button" type="primary" formType="submit" :disabled="!postvalid">{{buttonText}}</button>
+            <button class="submit-button" type="primary" formType="submit" :disabled="!formValid">{{buttonText}}</button>
         </form>
     </view>
 </template>
@@ -32,8 +32,6 @@ data () {
         postername: '',         // 联系人姓名
         postercontact: '',      // 联系人联系方式
         postcontent: '',        // 留言内容
-        limited: false,         // 是否达到每日提交次数上限
-        postvalid: false,       // 是否可以提交
         buttonText: '提交',     // 提交按钮字样
         inputnameFocus: true,       // 联系人姓名获得焦点
         inputcontactFocus: false,   // 联系方式获得焦点
@@ -41,26 +39,11 @@ data () {
     }
 },
 watch: {
-    // 留言正文
-    postcontent: {
-        handler (newVal, oldVal) {
-            if (this.limited === true) {
-                this.postvalid = false
-            } else {
-                if (newVal.trim() === '') {
-                    this.postvalid = false
-                } else {
-                    this.postvalid = true
-                }
-            }
-        }
-    },
     // 每日留言限制
     limited: {
         handler (newVal, oldVal) {
             if (newVal === true) {
                 this.buttonText = '已达到每日提交次数上限'
-                this.postvalid = false
             } else {
                 this.buttonText = '提交'
             }
@@ -72,6 +55,24 @@ watch: {
             this.setLimitation()
         }
     }
+},
+computed: {
+    nameValid () { return this.postername.trim() !== '' },
+    contactValid () { return this.validateEmail(this.postercontact) },
+    contentValid () { return this.postcontent.trim() !== '' },
+    limited () {
+        if (this.checkDate(new Date(), this.lastpostdate) === true) {   // 同一天
+            if (this.postcounter > 2) { // 同日计数大于2
+                return true
+            } else {    // 同日计数不大于2
+                return false
+            }
+        } else {    // 不是同一天
+            this.postcounter = 0
+            return false
+        }
+    },
+    formValid () { return !this.limited & this.nameValid & this.contactValid & this.contentValid }
 },
 methods: {
     // 获取本地缓存最后留言日期和留言计数
@@ -177,6 +178,11 @@ methods: {
             this.limited = false
             this.postcounter = 0
         }
+    },
+    // 验证邮箱有效性
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     },
     // 姓名输入栏点击确定
     inputnameConfirm () {

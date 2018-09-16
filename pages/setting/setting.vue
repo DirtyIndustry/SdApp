@@ -13,6 +13,16 @@
 			<view class="text-small text-gray">请在手机设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view>
 			<view class="separator-horizontal"></view>
 		</view>
+		<!-- 欢迎页面 -->
+		<view class="stripbutton" @tap="bienvenuTap">
+			<view class="separator-horizontal" />
+			<view class="text text-gray">欢迎页面</view>
+			<view class="right-column">
+				<view class="fa fa-angle-right font-icon text-gray"></view>
+			</view>
+			<view class="separator-horizontal" />
+		</view>
+		<view class="separator-vertical-small" />
 		<!-- 清理缓存 -->
 		<view class="stripbutton" @tap="cachebuttonTap">
 			<view class="separator-horizontal"></view>
@@ -80,19 +90,46 @@
 						}
 					},
 					fail: function (res) {
-						console.log('fail')
-					},
-					complete: function (res) {
-						console.log('complete')
+						console.log('[缓存]: 获取缓存占用空间 失败')
+					}
+				})
+			},
+			// 设置欢迎页面
+			bienvenuTap () {
+				uni.showModal({
+					title: '设置',
+					content: '启动时是否显示欢迎页面？',
+					confirmText: '是',
+					cancelText: '否',
+					success: function (res) {
+						if (res.confirm) {
+							utils.storeToLocal('skipbienvenu', false)
+						} else if (res.cancel) {
+							utils.storeToLocal('skipbienvenu', true)
+						}
 					}
 				})
 			},
 			// 清理缓存
 			cachebuttonTap () {
+				// try {
+				// 	uni.clearStorageSync()
+				// } catch (e) {
+				// 	console.log('[缓存]: 清理缓存出错')
+				// }
 				try {
-					uni.clearStorageSync()
+					uni.removeStorageSync('cityindex')
+					uni.removeStorageSync('cityname')
+					uni.removeStorageSync('weatherdata')
+					uni.removeStorageSync('tidedata')
+					uni.removeStorageSync('inshoredata')
+					uni.removeStorageSync('bathsdata')
+					uni.removeStorageSync('refineddata')
+					uni.removeStorageSync('fivedaydata')
+					uni.removeStorageSync('weihaidata')
 				} catch (e) {
-					console.log('[缓存]: 清理缓存出错')
+					console.log('[缓存]: 删除键值出错')
+					console.log(JSON.stringify(e))
 				}
 				this.getCacheSize()
 				uni.showModal({

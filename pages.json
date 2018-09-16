@@ -36,7 +36,19 @@
 		{
 			"path": "pages/map/map",
 			"style": {
-				"navigationBarTitleText": "地图"
+				"navigationBarTitleText": "地图",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf01e",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "16px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
@@ -47,6 +59,25 @@
 		},
 		{
 			"path": "pages/cityforecast/cityforecast",
+			"style": {
+				"navigationBarTitleText": "城市预报",
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf041",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "22px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/cityforecastAlt/cityforecastAlt",
 			"style": {
 				"navigationBarTitleText": "城市预报",
 				"enablePullDownRefresh": true,
@@ -107,25 +138,40 @@
 		{
 			"path": "pages/typhoonmap/typhoonmap",
 			"style": {
-				"navigationBarTitleText": "台风路径"
+				"navigationBarTitleText": "台风路径",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf01e",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "16px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/weatherimg/weatherimg",
 			"style": {
-				"navigationBarTitleText": "天气图"
+				"navigationBarTitleText": "天气图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/satelliteimg/satelliteimg",
 			"style": {
-				"navigationBarTitleText": "卫星云图"
+				"navigationBarTitleText": "卫星云图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/radarimg/radarimg",
 			"style": {
-				"navigationBarTitleText": "雷达图"
+				"navigationBarTitleText": "雷达图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -159,9 +205,6 @@
 			"style": {
 				"navigationBarTitleText": "关于"
 			}
-		},
-		{
-			"path": "pages/homepage/homepage"
 		}
 	],
 	"globalStyle": {

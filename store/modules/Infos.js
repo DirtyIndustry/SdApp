@@ -1,7 +1,7 @@
 var state = {
     systeminfo: {},
     cityarray: ['自动', '青岛', '烟台', '潍坊', '威海', '日照', '东营', '滨州'],
-    cityindex: 1
+    cityindex: 0
 }
 
 const mutations = {

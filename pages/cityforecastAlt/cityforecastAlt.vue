@@ -31,23 +31,29 @@
 			<view class="page-section section-body">
 				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />
 				<!-- 第一个图表 -->
-				<view class="chart-container">
+				<view class="chart-container chart-container-one">
 					<text class="chart-title text" v-if="tideData.chartTideOneTitle !== ''">{{tideData.chartTideOneTitle}}</text>
-					<scroll-view scroll-x="true">
+					<scroll-view scroll-x="true" @scroll="scrollTideOne">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideOne" canvasId="canvasIdTideOne" ref="echartsRefTideOne"></mpvue-echarts>
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
+					<view v-if="tideOneChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideOneChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 				<!-- 第二个图表 只在青岛地区显示 -->
 				<!-- <view class="section-body" v-show="tideData.chartTideTwoShow"> -->
 				<view class="chart-container" :class="{hide: !tideData.chartTideTwoShow}">
 					<text class="chart-title text">{{tideData.chartTideTwoTitle}}</text>
-					<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scrollTideTwo">
+					<scroll-view scroll-x="true" @scroll="scrollTideTwo">
 						<view class="chart-tide">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitTideTwo" canvasId="canvasIdTideTwo" ref="echartsRefTideTwo"></mpvue-echarts>
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
+					<view v-if="tideTwoChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+					<view v-if="tideTwoChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
 			</view>
 			<view class="separator" />
@@ -73,14 +79,9 @@
 				<view class="refinedChart-body">
 					<!-- 地名 -->
 					<view v-if="refinedData.dataOne.length > 0" class="chart-title text">{{refinedData.dataOne[0].loc}}</view>
-					<scroll-view scroll-x="true" @scroll="handleScrollRefinedOne">
-						<view class="chart-refined">
+					<scroll-view class="speed-up" scroll-x="true" @scroll="handleScrollRefinedOne">
+						<view class="chart-refined speed-up">
 							<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedOne" canvasId="canvasIdRefinedOne" ref="echartsRefRefinedOne"></mpvue-echarts>
-						</view>
-						<!-- 滑动的日期球，Move属性决定球是否显示 -->
-						<view class="balltrack">
-							<view class="dateball slideball-Snd text-mini" v-if="ballStatusRefinedOne.sndballMove">{{sndballText}}</view>
-							<view class="dateball slideball-Trd text-mini" v-if="ballStatusRefinedOne.trdballMove">{{trdballText}}</view>
 						</view>
 						<!-- 信息面板 -->
 						<view class="infopanel">
@@ -90,16 +91,17 @@
 							</view>
 						</view>
 					</scroll-view>
-					<!-- 固定在两端的日期球
-					Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
-					特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
-					<view class="balltrack-fix">
-						<view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatusRefinedOne.fstballActive}">{{fstballText}}</view>
-						<view class="dateball fixball-Snd text-mini" :class="{'dateball-active': ballStatusRefinedOne.sndballActive, 'fixball-Snd-left': ballStatusRefinedOne.sndballLeft}"
-						 v-if="ballStatusRefinedOne.sndballMove == false">{{sndballText}}</view>
-						<view class="dateball fixball-Trd text-mini" :class="{'dateball-active': ballStatusRefinedOne.trdballActive, 'fixball-Trd-lone': ballStatusRefinedOne.sndballMove, 'fixball-Trd-left': ballStatusRefinedOne.trdballLeft}"
-						 v-if="!ballStatusRefinedOne.trdballMove">{{trdballText}}</view>
+					<!-- 日期球 -->
+					<view class="balltrack-fix speed-up">
+						<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedOne.fstballActive}">{{fstballText}}</view>
+						<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedOne.sndballActive}"
+						    :style="{left: ballStatusRefinedOne.sndballLeft + 'px'}">{{sndballText}}</view>
+						<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedOne.trdballActive}"
+						    :style="{left: ballStatusRefinedOne.trdballLeft + 'px'}">{{trdballText}}</view>
 					</view>
+					<!-- 左右指示箭头 -->
+					<view v-if="ballStatusRefinedOne.chevronRightShow" class="chevron-refined chevron-right fa fa-chevron-right" />
+					<view v-if="ballStatusRefinedOne.chevronLeftShow" class="chevron-refined chevron-left fa fa-chevron-left" />
 				</view>
 				<!-- 两个图表之间的空白 -->
 				<view style="height: 60px" v-if="refinedData.showTwo" />
@@ -108,14 +110,9 @@
 					<view class="refinedChart-body">
 						<!-- 地名 -->
 						<view v-if="refinedData.dataTwo.length > 0" class="chart-title text">{{refinedData.dataTwo[0].loc}}</view>
-						<scroll-view scroll-x="true" @scroll="handleScrollRefinedTwo">
-							<view class="chart-refined">
+						<scroll-view class="speed-up" scroll-x="true" @scroll="handleScrollRefinedTwo">
+							<view class="chart-refined speed-up">
 								<mpvue-echarts :echarts="echarts" :onInit="handleInitRefinedTwo" canvasId="canvasIdRefinedTwo" ref="echartsRefRefinedTwo"></mpvue-echarts>
-							</view>
-							<!-- 滑动的日期球，Move属性决定球是否显示 -->
-							<view class="balltrack">
-								<view class="dateball slideball-Snd text-mini" v-if="ballStatusRefinedTwo.sndballMove">{{sndballText}}</view>
-								<view class="dateball slideball-Trd text-mini" v-if="ballStatusRefinedTwo.trdballMove">{{trdballText}}</view>
 							</view>
 							<!-- 信息面板 -->
 							<view class="infopanel">
@@ -125,16 +122,17 @@
 								</view>
 							</view>
 						</scroll-view>
-						<!-- 固定在两端的日期球
-						Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
-						特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
-						<view class="balltrack-fix">
-							<view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatusRefinedTwo.fstballActive}">{{fstballText}}</view>
-							<view class="dateball fixball-Snd text-mini" :class="{'dateball-active': ballStatusRefinedTwo.sndballActive, 'fixball-Snd-left': ballStatusRefinedTwo.sndballLeft}"
-							 v-if="ballStatusRefinedTwo.sndballMove == false">{{sndballText}}</view>
-							<view class="dateball fixball-Trd text-mini" :class="{'dateball-active': ballStatusRefinedTwo.trdballActive, 'fixball-Trd-lone': ballStatusRefinedTwo.sndballMove, 'fixball-Trd-left': ballStatusRefinedTwo.trdballLeft}"
-							 v-if="!ballStatusRefinedTwo.trdballMove">{{trdballText}}</view>
+						<!-- 日期球 -->
+						<view class="balltrack-fix speed-up">
+							<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedTwo.fstballActive}">{{fstballText}}</view>
+							<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedTwo.sndballActive}"
+							    :style="{left: ballStatusRefinedTwo.sndballLeft + 'px'}">{{sndballText}}</view>
+							<view class="dateball speed-up text-mini" :class="{'dateball-active': ballStatusRefinedTwo.trdballActive}"
+							    :style="{left: ballStatusRefinedTwo.trdballLeft + 'px'}">{{trdballText}}</view>
 						</view>
+						<!-- 左右指示箭头 -->
+						<view v-if="ballStatusRefinedTwo.chevronRightShow" class="chevron-refined chevron-right fa fa-chevron-right" />
+						<view v-if="ballStatusRefinedTwo.chevronLeftShow" class="chevron-refined chevron-left fa fa-chevron-left" />
 					</view>
 				</view>
 			</view>
@@ -274,22 +272,36 @@
 				ballStatusRefinedOne: {
 					fstballActive: true,	// 第一个球是否激活（显示为蓝色）
 					sndballActive: false,	// 第二个球是否激活（显示为蓝色）
-					sndballMove: false,		// 第二个球是否滑动
-					sndballLeft: false,		// 第二个球是否位于左端
 					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
-					trdballMove: false,		// 第三个球是否滑动
-					trdballLeft: false,		// 第三个球是否位于左端
+					sndballLeft: 0,		// 第二个球是否位于左端
+					trdballLeft: 0,		// 第三个球是否位于左端
+					// 左右三角箭头是否显示
+					chevronRightShow: true,
+					chevronLeftShow: false
 				},
 				// 日期球控制参数
 				ballStatusRefinedTwo: {
 					fstballActive: true,	// 第一个球是否激活（显示为蓝色）
 					sndballActive: false,	// 第二个球是否激活（显示为蓝色）
-					sndballMove: false,		// 第二个球是否滑动
-					sndballLeft: false,		// 第二个球是否位于左端
 					trdballActive: false,	// 第三个球是否激活（显示为蓝色）
-					trdballMove: false,		// 第三个球是否滑动
-					trdballLeft: false,		// 第三个球是否位于左端
-				},
+					sndballLeft: 0,		// 第二个球是否位于左端
+					trdballLeft: 0,		// 第三个球是否位于左端
+					// 左右三角箭头是否显示
+					chevronRightShow: true,
+					chevronLeftShow: false
+                },
+                // 精细化滑动小球
+                trackwidth: 0,          // 滑轨的长度
+                scrollwidth: 0,         // 能滚动的最大长度
+                sndRightPos: 0,         // 第二个小球的右边位置
+                trdRightPos: 0,         // 第三个小球的右边位置
+                stageOne: 0,            // 第二个小球到达左边
+				stageTwo: 0,            // 第三个小球到达左边
+				// 潮汐预报左右三角箭头
+				tideOneChevronRightShow: true,
+				tideOneChevronLeftShow: false,
+				tideTwoChevronRightShow: true,
+				tideTwoChevronLeftShow: false,
 				// 近海预报日期字符串
 				inshoreTitleDate: '',
 				// 浴场预报日期字符串
@@ -473,13 +485,22 @@
 							for (let i = 0; i < res.refinedDatas.length; i++) {
 								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+								let option = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								// 曲线颜色蓝色
+								option.series[0].lineStyle.color = '#0092d4'
+								// label颜色绿色
+								option.series[0].label.color = '#1c8d3b'
+								// 时间颜色红色
+								option.series[0].markLine.label.textStyle.color = 'red'
+								// 不显示日期
+								option.xAxis.axisLabel.show = false
+								// 将地名字母代号转为中文地名
+								res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
 								if (res.refinedDatas[i].tideinfo.location === 'DJKP') {
-									that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-									res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
+									that.refinedData.optionOne = option
 									that.refinedData.dataOne = res.refinedDatas[i].extrainfo
 								} else {
-									that.refinedData.optionTwo = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-									res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
+									that.refinedData.optionTwo = option
 									that.refinedData.dataTwo = res.refinedDatas[i].extrainfo
 								}
 							}
@@ -488,7 +509,17 @@
 							for (let i = 0; i < res.refinedDatas.length; i++) {
 								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
-								that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								let option = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								// 曲线颜色蓝色
+								option.series[0].lineStyle.color = '#0092d4'
+								// label颜色绿色
+								option.series[0].label.color = '#1c8d3b'
+								// 时间颜色红色
+								option.series[0].markLine.label.textStyle.color = 'red'
+								// 不显示日期
+								option.xAxis.axisLabel.show = false
+								that.refinedData.optionOne = option
+								// 将地名字母代号转为中文地名
 								res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
 								that.refinedData.dataOne = res.refinedDatas[i].extrainfo
 							}
@@ -760,79 +791,94 @@
 				this.sndballText = formatDate(now)
 				now = new Date(now.setDate(now.getDate() + 1))
 				this.trdballText = formatDate(now)
-			},
-			// 设置日期球的状态 scrollLeft为滚动距最左边的距离，windowWidth是系统信息屏幕宽度, ballObj为包含一系列bool值的object
-			setDateballStatus(scrollLeft, windowWidth, ballObj) {
-				//开始滚动 scrollLeft为0
-				if (scrollLeft < 45) {
-					// 刚开始滚动 还不足以让第二个球开始动
+            },
+            // 初始化第二三个小球的左距
+            setDateballLeft() {
+                this.trackwidth = this.systemInfo.windowWidth * 90 / 100
+                this.scrollwidth = Math.round(this.trackwidth * 190 / 100) + 1
+                this.sndRightPos = this.trackwidth - 57
+                this.trdRightPos = this.trackwidth - 28
+                this.stageOne = this.trackwidth - 29
+                this.stageTwo = this.scrollwidth - 58
+                this.ballStatusRefinedOne.sndballLeft = this.trackwidth - 57
+                this.ballStatusRefinedOne.trdballLeft = this.trackwidth - 28
+                this.ballStatusRefinedTwo.sndballLeft = this.trackwidth - 57
+                this.ballStatusRefinedTwo.trdballLeft = this.trackwidth - 28
+            },
+			// 设置日期球的状态 scrollLeft为滚动距最左边的距离 ballObj为包含一系列bool值的object
+			setDateballStatus(scrollLeft, ballObj) {
+				// 第二个球
+                if (scrollLeft < 57) {
+                    ballObj.sndballLeft = this.sndRightPos
+                } else if (scrollLeft > this.stageOne) {
+                    ballObj.sndballLeft = 29
+                } else {
+                    ballObj.sndballLeft = this.trackwidth - scrollLeft
+                }
+                // 第三个球
+                if (scrollLeft < this.trackwidth) {
+                    ballObj.trdballLeft = this.trdRightPos
+                } else if (scrollLeft > this.stageTwo) {
+                    ballObj.trdballLeft = 58
+                } else {
+                    ballObj.trdballLeft = this.scrollwidth - scrollLeft
+                }
+                // 颜色 箭头
+                if (scrollLeft < this.stageOne) {
+					// 颜色
 					ballObj.fstballActive = true
-					ballObj.sndballActive = false
+                    ballObj.sndballActive = false
 					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = false
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-					// } else if (scrollLeft < windowWidth * 0.966) {  // 290 360*0.805
-				} else if (scrollLeft < windowWidth * 0.80555) {
-					// 第二个球开始动
-					ballObj.fstballActive = true
-					ballObj.sndballActive = false
-					ballObj.trdballActive = false
-					ballObj.sndballMove = true
-					ballObj.sndballLeft = false
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-					// } else if (scrollLeft < windowWidth * 1.066) {  // 320 360*0.888
-				} else if (scrollLeft < windowWidth * 0.88888) {
-					// 第二个球停在最左边 第三个球还没开始动
+					// 箭头
+					ballObj.chevronLeftShow = false
+                } else if (scrollLeft < this.stageTwo) {
+					// 颜色
 					ballObj.fstballActive = false
-					ballObj.sndballActive = true
+                    ballObj.sndballActive = true
 					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = false
-					// } else if (scrollLeft < windowWidth * 1.166) {  // 350 360*0.972
-				} else if (scrollLeft < windowWidth * 0.97222) {
-					// 第三个球开始动
-					ballObj.fstballActive = false
-					ballObj.sndballActive = true
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = true
-					ballObj.trdballLeft = false
-					// } else if (scrollLeft < windowWidth * 1.9) {    // 570 360*1.583
-				} else if (scrollLeft < windowWidth * 1.58333) {
-					// 第三个球动
-					ballObj.fstballActive = false
-					ballObj.sndballActive = true
-					ballObj.trdballActive = false
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = true
-					ballObj.trdballLeft = false
-				} else {
-					// 第三个球停在最左边
-					ballObj.fstballActive = false
-					ballObj.sndballActive = false
+					// 箭头
+					ballObj.chevronLeftShow = true
+					ballObj.chevronRightShow = true
+                } else {
+					// 颜色
+                    ballObj.fstballActive = false
+                    ballObj.sndballActive = false
 					ballObj.trdballActive = true
-					ballObj.sndballMove = false
-					ballObj.sndballLeft = true
-					ballObj.trdballMove = false
-					ballObj.trdballLeft = true
+					// 箭头
+					ballObj.chevronRightShow = false
 				}
 			},
-			// 精细化图标一滚动事件
+			// 潮汐图表一滚动事件
+			scrollTideOne (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideOneChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideOneChevronLeftShow = true
+					this.tideOneChevronRightShow = true
+				} else {
+					this.tideOneChevronRightShow = false
+				}
+			},
+			// 潮汐图表二滚动事件
+			scrollTideTwo (e) {
+				if (e.detail.scrollLeft < 80) {
+					this.tideTwoChevronLeftShow = false
+				} else if (e.detail.scrollLeft < 540) {
+					this.tideTwoChevronLeftShow = true
+					this.tideTwoChevronRightShow = true
+				} else {
+					this.tideTwoChevronRightShow = false
+				}
+			},
+			// 精细化图表一滚动事件
 			handleScrollRefinedOne(e) {
 				// utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
-				this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedOne)
+				this.setDateballStatus(e.detail.scrollLeft, this.ballStatusRefinedOne)
 			},
 			// 精细化图表二滚动事件
 			handleScrollRefinedTwo(e) {
 				// utils.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth - 60, this.ballStatus)
-				this.setDateballStatus(e.detail.scrollLeft, this.systemInfo.windowWidth, this.ballStatusRefinedTwo)
+				this.setDateballStatus(e.detail.scrollLeft, this.ballStatusRefinedTwo)
 			},
 			// 自定义picker选择
 			mypickerSelect(index, item) {
@@ -911,8 +957,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiOne !== undefined) {
 						if (newVal) {
-							chartWeihaiOne.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiOne.init()
+							// chartWeihaiOne.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiOne.init()
 						}
 					}
 				}
@@ -922,8 +968,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiTwo !== undefined) {
 						if (newVal) {
-							chartWeihaiTwo.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiTwo.init()
+							// chartWeihaiTwo.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiTwo.init()
 						}
 					}
 				}
@@ -933,8 +979,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiThree !== undefined) {
 						if (newVal) {
-							chartWeihaiThree.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiThree.init()
+							// chartWeihaiThree.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiThree.init()
 						}
 					}
 				}
@@ -944,8 +990,8 @@
 				handler (newVal, oldVal) {
 					if (chartWeihaiFour !== undefined) {
 						if (newVal) {
-							chartWeihaiFour.setOption(newVal, true)
-							// this.$refs.echartsRefWeihaiFour.init()
+							// chartWeihaiFour.setOption(newVal, true)
+							this.$refs.echartsRefWeihaiFour.init()
 						}
 					}
 				}
@@ -961,7 +1007,8 @@
 			console.log('cityforecast vue mounted.')
 			this.setTitleDates(this.cityName)
 			// 加载时根据当前日期设置日期球文字
-			this.setDateballText()
+            this.setDateballText()
+            this.setDateballLeft()
 			// 根据index切换城市 允许自动定位 不写入缓存 
 			// this.switchCityByIndex(this.cityIndex)
 			// // 10秒后关闭toast
@@ -984,6 +1031,7 @@
 </script>
 
 <style scoped>
+	@import "../../common/FontAwesome.css";
 	@import "../../common/generic.css";
 
 	.header {
@@ -1028,6 +1076,9 @@
 		display: flex;
 		flex-direction: column;
 	}
+	.chart-container-one {
+		position: relative;
+	}
 
 	/* 潮汐曲线上方的地名 */
 	.chart-title {
@@ -1053,7 +1104,6 @@
 	.chart-refined {
 		width: 290%;
 		height: 250px;
-		/* border: 1px solid #000000; */
 	}
 
 	/* 日期球的外观样式 */
@@ -1061,6 +1111,8 @@
 		display: flex;
 		width: 62px;
 		height: 62px;
+        position: absolute;
+        bottom: 11px;
 		background-color: rgba(148, 148, 148, 0.8);
 		border-radius: 62px;
 		align-items: center;
@@ -1072,64 +1124,6 @@
 		background-color: rgba(0, 148, 255, 0.8);
 	}
 
-	/* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
-	.slideball-Snd {
-		position: relative;
-		top: 10px;
-		left: 96%;
-	}
-
-	/* 第三个球滑动时的定位 */
-	.slideball-Trd {
-		position: relative;
-		top: 10px;
-		left: 188%;
-	}
-
-	/* 第一个球固定时的定位 */
-	.fixball-Fst {
-		position: relative;
-		bottom: 11px;
-		left: 0%;
-	}
-
-	/* 第二个球固定时的定位 */
-	.fixball-Snd {
-		position: relative;
-		bottom: 11px;
-		left: 74%;
-	}
-
-	/* 第二个球固定在左端时的定位 */
-	.fixball-Snd-left {
-		left: 0%;
-	}
-
-	/* 第三个球固定时的定位 */
-	.fixball-Trd {
-		position: relative;
-		bottom: 11px;
-		left: 74%;
-	}
-
-	/* 当第二个球滑动时，第三个球需要调整定位 */
-	.fixball-Trd-lone {
-		left: 82.7%;
-	}
-
-	/* 第三个球固定在左端时的定位 */
-	.fixball-Trd-left {
-		left: 0%;
-	}
-
-	/* 滑动的小球的容器 flex属性能让小球水平排列，height为必须 */
-	.balltrack {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		height: 80px;
-	}
-
 	/* 固定的小球的容器 */
 	.balltrack-fix {
 		width: 100%;
@@ -1137,13 +1131,12 @@
 		flex-direction: row;
 		flex-wrap: nowrap;
 		position: absolute;
-		bottom: 0px;
+		bottom: 0;
 	}
 
 	/* 图表下方显示信息的面板 */
 	.infopanel {
-		position: absolute;
-		top: 260px;
+		position: relative;
 		width: 290%;
 		display: flex;
 		flex-direction: row;
@@ -1200,4 +1193,22 @@
 		flex: 1;
 	}
 
+	/* 潮汐曲线上左右箭头 */
+	.chevron {
+		position: absolute;
+		bottom: 125px;
+		color: #666;
+	}
+	/* 精细化曲线上左右箭头 */
+	.chevron-refined {
+		position: absolute;
+		bottom: 205px;
+		color: #666;
+	}
+	.chevron-right {
+		right: 2.5%;
+	}
+	.chevron-left {
+		left: 2.5%;
+	}
 </style>

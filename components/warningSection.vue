@@ -73,6 +73,7 @@ export default {
     height: 60px;
     position: relative;
     overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.8);
     /* --marqueeWidth--: -12em; */
 }
 .warning-header {
