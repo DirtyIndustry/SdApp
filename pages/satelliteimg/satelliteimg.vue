@@ -64,7 +64,12 @@
         },
         onLoad() {
             this.requestImage(this.data_source)
-        }
+        },
+        onPullDownRefresh() {
+			console.log('[界面]: 卫星云图 下拉刷新')
+            this.requestImage(this.data_source)
+            uni.stopPullDownRefresh()
+		},
     }
 </script>
 

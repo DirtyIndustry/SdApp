@@ -118,7 +118,12 @@
             }
             this.data_source = this.translateCities(this.cityName)
             this.requestImage(this.data_source)
-        }
+        },
+        onPullDownRefresh() {
+			console.log('[界面]: 雷达图 下拉刷新')
+            this.requestImage(this.data_source)
+            uni.stopPullDownRefresh()
+		},
     }
 </script>
 

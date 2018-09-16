@@ -156,19 +156,22 @@
 		{
 			"path": "pages/weatherimg/weatherimg",
 			"style": {
-				"navigationBarTitleText": "天气图"
+				"navigationBarTitleText": "天气图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/satelliteimg/satelliteimg",
 			"style": {
-				"navigationBarTitleText": "卫星云图"
+				"navigationBarTitleText": "卫星云图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/radarimg/radarimg",
 			"style": {
-				"navigationBarTitleText": "雷达图"
+				"navigationBarTitleText": "雷达图",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

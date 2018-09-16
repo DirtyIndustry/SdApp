@@ -115,7 +115,7 @@ export default {
         this.loadFisheryData()
     },
     onPullDownRefresh() {
-        console.log('pull down refresh.')
+        console.log('[界面]: 渔场预报 下拉刷新')
         this.setForecastDate()
         this.loadFisheryData()
         // 关闭提示

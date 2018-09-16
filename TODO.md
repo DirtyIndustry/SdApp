@@ -163,7 +163,8 @@ DONE... weihai sp watch method
 DONE... picswiper page init index  
 DONE... clear storage logic change  
 DONE... show bienvenu page setting  
-map page refresh  
+DONE... map page refresh  
+DONE... image page pull down refresh  
 chart right chevron mark  
 manifest  
 use opacity and position to show and hide blocks  

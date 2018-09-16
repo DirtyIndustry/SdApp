@@ -943,7 +943,7 @@
 			// }.bind(this), 10000)
 		},
 		onPullDownRefresh() {
-			console.log('pull down refresh.')
+			console.log('[界面]: 城市预报 下拉刷新')
 			this.requestData(this.cityName)
 			// // 10秒后关闭提示
 			// setTimeout(function () {
@@ -951,7 +951,6 @@
 			// }.bind(this), 10000)
 		},
 		onNavigationBarButtonTap() {
-			console.log('navibar button tapped.')
 			this.$refs.citypicker.switchDialog()
 		}
 	}
