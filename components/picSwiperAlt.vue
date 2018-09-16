@@ -299,10 +299,10 @@
         justify-content: center;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
         color: #666;
-        background: -webkit-radial-gradient(#fff, #eee, #fff); /* Safari 5.1 - 6.0 */
-        background: -o-radial-gradient#fff, (#eee, #fff); /* Opera 11.6 - 12.0 */
-        background: -moz-radial-gradient(#fff, #eee, #fff); /* Firefox 3.6 - 15 */
-        background: radial-gradient(#fff, #eee, #fff); /* 标准的语法 */
+        background: -webkit-radial-gradient(#fff, rgb(245, 245, 245), #eee); /* Safari 5.1 - 6.0 */
+        background: -o-radial-gradient#fff, (rgb(245, 245, 245), #eee); /* Opera 11.6 - 12.0 */
+        background: -moz-radial-gradient(#fff, rgb(245, 245, 245), #eee); /* Firefox 3.6 - 15 */
+        background: radial-gradient(#fff, rgb(245, 245, 245), #eee); /* 标准的语法 */
     }
     .btn_click {
         box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
