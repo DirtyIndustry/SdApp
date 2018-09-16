@@ -22,6 +22,9 @@
             <view class="speed-up dateball text-mini" :class="{'dateball-active': ballStatus.trdballActive}"
                 :style="{left: ballStatus.trdballLeft + 'px'}">{{trdballText}}</view>
         </view>
+        <!-- 左右指示箭头 -->
+        <view v-if="chevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
+        <view v-if="chevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
     </view>
 </template>
 
@@ -96,7 +99,10 @@
                 sndRightPos: 0,         // 第二个小球的右边位置
                 trdRightPos: 0,         // 第三个小球的右边位置
                 stageOne: 0,            // 第二个小球到达左边
-                stageTwo: 0             // 第三个小球到达左边
+                stageTwo: 0,            // 第三个小球到达左边
+				// 潮汐预报一左右三角箭头显隐
+				chevronLeftShow: false,
+				chevronRightShow: true,
             }
         },
         computed: {
@@ -172,6 +178,15 @@
                     this.ballStatus.sndballActive = false
                     this.ballStatus.trdballActive = true
                 }
+                // 左右箭头
+                if (scrollLeft < this.stageOne) {
+					this.chevronLeftShow = false
+				} else if (scrollLeft < this.stageTwo) {
+					this.chevronLeftShow = true
+					this.chevronRightShow = true
+				} else {
+					this.chevronRightShow = false
+				}
             },
             // 图标滚动事件
             handleScroll(e) {
@@ -188,6 +203,7 @@
 </script>
 
 <style scoped>
+    @import "../common/FontAwesome.css";
     @import "../common/generic.css";
 
     /* 整个组件的容器 */
@@ -267,4 +283,16 @@
         text-align: right;
     }
 
+    /* 潮汐曲线上左右箭头 */
+	.chevron {
+		position: absolute;
+		bottom: 205px;
+		color: #666;
+	}
+	.chevron-right {
+		right: 2.5%;
+	}
+	.chevron-left {
+		left: 2.5%;
+	}
 </style>

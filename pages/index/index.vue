@@ -49,6 +49,7 @@
 							<myChart :option="tideData.optionTideOne" canvasId="tideOne" />
 						</view>
 					</scroll-view>
+					<!-- 左右指示箭头 -->
 					<view v-if="tideOneChevronRightShow" class="chevron chevron-right fa fa-chevron-right" />
 					<view v-if="tideOneChevronLeftShow" class="chevron chevron-left fa fa-chevron-left" />
 				</view>
