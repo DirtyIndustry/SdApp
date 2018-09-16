@@ -178,9 +178,6 @@
 			"style": {
 				"navigationBarTitleText": "关于"
 			}
-		},
-		{
-			"path": "pages/homepage/homepage"
 		}
 	],
 	"globalStyle": {

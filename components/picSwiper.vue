@@ -51,17 +51,23 @@
             // 起始状态展示第几张图片
             startIndex: {
                 type: Number,
-                default: 0
+                default () {
+                    return 0
+                }
             },
             // 自动播放
             autoStart: {
                 type: Boolean,
-                default: false
+                default () {
+                    return false
+                }
             },
             // 播放间隔
             interval: {
                 type: Number,
-                default: 2000
+                default () {
+                    return 2000
+                }
             }
         },
         data() {
@@ -90,7 +96,7 @@
             imgArray: {
                 handler (newVal, oldVal) {
                     if (newVal) {
-                        this.imgindex = 0
+                        this.imgindex = this.startIndex > newVal.length - 1 ? 0 : this.startIndex
                     }
                 }
             },

@@ -85,9 +85,9 @@
             }
         },
         "splashscreen": {
-            "waiting": true,
+            "waiting": false,
             "autoclose": true,
-            "delay": 4
+            "delay": 4000
         }
     },
     /* SDK配置 */

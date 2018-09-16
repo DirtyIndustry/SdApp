@@ -1,7 +1,7 @@
 <template>
     <view class="wrap" @tap="pageTap">
         <view style="height: 40px;"></view>
-        <view class="choose_source" @tap="showModel">
+        <view class="choose_source">
             <picker @change="source_change" :value="cityIndex" :range="sourceArray">
                 <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
                 <text class="text text-blue">{{sourceArray[cityIndex]}}&nbsp;&nbsp;</text>
@@ -59,14 +59,16 @@
                             return false
                         }
                         let dataarr = JSON.parse(res.data.d)
-                        // 清空现在的数组
-                        that.imageArray.length = 0
-                        that.dateArray.length = 0
                         // 将返回数据填入数组
+                        let imgarr = []
+                        let datearr = []
                         for (let i = 0; i < dataarr.length; i++) {
-                            that.imageArray.push(dataarr[i].url)
-                            that.dateArray.push(dataarr[i].title)
+                            imgarr.push(dataarr[i].url)
+                            datearr.push(dataarr[i].title)
                         }
+                        that.startIndex = dataarr.length - 1
+                        that.imageArray = imgarr
+                        that.dateArray = datearr
                     }
                 })
             }, // end-requestImage()

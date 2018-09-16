@@ -1,12 +1,9 @@
 <template>
     <view class="wrap" @tap="pageTap">
         <view style="height: 40px;"></view>
-        <view class="choose_source" @tap="showModel">
-            <picker @change="source_change" v-model="cityIndex" :range="sourceArray">
-                <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
-                <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
-                <text class="text text-blue fa fa-angle-down"></text>
-            </picker>
+        <view class="choose_source">
+            <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
+            <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
         </view>
         <view class="separator"></view>
         <picSwiper :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
@@ -26,7 +23,6 @@
             return {
                 cityIndex: 0,
                 data_source: '中国气象网',
-                sourceArray: ['中国气象网'],
                 imageArray: [],
                 dateArray: [],
                 startIndex: 0,
@@ -34,17 +30,6 @@
             }
         },
         methods: {
-            //切换数据源
-            source_change(e) {
-                // this.data_source = this.sourceArray[e.detail.value]
-                switch (e.detail.value) {
-                    case 0:
-                        that.data_source = '中国'
-                        break
-                    default:break
-                }
-                this.requestImage(this.data_source)
-            },
             // 向服务器请求图片
             requestImage(source) {
                 let that = this
@@ -59,14 +44,16 @@
                             return false
                         }
                         let dataarr = JSON.parse(res.data.d)
-                        // 清空现在的数组
-                        that.imageArray.length = 0
-                        that.dateArray.length = 0
+                        let imgarr = []
+                        let datearr = []
                         // 将返回数据填入数组
                         for (let i = 0; i < dataarr.length; i++) {
-                            that.imageArray.push(dataarr[i].url)
-                            that.dateArray.push(dataarr[i].title)
+                            imgarr.push(dataarr[i].url)
+                            datearr.push(dataarr[i].title)
                         }
+                        that.startIndex = dataarr.length - 1
+                        that.imageArray = imgarr
+                        that.dateArray = datearr
                     }
                 })
             }, // end-requestImage()

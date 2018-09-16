@@ -105,11 +105,9 @@
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	import myChart from '../../components/myChart.vue'
-	import weatherSection from '../../components/weatherSection.vue'
 	import realtimeWeather from '../../components/realtimeWeather.vue'
 	import warningSection from '../../components/warningSection.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
-	import inshoreTable from '../../components/inshoreTable.vue'
 	import inshoreTableNew from '../../components/inshoreTableNew.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import refinedChart from '../../components/refinedChart.vue'
@@ -120,11 +118,9 @@
 	export default {
 		components: {
 			myChart,
-			weatherSection,
 			realtimeWeather,
 			warningSection,
 			fivedayForcast,
-			inshoreTable,
 			inshoreTableNew,
 			bathsTable,
 			refinedChart,

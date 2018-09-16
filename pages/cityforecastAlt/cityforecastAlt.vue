@@ -224,7 +224,6 @@
 <script>
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
-	import inshoreTable from '../../components/inshoreTable.vue'
 	import bathsTable from '../../components/bathsTable.vue'
 	import myPicker from '../../components/myPicker.vue'
 	import tableTitle from '../../components/tableTitle.vue'
@@ -243,7 +242,6 @@
 
 	export default {
 		components: {
-			inshoreTable,
 			bathsTable,
 			myPicker,
 			tableTitle,

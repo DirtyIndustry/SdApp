@@ -53,14 +53,15 @@
 							return false
 						}
 						let dataarr = JSON.parse(res.data.d)
-						// 清空现在的数组
-						that.imageArray.length = 0
-						that.dateArray.length = 0
 						// 将返回数据填入数组
+						let imgarr = []
+						let datearr = []
 						for (let i = 0; i < dataarr.length; i++) {
-							that.imageArray.push(dataarr[i].url)
-							that.dateArray.push(dataarr[i].title)
+							imgarr.push(dataarr[i].url)
+							datearr.push(dataarr[i].title)
 						}
+						that.imageArray = imgarr
+						that.dateArray = datearr
 					}
 				})
 			}, // end-requestImage()

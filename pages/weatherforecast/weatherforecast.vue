@@ -64,7 +64,6 @@
 <script>
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
-	import weatherSection from '../../components/weatherSection.vue'
 	import realtimeWeather from '../../components/realtimeWeather.vue'
 	import myPicker from '../../components/myPicker.vue'
 	import * as echarts from 'echarts'
@@ -74,7 +73,6 @@
 
 	export default {
 		components: {
-			weatherSection,
 			realtimeWeather,
 			myPicker,
 			mpvueEcharts
