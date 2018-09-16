@@ -162,7 +162,7 @@ DONE... slide ball
 DONE... weihai sp watch method  
 DONE... picswiper page init index  
 DONE... clear storage logic change  
-show bienvenu page setting  
+DONE... show bienvenu page setting  
 map page refresh  
 chart right chevron mark  
 manifest  

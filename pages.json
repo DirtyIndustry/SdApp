@@ -36,7 +36,19 @@
 		{
 			"path": "pages/map/map",
 			"style": {
-				"navigationBarTitleText": "地图"
+				"navigationBarTitleText": "地图",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf01e",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "16px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
@@ -126,7 +138,19 @@
 		{
 			"path": "pages/typhoonmap/typhoonmap",
 			"style": {
-				"navigationBarTitleText": "台风路径"
+				"navigationBarTitleText": "台风路径",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+							{
+								"text": "\uf01e",
+								"fontSrc": "/static/fontawesome-webfont.ttf",
+								"fontSize": "16px",
+								"color": "#ffffff"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
