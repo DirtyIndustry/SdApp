@@ -239,7 +239,7 @@
 									that.tideData.optionTideOne = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
 								} else {
 									let optiontwo = utils.getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
-									optiontwo.series[0].lineStyle.color = "#0092d4"
+									optiontwo.series[0].lineStyle.color = '#0092d4'
 									that.tideData.optionTideTwo = optiontwo
 								}
 							}
@@ -280,13 +280,22 @@
 							for (let i = 0; i < res.refinedDatas.length; i++) {
 								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
+								let option = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								// 曲线颜色蓝色
+								option.series[0].lineStyle.color = '#0092d4'
+								// label颜色绿色
+								option.series[0].label.color = '#1c8d3b'
+								// 时间颜色红色
+								option.series[0].markLine.label.textStyle.color = 'red'
+								// 不显示日期
+								option.xAxis.axisLabel.show = false
+								// 将地名字母代号转为中文地名
+								res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
 								if (res.refinedDatas[i].tideinfo.location === 'DJKP') {
-									that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-									res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
+									that.refinedData.optionOne = option
 									that.refinedData.dataOne = res.refinedDatas[i].extrainfo
 								} else {
-									that.refinedData.optionTwo = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
-									res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
+									that.refinedData.optionTwo = option
 									that.refinedData.dataTwo = res.refinedDatas[i].extrainfo
 								}
 							}
@@ -295,7 +304,17 @@
 							for (let i = 0; i < res.refinedDatas.length; i++) {
 								let tide = utils.buildTidedata(res.refinedDatas[i].tideinfo.tidedata)
 								let mark = utils.buildMarkdata(res.refinedDatas[i].tideinfo.markdata)
-								that.refinedData.optionOne = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								let option = utils.getAstroOptionNew(tide, mark, res.refinedDatas[i].tideinfo.max, res.refinedDatas[i].tideinfo.min)
+								// 曲线颜色蓝色
+								option.series[0].lineStyle.color = '#0092d4'
+								// label颜色绿色
+								option.series[0].label.color = '#1c8d3b'
+								// 时间颜色红色
+								option.series[0].markLine.label.textStyle.color = 'red'
+								// 不显示日期
+								option.xAxis.axisLabel.show = false
+								that.refinedData.optionOne = option
+								// 将地名字母代号转为中文地名
 								res.refinedDatas[i].extrainfo[0].loc = utils.getLocName(res.refinedDatas[i].extrainfo[0].loc)
 								that.refinedData.dataOne = res.refinedDatas[i].extrainfo
 							}
@@ -366,10 +385,6 @@
 					}, // success-request
 					fail: function (res) {
 						console.log('[服务器]: 请求 山东预报数据 失败')
-						that.completedRequestCount++
-					},
-					complete: function (res) {
-						that.completedRequestCount++
 					}
 				})
 			},

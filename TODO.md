@@ -165,7 +165,9 @@ DONE... clear storage logic change
 DONE... show bienvenu page setting  
 DONE... map page refresh  
 DONE... image page pull down refresh  
-chart right chevron mark  
+DONE... chart right chevron mark  
+DONE... refined chart line label and time color  
+move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
 weather webservice deal with daily limit response  
