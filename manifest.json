@@ -2,7 +2,7 @@
    "name" : "SdApp",
    "appid" : "__UNI__D13F51F",
    "description" : "",
-   "versionName" : "1.0.0",
+   "versionName" : "0.4.1",
    "versionCode" : "100",
    "app-plus" : {
         /* 5+App特有相关 */
@@ -87,7 +87,7 @@
         "splashscreen": {
             "waiting": false,
             "autoclose": true,
-            "delay": 4000
+            "delay": 5000
         }
     },
     /* SDK配置 */
