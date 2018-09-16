@@ -167,6 +167,8 @@ DONE... map page refresh
 DONE... image page pull down refresh  
 DONE... chart right chevron mark  
 DONE... refined chart line label and time color  
+DONE... contact us email address placeholder  
+picswiper button change to font icon  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  

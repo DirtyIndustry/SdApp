@@ -8,7 +8,7 @@
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 联系方式 -->
-            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系方式（推荐使用邮箱）" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
+            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 留言内容 -->
