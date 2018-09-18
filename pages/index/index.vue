@@ -261,7 +261,7 @@
 							return false
 						}
 						let resdata = JSON.parse(res.data.d)
-						if (resdata.Typhoon !== {}) {
+						if (resdata.Typhoon.NUMBER !== '') {
 							console.log('[服务器]: 有台风警报')
 							let nowdate = new Date()
 							that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
