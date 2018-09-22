@@ -16,14 +16,31 @@
         <!-- 播放控制按钮 -->
         <view class="btn_panel" :class="{ btn_panel_hide: isButtonHide }">
             <view class="btn_box">
-                <view class="button prev" :class="{btn_click: prevbtnclick}" @tap="prev">
-                    <view class="prev-icon fa fa-backward" />
+                <view class="btn_cell">
+                    <view class="button prev" hover-class="btn_click" hover-stay-time="300" @tap="prev">
+                        <view class="prev-icon fa fa-backward" />
+                    </view>
                 </view>
-                <view class="button play_stop" :class="{btn_click: playbtnclick}" @tap="play_pause">
-                    <view class="fa" :class="{'play-icon fa-play': !isPlaying, 'fa-pause': isPlaying}" />
+                <view class="btn_cell">
+                    <view class="button play_stop" hover-class="btn_click" hover-stay-time="300" @tap="play_pause">
+                        <view class="fa" :class="{'play-icon fa-play': !isPlaying, 'fa-pause': isPlaying}" />
+                    </view>
                 </view>
-                <view class="button next" :class="{btn_click: nextbtnclick}" @tap="next">
-                    <view class="next-icon fa fa-forward" />
+                <view class="btn_cell">
+                    <view class="button next" hover-class="btn_click" hover-stay-time="300" @tap="next">
+                        <view class="next-icon fa fa-forward" />
+                    </view>
+                </view>
+            </view>
+            <view class="btn_back_box">
+                <view class="btn_cell">
+                    <view class="button_bowl prev_bowl" />
+                </view>
+                <view class="btn_cell">
+                    <view class="button_bowl play_stop_bowl" />
+                </view>
+                <view class="btn_cell">
+                    <view class="button_bowl next_bowl" />
                 </view>
             </view>
         </view>
@@ -76,11 +93,8 @@
                 imgindex: 0,
                 isPlaying: false,
                 isButtonHide: false,
-                viewHeight: '538px',
-                btnTimer: undefined,
-                playbtnclick: false,
-                nextbtnclick: false,
-                prevbtnclick: false
+                viewHeight: '538upx',
+                btnTimer: undefined
             }
         },
         computed: {
@@ -140,13 +154,6 @@
                 } else {
                     this.isPlaying = true
                 }
-                if (this.playbtnclick !== true) {
-                    this.playbtnclick = true
-                    let timer = setTimeout(function () {
-                        clearTimeout(timer)
-                        this.playbtnclick = false
-                    }.bind(this), 80)
-                }
             },
             // 上一张
             prev() {
@@ -157,13 +164,6 @@
                         this.imgindex--
                     }
                     this.initTitle()
-                    if (this.prevbtnclick !== true) {
-                        this.prevbtnclick = true
-                        let timer = setTimeout(function () {
-                            clearTimeout(timer)
-                            this.prevbtnclick = false
-                        }.bind(this), 80)
-                    }
                 }
             },
             // 下一张
@@ -175,13 +175,6 @@
                         this.imgindex = 0
                     }
                     this.initTitle()
-                    if (this.nextbtnclick !== true) {
-                        this.nextbtnclick = true
-                        let timer = setTimeout(function () {
-                            clearTimeout(timer)
-                            this.nextbtnclick = false
-                        }.bind(this), 80)
-                    }
                 }
             },
             // 初始化图片标题
@@ -208,13 +201,13 @@
                 let that = this
                 this.isButtonHide = false
                 if (this.btnTimer !== undefined) {
-                    clearInterval(this.btnTimer)
+                    clearTimeout(this.btnTimer)
                     this.btnTimer = undefined
                 }
                 this.btnTimer = setTimeout(function(){
                     that.isButtonHide = true
                     that.btnTimer = undefined
-                }, 6000)
+                }, 10000)
             },
             // 图片点击
             picTap () {
@@ -231,6 +224,10 @@
             this.isPlaying = this.autoStart
             this.initTitle()
             this.timerStart()
+        },
+        onUnload () {
+            clearTimeout(this.btnTimer)
+            this.btnTimer = null
         }
     }
 </script>
@@ -244,8 +241,8 @@
     
     .pic_title {
         width: 100%;
-        height: 80px;
-        font-size: 28px;
+        height: 80upx;
+        font-size: 28upx;
         color: #333;
         display: flex;
         align-items: center;
@@ -260,15 +257,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 28px;
-        margin: 20px 0;
+        font-size: 28upx;
+        margin: 20upx 0;
     }
 
     .btn_panel {
         position: absolute;
-        bottom: 80px;
+        bottom: 80upx;
         width: 100%;
-        height: 200px;
+        height: 200upx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -278,67 +275,95 @@
     .btn_panel_hide {
         transition: opacity 2s ease, bottom 0s ease 2s, position 0s ease 2s;
         opacity: 0;
-        bottom: -200px;
+        bottom: -200upx;
         position: fixed;
     }
 
     .btn_box {
-        /* border: 1px solid #000; */
         width: 70%;
         left: 15%;
-        bottom: 160px;
-        height: 200px;
+        height: 200upx;
+        display: flex;
+        flex-direction: row;
+    }
+    .btn_cell {
+        flex: 1;
+        height: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: center;
     }
-
     .button {
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
-        color: #666;
-        background: -webkit-radial-gradient(#fff, rgb(245, 245, 245), #eee); /* Safari 5.1 - 6.0 */
-        background: -o-radial-gradient#fff, (rgb(245, 245, 245), #eee); /* Opera 11.6 - 12.0 */
-        background: -moz-radial-gradient(#fff, rgb(245, 245, 245), #eee); /* Firefox 3.6 - 15 */
-        background: radial-gradient(#fff, rgb(245, 245, 245), #eee); /* 标准的语法 */
+        box-shadow: 0 3upx 8upx #aaa, inset 0 2upx 3upx #fff;
+        background-color: #f7f7f7;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
+        background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7); 
+        background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7); 
+        background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7); 
+        background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7); 
+        color: #a7a7a7;
+        z-index: 4;
     }
     .btn_click {
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
-        background: -webkit-radial-gradient(#fff, #ddd, #ccc); /* Safari 5.1 - 6.0 */
-        background: -o-radial-gradient#fff, (#ddd, #ccc); /* Opera 11.6 - 12.0 */
-        background: -moz-radial-gradient(#fff, #ddd, #ccc); /* Firefox 3.6 - 15 */
-        background: radial-gradient(#fff, #ddd, #ccc); /* 标准的语法 */
+        box-shadow: 0 1upx 3upx #aaa, inset 0 1upx 3upx #fff;
+        color: #555;
+        background: #f5f5f5;
+        text-decoration: none;
     }
     .prev,
     .next {
-        /* border: 1px solid #f00; */
-        border-radius: 55px;
-        width: 110px;
-        height: 110px;
-        font-size: 38px;
+        border-radius: 55upx;
+        width: 110upx;
+        height: 110upx;
+        font-size: 38upx;
     }
 
     .play_stop {
-        /* border: 1px solid #0f0; */
-        border-radius: 70px;
-        width: 140px;
-        height: 140px;
-        font-size: 55px;
+        border-radius: 70upx;
+        width: 140upx;
+        height: 140upx;
+        font-size: 55upx;
     }
-
+    
+    .btn_back_box {
+        position: absolute;
+        width: 70%;
+        left: 15%;
+        bottom: 0;
+        height: 200upx;
+        display: flex;
+        flex-direction: row;
+    }
+    .button_bowl {
+        background: #fff;
+        border-top: 2px solid #ddd;
+        z-index: 0;
+        border-radius: 50%;
+        box-shadow: inset 0px 8px 48px #ddd;
+    }
+    .prev_bowl,
+    .next_bowl {
+        width: 140upx;
+        height: 140upx;
+    }
+    .play_stop_bowl {
+        width: 170upx;
+        height: 170upx;
+    }
     .prev-icon {
         position: relative;
-        right: 5px;
+        right: 5upx;
     }
     .next-icon {
         position: relative;
-        left: 5px;
+        left: 5upx;
     }
     .play-icon {
         position: relative;
-        left: 5px;
+        left: 5upx;
     }
 
     .imgswiper {
