@@ -371,11 +371,6 @@
 				this.cityIndex = e.target.value
 				utils.storeToLocal('cityindex', e.target.value)
 				this.switchCityByIndex(e.target.value)
-
-				// // 10秒后关闭toast
-				// setTimeout(function () {
-				// 	uni.hideLoading()
-				// }.bind(this), 10000)
 			},
 			// 根据index切换城市 允许自动定位 不写入缓存
 			switchCityByIndex(index) {
@@ -845,11 +840,6 @@
 				this.cityIndex = index
 				utils.storeToLocal('cityindex', index)
 				this.switchCityByIndex(index)
-
-				// // 10秒后关闭toast
-				// setTimeout(function () {
-				// 	uni.hideLoading()
-				// }.bind(this), 10000)
 			}
 		}, // end-methods
 		watch: {
@@ -962,20 +952,10 @@
 			this.setTitleDates(this.cityName)
 			// 加载时根据当前日期设置日期球文字
 			this.setDateballText()
-			// 根据index切换城市 允许自动定位 不写入缓存 
-			// this.switchCityByIndex(this.cityIndex)
-			// // 10秒后关闭toast
-			// setTimeout(function () {
-			// 	uni.hideLoading()
-			// }.bind(this), 10000)
 		},
 		onPullDownRefresh() {
 			console.log('[界面]: 城市预报 下拉刷新')
 			this.requestData(this.cityName)
-			// // 10秒后关闭提示
-			// setTimeout(function () {
-			// 	uni.stopPullDownRefresh()
-			// }.bind(this), 10000)
 		},
 		onNavigationBarButtonTap() {
 			this.$refs.citypicker.switchDialog()

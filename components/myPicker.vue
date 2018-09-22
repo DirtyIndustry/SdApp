@@ -31,7 +31,8 @@
                 panelshow: false,
                 maskopacity: 0,
                 paneltop: '100%',
-                panelopacity: 0
+                panelopacity: 0,
+                timerlist: []
             }
         },
         watch: {
@@ -45,6 +46,7 @@
                             this.panelopacity = 100
                             this.maskopacity = 100
                         }.bind(this), 0)
+                        this.timerlist.push(timer)
                     } else {
                         this.panelopacity = 0
                         this.maskopacity = 0
@@ -53,6 +55,7 @@
                             this.paneltop = '100%'
                             this.panelshow = false
                         }.bind(this), 300)
+                        this.timerlist.push(timer)
                     }
                 }
             }
@@ -77,6 +80,13 @@
                     clearTimeout(timer)
                     this.$emit('itemSelected', index, item)
                 }.bind(this), 300)
+                this.timerlist.push(timer)
+            }
+        },
+        onUnload () {
+            for (let i = 0; i < this.timerlist.length; i++) {
+                clearTimeout(this.timerlist[i])
+                this.timerlist[i] = null
             }
         }
     }

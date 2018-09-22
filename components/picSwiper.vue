@@ -207,6 +207,10 @@
             this.isPlaying = this.autoStart
             this.initTitle()
             this.timerStart()
+        },
+        onUnload () {
+            clearTimeout(this.btnTimer)
+            this.btnTimer = null
         }
     }
 </script>

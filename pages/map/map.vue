@@ -11,7 +11,8 @@
 	export default {
 		data () {
 			return {
-				url: 'http://123.234.129.237:8002/SdForecast/MapSec/Map.html'
+				url: 'http://123.234.129.237:8002/SdForecast/MapSec/Map.html',
+				timerlist: []
 			}
 		},
 		methods: {
@@ -21,11 +22,18 @@
 					this.url = 'http://123.234.129.237:8002/SdForecast/MapSec/Map.html'
 					clearTimeout(timer)
 				}.bind(this), 100)
+				this.timerlist.push(timer)
 			}
 		},
 		onNavigationBarButtonTap () {
 			this.refresh()
-		}
+		},
+		onUnload () {
+            for (let i = 0; i < this.timerlist.length; i++) {
+                clearTimeout(this.timerlist[i])
+                this.timerlist[i] = null
+            }
+        }
 	}
 </script>
 

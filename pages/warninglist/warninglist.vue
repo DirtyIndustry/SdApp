@@ -37,7 +37,8 @@ export default {
             listRightLeft: '200%',
             listLeftShow: true,     // tab页是否显示
             listMiddleShow: false,
-            listRightShow: false
+            listRightShow: false,
+            timerlist: []
         }
     },
     computed: {
@@ -178,6 +179,7 @@ export default {
                 this.listMiddleShow = false
                 this.listRightShow = false
             }.bind(this), 520)
+            this.timerlist.push(timer)
         },
         // 显示中tab页
         showMiddleTab () {
@@ -195,6 +197,7 @@ export default {
                 this.listLeftShow = false
                 this.listRightShow = false
             }.bind(this), 520)
+            this.timerlist.push(timer)
         },
         // 显示右tab页
         showRightTab () {
@@ -211,6 +214,7 @@ export default {
                 this.listLeftShow = false
                 this.listMiddleShow = false
             }.bind(this), 520)
+            this.timerlist.push(timer)
         },
         // 根据警报名称判断警报类型
         getType (name) {
@@ -254,17 +258,15 @@ export default {
             mask: true
         })
         this.requestWarning()
-        // // 10秒后关闭toast
-        // setTimeout(function () {
-        //     uni.hideLoading()
-        // }.bind(this), 10000)
+    },
+    onUnload () {
+        for (let i = 0; i < this.timerlist.length; i++) {
+            clearTimeout(this.timerlist[i])
+            this.timerlist[i] = null
+        }
     },
     onPullDownRefresh() {
         this.requestWarning()
-        // // 10秒后关闭提示
-        // setTimeout(function () {
-        //     uni.stopPullDownRefresh()
-        // }.bind(this), 10000)
     }
 }
 </script>

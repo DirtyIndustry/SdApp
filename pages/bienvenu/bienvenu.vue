@@ -24,7 +24,8 @@ import utils from '../../utils/utils.js'
 export default {
     data () {
         return {
-            containeropacity: 100
+            containeropacity: 100,
+            timerlist: []
         }
     },
     methods: {
@@ -36,6 +37,7 @@ export default {
                 clearTimeout(timer)
                 this.gotoIndex()
             }.bind(this), 200)
+            this.timerlist.push(timer)
             // this.gotoIndex()
         },
         // 跳过按钮点击
@@ -47,6 +49,7 @@ export default {
                 clearTimeout(timer)
                 this.gotoIndex()
             }.bind(this), 200)
+            this.timerlist.push(timer)
             // this.gotoIndex()
         },
         // 检查是否跳过欢迎页
@@ -81,6 +84,12 @@ export default {
     onReady () {
         console.log('bienvenu page ready.')
         this.checkSkip()
+    },
+    onUnload () {
+        for (let i = 0; i < this.timerlist.length; i++) {
+            clearTimeout(this.timerlist[i])
+            this.timerlist[i] = null
+        }
     }
 }
 </script>
