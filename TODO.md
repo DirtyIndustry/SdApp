@@ -180,6 +180,7 @@ DONE... myPicker add hover-class
 DONE... change echarts  
 DONE... clean timer when page unload  
 DONE... myPicker, menu, setting and about page stop scroll  
+DONE... ocean forecast page auto adjust font-size  
 index page show inshore table date correctly after change city in other page  
 move bienvenu to index page  
 manifest  
