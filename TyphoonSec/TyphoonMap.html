@@ -309,6 +309,14 @@
             z-index: 10;
         }
 
+        /* 硬件加速 */
+        .speed-up {
+            -webkit-transform: translateZ(0);
+            -moz-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            -o-transform: translateZ(0);
+            transform: translateZ(0);
+        }
     </style>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
 
@@ -330,7 +338,7 @@
         <img class="img-icon" src="./Images/searchButton.png" alt="搜索">
     </div>
     <!-- 搜索条 -->
-    <div class="floatcontrol floatcontrol-panel searchstrip" id="searchstrip">
+    <div class="floatcontrol floatcontrol-panel searchstrip speed-up" id="searchstrip">
 
         <div class="searchcancel font-icon" onclick="javascript: switchSearch()">&#61701</div>
         <div class="searchinputpanel">
@@ -342,7 +350,7 @@
         <!-- <div class="searchconfirm">&#61442</div> -->
     </div>
     <!-- 搜索结果面板 -->
-    <div class="floatcontrol floatcontrol-panel searchresult-panel" id="resultpanel">
+    <div class="floatcontrol floatcontrol-panel searchresult-panel speed-up" id="resultpanel">
         <div class="searchresult-row" id="resulthead">
             <div class="searchresult-column text">编号</div>
             <div class="searchresult-column text">中文名</div>
@@ -383,7 +391,7 @@
     </div>
 
     <!-- 图例面板 -->
-    <div id="volet" class="floatcontrol-panel">
+    <div id="volet" class="floatcontrol-panel speed-up">
         <img class="img-icon" src="./Images/legend.png" alt="图例">
     </div>
 
