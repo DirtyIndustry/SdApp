@@ -62,6 +62,7 @@ export default {
                     if (res.data === true) {
                         // 跳往首页
                         // setTimeout(function () {
+                            console.log('[界面]: 跳转至首页')
                             that.gotoIndex()
                         // }.bind(that), 100)
                     }
