@@ -219,14 +219,8 @@
 						that.inshoreData = res.inshoreData
 
 						// 浴场预报
-						// 判断月份和城市
-						if (new Date().getMonth() > 5 & new Date().getMonth() < 9 & cityname === '青岛') {
-							that.bathsData.showBaths = true
-						} else {
-							that.bathsData.showBaths = false
-						}
 						// 写入Vuex
-						that.bathsData.data = res.bathsDatas
+						that.bathsData = res.bathsData
 
 						// 精细化预报
 						// 判断城市

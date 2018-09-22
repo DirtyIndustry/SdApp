@@ -1,5 +1,5 @@
 <template>
-    <view v-show="showBaths">
+    <view>
         <view class="separator" />
         <view class="uni-flex uni-column table-body">
             <view class="uni-flex uni-row baths-row" :class="{'baths-row-top': index == 0}" v-for="(item, index) in bathsData" :key="index">
@@ -26,10 +26,6 @@ export default {
                 WaterTemp: '',
                 Swimming: ''
             }]
-        },
-        showBaths: {
-            type: Boolean,
-            default: true
         }
     }
 }

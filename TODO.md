@@ -183,7 +183,12 @@ DONE... myPicker, menu, setting and about page stop scroll
 DONE... ocean forecast page auto adjust font-size  
 DONE... change inshore and baths models in vuex  
 DONE... change weihai SP chart grid  
-index page show inshore table date correctly after change city in other page  
+DONE... apply inshore and baths in App.vue  
+DONE... apply inshore and baths in index page  
+DONE... apply inshore and baths in components  
+DONE... apply inshore and baths in city forecast page  
+DONE... apply inshore and baths in weather forecast page  
+DONE... index page show inshore table date correctly after change city in other page  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
