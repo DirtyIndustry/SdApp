@@ -175,6 +175,7 @@ DONE... update picSwiper
 DONE... update flowTabbar  
 DONE... map page show/hide markers when map zooming  
 DONE... map and typhoon map change var  
+DONE... change image page interval time  
 index page show inshore table date correctly after change city in other page  
 move bienvenu to index page  
 manifest  

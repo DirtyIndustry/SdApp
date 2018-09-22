@@ -6,7 +6,7 @@
             <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
         </view>
         <view class="separator"></view>
-        <picSwiperAlt :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="3000"
+        <picSwiperAlt :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="1500"
             ref="picswiper"></picSwiperAlt>
     </view>
 </template>
