@@ -66,8 +66,8 @@
 	import utils from '../../utils/utils.js'
 	import realtimeWeather from '../../components/realtimeWeather.vue'
 	import myPicker from '../../components/myPicker.vue'
-	import * as echarts from 'echarts'
-	import mpvueEcharts from 'mpvue-echarts'
+	import * as echarts from '../../components/echarts/echarts.common.min.js'
+	import mpvueEcharts from '../../components/mpvue-echarts/src/echarts.vue'
 
 	let chartFiveday
 

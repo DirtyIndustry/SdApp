@@ -242,8 +242,8 @@
 	import myPicker from '../../components/myPicker.vue'
 	import tableTitle from '../../components/tableTitle.vue'
 	import inshoreTableNew from '../../components/inshoreTableNew.vue'
-	import * as echarts from 'echarts'
-	import mpvueEcharts from 'mpvue-echarts'
+	import * as echarts from '../../components/echarts/echarts.common.min.js'
+	import mpvueEcharts from '../../components/mpvue-echarts/src/echarts.vue'
 
 	let chartTideOne = undefined
 	let chartTideTwo = undefined

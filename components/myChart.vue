@@ -5,8 +5,8 @@
 </template>
 
 <script>
-	import * as echarts from 'echarts'
-	import mpvueEcharts from 'mpvue-echarts'
+	import * as echarts from './echarts/echarts.common.min.js'
+	import mpvueEcharts from './mpvue-echarts/src/echarts.vue'
 
 	let chart
 
