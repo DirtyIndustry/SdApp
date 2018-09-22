@@ -194,10 +194,10 @@ DONE... change image pages background color
 DONE... bienvenu page console message  
 DONE... menu page change button to view with hover-class  
 DONE... menu page add background image  
+DONE... weather webservice deal with daily limit response  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
-weather webservice deal with daily limit response  
 responsive ui  
 separate bis logic and general modules  
 修改返回值不为JSON的接口  
