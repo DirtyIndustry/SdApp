@@ -108,7 +108,11 @@ export default {
             // console.log(this.systemInfo.system)
             // console.log(this.systemInfo.platform)
             if (this.systemInfo.platform === 'android') {
-                this.rightTabbarRight = '1upx'
+                if (this.sideButtonWidth + this.sideButtonWidth + this.midButtonWidth < this.systemInfo.windowWidth) {
+                    this.rightTabbarRight = '2px'
+                } else {
+                    this.rightTabbarRight = '1px'
+                }
             } else {
                 this.rightTabbarRight = '0'
             }
