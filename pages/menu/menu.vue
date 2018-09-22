@@ -5,91 +5,91 @@
             <view class="menu-row">
                 <!-- 第一行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="cityforeTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="cityforeTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/city_img.png" />
                         <view class="text-large text-blue">城市预报</view>
-                    </button>
+                    </view>
                 </view>
                 <!-- 第一行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="warninglistTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="warninglistTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Warning_img.png" />
                         <view class="text-large text-blue">预警报</view>
-                    </button>
+                    </view>
                 </view>
             </view>
             <!-- 第二行 -->
             <view class="menu-row">
                 <!-- 第二行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="fisheryTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="fisheryTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
                         <view class="text-large text-blue">渔场预报</view>
-                    </button>
+                    </view>
                 </view>
                 <!-- 第二行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="trendTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="trendTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/trendPrediction_img.png" />
                         <view class="text-large text-blue">趋势预测</view>
-                    </button>
+                    </view>
                 </view>
             </view>
             <!-- 第三行 -->
             <view class="menu-row">
                 <!-- 第三行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="weatherTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
                         <view class="text-large text-blue">天气预报</view>
-                    </button>
+                    </view>
                 </view>
                 <!-- 第三行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="weatherimgTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
                         <view class="text-large text-blue">天气图</view>
-                    </button>
+                    </view>
                 </view>
             </view>
             <!-- 第四行 -->
             <view class="menu-row">
                 <!-- 第四行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="satelliteimgTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="satelliteimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/SatelliteCloudMap_img.png" />
                         <view class="text-large text-blue">卫星云图</view>
-                    </button>
+                    </view>
                 </view>
                 <!-- 第四行右 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="radarimgTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="radarimgTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/RadarMap_img.png" />
                         <view class="text-large text-blue">雷达图</view>
-                    </button>
+                    </view>
                 </view>
             </view>
             <!-- 第五行 -->
             <view class="menu-row">
                 <!-- 第五行左 -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="typhoonpathTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="typhoonpathTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
                         <view class="text-large text-blue">台风路径</view>
-                    </button>
+                    </view>
                 </view>
                 <!-- 第五行右 -->
                 <!-- <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="newscenterTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="newscenterTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/news_img.png" />
                         <view class="text-large text-blue">新闻中心</view>
-                    </button>
+                    </view>
                 </view> -->
                 <view class="menu-cell menu-column">
-                    <button class="menu-button" type="default" @tap="oceanforecastTap">
+                    <view class="menu-button" hover-class="hover" type="default" @tap="oceanforecastTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
                         <view class="text-large text-blue">海区预报</view>
-                    </button>
+                    </view>
                 </view>
             </view>
         </view>
@@ -222,6 +222,11 @@ export default {
         align-items: center;
         justify-content: center;
         border: 1upx solid #0092d4;
+        border-radius: 10upx;
+    }
+
+    .hover {
+        background-color: rgba(221, 221, 221, 0.8);
     }
 
     .menu-button-icon {
