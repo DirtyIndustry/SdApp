@@ -193,6 +193,7 @@ DONE... typhoon map apply hardware acceleration
 DONE... change image pages background color  
 DONE... bienvenu page console message  
 DONE... menu page change button to view with hover-class  
+DONE... menu page add background image  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  

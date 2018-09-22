@@ -1,5 +1,7 @@
 <template>
     <view class="page-body menu-page" catchtouchmove>
+        <image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" />
+        
         <view class="menu-table">
             <!-- 第一行 -->
             <view class="menu-row">
@@ -221,12 +223,13 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: #fff;
         border: 1upx solid #0092d4;
         border-radius: 10upx;
     }
 
     .hover {
-        background-color: rgba(221, 221, 221, 0.8);
+        background-color: rgb(221, 221, 221);
     }
 
     .menu-button-icon {
