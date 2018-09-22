@@ -190,6 +190,7 @@ DONE... apply inshore and baths in city forecast page
 DONE... apply inshore and baths in weather forecast page  
 DONE... index page show inshore table date correctly after change city in other page  
 DONE... typhoon map apply hardware acceleration  
+DONE... change image pages background color  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  

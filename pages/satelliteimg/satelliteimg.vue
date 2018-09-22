@@ -83,7 +83,7 @@
     }
 
     .wrap {
-        background: #f0eff5;
+        background: #f0f0f0;
         width: 100%;
         height: 100%;
     }
