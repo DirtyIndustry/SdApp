@@ -520,7 +520,7 @@
 								let mark = utils.buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
 								data.option = utils.getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
 								data.option.grid = {
-									top: '4%',
+									top: '8%',
 									left: '-3%',
 									right: '5%',
 									bottom: '20%',
