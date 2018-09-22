@@ -21,79 +21,83 @@ var state = {
     },
     // 近海预报
     inshoredata: {
-        location: "",
-        time: "",
+        location: '',
+        timeupper: '',
+        timelower: '',
         data: [
             {
-                loc: "海域",
-                wave: "浪高(m)",
-                temp: "表层水温(℃)"
+                loc: '海域',
+                wave: '浪高(m)',
+                temp: '表层水温(℃)'
             },
             {
-                loc: "",
-                wave: "",
-                temp: ""
+                loc: '',
+                wave: '',
+                temp: ''
             },
             {
-                loc: "",
-                wave: "",
-                temp: ""
+                loc: '',
+                wave: '',
+                temp: ''
             },
             {
-                loc: "",
-                wave: "",
-                temp: ""
+                loc: '',
+                wave: '',
+                temp: ''
             },
             {
-                loc: "",
-                wave: "",
-                temp: ""
+                loc: '',
+                wave: '',
+                temp: ''
             }
         ],
         showextra: true,
-        extrawave48h: "",
-        extratemp48h: "",
-        extrawave72h: "",
-        extratemp72h: ""
+        extradate48h: '',
+        extrawave48h: '',
+        extratemp48h: '',
+        extradate72h: '',
+        extrawave72h: '',
+        extratemp72h: ''
     },
     // 浴场预报
     bathsdata: {
         showBaths: true,
+        time: '',
         data: [
             {
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             },
             {
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             },
             {
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             },
             {
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             },
             {
-                PublishDate: "",
-                BathsName: "",
-                WaveHeight: "",
-                WaterTemp: "",
-                Swimming: ""
+                PublishDate: '',
+                BathsName: '',
+                WaveHeight: '',
+                WaterTemp: '',
+                Swimming: ''
             }
         ]
     },
