@@ -1,5 +1,5 @@
 <template>
-	<view class="page-body">
+	<view class="page-body" catchtouchmove>
 		<!-- 上端空白 -->
 		<view class="separator-vertical"></view>
 		<!-- 推送按钮 -->

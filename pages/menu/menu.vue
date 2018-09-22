@@ -1,5 +1,5 @@
 <template>
-    <view class="page-body menu-page">
+    <view class="page-body menu-page" catchtouchmove>
         <view class="menu-table">
             <!-- 第一行 -->
             <view class="menu-row">

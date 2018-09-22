@@ -1,5 +1,5 @@
 <template>
-    <view class="page-body" catchtouchmove="stopscroll">
+    <view class="page-body" catchtouchmove>
         <view class="section-top">
             <view style="height: 100upx;"></view>
             <view class="icon-container">
@@ -28,12 +28,6 @@ export default {
     computed: {
         appname () { return appsettings.appname },
         appversion () { return appsettings.appversion }
-    },
-    methods: {
-        // 禁止页面滚动
-        stopscroll () {
-            
-        }
     }
 }
 </script>

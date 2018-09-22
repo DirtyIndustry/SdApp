@@ -3,7 +3,7 @@
         <!-- 背景蒙板 -->
         <view class="layer masklayer speed-up" v-show="panelshow" :style="{opacity: maskopacity}"  ></view>
         
-        <view class="layer buttonlayer speed-up" v-show="panelshow" :style="{top: paneltop, opacity: panelopacity}" @tap="closeDialog" catchtouchmove="stopscroll">
+        <view class="layer buttonlayer speed-up" v-show="panelshow" :style="{top: paneltop, opacity: panelopacity}" @tap="closeDialog" catchtouchmove>
             <!-- 选项按钮组 -->
             <view class="choose_box">
                 <view class="chooseItem" hover-class="hover" v-for="(item, index) in items" :key="index" @tap="itemTap(index, item)">{{item}}</view>
@@ -69,9 +69,6 @@
             },
             switchDialog() {
                 this.show = !this.show
-            },
-            stopscroll() {
-                // 阻止背后页面滚动
             },
             // 选项点击
             itemTap(index, item) {
