@@ -214,7 +214,7 @@
 	/* 曲线图的容器 必须设置宽度和高度 */
     .chart {
         width: 290%;
-        height: 250px;
+        height: 250upx;
     }
 
     /* 图表上方的地名 */
@@ -222,18 +222,18 @@
         position: relative;
         width: 95%;
         left: 2.5%;
-        border-bottom: 1px solid #666;
+        border-bottom: 1upx solid #666;
     }
 
     /* 日期球的外观样式 */
     .dateball {
         display: flex;
-        width: 62px;
-        height: 62px;
+        width: 62upx;
+        height: 62upx;
         position: absolute;
-        bottom: 11px;
+        bottom: 11upx;
         background-color: rgba(148, 148, 148, 0.8);
-        border-radius: 62px;
+        border-radius: 62upx;
         align-items: center;
         justify-content: center;
     }
@@ -260,7 +260,7 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        height: 80px;
+        height: 80upx;
     }
 
     /* 信息面板中一天的部分 */
@@ -274,7 +274,7 @@
     /* 信息面板的列 */
     .infocolumn {
         flex: 1;
-        padding: 10px;
+        padding: 10upx;
         white-space: pre-wrap;
     }
 
@@ -286,7 +286,7 @@
     /* 曲线上左右箭头 */
 	.chevron {
 		position: absolute;
-		bottom: 205px;
+		bottom: 205upx;
 		color: #666;
 	}
 	.chevron-right {

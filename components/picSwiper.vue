@@ -76,7 +76,7 @@
                 imgindex: 0,
                 isPlaying: false,
                 isButtonHide: false,
-                viewHeight: '538px',
+                viewHeight: '538upx',
                 btnTimer: undefined
             }
         },
@@ -214,8 +214,8 @@
 <style scoped>
     .pic_title {
         width: 100%;
-        height: 80px;
-        font-size: 28px;
+        height: 80upx;
+        font-size: 28upx;
         color: #333;
         display: flex;
         align-items: center;
@@ -230,15 +230,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 28px;
-        margin: 20px 0;
+        font-size: 28upx;
+        margin: 20upx 0;
     }
 
     .btn_panel {
         position: absolute;
-        bottom: 80px;
+        bottom: 80upx;
         width: 100%;
-        height: 200px;
+        height: 200upx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -248,15 +248,14 @@
     .btn_panel_hide {
         transition: opacity 2s ease, bottom 0s ease 2s;
         opacity: 0;
-        bottom: -200px;
+        bottom: -200upx;
     }
 
     .btn_box {
-        /* border: 1px solid #000; */
         width: 70%;
         left: 15%;
-        bottom: 160px;
-        height: 200px;
+        bottom: 160upx;
+        height: 200upx;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -268,15 +267,13 @@
 
     .prev,
     .next {
-        /* border: 1px solid #f00; */
-        width: 110px;
-        height: 110px;
+        width: 110upx;
+        height: 110upx;
     }
 
     .play_stop {
-        /* border: 1px solid #0f0; */
-        width: 140px;
-        height: 140px;
+        width: 140upx;
+        height: 140upx;
     }
 
     .imgswiper {

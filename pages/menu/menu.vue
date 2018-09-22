@@ -216,17 +216,17 @@ export default {
     }
 
     .menu-button {
-        width: 300px;
-        height: 90px;
+        width: 300upx;
+        height: 90upx;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #0092d4;
+        border: 1upx solid #0092d4;
     }
 
     .menu-button-icon {
-        width: 50px;
-        height: 50px;
+        width: 50upx;
+        height: 50upx;
     }
 
 </style>

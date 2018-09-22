@@ -73,7 +73,7 @@ export default {
         return {
             sideButtonWidth: 0, // 两侧按钮的宽度
             midButtonWidth: 0,  // 中间按钮的宽度
-            rightTabbarRight: '1px',    // 右按钮组的右边距
+            rightTabbarRight: '1upx',    // 右按钮组的右边距
             leftTabWidth: '6%',         // 左tabbar宽度
             rightTabWidth: '64%',       // 右tabbar宽度
             leftMarkerWidth: '8%',      // 左指示器宽度
@@ -108,9 +108,9 @@ export default {
             // console.log(this.systemInfo.system)
             // console.log(this.systemInfo.platform)
             if (this.systemInfo.platform === 'android') {
-                this.rightTabbarRight = '1px'
+                this.rightTabbarRight = '1upx'
             } else {
-                this.rightTabbarRight = '0px'
+                this.rightTabbarRight = '0'
             }
         },
         // 将tab选择状态发送出去
@@ -156,8 +156,6 @@ export default {
 @import "../common/generic.css";
 /* 控件最外城容器 */
 .tabbar-container {
-    /* border: 1px solid #000; */
-    /* position: relative; */
     position: fixed;
     top: 0;
     left: 0;
@@ -168,10 +166,9 @@ export default {
 
 /* 按钮组 */
 .tabbar {
-    /* border: 1px solid #000; */
     background-color: #fff;
     top: 0;
-    height: 120px;
+    height: 120upx;
     position: absolute;
     overflow: hidden;
     display: flex;
@@ -190,7 +187,7 @@ export default {
 .tabbar-right {
     width: 64%;
     flex-direction: row-reverse;
-    right: 0px;
+    right: 0;
     z-index: 5;
 }
 /* 背景按钮组 */
@@ -199,13 +196,12 @@ export default {
     flex-direction: row;
     left: 0;
     z-index: 4;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2upx 10upx rgba(0, 0, 0, 0.4);
 }
 
 /* 按钮组中的按钮 */
 .tabbar-button {
-    /* border: 1px solid #0f0; */
-    height: 120px;
+    height: 120upx;
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -214,28 +210,25 @@ export default {
 
 /* 左边的按钮 */
 .tabbar-button-left {
-    /* border: 1px solid #f00; */
     left: 0;
 }
 /* 右边的按钮 */
 .tabbar-button-right {
-    /* border: 1px solid #00f; */
     right: 0;
 }
 
 /* 按钮内层容器 */
 .button-inner {
-    /* border: 1px solid #f00; */
     width: 100%;
-    height: 80px;
+    height: 80upx;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 /* 中间按钮内层容器 */
 .border-inner-middle {
-    border-left: 1px solid #999999;
-    border-right: 1px solid #999999;
+    border-left: 1upx solid #999999;
+    border-right: 1upx solid #999999;
 }
 /* 背景按钮组 按钮内层容器 */
 .button-inner-background {
@@ -245,8 +238,8 @@ export default {
 /* 下方蓝色指示器 */
 .marker {
     position: absolute;
-    top: 120px;
-    height: 5px;
+    top: 120upx;
+    height: 5upx;
     overflow: hidden;
     display: flex;
     flex-shrink: 0;

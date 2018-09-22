@@ -163,8 +163,8 @@ export default {
 
     /* 标题部分容器 */
     .title-section {
-        border-bottom: 1px solid #666;
-        height: 80px;
+        border-bottom: 1upx solid #666;
+        height: 80upx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -172,9 +172,8 @@ export default {
 
     /* 标题图标+渔场预报字样 */
     .title {
-        /* border: 1px solid #f00; */
         flex: 3;
-        height: 60px;
+        height: 60upx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -182,16 +181,15 @@ export default {
 
     /* 标题图标 */
     .title-icon {
-        width: 60px;
-        height: 60px;
+        width: 60upx;
+        height: 60upx;
     }
 
     /* 标题日期 */
     .date {
-        /* border: 1px solid #000; */
         flex: 5;
-        height: 80px;
-        line-height: 125px;
+        height: 80upx;
+        line-height: 125upx;
         text-align: right;
     }
 

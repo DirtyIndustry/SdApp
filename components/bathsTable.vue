@@ -60,15 +60,15 @@ export default {
     /* 浴场预报表格的行 */
     .baths-row {
         flex: 1;
-        height: 70px;
-        border-left: 1px solid #000;
-        border-right: 1px solid #000;
-        border-bottom: 1px solid #000;
+        height: 70upx;
+        border-left: 1upx solid #000;
+        border-right: 1upx solid #000;
+        border-bottom: 1upx solid #000;
     }
 
     /* 浴场预报表格的最底行 */
     .baths-row-top {
-        border-top: 1px solid #000;
+        border-top: 1upx solid #000;
     }
 
     /* 浴场预报表格的列 */
@@ -83,7 +83,7 @@ export default {
 
     /* 浴场预报表格的非首列 */
     .baths-column-right {
-        border-left: 1px solid #000;
+        border-left: 1upx solid #000;
     }
 
     /* 浴场预报单元格 */

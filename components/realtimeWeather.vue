@@ -7,7 +7,7 @@
             <view class="row">
                 <view class="icon">
                     <view class="cell">
-                        <image :src="weatherData.weatherIcon" mode="widthFix" style="width: 75px; height: 70px;" />
+                        <image :src="weatherData.weatherIcon" mode="widthFix" style="width: 75upx; height: 70upx;" />
                     </view>
                 </view>
                 <view class="content" :class="{'text-large': weatherData.airconDesc.length < 5, text: weatherData.airconDesc.length > 4}">{{weatherData.weather}}</view>
@@ -87,7 +87,7 @@ export default {
 }
 .font-icon {
     height: 100%;
-    font-size: 50px;
+    font-size: 50upx;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -109,19 +109,18 @@ export default {
 
 .text-huge {
     color: #0092d4;
-    font-size: 120px;
+    font-size: 120upx;
     font-weight: bold;
 }
 .text-mini-icon {
-    /* border: 1px solid #000; */
     height: 55%;
     line-height: 400%;
-    font-size: 20px;
+    font-size: 20upx;
 }
 .text-mini-content {
     height: 55%;
     line-height: 350%;
-    font-size: 20px;
+    font-size: 20upx;
 }
 /* 空气质量优 */
 .excellent {

@@ -21,11 +21,11 @@
 				</view>
 			</view>
 			<!-- 占位空白模块 -->
-			<view style="height: 100px;" />
+			<view style="height: 100upx;" />
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
 			<view class="page-section header text-large text-bold text-blue">{{cityName}}地区预报</view>
-			<view style="height: 20px;" />
+			<view style="height: 20upx;" />
 			<!-- #endif -->
 			<!-- 天气预报模块 -->
 			<view class="page-section">
@@ -88,7 +88,7 @@
 				<view class="section-body">
 					<refinedChartAlt :option="refinedData.optionOne" :data="refinedData.dataOne" canvasId="refinedOne" />
 					<!-- 两个图表之间的空白 -->
-					<view style="height: 60px" v-if="refinedData.showTwo" />
+					<view style="height: 60upx" v-if="refinedData.showTwo" />
 					<view v-show="refinedData.showTwo">
 						<refinedChartAlt :option="refinedData.optionTwo" :data="refinedData.dataTwo" canvasId="refinedTwo" />
 					</view>
@@ -674,7 +674,7 @@
 
 	/* 页面顶端城市名称容器 */
 	.header {
-		height: 80px;
+		height: 80upx;
 		display: flex;
 		align-items: center;
 	}
@@ -682,7 +682,7 @@
 	/* 微信小程序城市选择器 */
 	.container {
 		display: flex;
-		height: 80px;
+		height: 80upx;
 		width: 100%;
 	}
 	.main {
@@ -692,7 +692,7 @@
 		align-items: center;
 	}
 	.sidebar {
-		width: 150px;
+		width: 150upx;
 		height: 100%;
 	}
 	.city-picker {
@@ -720,19 +720,19 @@
 	/* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
 		width: 290%;
-		height: 250px;
+		height: 250upx;
 	}
 	/* 潮汐曲线上方的地名 */
 	.chart-title {
 		position: relative;
         width: 95%;
 		left: 2.5%;
-        border-bottom: 1px solid #666;
+        border-bottom: 1upx solid #666;
 	}
 	/* 潮汐曲线上左右箭头 */
 	.chevron {
 		position: absolute;
-		bottom: 125px;
+		bottom: 125upx;
 		color: #666;
 	}
 	.chevron-right {

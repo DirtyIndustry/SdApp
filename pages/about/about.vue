@@ -1,7 +1,7 @@
 <template>
     <view class="page-body" catchtouchmove="stopscroll">
         <view class="section-top">
-            <view style="height: 100px;"></view>
+            <view style="height: 100upx;"></view>
             <view class="icon-container">
                 <image class="icon-image" src="../../static/Images/icon.png" mode="aspectFit" />
             </view>
@@ -47,14 +47,14 @@ export default {
 
 .section-top {
     width: 100%;
-    height: 456px;
+    height: 456upx;
     display: flex;
     flex-direction: column;
 }
 
 .section-bottom {
     width: 100%;
-    height: 200px;
+    height: 200upx;
     position: absolute;
     bottom: 0;
     display: flex;
@@ -62,19 +62,19 @@ export default {
 }
 
 .icon-container {
-    height: 220px;
+    height: 220upx;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .icon-image {
-    width: 220px;
-    height: 220px;
+    width: 220upx;
+    height: 220upx;
 }
 
 .strip-text {
-    height: 68px;
+    height: 68upx;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,11 +82,11 @@ export default {
 
 .text {
     color: #666;
-    font-size: 34px;
+    font-size: 34upx;
 }
 .text-small {
     color: #666;
-    font-size: 30px;
+    font-size: 30upx;
 }
 
 .column-bottom {
@@ -104,7 +104,7 @@ export default {
 
 .bottom-content {
     width: 75%;
-    height: 100px;
+    height: 100upx;
     display: flex;
 }
 .bottom-content-left {

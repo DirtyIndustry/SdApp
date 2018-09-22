@@ -220,7 +220,7 @@
 	/* 曲线图的容器 必须设置宽度和高度 */
     .chart {
         width: 290%;
-        height: 250px;
+        height: 250upx;
     }
 
     /* 图表上方的地名 */
@@ -228,16 +228,16 @@
         position: relative;
         width: 95%;
         left: 2.5%;
-        border-bottom: 1px solid #666;
+        border-bottom: 1upx solid #666;
     }
 
     /* 日期球的外观样式 */
     .dateball {
         display: flex;
-        width: 62px;
-        height: 62px;
+        width: 62upx;
+        height: 62upx;
         background-color: rgba(148, 148, 148, 0.8);
-        border-radius: 62px;
+        border-radius: 62upx;
         align-items: center;
         justify-content: center;
     }
@@ -250,28 +250,28 @@
     /* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
     .slideball-Snd {
         position: relative;
-        top: 10px;
+        top: 10upx;
         left: 96%;
     }
 
     /* 第三个球滑动时的定位 */
     .slideball-Trd {
         position: relative;
-        top: 10px;
+        top: 10upx;
         left: 188%;
     }
 
     /* 第一个球固定时的定位 */
     .fixball-Fst {
         position: relative;
-        bottom: 11px;
+        bottom: 11upx;
         left: 0%;
     }
 
     /* 第二个球固定时的定位 */
     .fixball-Snd {
         position: relative;
-        bottom: 11px;
+        bottom: 11upx;
         left: 74%;
     }
 
@@ -283,7 +283,7 @@
     /* 第三个球固定时的定位 */
     .fixball-Trd {
         position: relative;
-        bottom: 11px;
+        bottom: 11upx;
         left: 74%;
     }
 
@@ -302,7 +302,7 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        height: 80px;
+        height: 80upx;
     }
 
     /* 固定的小球的容器 */
@@ -312,18 +312,18 @@
         flex-direction: row;
         flex-wrap: nowrap;
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
     }
 
     /* 图表下方显示信息的面板 */
     .infopanel {
         position: absolute;
-        top: 260px;
+        top: 260upx;
         width: 290%;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        height: 80px;
+        height: 80upx;
     }
 
     /* 信息面板中一天的部分 */
@@ -337,7 +337,7 @@
     /* 信息面板的列 */
     .infocolumn {
         flex: 1;
-        padding: 10px;
+        padding: 10upx;
         white-space: pre-wrap;
     }
 

@@ -170,6 +170,7 @@ DONE... refined chart line label and time color
 DONE... contact us email address placeholder  
 DONE... picswiper button change to font icon  
 DONE... fix typhoon warning bug  
+DONE... change px to upx  
 index page show inshore table date correctly after change city in other page  
 move bienvenu to index page  
 manifest  

@@ -106,7 +106,6 @@ button {
     bottom: 20%;
     left: 30%;
     width: 40%;
-    /* border: 1px solid #fff; */
     border-color: #fff;
     color: #fff;
     z-index: 2;

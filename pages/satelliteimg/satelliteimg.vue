@@ -1,6 +1,6 @@
 <template>
     <view class="wrap" @tap="pageTap">
-        <view style="height: 40px;"></view>
+        <view style="height: 40upx;"></view>
         <view class="choose_source">
             <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
             <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
@@ -90,13 +90,13 @@
 
     .choose_source {
         width: 100%;
-        height: 80px;
+        height: 80upx;
         background-color: #fff;
-        line-height: 80px;
+        line-height: 80upx;
     }
 
     .choose-source-header {
-        margin-left: 100px;
+        margin-left: 100upx;
     }
 
 </style>

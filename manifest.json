@@ -2,8 +2,9 @@
    "name" : "SdApp",
    "appid" : "__UNI__D13F51F",
    "description" : "",
-   "versionName" : "0.4.1",
-   "versionCode" : "100",
+   "versionName" : "0.0.1",
+   "versionCode" : "001",
+   "transformPx": false,
    "app-plus" : {
         /* 5+App特有相关 */
         "modules" : {},

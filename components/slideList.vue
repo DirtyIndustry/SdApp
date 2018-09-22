@@ -21,7 +21,7 @@
             </view>
         </view>
         <!-- 列表底部占位 -->
-        <view v-if="list.length !== 0" style="height: 40px;" />
+        <view v-if="list.length !== 0" style="height: 40upx;" />
     </view>
 </template>
 
@@ -70,7 +70,6 @@
 
     /* 最外层容器 */
     .panel {
-        /* border: 1px solid #000; */
         position: absolute;
         width: 90%;
         transition: left .5s ease-in-out;
@@ -78,34 +77,34 @@
 
     /* 移出屏幕时不占屏幕高度 */
     .hide {
-        height: 0px;
+        height: 0;
         overflow: hidden;
     }
 
     /* 列表容器 */
     .list-body {
-        border-radius: 15px;
+        border-radius: 15upx;
         background-color: rgba(250, 250, 250, 0.8);
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 20upx rgba(0, 0, 0, 0.5);
     }
 
     /* 列表行 */
     .list-row {
         width: 100%;
-        height: 100px;
+        height: 100upx;
         display: flex;
         flex-direction: row;
     }
 
     /* 列表中的横分隔线 */
     .border-top {
-        border-top: 1px solid #999;
+        border-top: 1upx solid #999;
     }
 
     /* 左边显示icon的单元格 */
     .cell-icon {
-        height: 100px;
-        width: 100px;
+        height: 100upx;
+        width: 100upx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -122,13 +121,13 @@
     /* 显示警报名的单元格 */
     .cell-name {
         flex: 2;
-        font-size: 38px;
+        font-size: 38upx;
     }
 
     /* 显示日期的单元格 */
     .cell-date {
         flex: 1;
-        font-size: 23px;
+        font-size: 23upx;
         text-align: right;
     }
 
@@ -137,7 +136,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 38px;
+        font-size: 38upx;
         color: #0092d4;
     }
 

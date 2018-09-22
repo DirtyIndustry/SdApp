@@ -44,7 +44,6 @@ export default {
 	flex-grow: 1;
 }
 .table-body {
-    /* border: 1px solid #000; */
     position: relative;
     left: 3.5%;
     width: 93%;
@@ -52,19 +51,19 @@ export default {
     flex-direction: column;
 }
 .table-row {
-    height: 70px;
+    height: 70upx;
     display: flex;
     flex-direction: row;
 }
 .border-top {
-    border-top: 1px solid #666;
+    border-top: 1upx solid #666;
 }
 .border-left {
-    border-left: 1px solid #666;
+    border-left: 1upx solid #666;
 }
 .table-cell {
-    border-bottom: 1px solid #666;
-    border-right: 1px solid #666;
+    border-bottom: 1upx solid #666;
+    border-right: 1upx solid #666;
     flex: 1;
     display: flex;
     align-items: center;

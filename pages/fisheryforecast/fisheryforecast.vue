@@ -142,20 +142,20 @@ export default {
 
     /* 表格表头 */
     .fishery-header {
-        border-top: 1px solid #999999;
+        border-top: 1upx solid #999999;
         flex: 1;
-        height: 60px;
+        height: 60upx;
     }
 
     /* 表格行 */
     .fishery-row {
         flex: 3;
-        height: 180px;
+        height: 180upx;
     }
 
     /* 表格中填字的单元格 */
     .fishery-cell {
-        border-bottom: 1px solid #999999;
+        border-bottom: 1upx solid #999999;
         flex: 1;
         display: flex;
         align-items: center;
@@ -165,7 +165,7 @@ export default {
 
     /* 表格左边较窄的列 */
     .fishery-column-left {
-        border-right: 1px solid #999999;
+        border-right: 1upx solid #999999;
         flex: 2;
         display: flex;
         flex-direction: column;
@@ -173,7 +173,6 @@ export default {
 
     /* 表格右边较宽的列 */
     .fishery-column-right {
-        /* border: 1px solid #f00; */
         flex: 3;
         display: flex;
         flex-direction: column;
@@ -181,7 +180,7 @@ export default {
 
     /* 表格第三列 */
     .fishery-column-middle {
-        border-right: 1px solid #999999;
+        border-right: 1upx solid #999999;
     }
 
 </style>

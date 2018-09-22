@@ -53,14 +53,14 @@ export default {
 	/* 威海专项图表 */
 	.chart-weihai {
 		width: 100%;
-        height: 250px;
-        border: 1px solid #000000;
+        height: 250upx;
+        border: 1upx solid #000000;
 	}
 
 	/* 威海专项 图表下信息面板 */
 	.weihai-infopanel {
 		width: 100%;
-		height: 50px;
+		height: 50upx;
 		display: flex;
         flex-direction: row;
         flex-wrap: nowrap;

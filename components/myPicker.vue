@@ -29,8 +29,6 @@
             return {
                 show: false,
                 panelshow: false,
-                // listbottom: '140px',
-                // cancelbottom: '20px'
                 maskopacity: 0,
                 paneltop: '100%',
                 panelopacity: 0
@@ -109,8 +107,6 @@
         border-radius: 24rpx;
         background: #fff;
         position: absolute;
-        /* max-height: 720rpx;
-        overflow-y: scroll; */
         left: 2.5%;
         bottom: 140rpx;
     }
