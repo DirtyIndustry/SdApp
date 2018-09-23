@@ -200,6 +200,7 @@ DONE... tideChart
 DONE... update weihaiSPChart  
 DONE... update fivedayForecast  
 DONE... update realtime weather  
+DONE... update utils add getShandongData  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
