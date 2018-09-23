@@ -195,6 +195,7 @@ DONE... bienvenu page console message
 DONE... menu page change button to view with hover-class  
 DONE... menu page add background image  
 DONE... weather webservice deal with daily limit response  
+DONE... update refinedChartAlt  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  

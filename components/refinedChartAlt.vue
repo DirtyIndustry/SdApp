@@ -4,7 +4,7 @@
         <view class="chart-title" v-if="data.length > 0">{{data[0].loc}}</view>
         <scroll-view  class="speed-up" scroll-x="true" scroll-with-animation="true" @scroll="handleScroll">
             <view class="chart">
-                <myChart :option="option" :canvasId="canvasId" />
+                <mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
             </view>
             <!-- 信息面板 -->
             <view class="infopanel">
@@ -29,17 +29,23 @@
 </template>
 
 <script>
-    import myChart from './myChart.vue'
+	import * as echarts from './echarts/echarts.common.min.js'
+	import mpvueEcharts from './mpvue-echarts/src/echarts.vue'
+
+    let chart
 
     export default {
         name: 'refinedChartAlt',
         components: {
-            myChart
+            mpvueEcharts
         },
         props: {
             // 画布id 在页面中必须唯一
             canvasId: {
                 type: String,
+                default () {
+                    return ''
+                },
                 required: true
             },
             // 图表数据
@@ -52,32 +58,34 @@
             // 表格数据
             data: {
                 type: Array,
-                default: [
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                    {
-                        loc: '',
-                        time: '',
-                        wave: '',
-                        temp: '',
-                        windLvl: '',
-                        windDir: ''
-                    },
-                ]
+                default () {
+                    return [
+                        {
+                            loc: '',
+                            time: '',
+                            wave: '',
+                            temp: '',
+                            windLvl: '',
+                            windDir: ''
+                        },
+                        {
+                            loc: '',
+                            time: '',
+                            wave: '',
+                            temp: '',
+                            windLvl: '',
+                            windDir: ''
+                        },
+                        {
+                            loc: '',
+                            time: '',
+                            wave: '',
+                            temp: '',
+                            windLvl: '',
+                            windDir: ''
+                        },
+                    ]
+                }
             }
         },
         data() {
@@ -102,7 +110,8 @@
                 stageTwo: 0,            // 第三个小球到达左边
 				// 潮汐预报一左右三角箭头显隐
 				chevronLeftShow: false,
-				chevronRightShow: true,
+                chevronRightShow: true,
+                echarts
             }
         },
         computed: {
@@ -110,6 +119,19 @@
             systemInfo: {
                 get () {
                     return this.$store.state.Infos.systeminfo
+                }
+            }
+        },
+        watch: {
+            // 图表option
+            option: {
+                handler(newVal, oldVal) {
+                    if (chart !== undefined) {
+                        if (newVal) {
+							//chart.setOption(newVal, true)
+							this.$refs.echartsRef.init()
+                        }
+                    }
                 }
             }
         },
@@ -188,11 +210,21 @@
 					this.chevronRightShow = false
 				}
             },
-            // 图标滚动事件
+            // 图表滚动事件
             handleScroll(e) {
                 // console.log(e.detail.scrollLeft)
                 this.setDateballStatus(e.detail.scrollLeft)
             },
+            // 初始化图表
+            handleInit(canvas, width, height) {
+                chart = echarts.init(canvas, null, {
+                    width: width,
+                    height: height
+                })
+                canvas.setChart(chart)
+                chart.setOption(this.option, true)
+                return chart
+            }
         },
         mounted() {
             // 加载时根据当前日期设置日期球文字
