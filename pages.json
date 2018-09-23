@@ -58,25 +58,6 @@
 			}
 		},
 		{
-			"path": "pages/cityforecast/cityforecast",
-			"style": {
-				"navigationBarTitleText": "城市预报",
-				"enablePullDownRefresh": true,
-				"app-plus": {
-					"titleNView": {
-						"buttons": [
-							{
-								"text": "\uf041",
-								"fontSrc": "/static/fontawesome-webfont.ttf",
-								"fontSize": "22px",
-								"color": "#ffffff"
-							}
-						]
-					}
-				}
-			}
-		},
-		{
 			"path": "pages/cityforecastAlt/cityforecastAlt",
 			"style": {
 				"navigationBarTitleText": "城市预报",
@@ -171,13 +152,6 @@
 			"path": "pages/radarimg/radarimg",
 			"style": {
 				"navigationBarTitleText": "雷达图",
-				"enablePullDownRefresh": true
-			}
-		},
-		{
-			"path": "pages/newscenter/newscenter",
-			"style": {
-				"navigationBarTitleText": "新闻中心",
 				"enablePullDownRefresh": true
 			}
 		},
