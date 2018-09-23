@@ -201,6 +201,10 @@ DONE... update weihaiSPChart
 DONE... update fivedayForecast  
 DONE... update realtime weather  
 DONE... update utils add getShandongData  
+DONE... update App.vue apply getShandongData  
+DONE... update index page apply tideChart and getShandongData  
+DONE... update cityforecast page with chart components and getShandongData  
+DONE... update weatherforecast page with fivedayForcast and getShandongData  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
