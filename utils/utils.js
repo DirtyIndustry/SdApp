@@ -246,7 +246,7 @@ const getShandongData = function (res) {
     storeToLocal('inshoredata', JSON.stringify(store.state.Datas.inshoredata))
     storeToLocal('bathsdata', JSON.stringify(store.state.Datas.bathsdata))
     storeToLocal('refineddata', JSON.stringify(store.state.Datas.refineddata))
-    storeToLocal('fivedaydata', JSON.stringify(store.state.Datas.fivedayData))
+    storeToLocal('fivedaydata', JSON.stringify(store.state.Datas.fivedaydata))
     storeToLocal('weihaidata', JSON.stringify(store.state.Datas.weihaidata))
 }
 

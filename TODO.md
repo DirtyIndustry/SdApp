@@ -205,6 +205,7 @@ DONE... update App.vue apply getShandongData
 DONE... update index page apply tideChart and getShandongData  
 DONE... update cityforecast page with chart components and getShandongData  
 DONE... update weatherforecast page with fivedayForcast and getShandongData  
+DONE... utils getShandongData debug  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
