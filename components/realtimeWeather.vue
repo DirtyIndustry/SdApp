@@ -24,7 +24,7 @@
             </view>
             <view class="row">
                 <view class="icon">
-                    <view class="cell text-bold" :class="weatherData.pm25Style">PM2.5</view>
+                    <view class="cell text-bold" :class="{vert: weatherData.pm25Desc === '优', jeune: weatherData.pm25Desc === '良', orange: weatherData.pm25Desc === '轻度污染', rouge: weatherData.pm25Desc === '重度污染'}">PM2.5</view>
                 </view>
                 <view class="content text-large">
                     {{weatherData.pm25}}
@@ -121,25 +121,6 @@ export default {
     height: 55%;
     line-height: 350%;
     font-size: 20upx;
-}
-/* 空气质量优 */
-.excellent {
-    color: green;
-}
-
-/* 空气质量良 */
-.very {
-    color: goldenrod;
-}
-
-/* 空气质量轻度污染 */
-.bad {
-    color: Chocolate;
-}
-
-/* 空气质量重度污染 */
-.sev {
-    color: red;
 }
 
 .vert {

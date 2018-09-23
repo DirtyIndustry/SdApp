@@ -16,13 +16,17 @@
         </view>
     </view>
     <view class="chart-fiveday">
-        <myChart :option="option" :canvasId="canvasId" />
+        <mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
     </view>
 </view>
 </template>
 
 <script>
-import myChart from './myChart.vue'
+import * as echarts from './echarts/echarts.common.min.js'
+import mpvueEcharts from './mpvue-echarts/src/echarts.vue'
+
+let chart
+
 export default {
     name: 'fivedayForcast',
     props: {
@@ -45,8 +49,37 @@ export default {
         }
     },
     components: {
-        myChart
+        mpvueEcharts
     },
+    data() {
+        return {
+            echarts
+        }
+    },
+    watch: {
+        option: {
+            handler(newVal, oldVal) {
+                if (chart !== undefined) {
+                    if (newVal) {
+                        chart.setOption(newVal, true)
+                        // this.$refs.echartsRef.init()
+                    }
+                }
+            }
+        }
+    },
+    methods: {
+        // 初始化图表
+        handleInit(canvas, width, height) {
+            chart = echarts.init(canvas, null, {
+                width: width,
+                height: height
+            })
+            canvas.setChart(chart)
+            chart.setOption(this.option, true)
+            return chart
+        }
+    }
 }
 </script>
 

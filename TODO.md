@@ -196,6 +196,10 @@ DONE... menu page change button to view with hover-class
 DONE... menu page add background image  
 DONE... weather webservice deal with daily limit response  
 DONE... update refinedChartAlt  
+DONE... tideChart  
+DONE... update weihaiSPChart  
+DONE... update fivedayForecast  
+DONE... update realtime weather  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
