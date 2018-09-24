@@ -68,6 +68,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 .separator {
     height: 3.5vw;

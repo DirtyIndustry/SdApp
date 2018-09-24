@@ -2,7 +2,7 @@
     <view class="refinedChart-body">
         <!-- 地名 -->
         <view class="chart-title" v-if="data.length > 0">{{data[0].loc}}</view>
-        <scroll-view scroll-x="true" scroll-with-animation="true" @scroll="handleScroll">
+        <scroll-view class="speed-up" scroll-x="true" scroll-with-animation="true" @scroll="handleScroll">
             <view class="chart">
                 <mpvue-echarts :echarts="echarts" :onInit="handleInit" :canvasId="canvasId" ref="echartsRef"></mpvue-echarts>
             </view>

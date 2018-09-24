@@ -9,7 +9,7 @@ var state = {
         weather: '晴',
         weatherIcon: '../../static/Images/right_weather_fine.png', // 天气图表
         pm25: '8', // PM2.5
-        pm25Style: 'good'
+        pm25Desc: '优'
     },
     // 潮汐预报
     tidedata: {

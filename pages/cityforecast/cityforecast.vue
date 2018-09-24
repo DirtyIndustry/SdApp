@@ -81,8 +81,8 @@
 						<weihaiSPChart :option="weihaiData.fourth.option" :data="weihaiData.fourth" canvasId="canvasIdWeihaiFour" />
 					</view>
 				</view>
+				<view class="separator" />
 			</view>
-			<view class="separator" />
 		</view>
 	</view>
 </template>

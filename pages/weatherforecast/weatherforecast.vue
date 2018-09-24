@@ -29,15 +29,15 @@
 	import utils from '../../utils/utils.js'
 	import myPicker from '../../components/myPicker.vue'
 	import weixinCityPicker from '../../components/weixinCityPicker.vue'
+	import tableTitle from '../../components/tableTitle.vue'
 	import realtimeWeather from '../../components/realtimeWeather.vue'
 	import fivedayForcast from '../../components/fivedayForcast.vue'
-
-	let chartFiveday
 
 	export default {
 		components: {
 			myPicker,
 			weixinCityPicker,
+			tableTitle,
 			realtimeWeather,
 			fivedayForcast
 		},
