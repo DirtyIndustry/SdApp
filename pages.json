@@ -58,7 +58,7 @@
 			}
 		},
 		{
-			"path": "pages/cityforecastAlt/cityforecastAlt",
+			"path": "pages/cityforecast/cityforecast",
 			"style": {
 				"navigationBarTitleText": "城市预报",
 				"enablePullDownRefresh": true,

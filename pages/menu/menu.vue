@@ -105,8 +105,7 @@ export default {
         cityforeTap (e) {
             console.log('城市预报点击')
             uni.navigateTo({
-                // url: '../cityforecast/cityforecast'
-                url: '../cityforecastAlt/cityforecastAlt'
+                url: '../cityforecast/cityforecast'
             })
         },
         // 预警报
