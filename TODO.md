@@ -211,6 +211,8 @@ DONE... combine ios and android versions
 DONE... weixinCityPicker  
 DONE... implement weixinCityPicker on index page  
 DONE... implement weixinCityPicker on weather forecast and city forecast page  
+DONE... index page tide chart style fix  
+DONE... city forecast page tide chart style fix  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  

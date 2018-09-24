@@ -7,13 +7,15 @@
 			<!-- 地区选择模块 -->
 			<weixinCityPicker :cityName="cityName" :cityIndex="cityIndex" :cityArray="cityArray" @change="bindPickerChange" />
 			<!-- 潮汐预报模块 -->
-			<view class="page-section section-body">
+			<view class="page-section">
 				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />
-				<!-- 第一个图表 -->
-				<tideChart :option="tideData.optionTideOne" :title="tideData.chartTideOneTitle" canvasId="canvasIdTideOne" />
-				<!-- 第二个图表 只在青岛地区显示 -->
-				<view :class="{hide: !tideData.chartTideTwoShow}">
-					<tideChart :option="tideData.optionTideTwo" :title="tideData.chartTideTwoTitle" canvasId="canvasIdTideTwo" />
+				<view class="section-body">
+					<!-- 第一个图表 -->
+					<tideChart :option="tideData.optionTideOne" :title="tideData.chartTideOneTitle" canvasId="canvasIdTideOne" />
+					<!-- 第二个图表 只在青岛地区显示 -->
+					<view :class="{hide: !tideData.chartTideTwoShow}">
+						<tideChart :option="tideData.optionTideTwo" :title="tideData.chartTideTwoTitle" canvasId="canvasIdTideTwo" />
+					</view>
 				</view>
 			</view>
 			<view class="separator" />
