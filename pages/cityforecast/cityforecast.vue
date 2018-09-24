@@ -5,28 +5,7 @@
 		<view class="page-body">
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" />
 			<!-- 地区选择模块 -->
-			<!-- #ifdef MP-WEIXIN -->
-			<view style="position: fixed; width: 100%; left: 0; opacity: 0.9; z-index: 9;">
-				<!-- 布局右侧宽度固定，左侧自适应 -->
-				<view class="container section-body">
-					<view class="main text-large text-bold text-blue">
-						{{cityName}}地区预报
-					</view>
-					<view class="sidebar">
-						<!-- 切换城市按钮 -->
-						<picker class="city-picker" @change="bindPickerChange" :value="cityIndex" :range="cityArray">
-							<view class="sidebar-cell">切换城市</view>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<!-- 占位空白模块 -->
-			<view style="height: 100upx;" />
-			<!-- #endif -->
-			<!-- #ifdef APP-PLUS -->
-			<view class="page-section header text-large text-bold text-blue">{{cityName}}地区预报</view>
-			<view style="height: 20upx;" />
-			<!-- #endif -->
+			<weixinCityPicker :cityName="cityName" :cityIndex="cityIndex" :cityArray="cityArray" @change="bindPickerChange" />
 			<!-- 潮汐预报模块 -->
 			<view class="page-section section-body">
 				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />
@@ -112,6 +91,7 @@
 	import appsettings from '../../utils/appsettings.js'
 	import utils from '../../utils/utils.js'
 	import myPicker from '../../components/myPicker.vue'
+	import weixinCityPicker from '../../components/weixinCityPicker.vue'
 	import tableTitle from '../../components/tableTitle.vue'
 	import tideChart from '../../components/tideChart.vue'
 	import inshoreTableNew from '../../components/inshoreTableNew.vue'
@@ -122,6 +102,7 @@
 	export default {
 		components: {
 			myPicker,
+			weixinCityPicker,
 			tableTitle,
 			tideChart,
 			inshoreTableNew,
@@ -360,42 +341,4 @@
 
 <style scoped>
 	@import "../../common/generic.css";
-
-	.header {
-		/* background-color: #fff; */
-		height: 80upx;
-		display: flex;
-		align-items: center;
-	}
-
-	/* 微信小程序城市选择器 */
-	.container {
-		display: flex;
-		height: 80upx;
-		width: 100%;
-	}
-	.main {
-		flex: 1;
-		height: 100%;
-		display: flex;
-		align-items: center;
-	}
-	.sidebar {
-		width: 150upx;
-		height: 100%;
-	}
-	.city-picker {
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.sidebar-cell {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
 </style>

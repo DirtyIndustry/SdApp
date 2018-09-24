@@ -208,6 +208,9 @@ DONE... update weatherforecast page with fivedayForcast and getShandongData
 DONE... utils getShandongData debug  
 DONE... clean up  
 DONE... combine ios and android versions  
+DONE... weixinCityPicker  
+DONE... implement weixinCityPicker on index page  
+DONE... implement weixinCityPicker on weather forecast and city forecast page  
 move bienvenu to index page  
 manifest  
 use opacity and position to show and hide blocks  
