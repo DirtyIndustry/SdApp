@@ -67,7 +67,7 @@ export default {
         loadFisheryData () {
             let that = this
             uni.request({
-                url: appsettings.hosturl + 'GetFisheriesForecast_0831',
+                url: appsettings.hosturl + 'GetFisheryData',
                 data: {name: 'admin', areaflg: '山东'},
                 method: 'POST',
                 success: function (res) {

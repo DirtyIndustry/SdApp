@@ -3,7 +3,7 @@
         <view style="height: 40upx;"></view>
         <view class="choose_source">
             <text class="choose-source-header text">数据源:&nbsp;&nbsp;</text>
-            <text class="text text-blue">{{data_source}}&nbsp;&nbsp;</text>
+            <text class="text text-blue">中国气象网&nbsp;&nbsp;</text>
         </view>
         <view class="separator"></view>
         <picSwiperAlt :imgArray="imageArray" :startIndex="startIndex" :autoStart="autostart" interval="1500"
@@ -21,8 +21,6 @@
         },
         data() {
             return {
-                cityIndex: 0,
-                data_source: '中国气象网',
                 imageArray: [],
                 dateArray: [],
                 startIndex: 0,
@@ -34,8 +32,8 @@
             requestImage(source) {
                 let that = this
                 uni.request({
-                    url: appsettings.hosturl + 'GetSatelliteCloud_ZG_0905',
-                    data: { name: 'admin', areaflg: '山东', flg: source },
+                    url: appsettings.hosturl + 'GetSatelliteImages',
+                    data: { name: 'admin', areaflg: '山东', source: '中国' },
                     method: 'POST',
                     success: function (res) {
                         console.log('[服务器]: 返回 卫星云图')

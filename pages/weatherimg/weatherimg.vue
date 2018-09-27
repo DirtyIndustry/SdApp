@@ -43,8 +43,8 @@
 			requestImage(source) {
 				let that = this
 				uni.request({
-					url: appsettings.hosturl + 'GetWeatherMap_0905',
-					data: { name: 'admin', areaflg: '青岛', flg: source },
+					url: appsettings.hosturl + 'GetWeatherImages',
+					data: { name: 'admin', areaflg: '青岛', source: source },
 					method: 'POST',
 					success: function (res) {
 						console.log('[服务器]: 返回 天气图')

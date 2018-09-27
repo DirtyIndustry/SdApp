@@ -64,7 +64,7 @@ export default {
         requestWarning () {
             let that = this
             uni.request({
-                url: appsettings.hosturl + 'GetEachWarning_0818',
+                url: appsettings.hosturl + 'GetOceanAlarmList',
                 data: {name: 'admin', areaflg: '青岛'},
                 method: 'POST',
                 success: function (res) {
@@ -129,7 +129,7 @@ export default {
             console.log('clicked! ' + filename)
             let that = this
             uni.request({
-                url: appsettings.hosturl + 'GetDangeWarning_0816',
+                url: appsettings.hosturl + 'GetOceanAlarmUrl',
                 data: {name: 'admin', areaflg: '山东', filename: filename},
                 method: 'POST',
                 success: function (res) {

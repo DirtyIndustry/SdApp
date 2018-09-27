@@ -17,7 +17,7 @@ export default {
         loadTrend () {
             let that = this
             uni.request({
-                url: appsettings.hosturl + 'GetTrendPrediction',
+                url: appsettings.hosturl + 'GetTrendImage',
                 data: {name: 'admin', areaflg: '山东'},
                 method: 'POST',
                 success: function (res) {
