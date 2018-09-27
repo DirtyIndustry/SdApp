@@ -242,9 +242,7 @@
             flex: 3;
         }
     </style>
-    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
-    <script>
-    </script>
+    
 </head>
 
 <body>
@@ -418,7 +416,7 @@
         </div>
 
     </div>
-
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
     <script>
         let map // 地图实体
         let mapdragging = false
@@ -1030,14 +1028,8 @@
             //调用初始化函数地图
             init()
             City()
-            // requestData('http://123.234.129.238:8001/MyWebService.asmx/GetRefinedForecast_2018', 'name=admin&areaflg=山东&city=青岛', {})
-            loadCityInfo('青岛', infoCityQD)
-            loadCityInfo('日照', infoCityRZ)
-            loadCityInfo('威海', infoCityWH)
-            loadCityInfo('烟台', infoCityYT)
-            loadCityInfo('潍坊', infoCityWF)
-            loadCityInfo('东营', infoCityDY)
-            loadCityInfo('滨州', infoCityBZ)
+            
+            loadSDSevenCity()
             loadFisheryInfo()
 
         } // end-window.onload()
@@ -1067,9 +1059,9 @@
         } // end-requestData()
 
         // 向服务器请求城市信息
-        const loadCityInfo = function (city, output) {
-            let url = hosturl + 'GetSDSevenCity_0831'
-            let data = 'name=admin&areaflg=山东&city=' + city
+        const loadSDSevenCity = function () {
+            let url = hosturl + 'GetSDSevenCityData'
+            let data = 'name=admin&areaflg=山东'
             let xmlhttp = new XMLHttpRequest()
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
@@ -1083,21 +1075,35 @@
                         let todaystring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
                         date.setDate(date.getDate() + 1)
                         let tomorrowstring = (date.getMonth() + 1) + '月' + date.getDate() + '日' + '0时'
-                        
-                        output.location = res.FORECASTAREA
-                        output.date = todaystring + '~' + tomorrowstring
-                        output.firsthightime = res.FIRSTHIGHTIME
-                        output.firstlowtime = res.FIRSTLOWTIME
-                        output.secondhightime = res.SECONDHIGHTIME
-                        output.secondlowtime = res.SECONDLOWTIME
-                        output.firsthigh = res.FIRSTHIGH
-                        output.secondhigh = res.SECONDHIGH
-                        output.firstlow = res.FIRSTLOW
-                        output.secondlow = res.SECONDLOW
-                        output.waveheight = res.WAVEHEIGHT
-                        output.temperature = res.TEMPERATURE
+                        for (let i = 0; i < res.length; i++) {
+                            res[i].date = todaystring + '~' + tomorrowstring
+                            switch (res[i].FORECASTAREA) {
+                                case '日照近海':
+                                    setCityInfo(res[i], infoCityRZ)
+                                    break
+                                case '青岛近海':
+                                    setCityInfo(res[i], infoCityQD)
+                                    break
+                                case '威海近海':
+                                    setCityInfo(res[i], infoCityWH)
+                                    break
+                                case '烟台近海':
+                                    setCityInfo(res[i], infoCityYT)
+                                    break
+                                case '潍坊近海':
+                                    setCityInfo(res[i], infoCityWF)
+                                    break
+                                case '东营近海':
+                                    setCityInfo(res[i], infoCityDY)
+                                    break
+                                case '滨州近海':
+                                    setCityInfo(res[i], infoCityBZ)
+                                    break
+                                default:
+                                    break
+                            }
+                        }
                         // console.log(output)
-
                     } else if (xmlhttp.status === 400) {
                         console.log('error 400')
                         alert('There was an error 400')
@@ -1110,11 +1116,26 @@
             xmlhttp.open('POST', url, true)
             xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
             xmlhttp.send(data)
-        } // end-loadQD()
+        }
+        // 将服务器数据存入变量
+        const setCityInfo = function (source, target) {
+            target.location = source.FORECASTAREA
+            target.date = source.date
+            target.firsthightime = source.FIRSTHIGHTIME
+            target.firstlowtime = source.FIRSTLOWTIME
+            target.secondhightime = source.SECONDHIGHTIME
+            target.secondlowtime = source.SECONDLOWTIME
+            target.firsthigh = source.FIRSTHIGH
+            target.secondhigh = source.SECONDHIGH
+            target.firstlow = source.FIRSTLOW
+            target.secondlow = source.SECONDLOW
+            target.waveheight = source.WAVEHEIGHT
+            target.temperature = source.TEMPERATURE
+        }
 
         // 向服务器请求渔场信息
         const loadFisheryInfo = function () {
-            let url = hosturl + 'GetFisheriesForecast_0831'
+            let url = hosturl + 'GetFisheryData'
             let data = 'name=admin&areaflg=山东'
             let xmlhttp = new XMLHttpRequest()
             xmlhttp.onreadystatechange = function () {
