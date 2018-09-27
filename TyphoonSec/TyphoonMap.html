@@ -318,7 +318,6 @@
             transform: translateZ(0);
         }
     </style>
-    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
 
 </head>
 
@@ -395,6 +394,7 @@
         <img class="img-icon" src="./Images/legend.png" alt="图例">
     </div>
 
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=2RHBZ-FSF66-SHQS6-M4ANO-7NPKE-QIFP5"></script>
     <script>
 
         // let hosturl = 'http://123.234.129.238:8001/MyWebService.asmx/'
@@ -573,8 +573,8 @@
             // 页面加载时向服务器请求起始数据
             const startupRequest = function () {
                 let year = new Date().getFullYear()
-                let url = hosturl + 'GetTyphoonList_0904'
-                let data = 'areaflg=山东&Typhoonyear=' + year
+                let url = hosturl + 'GetTyphoonList'
+                let data = 'name=admin&areaflg=山东&typhoonyear=' + year
                 let res = []
                 let xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
@@ -615,8 +615,8 @@
                 if (value === '') {
                     return
                 }
-                let url = hosturl + 'GetTyphoonList_0904'
-                let data = 'areaflg=山东&Typhoonyear=' + value
+                let url = hosturl + 'GetTyphoonList'
+                let data = 'name=admin&areaflg=山东&typhoonyear=' + value
                 let xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
@@ -686,8 +686,8 @@
 
             // 向服务器请求台风路径
             const requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
-                let url = hosturl + 'GetTyphoonPath_0904'
-                let data = 'areaflg=山东&typhoonNumber=' + typhoonNo
+                let url = hosturl + 'GetTyphoonPath'
+                let data = 'name=admin&areaflg=山东&typhoonnumber=' + typhoonNo
                 let res = []
                 let active = false
                 let xmlhttp = new XMLHttpRequest()
@@ -702,7 +702,7 @@
                                 res[i].number = Number(typhoonNo)
                                 res[i].name = typhoonName
                                 res[i].eng = typhoonEng
-                                res[i].date = res[i].date.replace(/-/g, '/')
+                                // res[i].date = res[i].date.replace(/-/g, '/')
                             }
                             // 判断时效性
                             let today = new Date()
@@ -748,12 +748,7 @@
                             showTyphoonName()
                             // 如果台风是活动状态则请求预测路线
                             if (active === true) {
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '中国', res[res.length - 1])
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '中国台湾', res[res.length - 1])
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '中国香港', res[res.length - 1])
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '美国', res[res.length - 1])
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '日本', res[res.length - 1])
-                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, '韩国', res[res.length - 1])
+                                requestPathPrediction(typhoonNo, typhoonName, typhoonEng, res[res.length - 1])
                             }
                             // 如果强制显示(搜索该台风)则pan到台风所在地
                             if (alwaysshow === true) {
@@ -774,15 +769,15 @@
             } // end-requestTyphoonPath()
 
             // 向服务器请求台风路径预测
-            const requestPathPrediction = function (typhoonNo, typhoonName, typhoonEng, forecastsite, lastpoint) {
-                let url = hosturl + 'Typhoonforecastpath_0904'
-                let data = 'name=admin&areaflg=山东&number=' + typhoonNo + '&forcastlestTyphoon=' + forecastsite
+            const requestPathPrediction = function (typhoonNo, typhoonName, typhoonEng, lastpoint) {
+                let url = hosturl + 'GetTyphoonPathPredict'
+                let data = 'name=admin&areaflg=山东&typhoonnumber=' + typhoonNo
                 let res = []
                 let xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE === 4
                         if (xmlhttp.status === 200) {
-                            console.log('[服务器]: 返回台风路径' + forecastsite + '预测数据')
+                            console.log('[服务器]: 返回台风路径预测数据')
                             let parser = new DOMParser()
                             let xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
                             // 返回值为'当前无台风'时 直接返回
@@ -792,14 +787,14 @@
                             }
                             res = JSON.parse(xmldoc.getElementsByTagName('string')[0].innerHTML)
                             for (let i = 0; i < res.length; i++) {
-                                res[i].number = Number(typhoonNo)
-                                res[i].name = typhoonName
-                                res[i].eng = typhoonEng
-                                res[i].site = forecastsite
-                                res[i].date = res[i].date.replace(/-/g, '/')
+                                for (let j = 0; j < res[i].length; j++) {
+                                    res[i][j].number = Number(typhoonNo)
+                                    res[i][j].name = typhoonName
+                                    res[i][j].eng = typhoonEng
+                                }
+                                // 将预测数据载入地图
+                                addPredicToMap(res[i], lastpoint)
                             }
-                            // 将预测数据载入地图
-                            addPredicToMap(res, lastpoint)
                         } else if (xmlhttp.status === 400) {
                             console.log('error 400')
                             alert('There was an error 400')
@@ -812,7 +807,7 @@
                 xmlhttp.open('POST', url, true)
                 xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
                 xmlhttp.send(data)
-            }
+            } // end-requestPathPrediction()
 
             // 根据中心风力大小获取对应的台风级别和icon路径
             const getTyphoonLevel = function (centerspeed) {
