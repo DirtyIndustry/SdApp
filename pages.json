@@ -60,7 +60,7 @@
 		{
 			"path": "pages/cityforecast/cityforecast",
 			"style": {
-				"navigationBarTitleText": "城市预报",
+				"navigationBarTitleText": "近海预报",
 				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
@@ -79,7 +79,7 @@
 		{
 			"path": "pages/warninglist/warninglist",
 			"style": {
-				"navigationBarTitleText": "预警报",
+				"navigationBarTitleText": "海洋警报",
 				"enablePullDownRefresh": true
 			}
 		},

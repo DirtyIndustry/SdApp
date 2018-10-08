@@ -12,7 +12,7 @@
 	export default {
 		data () {
 			return {
-				url: 'http://123.234.129.237:8002/SdForecast/TyphoonSec/TyphoonMap.html',
+				url: 'http://123.234.129.237:8001/Maps/TyphoonMap.html',
 				timerlist: []
 			}
 		},
@@ -20,7 +20,7 @@
 			refresh () {
 				this.url = ''
 				let timer = setTimeout(function () {
-					this.url = 'http://123.234.129.237:8002/SdForecast/TyphoonSec/TyphoonMap.html'
+					this.url = 'http://123.234.129.237:8001/Maps/TyphoonMap.html'
 					clearTimeout(timer)
 				}.bind(this), 100)
 				this.timerlist.push(timer)

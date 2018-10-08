@@ -63,7 +63,7 @@ export default {
 .body {
     display: flex;
     flex-direction: row;
-    height: calc(100vw / 2.5);
+    height: 350rpx;
 }
 
 .column {
@@ -72,6 +72,7 @@ export default {
 }
 .column-left {
     flex: 4;
+    height: 100%;
 }
 .column-right {
     flex: 3;

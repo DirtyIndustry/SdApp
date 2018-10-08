@@ -299,6 +299,12 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
             axisTick: {
                 show: false
             },
+            axisLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: '#999999'
+                }
+            },
             splitLine: {
                 show: false
             }
@@ -314,7 +320,7 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
             {
                 name: '潮汐',
                 type: 'line',
-                smooth: 0.3,
+                smooth: 0.4,
                 silent: true,
                 animation: false,
                 symbolSize: 0.0001, // 曲线上数据点小圆圈的大小 不能设为0否则label不显示
@@ -355,7 +361,7 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
 
                     }, // end-label-markLine
                     lineStyle: {
-                        type: 'dot',
+                        type: 'dashed',
                         color: '#999999'
                     },
                     data: markdata
@@ -389,7 +395,8 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
                     label: {
                         show: false
                     },
-                    data: [{ yAxis: max }, { yAxis: min }]
+                    // data: [{ yAxis: max }, { yAxis: min }]
+                    data: [{ yAxis: max }]
                 } // end-markLine
             }
         ] // end-series

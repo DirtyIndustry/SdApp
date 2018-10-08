@@ -14,7 +14,7 @@
                 <!-- 表头 -->
                 <view class="uni-flex uni-row fishery-header">
                     <view class="fishery-column-left fishery-cell text">渔场名称</view>
-                    <view class="fishery-column-left fishery-cell text">时效(h)</view>
+                    <view class="fishery-column-left fishery-cell text">时效</view>
                     <view class="fishery-column-right fishery-column-middle fishery-cell text">波高(m)</view>
                     <view class="fishery-column-right fishery-cell text">浪向</view>
                 </view>
@@ -24,9 +24,9 @@
                     <view class="fishery-column-left fishery-cell text" :class="{'text-small': item.FORECASTAREA.length > 4}">{{item.FORECASTAREA}}</view>
                     <!-- 第二列 时效 -->
                     <view class="fishery-column-left">
-                        <view class="fishery-cell text">24</view>
-                        <view class="fishery-cell text">48</view>
-                        <view class="fishery-cell text">72</view>
+                        <view class="fishery-cell text">24h</view>
+                        <view class="fishery-cell text">48h</view>
+                        <view class="fishery-cell text">72h</view>
                     </view>
                     <!-- 第三列 浪高 -->
                     <view class="fishery-column-right fishery-column-middle">

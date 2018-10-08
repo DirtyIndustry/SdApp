@@ -9,14 +9,14 @@
                 <view class="menu-cell menu-column">
                     <view class="menu-button" hover-class="hover" type="default" @tap="cityforeTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/city_img.png" />
-                        <view class="text-large text-blue">城市预报</view>
+                        <view class="text-large text-blue">近海预报</view>
                     </view>
                 </view>
                 <!-- 第一行右 -->
                 <view class="menu-cell menu-column">
                     <view class="menu-button" hover-class="hover" type="default" @tap="warninglistTap">
                         <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Warning_img.png" />
-                        <view class="text-large text-blue">预警报</view>
+                        <view class="text-large text-blue">海洋警报</view>
                     </view>
                 </view>
             </view>
@@ -24,16 +24,16 @@
             <view class="menu-row">
                 <!-- 第二行左 -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="fisheryTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
-                        <view class="text-large text-blue">渔场预报</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="oceanforecastTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
+                        <view class="text-large text-blue">海区预报</view>
                     </view>
                 </view>
                 <!-- 第二行右 -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="trendTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/trendPrediction_img.png" />
-                        <view class="text-large text-blue">趋势预测</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="fisheryTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/fishery_img.png" />
+                        <view class="text-large text-blue">渔场预报</view>
                     </view>
                 </view>
             </view>
@@ -41,16 +41,16 @@
             <view class="menu-row">
                 <!-- 第三行左 -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
-                        <view class="text-large text-blue">天气预报</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="trendTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/trendPrediction_img.png" />
+                        <view class="text-large text-blue">趋势预测</view>
                     </view>
                 </view>
                 <!-- 第三行右 -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherimgTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
-                        <view class="text-large text-blue">天气图</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="typhoonpathTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
+                        <view class="text-large text-blue">台风路径</view>
                     </view>
                 </view>
             </view>
@@ -75,22 +75,16 @@
             <view class="menu-row">
                 <!-- 第五行左 -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="typhoonpathTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/Typhoon_img.png" />
-                        <view class="text-large text-blue">台风路径</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherimgTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherMap_img.png" />
+                        <view class="text-large text-blue">天气图</view>
                     </view>
                 </view>
                 <!-- 第五行右 -->
-                <!-- <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="newscenterTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/news_img.png" />
-                        <view class="text-large text-blue">新闻中心</view>
-                    </view>
-                </view> -->
                 <view class="menu-cell menu-column">
-                    <view class="menu-button" hover-class="hover" type="default" @tap="oceanforecastTap">
-                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/area_img.png" />
-                        <view class="text-large text-blue">海区预报</view>
+                    <view class="menu-button" hover-class="hover" type="default" @tap="weatherTap">
+                        <image class="menu-button-icon" mode="aspectFit" src="../../static/Images/WeatherForecast_img.png" />
+                        <view class="text-large text-blue">天气预报</view>
                     </view>
                 </view>
             </view>
@@ -101,16 +95,16 @@
 <script>
 export default {
     methods: {
-        // 城市预报
+        // 近海预报
         cityforeTap (e) {
-            console.log('城市预报点击')
+            console.log('近海预报点击')
             uni.navigateTo({
                 url: '../cityforecast/cityforecast'
             })
         },
-        // 预警报
+        // 海洋警报
         warninglistTap (e) {
-            console.log('预警报点击')
+            console.log('海洋警报点击')
             uni.navigateTo({
                 url: '../warninglist/warninglist'
             })
@@ -218,7 +212,7 @@ export default {
 
     .menu-button {
         width: 300upx;
-        height: 90upx;
+        height: 140upx;
         display: flex;
         align-items: center;
         justify-content: center;

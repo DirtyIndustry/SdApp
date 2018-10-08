@@ -17,6 +17,12 @@
             <view class="separator-vertical"></view>
             <!-- 提交按钮 -->
             <button class="submit-button" type="primary" formType="submit" :disabled="!formValid">{{buttonText}}</button>
+            <!-- 分隔条 -->
+            <view class="separator-vertical"></view>
+            <!-- 二维码 -->
+            <view class="qrcode-container">
+                <image class="qrcode-img" src="../../static/Images/qrcode.jpg" mode="widthFix" />
+            </view>
         </form>
     </view>
 </template>
@@ -247,5 +253,16 @@ onShow () {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.qrcode-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qrcode-img {
+    width: 40%;
 }
 </style>
