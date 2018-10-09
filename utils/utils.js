@@ -163,6 +163,8 @@ const getShandongData = function (res) {
         option.series[0].markLine.label.textStyle.color = 'red'
         // 不显示日期
         option.xAxis.axisLabel.show = false
+        // 不显示最大值横线
+        option.series[1].markLine.data = []
         // 将地名字母代号转为中文地名
         res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
         if (res.refinedDatas.length > 1) {   // 如果是青岛
