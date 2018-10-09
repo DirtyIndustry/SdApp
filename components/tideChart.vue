@@ -113,7 +113,7 @@
     /* 潮汐预报曲线图的容器 必须设置宽度和高度 */
 	.chart-tide {
 		width: 290%;
-		height: 250upx;
+		height: 200upx;
 	}
     /* 潮汐曲线上左右箭头 */
 	.chevron {
