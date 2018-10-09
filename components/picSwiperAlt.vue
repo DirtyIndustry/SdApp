@@ -263,7 +263,7 @@
 
     .btn_panel {
         position: absolute;
-        bottom: 80upx;
+        bottom: 60upx;
         width: 100%;
         height: 200upx;
         display: flex;
