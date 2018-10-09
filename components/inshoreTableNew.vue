@@ -82,16 +82,16 @@
     .inshore-row {
         flex: 1;
         height: 70upx;
-        border-left: 1upx solid #000;
-        border-right: 1upx solid #000;
-        border-bottom: 1upx solid #000;
+        border-left: 1rpx solid #999999;
+        border-right: 1rpx solid #999999;
+        border-bottom: 1rpx solid #999999;
         display: flex;
         flex-direction: row;
     }
 
-    /* 近海预报表格的最底行 */
+    /* 近海预报表格的最顶行 */
     .inshore-row-top {
-        border-top: 1upx solid #000;
+        border-top: 1rpx solid #999999;
     }
 
     /* 最左列 */
@@ -106,7 +106,7 @@
 
     /* 近海预报表格的非首列 */
     .inshore-column-right {
-        border-left: 1upx solid #000;
+        border-left: 1rpx solid #999999;
     }
 
     /* 近海预报单元格 */
