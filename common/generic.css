@@ -21,8 +21,14 @@
 .text {
     font-size: 30upx;
 }
-.text-mini {
+.text-xxxs {
+    font-size: 16upx;
+}
+.text-xxs {
     font-size: 20upx;
+}
+.text-xs {
+    font-size: 22upx;
 }
 .text-small {
     font-size: 24upx;
@@ -38,6 +44,9 @@
 }
 .text-gray {
     color: #666;
+}
+.text-white {
+    color: #fff;
 }
 .speed-up {
     -webkit-transform: translateZ(0);

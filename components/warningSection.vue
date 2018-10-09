@@ -5,7 +5,7 @@
             <view class="warning-header">
                 <image class="warning-header-icon" src="../../static/Images/bugle.png" mode="aspectFit"/>
                 <view class="warning-header-text-container">
-                    <view class="warning-header-text text-mini">&nbsp;台风&nbsp;</view>
+                    <view class="warning-header-text text-xxs">&nbsp;台风&nbsp;</view>
                 </view>
             </view>
             <view class="warning-fader warning-fader-left"></view>
@@ -24,7 +24,7 @@
             <view class="warning-header">
                 <image class="warning-header-icon" src="../../static/Images/warning.png" mode="aspectFit"/>
                 <view class="warning-header-text-container">
-                    <view class="warning-header-text text-mini">&nbsp;海浪&nbsp;</view>
+                    <view class="warning-header-text text-xxs">&nbsp;海浪&nbsp;</view>
                 </view>
             </view>
             <view class="warning-fader warning-fader-left"></view>

@@ -8,14 +8,14 @@
             </view>
             <!-- 滑动的日期球，Move属性决定球是否显示 -->
             <view class="balltrack">
-                <view class="dateball slideball-Snd text-mini" :class="{hide: !ballStatus.sndballMove}">{{sndballText}}</view>
-                <view class="dateball slideball-Trd text-mini" :class="{hide: !ballStatus.trdballMove}">{{trdballText}}</view>
+                <view class="dateball slideball-Snd text-xxxs text-white" :class="{hide: !ballStatus.sndballMove}">{{sndballText}}</view>
+                <view class="dateball slideball-Trd text-xxxs text-white" :class="{hide: !ballStatus.trdballMove}">{{trdballText}}</view>
             </view>
             <!-- 信息面板 -->
             <view class="infopanel">
                 <view class="infopanel-day" v-for="(item, index) in data" :key="index">
-                    <view class="infocolumn infocolumn-left text-mini">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
-                    <view class="infocolumn text-mini">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
+                    <view class="infocolumn infocolumn-left text-xxs">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
+                    <view class="infocolumn text-xxs">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
                 </view>
             </view>
         </scroll-view>
@@ -23,9 +23,9 @@
         Active属性决定球的颜色，Move属性决定球是否显示，Left属性决定球是否在左边
         特别的： 第二个球Move时，第三个球需要用lone属性调整位置 -->
         <view class="balltrack-fix">
-            <view class="dateball fixball-Fst text-mini" :class="{'dateball-active': ballStatus.fstballActive}">{{fstballText}}</view>
-            <view class="dateball fixball-Snd text-mini" :class="{'hide': ballStatus.sndballMove, 'dateball-active': ballStatus.sndballActive, 'fixball-Snd-left': ballStatus.sndballLeft}">{{sndballText}}</view>
-            <view class="dateball fixball-Trd text-mini" :class="{'hide': ballStatus.trdballMove, 'dateball-active': ballStatus.trdballActive, 'fixball-Trd-lone': ballStatus.sndballMove, 'fixball-Trd-left': ballStatus.trdballLeft}">{{trdballText}}</view>
+            <view class="dateball fixball-Fst text-xxxs text-white" :class="{'dateball-active': ballStatus.fstballActive}">{{fstballText}}</view>
+            <view class="dateball fixball-Snd text-xxxs text-white" :class="{'hide': ballStatus.sndballMove, 'dateball-active': ballStatus.sndballActive, 'fixball-Snd-left': ballStatus.sndballLeft}">{{sndballText}}</view>
+            <view class="dateball fixball-Trd text-xxxs text-white" :class="{'hide': ballStatus.trdballMove, 'dateball-active': ballStatus.trdballActive, 'fixball-Trd-lone': ballStatus.sndballMove, 'fixball-Trd-left': ballStatus.trdballLeft}">{{trdballText}}</view>
         </view>
         <!-- 左右指示箭头 -->
         <view class="chevron chevron-right fa fa-chevron-right" :class="{hide: !chevronRightShow}" />
@@ -288,7 +288,7 @@
 	/* 曲线图的容器 必须设置宽度和高度 */
     .chart {
         width: 290%;
-        height: 250upx;
+        height: 200upx;
     }
 
     /* 图表上方的地名 */
@@ -302,10 +302,10 @@
     /* 日期球的外观样式 */
     .dateball {
         display: flex;
-        width: 62upx;
-        height: 62upx;
+        width: 50upx;
+        height: 50upx;
         background-color: rgba(148, 148, 148, 0.8);
-        border-radius: 62upx;
+        border-radius: 50%;
         align-items: center;
         justify-content: center;
     }
@@ -323,29 +323,25 @@
     /* 第二个球滑动时的定位 调整slideball的top和fixball的bottom 让两种球平行 */
     .slideball-Snd {
         position: relative;
-        top: 10upx;
         left: 96%;
     }
 
     /* 第三个球滑动时的定位 */
     .slideball-Trd {
         position: relative;
-        top: 10upx;
         left: 188%;
     }
 
     /* 第一个球固定时的定位 */
     .fixball-Fst {
         position: relative;
-        bottom: 11upx;
         left: 0%;
     }
 
     /* 第二个球固定时的定位 */
     .fixball-Snd {
         position: relative;
-        bottom: 11upx;
-        left: 74%;
+        left: 77.5%;
     }
 
     /* 第二个球固定在左端时的定位 */
@@ -356,13 +352,12 @@
     /* 第三个球固定时的定位 */
     .fixball-Trd {
         position: relative;
-        bottom: 11upx;
-        left: 74%;
+        left: 77.5%;
     }
 
     /* 当第二个球滑动时，第三个球需要调整定位 */
     .fixball-Trd-lone {
-        left: 82.7%;
+        left: 85%;
     }
 
     /* 第三个球固定在左端时的定位 */
@@ -373,15 +368,18 @@
     /* 滑动的小球的容器 flex属性能让小球水平排列，height为必须 */
     .balltrack {
         display: flex;
+        align-items: center;
         flex-direction: row;
         flex-wrap: nowrap;
-        height: 80upx;
+        height: 74upx;
     }
 
     /* 固定的小球的容器 */
     .balltrack-fix {
         width: 100%;
+        height: 74upx;
         display: flex;
+        align-items: center;
         flex-direction: row;
         flex-wrap: nowrap;
         position: absolute;
@@ -391,7 +389,7 @@
     /* 图表下方显示信息的面板 */
     .infopanel {
         position: absolute;
-        top: 260upx;
+        top: 200upx;
         width: 290%;
         display: flex;
         flex-direction: row;
