@@ -3,7 +3,12 @@
 	<view>
 		<myPicker ref="citypicker" :items="cityArray" @itemSelected="mypickerSelect"></myPicker>
 		<view class="page-body">
+			<!-- 背景图片 -->
 			<image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" />
+			<!-- 首页引导图 -->
+			<image v-if="showIndexGuide" src="../../static/Images/indexguide.png" mode="widthFix" 
+			style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: 99;" 
+			catchtouchmove @tap="closeIndexGuide"/>
 			<!-- 地区选择模块 -->
 			<weixinCityPicker :cityName="cityName" :cityIndex="cityIndex" :cityArray="cityArray" @change="bindPickerChange" />
 			<!-- 天气预报模块 -->
@@ -157,6 +162,11 @@
 			weihaiData: {
 				get() { return this.$store.state.Datas.weihaidata },
 				set(value) { this.$store.dispatch('setWeihaiData', value) }
+			},
+			// 首页引导显示
+			showIndexGuide: {
+				get () { return this.$store.state.Infos.showindexguide },
+				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
 			}
 		},
 		methods: {
@@ -358,6 +368,14 @@
 				uni.navigateTo({
 					url: '../warningdetail/warningdetail?data=' + that.warningData.waveUrl
 				})
+			},
+			// 首页引导图点击
+			closeIndexGuide () {
+				console.log('[界面]: 点击首页引导图')
+				// 写入Vuex
+				this.showIndexGuide = false
+				// 写入本地缓存
+				utils.storeToLocal('showindexguide', false)
 			}
 		}, // end-methods
 		watch: {
@@ -392,6 +410,9 @@
 			this.requestData(this.cityName)
 		},
 		onNavigationBarButtonTap() {
+			if (this.showIndexGuide === true) {
+				this.closeIndexGuide()
+			}
 			this.$refs.citypicker.switchDialog()
 		}
 	}

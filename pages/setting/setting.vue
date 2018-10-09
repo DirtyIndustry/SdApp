@@ -127,6 +127,7 @@
 					uni.removeStorageSync('refineddata')
 					uni.removeStorageSync('fivedaydata')
 					uni.removeStorageSync('weihaidata')
+					uni.removeStorageSync('showindexguide')
 				} catch (e) {
 					console.log('[缓存]: 删除键值出错')
 					console.log(JSON.stringify(e))

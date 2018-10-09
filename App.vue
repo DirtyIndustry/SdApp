@@ -54,6 +54,11 @@
 			weihaiData: {
 				get () { return this.$store.state.Datas.weihaidata },
 				set (value) { this.$store.dispatch('setWeihaiData', value) }
+			},
+			// 首页引导显示
+			showIndexGuide: {
+				get () { return this.$store.state.Infos.showindexguide },
+				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
 			}
 		},
 		methods: {
@@ -119,7 +124,7 @@
 						that.cityIndex = res.data
 					}
 				})
-				// 所宣城市名称
+				// 所选城市名称
 				uni.getStorage({
 					key: 'cityname',
 					success: function (res) {
@@ -189,6 +194,15 @@
 						console.log('[缓存]: 获取 威海专项预报')
 						// console.log(res.data)
 						that.weihaiData = JSON.parse(res.data)
+					}
+				})
+				// 首页引导显示
+				uni.getStorage({
+					key: 'showindexguide',
+					success: function (res) {
+						console.log('[缓存]: 获取 首页引导显示')
+						// console.log(res.data)
+						that.showIndexGuide = JSON.parse(res.data)
 					}
 				})
 			}, // end-getLocalStorage()
