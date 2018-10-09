@@ -640,6 +640,7 @@
                                 document.getElementById('resulthead').style.display = 'flex'
                                 document.getElementById('resulttable').style.display = 'flex'
                                 document.getElementById('tablecontent').innerHTML = ''
+                                res.reverse()
                                 for (var j = 0; j < res.length; j++) {
                                     var newrow = document.createElement('div')
                                     newrow.setAttribute('class', 'searchresult-row')
