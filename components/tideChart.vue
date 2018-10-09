@@ -118,7 +118,7 @@
     /* 潮汐曲线上左右箭头 */
 	.chevron {
 		position: absolute;
-		bottom: 125upx;
+		bottom: 100upx;
 		color: #666;
 	}
 	.chevron-right {

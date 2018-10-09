@@ -318,7 +318,7 @@
     /* 曲线上左右箭头 */
 	.chevron {
 		position: absolute;
-		bottom: 205upx;
+		bottom: 180upx;
 		color: #666;
 	}
 	.chevron-right {
