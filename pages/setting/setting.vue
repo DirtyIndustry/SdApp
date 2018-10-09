@@ -246,8 +246,8 @@
 }
 
 .stripbutton{
-	border-top: 1upx solid #999;
-	border-bottom: 1upx solid #999;
+	/* border-top: 1upx solid #999;
+	border-bottom: 1upx solid #999; */
 	height: 80upx;
 	background-color: #fff;
 	display: flex;
