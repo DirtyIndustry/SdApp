@@ -38,7 +38,7 @@ data () {
         postername: '',         // 联系人姓名
         postercontact: '',      // 联系人联系方式
         postcontent: '',        // 留言内容
-        buttonText: '提交',     // 提交按钮字样
+        buttonText: '发送',     // 发送按钮字样
         inputnameFocus: true,       // 联系人姓名获得焦点
         inputcontactFocus: false,   // 联系方式获得焦点
         inputcontentFocus: false,   // 留言正文获得焦点
@@ -49,9 +49,9 @@ watch: {
     limited: {
         handler (newVal, oldVal) {
             if (newVal === true) {
-                this.buttonText = '已达到每日提交次数上限'
+                this.buttonText = '已达到每日发送次数上限'
             } else {
-                this.buttonText = '提交'
+                this.buttonText = '发送'
             }
         }
     },
@@ -109,7 +109,7 @@ methods: {
         }
         // 显示loading toast
         uni.showLoading({
-            title: '提交中',
+            title: '发送中',
             mask: true
         })
         let that = this
@@ -136,7 +136,7 @@ methods: {
                 // 弹出提示窗口
                 uni.showModal({
 					title: '成功',
-					content: '用户留言提交成功',
+					content: '用户留言发送成功',
                     showCancel: false,
                     success: function (e) {
                         if (e.confirm) {
@@ -154,7 +154,7 @@ methods: {
                 // 弹出提示窗口
                 uni.showModal({
 					title: '失败',
-					content: '用户留言提交失败',
+					content: '用户留言发送失败',
 					showCancel: false
 				})
             } // end-fail-request

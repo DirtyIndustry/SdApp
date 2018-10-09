@@ -9,6 +9,7 @@
             <!-- 信息面板 -->
             <view class="infopanel">
                 <view class="infopanel-day" v-for="(item, index) in data" :key="index">
+                    <view class="infocolumn-left" />
                     <view class="infocolumn infocolumn-left text-xs">浪高：{{item.wave}}米\n风力：{{item.windLvl}}级</view>
                     <view class="infocolumn text-xs">水温：{{item.temp}}℃\n风向：{{item.windDir}}</view>
                 </view>
@@ -305,14 +306,15 @@
 
     /* 信息面板的列 */
     .infocolumn {
-        flex: 1;
+        flex: 2;
         padding: 10upx;
         white-space: pre-wrap;
     }
 
     /* 左边的列 文字水平靠右 */
     .infocolumn-left {
-        text-align: right;
+        /* text-align: right; */
+        flex: 1;
     }
 
     /* 曲线上左右箭头 */

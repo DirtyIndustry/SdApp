@@ -211,13 +211,14 @@ export default {
     }
 
     .menu-button {
-        width: 300upx;
-        height: 140upx;
+        width: 270upx;
+        height: 120upx;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: #fff;
-        border: 1upx solid #0092d4;
+        /* border: 1upx solid #0092d4; */
+        border: 1upx solid #50c7ff;
         border-radius: 10upx;
     }
 
