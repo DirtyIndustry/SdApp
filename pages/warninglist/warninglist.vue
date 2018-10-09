@@ -176,8 +176,8 @@ export default {
             // 控制显隐
             let timer = setTimeout(function () {
                 clearTimeout(timer)
-                this.listMiddleShow = false
-                this.listRightShow = false
+                // this.listMiddleShow = false
+                // this.listRightShow = false
             }.bind(this), 520)
             this.timerlist.push(timer)
         },
@@ -194,8 +194,8 @@ export default {
             // 控制显隐
             let timer = setTimeout(function () {
                 clearTimeout(timer)
-                this.listLeftShow = false
-                this.listRightShow = false
+                // this.listLeftShow = false
+                // this.listRightShow = false
             }.bind(this), 520)
             this.timerlist.push(timer)
         },
@@ -211,8 +211,8 @@ export default {
             // 控制显隐
             let timer = setTimeout(function () {
                 clearTimeout(timer)
-                this.listLeftShow = false
-                this.listMiddleShow = false
+                // this.listLeftShow = false
+                // this.listMiddleShow = false
             }.bind(this), 520)
             this.timerlist.push(timer)
         },

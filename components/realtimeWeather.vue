@@ -76,12 +76,12 @@ export default {
 .column-left {
     flex: 4;
     height: 100%;
-    display: flex;
     align-items: center;
     justify-content: center;
 }
 .column-right {
     flex: 3;
+    height: 100%;
 }
 
 .row-left {
@@ -91,11 +91,13 @@ export default {
 }
 .row {
     flex: 1;
+    height: 33%;
     display: flex;
     flex-direction: row;
 }
 .icon {
     flex: 2;
+    height: 100%;
 }
 .font-icon {
     height: 100%;
