@@ -596,6 +596,17 @@ const buildMarkdata = function (raw) {
     }
     return result
 }
+// 检查版本
+const needUpdate = function (oldVal, newVal) {
+    let oldarr = oldVal.split('.')
+    let newarr = newVal.split('.')
+    for (let i = 0; i < oldarr.length; i++) {
+        if (oldarr[i] < newarr[i]) {
+            return true
+        }
+    }
+    return false
+}
 
 module.exports = {
     setWeatherIcon: setWeatherIcon, // 天气图标
@@ -607,5 +618,6 @@ module.exports = {
     getAstroOptionNew: getAstroOptionNew,   // 根据tidedata和markdata生成曲线chart option
     buildTidedata: buildTidedata,
     buildMarkdata: buildMarkdata,
-    switchCity: switchCity  // 切换城市 包括自动定位
+    switchCity: switchCity, // 切换城市 包括自动定位
+    needUpdate: needUpdate  // 对比版本号 检查是否需要更新
 }

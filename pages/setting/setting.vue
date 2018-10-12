@@ -177,7 +177,7 @@
 							let resappname = result[i].appname
 							// 检查app名称是否相同
 							if (resappname === appsettings.appname) {
-								if (that.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+								if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
 									// 弹窗提示
 									uni.showModal({
 										title: '发现新版本',
@@ -203,17 +203,6 @@
 						}
 					}
 				})
-			},
-			// 检查版本
-			needUpdate (oldVal, newVal) {
-				let oldarr = oldVal.split('.')
-				let newarr = newVal.split('.')
-				for (let i = 0; i < oldarr.length; i++) {
-					if (oldarr[i] < newarr[i]) {
-						return true
-					}
-				}
-				return false
 			}
 		},
 		onLoad () {
