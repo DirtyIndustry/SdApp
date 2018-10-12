@@ -212,6 +212,7 @@ const getShandongData = function (res) {
             let tide = buildTidedata(res.weihaiDatas[i].tideinfo.tidedata)
             let mark = buildMarkdata(res.weihaiDatas[i].tideinfo.markdata)
             data.option = getAstroOptionNew(tide, mark, res.weihaiDatas[i].tideinfo.max, res.weihaiDatas[i].tideinfo.min)
+            // 曲线显示范围
             data.option.grid = {
                 top: '8%',
                 left: '-3%',
@@ -219,6 +220,12 @@ const getShandongData = function (res) {
                 bottom: '20%',
                 containLabel: true
             }
+            // 曲线颜色蓝色
+            data.option.series[0].lineStyle.color = '#0092d4'
+            // label颜色绿色
+            data.option.series[0].label.color = '#1c8d3b'
+            // 时间颜色红色
+            data.option.series[0].markLine.label.textStyle.color = 'red'
             switch (res.weihaiDatas[i].REPORTAREA) {
                 case '成山头':
                     weihaiData.first = data
@@ -291,7 +298,7 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
                 inside: true,
                 fontSize: '14',
                 align: 'left',
-                padding: [0, 0, 30, 0],
+                padding: [0, 0, 15, 0],
                 color: 'red',
                 formatter: function (value, index) {
                     let date = new Date(value)

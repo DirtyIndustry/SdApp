@@ -9,10 +9,10 @@
             <view class="weihai-infopanel">
                 <view class="weihai-infocolumn-side" />
                 <view class="weihai-infocolumn">
-                    <view class="text">水温:{{data.WATERTEMP}}℃</view>
+                    <view class="text-xs">水温:{{data.WATERTEMP}}℃</view>
                 </view>
                 <view class="weihai-infocolumn">
-                    <view class="text">浪高:{{data.WAVEHEIGHT}}米</view>
+                    <view class="text-xs">浪高:{{data.WAVEHEIGHT}}米</view>
                 </view>
                 <view class="weihai-infocolumn-side" />
             </view>
@@ -99,7 +99,7 @@ export default {
 	/* 威海专项图表 */
 	.chart-weihai {
 		width: 100%;
-        height: 250upx;
+        height: 200upx;
 	}
 
 	/* 威海专项 图表下信息面板 */

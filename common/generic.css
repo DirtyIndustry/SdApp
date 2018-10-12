@@ -18,9 +18,6 @@
 .separator {
     height: 5vw;
 }
-.text {
-    font-size: 30upx;
-}
 .text-xxxs {
     font-size: 16upx;
 }
@@ -32,6 +29,9 @@
 }
 .text-small {
     font-size: 24upx;
+}
+.text {
+    font-size: 30upx;
 }
 .text-large {
     font-size: 37upx;
