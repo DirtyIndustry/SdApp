@@ -74,13 +74,13 @@ export default {
     flex-direction: column;
 }
 .column-left {
-    flex: 4;
+    flex: 5;
     height: 100%;
     align-items: center;
     justify-content: center;
 }
 .column-right {
-    flex: 3;
+    flex: 4;
     height: 100%;
 }
 

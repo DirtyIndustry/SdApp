@@ -174,12 +174,14 @@ export default {
             this.listMiddleLeft = '105%'
             this.listRightLeft = '200%'
             // 控制显隐
-            let timer = setTimeout(function () {
-                clearTimeout(timer)
-                // this.listMiddleShow = false
-                // this.listRightShow = false
-            }.bind(this), 520)
-            this.timerlist.push(timer)
+            if (Number(this.systemInfo.system.split('.')[0]) > 4) {
+                let timer = setTimeout(function () {
+                    clearTimeout(timer)
+                    this.listMiddleShow = false
+                    this.listRightShow = false
+                }.bind(this), 520)
+                this.timerlist.push(timer)
+            }
         },
         // 显示中tab页
         showMiddleTab () {
@@ -192,12 +194,14 @@ export default {
             this.listMiddleLeft = '5%'
             this.listRightLeft = '105%'
             // 控制显隐
-            let timer = setTimeout(function () {
-                clearTimeout(timer)
-                // this.listLeftShow = false
-                // this.listRightShow = false
-            }.bind(this), 520)
-            this.timerlist.push(timer)
+            if (Number(this.systemInfo.system.split('.')[0]) > 4) {
+                let timer = setTimeout(function () {
+                    clearTimeout(timer)
+                    this.listLeftShow = false
+                    this.listRightShow = false
+                }.bind(this), 520)
+                this.timerlist.push(timer)
+            }
         },
         // 显示右tab页
         showRightTab () {
@@ -209,12 +213,14 @@ export default {
             this.listMiddleLeft = '-105%'
             this.listRightLeft = '5%'
             // 控制显隐
-            let timer = setTimeout(function () {
-                clearTimeout(timer)
-                // this.listLeftShow = false
-                // this.listMiddleShow = false
-            }.bind(this), 520)
-            this.timerlist.push(timer)
+            if (Number(this.systemInfo.system.split('.')[0]) > 4) {
+                let timer = setTimeout(function () {
+                    clearTimeout(timer)
+                    this.listLeftShow = false
+                    this.listMiddleShow = false
+                }.bind(this), 520)
+                this.timerlist.push(timer)
+            }
         },
         // 根据警报名称判断警报类型
         getType (name) {

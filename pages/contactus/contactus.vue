@@ -4,15 +4,21 @@
 		<view class="separator-vertical"></view>
         <form @submit="formSubmit">
             <!-- 联系人姓名 -->
-            <input name="input_name" class="input input-small" v-model="postername" placeholder="联系人姓名" :focus="inputnameFocus" @confirm="inputnameConfirm"/>
+            <view class="input-container">
+                <input name="input_name" class="input input-small" v-model="postername" placeholder="联系人姓名" :focus="inputnameFocus" @confirm="inputnameConfirm"/>
+            </view>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 联系方式 -->
-            <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
+            <view class="input-container">
+                <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
+            </view>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
             <!-- 留言内容 -->
-            <textarea name="input_content" class="input input-big" v-model="postcontent" placeholder="请输入留言*" :focus="inputcontentFocus"></textarea>
+            <view class="input-container">
+                <textarea name="input_content" class="input input-big" v-model="postcontent" placeholder="请输入留言*" :focus="inputcontentFocus"></textarea>
+            </view>
             <!-- 分隔条 -->
             <view class="separator-vertical"></view>
             <!-- 提交按钮 -->
@@ -228,15 +234,23 @@ onShow () {
 	width: 40upx;
 }
 
-.input {
+.input-container {
     border: 1upx solid #999;
     border-radius: 10upx;
     background-color: #fff;
     position: relative;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     width: 90%;
     left: 5%;
+}
+
+.input {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 90%;
 }
 
 .input-small {

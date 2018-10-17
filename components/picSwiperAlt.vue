@@ -85,6 +85,13 @@
                 default () {
                     return 2000
                 }
+            },
+            // 按钮自动隐藏
+            buttonFade: {
+                type: Boolean,
+                default () {
+                    return true
+                }
             }
         },
         data() {
@@ -204,10 +211,12 @@
                     clearTimeout(this.btnTimer)
                     this.btnTimer = undefined
                 }
-                this.btnTimer = setTimeout(function(){
-                    that.isButtonHide = true
-                    that.btnTimer = undefined
-                }, 10000)
+                if (this.buttonFate === true) {
+                    this.btnTimer = setTimeout(function(){
+                        that.isButtonHide = true
+                        that.btnTimer = undefined
+                    }, 10000)
+                }
             },
             // 图片点击
             picTap () {

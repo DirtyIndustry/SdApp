@@ -15,13 +15,13 @@
 			<view class="page-section">
 				<realtimeWeather :weatherData="weatherData" />
 			</view>
-			<view class="separator" />
+			<!-- <view class="separator" /> -->
 			<!-- 警报模块 -->
 			<view class="page-section">
 				<warningSection :typhoon="warningData.typhoonWarning" :wave="warningData.waveWarning" @typhoonTap="typhoonWarningTap"
 				 @waveTap="waveWarningTap" />
 			</view>
-			<view class="separator" />
+			<view class="separator" v-if="warningData.typhoonWarning !== '' & warningData.waveWarning !== ''"/>
 			<!-- 潮汐预报模块 -->
 			<view class="page-section">
 				<tableTitle title="潮汐预报" icon="../../static/Images/top_left_img_new.png" />

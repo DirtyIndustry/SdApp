@@ -118,6 +118,8 @@ const getShandongData = function (res) {
             let mark = buildMarkdata(res.astroDatas[i].markdata)
             if (res.astroDatas[i].location === '第一海水浴场') {
                 tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+                // 调整上边距
+                tideData.optionTideOne.grid.top = '12%'
             } else {
                 let optiontwo = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
                 optiontwo.series[0].lineStyle.color = '#0092d4'
@@ -375,7 +377,6 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
                     },
                     data: markdata
                 }, // end-markLine
-                /*
                 markPoint: {
                     symbol: 'circle',
                     symbolSize: 4,
@@ -387,7 +388,7 @@ const getAstroOptionNew = function (tidedata, markdata, max, min) {
                         {coord:[nowtime, nowdata]}
                     ]
                 }
-                */
+                
             },
             // 第二组series： 两条水平标线 表示三天最高和最低的潮位
             {

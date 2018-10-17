@@ -18,7 +18,7 @@
         <!-- #endif -->
         <!-- #ifdef APP-PLUS -->
         <view class="page-section header text-large text-bold text-blue">{{cityName}}市</view>
-        <view style="height: 20upx;" />
+        <!-- <view style="height: 20upx;" /> -->
         <!-- #endif -->
     </view>
 </template>
