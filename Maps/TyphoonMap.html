@@ -74,7 +74,7 @@
         /* 台风名称面板 */
         .namepanel {
             border-radius: 10px;
-            display: none;
+            display: flex;
             min-width: 150px;
             top: 5px;
             left: 5px;
@@ -586,12 +586,14 @@
                             var xmldoc = parser.parseFromString(xmlhttp.responseText, 'text/xml')
                             var jsonstring = xmldoc.getElementsByTagName('string')[0].childNodes[0].nodeValue
                             var res = JSON.parse(jsonstring)
-                            // 大于3?
-                            if (res.length >= 3) {
+                            if (res.length === 0) { // 0个结果
+                                showTyphoonName()
+                            }
+                            else if (res.length >= 3) { // 3个以上结果
                                 for (var j = 0; j < 3; j++) {
                                     requestTyphoonPath(res[res.length - 1 - j].NUMBER, res[res.length - 1 - j].CHN_NAME, res[res.length - 1 - j].ENG_NAME, false)
                                 }
-                            } else {
+                            } else { // 1或2个结果
                                 for (var k = res.length - 1; k > 0; k--) {
                                     requestTyphoonPath(res[k].NUMBER, res[k].CHN_NAME, res[k].ENG_NAME, false)
                                 }
@@ -722,6 +724,7 @@
                             }
                             // 如果不是强制显示且该台风已过期 则跳过该台风
                             if (alwaysshow === false & active === false) {
+                                showTyphoonName()
                                 return
                             }
                             // 查看哪个数组为空
@@ -1040,7 +1043,10 @@
                 showingArray.sort(SortByNo)
                 switch (showingArray.length) {
                     case 0:
-                        document.getElementById('typhoonNamePanel').style.display = 'none'
+                        // document.getElementById('typhoonNamePanel').style.display = 'none'
+                        var elem0 = document.getElementById('firstTyphoon')
+                        elem0.style.display = 'flex'
+                        elem0.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前无台风'
                         break
                     case 3:
                         var elem3 = document.getElementById('thirdTyphoon')
@@ -1054,7 +1060,6 @@
                         var elem1 = document.getElementById('firstTyphoon')
                         elem1.style.display = 'flex'
                         elem1.innerHTML = '台风：' + showingArray[0].name + '（' + showingArray[0].eng + '）'
-                        document.getElementById('typhoonNamePanel').style.display = 'flex'
                         break
                     default:
                         break
@@ -1148,8 +1153,10 @@
 
         // 显示第一个台风
         var panToFirst = function () {
-            var number = showingArray[0].no
-            panToLastPoint(number)
+            if (showingArray.length > 0) {
+                var number = showingArray[0].no
+                panToLastPoint(number)
+            }
             // panToTyphoon(typhoonList)
         }
 
