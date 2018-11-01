@@ -58,14 +58,14 @@
 		<!-- 小分隔条 -->
 		<view class="separator-vertical-small"></view>
 		<!-- 检查更新 -->
-		<view class="stripbutton" @tap="checkupdateTap">
+		<!-- <view class="stripbutton" @tap="checkupdateTap">
 			<view class="separator-horizontal"></view>
 			<view class="text text-gray">检查更新</view>
 			<view class="right-column">
 				<view class="fa fa-angle-right font-icon text-gray"></view>
 			</view>
 			<view class="separator-horizontal"></view>
-		</view>
+		</view> -->
     </view>
 </template>
 

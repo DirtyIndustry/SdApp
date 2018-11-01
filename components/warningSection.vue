@@ -70,7 +70,7 @@ export default {
 @import "../common/generic.css";
 .warning-section {
     border: 1upx solid #999;
-    height: 60upx;
+    height: 62upx;
     position: relative;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.8);
@@ -79,7 +79,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    height: 60upx; 
+    height: 62upx; 
     width: 120upx;
     background-color: #fff;
     display: flex;

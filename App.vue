@@ -78,56 +78,56 @@
 							console.log('网络异常,请检查网络设置')
 						} else {
 							// 尝试连接后台服务器
-							uni.request({
-								url: appsettings.hosturl + 'GetAndroidUpgrade_0911',
-								data: {name: 'admin', areaflg: '山东'},
-								method: 'POST',
-								success: function (res) {
-									console.log('[服务器]: 返回 安卓升级数据')
-									if (!res.data.d) {
-										console.log('[服务器]: 返回 安卓升级数据 返回值为空')
-										return false
-									}
-									let result = JSON.parse(res.data.d)
-									if (result.length === 0) {
-										console.log('[服务器]: 返回 安卓升级数据 返回值为空')
-										return false
-									}
-									for (let i = 0; i < result.length; i++) {
-										let resversion = result[i].version
-										let resappname = result[i].appname
-										// 检查app名称是否相同
-										if (resappname === appsettings.appname) {
-											if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
-												// 弹窗提示
-												uni.showModal({
-													title: '发现新版本',
-													content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
-													confirmText: '立即升级',
-													cancelText: '取消',
-													success: function (res) {
-														if (res.confirm) {
-															console.log('用户确认升级')
-															plus.runtime.openURL(result[i].url)
-														} else {
-															console.log('用户取消升级')
-														}
-													}
-												})
-											}
-										}
-									}
-								}, // end-success
-								fail: function (res) {
-									// 无法成功连接服务器 弹出提示
-									console.log('[服务器]: 维护中!')
-									uni.showModal({
-										title: '提示',
-										content: '服务器维护中!',
-										showCancel: false
-									})
-								} // end-fail
-							}) // end-request
+							// uni.request({
+							// 	url: appsettings.hosturl + 'GetAndroidUpgrade_0911',
+							// 	data: {name: 'admin', areaflg: '山东'},
+							// 	method: 'POST',
+							// 	success: function (res) {
+							// 		console.log('[服务器]: 返回 安卓升级数据')
+							// 		if (!res.data.d) {
+							// 			console.log('[服务器]: 返回 安卓升级数据 返回值为空')
+							// 			return false
+							// 		}
+							// 		let result = JSON.parse(res.data.d)
+							// 		if (result.length === 0) {
+							// 			console.log('[服务器]: 返回 安卓升级数据 返回值为空')
+							// 			return false
+							// 		}
+							// 		for (let i = 0; i < result.length; i++) {
+							// 			let resversion = result[i].version
+							// 			let resappname = result[i].appname
+							// 			// 检查app名称是否相同
+							// 			if (resappname === appsettings.appname) {
+							// 				if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+							// 					// 弹窗提示
+							// 					uni.showModal({
+							// 						title: '发现新版本',
+							// 						content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
+							// 						confirmText: '立即升级',
+							// 						cancelText: '取消',
+							// 						success: function (res) {
+							// 							if (res.confirm) {
+							// 								console.log('用户确认升级')
+							// 								plus.runtime.openURL(result[i].url)
+							// 							} else {
+							// 								console.log('用户取消升级')
+							// 							}
+							// 						}
+							// 					})
+							// 				}
+							// 			}
+							// 		}
+							// 	}, // end-success
+							// 	fail: function (res) {
+							// 		// 无法成功连接服务器 弹出提示
+							// 		console.log('[服务器]: 维护中!')
+							// 		uni.showModal({
+							// 			title: '提示',
+							// 			content: '服务器维护中!',
+							// 			showCancel: false
+							// 		})
+							// 	} // end-fail
+							// }) // end-request
 						} // end-if-else (res.network === 'none')
 					} // end-success-getNetworkType
 				}) // end-uni.getNetworkType
