@@ -1,9 +1,9 @@
 {
-    "name" : "SdApp",
+    "name" : "山东海洋预报",
     "appid" : "__UNI__D13F51F",
     "description" : "",
-    "versionName" : "0.0.1",
-    "versionCode" : "001",
+    "versionName" : "1.3.0",
+    "versionCode" : 130,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */

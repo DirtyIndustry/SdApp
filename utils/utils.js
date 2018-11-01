@@ -134,6 +134,7 @@ const getShandongData = function (res) {
             let tide = buildTidedata(res.astroDatas[i].tidedata)
             let mark = buildMarkdata(res.astroDatas[i].markdata)
             tideData.optionTideOne = getAstroOptionNew(tide, mark, res.astroDatas[i].max, res.astroDatas[i].min)
+            tideData.optionTideOne.series[0].markPoint.symbol = 'none'
         }
     } // if-else 是否是青岛
     // 写入Vuex
@@ -167,6 +168,8 @@ const getShandongData = function (res) {
         option.xAxis.axisLabel.show = false
         // 不显示最大值横线
         option.series[1].markLine.data = []
+        // 不显示时间红点
+        option.series[0].markPoint.symbol = 'none'
         // 将地名字母代号转为中文地名
         res.refinedDatas[i].extrainfo[0].loc = getLocName(res.refinedDatas[i].extrainfo[0].loc)
         if (res.refinedDatas.length > 1) {   // 如果是青岛
@@ -228,6 +231,8 @@ const getShandongData = function (res) {
             data.option.series[0].label.color = '#1c8d3b'
             // 时间颜色红色
             data.option.series[0].markLine.label.textStyle.color = 'red'
+            // 不显示时间红点
+            data.option.series[0].markPoint.symbol = 'none'
             switch (res.weihaiDatas[i].REPORTAREA) {
                 case '成山头':
                     weihaiData.first = data
@@ -602,11 +607,11 @@ const needUpdate = function (oldVal, newVal) {
     let oldarr = oldVal.split('.')
     let newarr = newVal.split('.')
     for (let i = 0; i < oldarr.length; i++) {
-        if (oldarr[i] < newarr[i]) {
-            return true
+        if (Number(oldarr[i]) > Number(newarr[i])) {
+            return false
         }
     }
-    return false
+    return true
 }
 
 module.exports = {

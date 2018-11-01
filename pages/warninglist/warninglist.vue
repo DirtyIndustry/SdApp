@@ -65,7 +65,7 @@ export default {
             let that = this
             uni.request({
                 url: appsettings.hosturl + 'GetOceanAlarmList',
-                data: {name: 'admin', areaflg: '青岛'},
+                data: {name: 'admin', areaflg: '山东'},
                 method: 'POST',
                 success: function (res) {
                     console.log('[服务器]: 返回 预警报列表')

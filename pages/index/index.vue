@@ -111,7 +111,8 @@
 				warningData: {
 					typhoonWarning: '',
 					waveWarning: '',
-					waveUrl: ''
+					waveUrl: '',
+					filename: ''
 				}
 			}
 		},
@@ -221,21 +222,22 @@
 						if (resdata.Typhoon.NUMBER !== '') {
 							console.log('[服务器]: 有台风警报')
 							let nowdate = new Date()
-							that.warningData.typhoonWarning = nowdate.getFullYear() + '年' + (nowdate.getMonth() + 1) + '月' + nowdate.getDate() + '日, ' +
-								resdata.Typhoon.NUMBER +
-								'号台风"' +
-								resdata.Typhoon.CHN_NAME +
-								'(' +
-								resdata.Typhoon.ENG_NAME +
-								')"正在接近……'
+							// that.warningData.typhoonWarning = resdata.Typhoon.NUMBER +
+							// 	'号台风"' +
+							// 	resdata.Typhoon.CHN_NAME +
+							// 	'"正在接近...'
+							that.warningData.typhoonWarning = resdata.Typhoon.message
 						}
 						if (resdata.Ocean.length > 0) {
 							console.log('[服务器]: 有海洋警报')
 							let name = resdata.Ocean[resdata.Ocean.length - 1].name
-							let date = resdata.Ocean[resdata.Ocean.length - 1].datetime
+							let date = new Date(resdata.Ocean[resdata.Ocean.length - 1].datetime)
 							let url = resdata.Ocean[resdata.Ocean.length - 1].Url
-							that.warningData.waveWarning = name + ',' + date + '……'
+							let filename = resdata.Ocean[resdata.Ocean.length - 1].filename
+							// that.warningData.waveWarning = (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':00发布' + name + '。'
+							that.warningData.waveWarning = resdata.Ocean[resdata.Ocean.length - 1].message
 							that.warningData.waveUrl = url
+							that.warningData.filename = filename
 						}
 					}, // end-success
 					fail: function () {
@@ -365,8 +367,25 @@
 			waveWarningTap() {
 				console.log('[界面]: 点击海浪警报')
 				let that = this
-				uni.navigateTo({
-					url: '../warningdetail/warningdetail?data=' + that.warningData.waveUrl
+				// uni.navigateTo({
+				// 	url: '../warninglist/warninglist'
+				// })
+				uni.request({
+					url: appsettings.hosturl + 'GetOceanAlarmUrl',
+					data: {name: 'admin', areaflg: '山东', filename: that.warningData.filename},
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 预警报地址')
+						if (!res.data.d | res.data.d === '您无权访问此端口' | res.data.d === '') { // 返回的值为空
+							console.log('[服务器]: 返回 预警报地址 返回值为空')
+							return false
+						}
+						// 打开详细警报页面
+						console.log('[界面]: 跳转至 警报详情页面')
+						uni.navigateTo({
+							url: '../warningdetail/warningdetail?data=' + res.data.d
+						})
+					}
 				})
 			},
 			// 首页引导图点击
