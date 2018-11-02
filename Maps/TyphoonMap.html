@@ -574,7 +574,7 @@
             // 页面加载时向服务器请求起始数据
             var startupRequest = function () {
                 var year = new Date().getFullYear()
-                var url = hosturl + 'GetTyphoonList'
+                var url = hosturl + 'GetTyphoonListData'
                 var data = 'name=admin&areaflg=山东&typhoonyear=' + year
                 var res = []
                 var xmlhttp = new XMLHttpRequest()
@@ -619,7 +619,7 @@
                 if (value === '') {
                     return
                 }
-                var url = hosturl + 'GetTyphoonList'
+                var url = hosturl + 'GetTyphoonListData'
                 var data = 'name=admin&areaflg=山东&typhoonyear=' + value
                 var xmlhttp = new XMLHttpRequest()
                 xmlhttp.onreadystatechange = function () {
@@ -693,7 +693,7 @@
 
             // 向服务器请求台风路径
             var requestTyphoonPath = function (typhoonNo, typhoonName, typhoonEng, alwaysshow) {
-                var url = hosturl + 'GetTyphoonPath'
+                var url = hosturl + 'GetTyphoonPathData'
                 var data = 'name=admin&areaflg=山东&typhoonnumber=' + typhoonNo
                 var res = []
                 var active = false
