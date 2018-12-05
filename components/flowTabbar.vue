@@ -3,37 +3,82 @@
     <!-- 左边的按钮 -->
         <view class="tabbar tabbar-left" :style="{width: leftTabWidth}">
             <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-                <view class="button-inner">{{leftLabel}}</view>
+                <view class="button-inner">
+                    {{leftLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="leftNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-                <view class="button-inner border-inner-middle">{{middleLabel}}</view>
+                <view class="button-inner border-inner-middle">
+                    {{middleLabel}}
+                    <view class="indicator-container" >
+                        <view class="fa fa-circle indicator" v-if="middleNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-                <view class="button-inner">{{rightLabel}}</view>
+                <view class="button-inner">
+                    {{rightLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="rightNew"></view>
+                    </view>
+                </view>
             </view>
         </view>
         <!-- 右边的按钮顺 序是反的 右在左 左在右 -->
         <view class="tabbar tabbar-right" :style="{width: rightTabWidth, right: rightTabbarRight}">
             <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}" @tap="rightButtonTap">
-                <view class="button-inner">{{rightLabel}}</view>
+                <view class="button-inner">
+                    {{rightLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="rightNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}" @tap="midButtonTap">
-                <view class="button-inner border-inner-middle">{{middleLabel}}</view>
+                <view class="button-inner border-inner-middle">
+                    {{middleLabel}}
+                    <view class="indicator-container" >
+                        <view class="fa fa-circle indicator" v-if="middleNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}" @tap="leftButtonTap">
-                <view class="button-inner">{{leftLabel}}</view>
+                <view class="button-inner">
+                    {{leftLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="leftNew"></view>
+                    </view>
+                </view>
             </view>
         </view>
         <!-- 底层的按钮 -->
         <view class="tabbar tabbar-background">
             <view class="tabbar-button tabbar-button-left" :style="{width: sideButtonWidth + 'px'}">
-                <view class="button-inner button-inner-background">{{leftLabel}}</view>
+                <view class="button-inner button-inner-background">
+                    {{leftLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="leftNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button" :style="{width: midButtonWidth + 'px'}">
-                <view class="button-inner border-inner-middle button-inner-background">{{middleLabel}}</view>
+                <view class="button-inner border-inner-middle button-inner-background">
+                    {{middleLabel}}
+                    <view class="indicator-container" >
+                        <view class="fa fa-circle indicator" v-if="middleNew"></view>
+                    </view>
+                </view>
             </view>
             <view class="tabbar-button tabbar-button-right" :style="{width: sideButtonWidth + 'px'}">
-                <view class="button-inner button-inner-background">{{rightLabel}}</view>
+                <view class="button-inner button-inner-background">
+                    {{rightLabel}}
+                    <view class="indicator-container-side" >
+                        <view class="fa fa-circle indicator" v-if="rightNew"></view>
+                    </view>
+                </view>
             </view>
         </view>
         <!-- 蓝色指示器 -->
@@ -66,6 +111,27 @@ export default {
             type: String,
             default () {
                 return ''
+            }
+        },
+        // 左边红点指示器是否显示
+        leftNew: {
+            type: Boolean,
+            default () {
+                return false
+            }
+        },
+        // 中间红点指示器是否显示
+        middleNew: {
+            type: Boolean,
+            default () {
+                return false
+            }
+        },
+        // 右边红点指示器是否显示
+        rightNew: {
+            type: Boolean,
+            default () {
+                return false
             }
         }
     },
@@ -157,6 +223,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../common/FontAwesome.css";
 @import "../common/generic.css";
 /* 控件最外城容器 */
 .tabbar-container {
@@ -225,9 +292,27 @@ export default {
 .button-inner {
     width: 100%;
     height: 80upx;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+/* 指示点容器 */
+.indicator-container {
+    position: absolute;
+    right: 45rpx;
+    height: 100%;
+}
+.indicator-container-side {
+    position: absolute;
+    right: 65rpx;
+    height: 100%;
+}
+/* 新警报指示点 */
+.indicator {
+    color: red;
+    font-size: 10px;
+    top: 0;
 }
 /* 中间按钮内层容器 */
 .border-inner-middle {

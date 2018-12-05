@@ -1,7 +1,8 @@
 <template>
 <view class="page-body">
     <image src="../../static/Images/back_images.jpg" mode="aspectFill" style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;"/>
-    <flowTabbar leftLabel="风暴潮" middleLabel="海浪警报" rightLabel="海冰警报" @tabchange="switchTab"></flowTabbar>
+    <flowTabbar leftLabel="风暴潮" middleLabel="海浪警报" rightLabel="海冰警报"
+        :leftNew="leftNew" :middleNew="middleNew" :rightNew="rightNew" @tabchange="switchTab" ref="flowtabbar"></flowTabbar>
     <view style="height: 160upx;" />
     <view>
         <!-- 左列表 -->
@@ -31,6 +32,9 @@ export default {
             listLeft: [],       // 三个列表的内容数据
             listMiddle: [],
             listRight: [],
+            leftNew: false,     // 三个列表是否有新数据
+            middleNew: false,
+            rightNew: false,
             currentIndex: 0,    // 当前显示的tab页
             listLeftLeft: '5%',     // 三个tab页的左边距
             listMiddleLeft: '105%',
@@ -102,18 +106,41 @@ export default {
                         switch (warning.type) {
                             case '风暴潮':
                                 that.listLeft.push(warning)
+                                if (new Date(warning.date).toDateString() == new Date().toDateString()) {
+                                    that.leftNew = true
+                                }
                                 break
                             case '海浪':
+                                if (new Date(warning.date).toDateString() == new Date().toDateString()) {
+                                    that.middleNew = true
+                                }
                                 that.listMiddle.push(warning)
                                 break
                             case '海冰':
+                                if (new Date(warning.date).toDateString() == new Date().toDateString()) {
+                                    that.rightNew = true
+                                }
                                 that.listRight.push(warning)
                                 break
                             default:
                                 break
                         } // end-switch
                     } // end-for resarr
-                    
+                    // 跳转到有内容的标签
+                    if (that.listMiddle.length > 0) {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
+                            that.$refs.flowtabbar.midButtonTap()
+                            that.showMiddleTab()
+                        }.bind(this), 525)
+                        // this.timerlist.push(timer)
+                    } else if (that.listRight.length > 0) {
+                        let timer = setTimeout(function () {
+                            clearTimeout(timer)
+                            that.$refs.flowtabbar.rightButtonTap()
+                            that.showRightTab()
+                        }.bind(this), 525)
+                    }
                 }, // end-success
                 fail: function (res) {
                     // 网络请求失败
