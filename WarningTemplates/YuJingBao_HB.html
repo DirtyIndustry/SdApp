@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>警报</title>
+    <style>
+        .page-body {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header {
+            /* border: 1px solid #000; */
+            width: 85%;
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .maintitle {
+            width: 85%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-column {
+            /* border: 1px solid #f00; */
+            flex: 5;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .header-column-left-row {
+            height: 20px;
+        }
+        .header-column-right {
+            flex: 3;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .leval {
+            border: 1px solid #000;
+            padding: 5px;
+        }
+
+        .header-column-right2 {
+            /* border: 1px solid #000; */
+            flex: 3;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header-column-right-row {
+            /* border: 1px solid #0f0; */
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .text-small {
+            font-size: 12px;
+        }
+
+        .bottomline {
+            border-bottom: 1px solid #333;
+        }
+
+        .redline {
+            border-top: 1px red solid;
+            border-bottom: 3px red solid;
+            width: 85%;
+            height: 1px;
+        }
+
+        .content {
+            width: 85%;
+        }
+
+        .subtitle {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .tableform table td {
+            border: 1px black solid;
+        }
+
+        .table-title {
+            /* border: 1px solid #000; */
+
+            width: 100%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .table-body {
+            /* border: 1px solid #f00; */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header-row {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .table-header-column {
+            border: 1px solid #000;
+            flex: 7;
+        }
+
+        .table-header-column-right {
+            border-top: 1px solid #000;
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+            flex: 4;
+        }
+
+        .table-row {
+            /* border: 1px solid #f00; */
+            flex: 1;
+            width: 100%;
+            min-height: 40px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .table-column {
+            border-left: 1px solid #000;
+            border-bottom: 1px solid #000;
+            border-right: 1px solid #000;
+            flex: 7;
+        }
+
+        .table-column-right {
+            border-bottom: 1px solid #000;
+            border-right: 1px solid #000;
+            flex: 4;
+        }
+
+        .table-cell {
+            /* border: 1px solid #f00; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            font-size: 12px;
+        }
+
+        .footer {
+            /* border: 1px solid #000; */
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            width: 85%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .footer-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-cell {
+            /* border: 1px solid #f00; */
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-body">
+
+
+        <div style="height: 20px;"></div>
+        <div class="header">
+            <div class="header-column">
+                <h4 id="p1" class="fl">$htmlformat[0]</h4>
+            </div>
+            <div class="header-column-right">
+                <div class="leval fr">$htmlformat[2]</div>
+            </div>
+        </div>
+        <div class="maintitle">
+            <h3 class="title">$htmlformat[1]</h3>
+        </div>
+        <div class="header">
+            <div class="header-column">
+                <div class="time fl">
+                    <div class="p1 header-column-left-row text-small">时间：<span class="bottomline">$htmlformat[3]</span></div>
+                    <div class="p2 header-column-left-row text-small">编号：<span class="bottomline">$htmlformat[4]</span></div>
+                </div>
+            </div>
+            <div class="header-column-right2">
+                <div class="header-column-right-row"></div>
+                <div class="header-column-right-row">
+                    <div class="name fr">
+                        <div>$htmlformat[40]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 10px;"></div>
+        <!-- 红线 -->
+        <div class="redline"></div>
+        <!-- 正文 -->
+        <div class="content">
+            <div class="subtitle">
+                <h5>$htmlformat[5]</h5>
+            </div>
+            <p style="text-indent:2em;">$htmlformat[6]</p>
+            <div class="table-title">表1 未来三天各海区浮冰外缘线与平整冰厚度预报</div>
+            <div class="table-body">
+                <div class="table-header-row">
+                    <div class="table-header-column table-cell">预报海区</div>
+                    <div class="table-header-column-right table-cell">浮冰外缘线(海里)</div>
+                    <div class="table-header-column-right table-cell">一般冰厚(厘米)</div>
+                    <div class="table-header-column-right table-cell">最大冰厚(厘米)</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">辽东湾</div>
+                    <div class="table-column-right table-cell">$htmlformat[7]</div>
+                    <div class="table-column-right table-cell">$htmlformat[11]</div>
+                    <div class="table-column-right table-cell">$htmlformat[15]</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">渤海湾</div>
+                    <div class="table-column-right table-cell">$htmlformat[8]</div>
+                    <div class="table-column-right table-cell">$htmlformat[12]</div>
+                    <div class="table-column-right table-cell">$htmlformat[16]</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">莱州湾</div>
+                    <div class="table-column-right table-cell">$htmlformat[9]</div>
+                    <div class="table-column-right table-cell">$htmlformat[13]</div>
+                    <div class="table-column-right table-cell">$htmlformat[17]</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">黄海北部</div>
+                    <div class="table-column-right table-cell">$htmlformat[10]</div>
+                    <div class="table-column-right table-cell">$htmlformat[14]</div>
+                    <div class="table-column-right table-cell">$htmlformat[18]</div>
+                </div>
+            </div>
+            <div style="height: 10px;"></div>
+            <div class="table-title">表2 未来三天沿岸港口和海岛平整冰厚度预报</div>
+            <div class="table-body">
+                <div class="table-header-row">
+                    <div class="table-header-column table-cell">预报要素</div>
+                    <div class="table-header-column-right table-cell">营口港</div>
+                    <div class="table-header-column-right table-cell">锦州港</div>
+                    <div class="table-header-column-right table-cell">秦皇岛港</div>
+                    <div class="table-header-column-right table-cell">天津港</div>
+                    <div class="table-header-column-right table-cell">黄骅港</div>
+                    <div class="table-header-column-right table-cell">东营港</div>
+                    <div class="table-header-column-right table-cell">潍坊港</div>
+                    <div class="table-header-column-right table-cell">觉华岛</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">一般冰厚（厘米）</div>
+                    <div class="table-column-right table-cell">$htmlformat[13]</div>
+                    <div class="table-column-right table-cell">$htmlformat[21]</div>
+                    <div class="table-column-right table-cell">$htmlformat[23]</div>
+                    <div class="table-column-right table-cell">$htmlformat[25]</div>
+                    <div class="table-column-right table-cell">$htmlformat[27]</div>
+                    <div class="table-column-right table-cell">$htmlformat[29]</div>
+                    <div class="table-column-right table-cell">$htmlformat[31]</div>
+                    <div class="table-column-right table-cell">$htmlformat[33]</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-column table-cell">最大冰厚（厘米）</div>
+                    <div class="table-column-right table-cell">$htmlformat[20]</div>
+                    <div class="table-column-right table-cell">$htmlformat[22]</div>
+                    <div class="table-column-right table-cell">$htmlformat[24]</div>
+                    <div class="table-column-right table-cell">$htmlformat[26]</div>
+                    <div class="table-column-right table-cell">$htmlformat[28]</div>
+                    <div class="table-column-right table-cell">$htmlformat[30]</div>
+                    <div class="table-column-right table-cell">$htmlformat[32]</div>
+                    <div class="table-column-right table-cell">$htmlformat[34]</div>
+                </div>
+            </div>
+            <div style="height: 10px;"></div>
+            <div style="text-align:center">
+                <img id="imgid" src=" " style="max-width:100%;" /> $htmlformat[35]
+            </div>
+            <div style="text-indent:2em;">$htmlformat[41]</div>
+            <div style="height: 5px;"></div>
+
+        </div>
+        <!-- 页脚 -->
+        <div style="height: 5px;"></div>
+        <div class="footer">
+            <div class="footer-column">
+                <div class="footer-cell text-small">
+                    $htmlformat[36]
+                </div>
+                <div class="footer-cell text-small">
+                    $htmlformat[38]
+                </div>
+            </div>
+            <div class="footer-column">
+                <div class="footer-cell text-small">
+                    $htmlformat[37]
+                </div>
+                <div class="footer-cell text-small">
+                    $htmlformat[39]
+                </div>
+            </div>
+        </div>
+        <div style="height: 20px;"></div>
+
+    </div>
+
+</body>
+
+</html>

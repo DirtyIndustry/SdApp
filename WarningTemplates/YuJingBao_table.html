@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>警报</title>
+    <style>
+        .page-body {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header {
+            /* border: 1px solid #000; */
+            width: 85%;
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+        }
+        .maintitle {
+            width: 85%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-column {
+            /* border: 1px solid #f00; */
+            flex: 5;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+        }
+        
+        .header-column-left-row {
+            height: 20px;
+        }
+        .header-column-right {
+            flex: 3;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+        .leval {
+            border: 1px solid #000;
+            padding: 5px;
+        }
+        .header-column-right2 {
+            /* border: 1px solid #000; */
+            flex: 3;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .header-column-right-row {
+            /* border: 1px solid #0f0; */
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+        .text-small {
+            font-size: 12px;
+        }
+        .bottomline {
+            border-bottom: 1px solid #333;
+        }
+
+        .redline {
+            border-top: 1px red solid;
+            border-bottom: 3px red solid;
+            width: 85%;
+            height: 1px;
+        }
+        
+        .content {
+            width: 85%;
+        }
+        .subtitle {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .tableform table td {
+            border: 1px black solid;
+        }
+
+        .footer {
+            /* border: 1px solid #000; */
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            width: 85%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+        }
+        .footer-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .footer-cell {
+            /* border: 1px solid #f00; */
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-body">
+
+
+        <div style="height: 20px;"></div>
+        <div class="header">
+            <div class="header-column">
+                <h4 id="p1" class="fl">$htmlformat[0]</h4>
+            </div>
+            <div class="header-column-right">
+                <div class="leval fr">$htmlformat[18]</div>
+            </div>
+        </div>
+        <div class="maintitle">
+            <h3 class="title">$htmlformat[1]</h3>
+        </div>
+        <div class="header">
+            <div class="header-column">
+                <div class="time fl">
+                    <div class="p1 header-column-left-row text-small">时间：<span class="bottomline">$htmlformat[2]</span></div>
+                    <div class="p2 header-column-left-row text-small">编号：<span class="bottomline">$htmlformat[3]</span></div>
+                </div>
+            </div>
+            <div class="header-column-right2">
+                <div class="header-column-right-row"></div>
+                <div class="header-column-right-row">
+                    <div class="name fr">
+                        <div>$htmlformat[4]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 10px;"></div>
+        <div class="redline"></div>
+        <div class="content">
+            <div class="subtitle">
+                <h5>$htmlformat[17]</h5>
+            </div>
+            <p style="text-indent:2em;">$htmlformat[5]</p>
+            <div style="text-align:center">
+                $htmlformat[19]
+            </div>
+        </div>
+        <div style="height: 5px;"></div>
+        <div class="footer">
+            <div class="footer-column">
+                <div class="footer-cell text-small">
+                    $htmlformat[12]
+                </div>
+                <div class="footer-cell text-small">
+                    $htmlformat[14]
+                </div>
+            </div>
+            <div class="footer-column">
+                <div class="footer-cell text-small">
+                    $htmlformat[13]
+                </div>
+                <div class="footer-cell text-small">
+                    $htmlformat[15]
+                </div>
+            </div>
+        </div>
+        <div style="height: 20px;"></div>
+
+    </div>
+    
+</body>
+
+</html>
