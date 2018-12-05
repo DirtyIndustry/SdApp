@@ -8,14 +8,9 @@
                     <view class="warning-header-text text-xxs">&nbsp;台风&nbsp;</view>
                 </view>
             </view>
-            <!-- <view class="warning-fader warning-fader-left"></view> -->
             <view class="warning-banner text" >
                 {{typhoon}}
             </view>
-            <view class="warning-banner warning-banner-follow text" >
-                {{typhoon}}
-            </view>
-            <!-- <view class="warning-fader warning-fader-right"></view> -->
         </view>
         <!-- 分隔栏 -->
         <view style="height: 5upx;"></view>
@@ -27,14 +22,9 @@
                     <view class="warning-header-text text-xxs">&nbsp;海浪&nbsp;</view>
                 </view>
             </view>
-            <!-- <view class="warning-fader warning-fader-left"></view> -->
             <view class="warning-banner text" >
                 {{wave}}
             </view>
-            <view class="warning-banner warning-banner-follow text" >
-                {{wave}}
-            </view>
-            <!-- <view class="warning-fader warning-fader-right"></view> -->
         </view>
     </view>
 </template>
@@ -130,22 +120,11 @@ export default {
     align-items: center;
     white-space: nowrap;
     margin-left: 18%;
-    /* animation-name: around;
-    animation-duration: 14s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear; */
     z-index: 5;
 }
 .warning-banner-follow {
     margin-left: 100%;
     animation-delay: 7s;
 }
-@keyframes around {
-    from {
-        margin-left: 100%;
-    }
-    to {
-        margin-left: -180%;
-    }
-}
+
 </style>

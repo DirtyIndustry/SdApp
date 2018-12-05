@@ -616,6 +616,20 @@ const needUpdate = function (oldVal, newVal) {
     }
     return true
 }
+// 升级操作
+const doUpgrade = function () {
+    if (plus.os.name == 'Android') {
+        uni.downloadFile({
+            url: resurl,
+            success: function (res) {
+                plus.runtime.openFile(res.tempFilePath)
+            }
+        })
+    } else { // ios
+        var urlstr = encodeURI('https://itunes.apple.com/cn/app/%E5%B1%B1%E4%B8%9C%E6%B5%B7%E6%B4%8B%E9%A2%84%E6%8A%A5/id1284461583?mt=8')
+        plus.runtime.openURL(urlstr)
+    }
+}
 
 module.exports = {
     setWeatherIcon: setWeatherIcon, // 天气图标
@@ -628,5 +642,6 @@ module.exports = {
     buildTidedata: buildTidedata,
     buildMarkdata: buildMarkdata,
     switchCity: switchCity, // 切换城市 包括自动定位
-    needUpdate: needUpdate  // 对比版本号 检查是否需要更新
+    needUpdate: needUpdate, // 对比版本号 检查是否需要更新
+    doUpgrade: doUpgrade    // 执行升级
 }

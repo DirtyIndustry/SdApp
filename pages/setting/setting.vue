@@ -175,9 +175,20 @@
 						for (let i = 0; i < result.length; i++) {
 							let resversion = result[i].version
 							let resappname = result[i].appname
+							let forceupgradeversion = result[i].forceupgradeversion
+							let resurl = result[i].url
 							// 检查app名称是否相同
 							if (resappname === appsettings.appname) {
-								if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+								if (utils.needUpdate(forceupgradeversion, appsettings.appversion) & forceupgradeversion !== '') { // 强制升级
+									uni.showModal({
+										title: '当前版本已停用, 请升级',
+										showCancel: false,
+										confirmText: '立即升级',
+										complete: function (res) {
+											utils.doUpgrade()
+										}
+									})
+								} else if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
 									// 弹窗提示
 									uni.showModal({
 										title: '发现新版本',
@@ -187,16 +198,11 @@
 										success: function (res) {
 											if (res.confirm) {
 												console.log('用户确认升级')
-												plus.runtime.openURL(result[i].url)
+												utils.doUpgrade()
 											} else {
 												console.log('用户取消升级')
 											}
 										}
-									})
-								} else {	// 不需要升级
-									uni.showModal({
-										content: '当前已是最新版本',
-										showCancel: false
 									})
 								}
 							}

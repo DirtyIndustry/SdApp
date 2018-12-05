@@ -2,6 +2,11 @@
 	import appsettings from './utils/appsettings.js'
 	import utils from './utils/utils.js'
 	export default {
+		data() {
+			return {
+				provider: []
+			}
+		},
 		computed: {
 			// 系统信息
 			systemInfo: {
@@ -61,6 +66,13 @@
 				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
 			}
 		},
+		watch: {
+			provider: {
+				handler (newVal, oldVal) {
+					// this.listenTranMsg()
+				}
+			}
+		},
 		methods: {
 			// 检查网络环境
 			checkNetwork () {
@@ -77,6 +89,14 @@
 							})
 							console.log('网络异常,请检查网络设置')
 						} else {
+							uni.request({
+								url: appsettings.hosturl + 'GetDeviceToken',
+								data: { name: 'admin', areaflg: '山东', deviceToken: plus.device.uuid, version: appsettings.appversion },
+								method: 'POST',
+								success: function (res) {
+									console.log('[服务器]: 统计应用信息成功')
+								}
+							})
 							// 尝试连接后台服务器
 							uni.request({
 								url: appsettings.hosturl + 'GetAndroidUpgrade_0911',
@@ -92,6 +112,41 @@
 									if (result.length === 0) {
 										console.log('[服务器]: 返回 安卓升级数据 返回值为空')
 										return false
+									}
+									for (let i = 0; i < result.length; i++) {
+										let resversion = result[i].version
+										let resappname = result[i].appname
+										let forceupgradeversion = result[i].forceupgradeversion
+										let resurl = result[i].url
+										// 检查app名称是否相同
+										if (resappname === appsettings.appname) {
+											if (utils.needUpdate(forceupgradeversion, appsettings.appversion) & forceupgradeversion !== '') { // 强制升级
+												uni.showModal({
+													title: '当前版本已停用, 请升级',
+													showCancel: false,
+													confirmText: '立即升级',
+													complete: function (res) {
+														utils.doUpgrade()
+													}
+												})
+											} else if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+												// 弹窗提示
+												uni.showModal({
+													title: '发现新版本',
+													content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
+													confirmText: '立即升级',
+													cancelText: '取消',
+													success: function (res) {
+														if (res.confirm) {
+															console.log('用户确认升级')
+															utils.doUpgrade()
+														} else {
+															console.log('用户取消升级')
+														}
+													}
+												})
+											}
+										}
 									}
 									// for (let i = 0; i < result.length; i++) {
 									// 	let resversion = result[i].version
@@ -340,6 +395,38 @@
 						this.weihaiData.show = false
 						break
 				}
+			},
+			// 开启推送
+			openPush() {
+				let that = this
+				uni.getProvider({
+					service: 'push',
+					success: function (res) {
+						console.log(res.provider)
+						that.provider = res.provider
+						uni.subscribePush({
+							provider: res.provider[0],
+							success: function (res2) {
+								console.log('[设备]: 已开启' + res.provider[0] + 'push接收')
+								that.listenTranMsg()
+							}
+						})
+					}
+				})
+			},
+			listenTranMsg() {
+				let that = this
+				uni.onPush({
+					provider: this.provider[0],
+					success: (e) => {
+						console.log('[设备]: 开始监听透传数据')
+					},
+					callback: (e) => {
+						uni.showToast({
+							title: e.data
+						})
+					}
+				})
 			}
 		}, // end-methods
 		onLaunch: function () {
@@ -358,6 +445,7 @@
 			this.getSystemInfo()
 			this.getLocalStorage()
 			this.switchCityByIndex(this.cityIndex)
+			this.openPush()
 		},
 		onShow: function () {
 			console.log('App Show')
