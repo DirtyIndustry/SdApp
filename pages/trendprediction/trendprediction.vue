@@ -1,6 +1,6 @@
 <template>
     <view class="page-body">
-        <image class="trend-image" :src="trendurl" mode="widthFix" />
+        <image class="trend-image" :src="trendurl" mode="widthFix" @tap="viewImage" />
     </view>    
 </template>
 
@@ -34,6 +34,13 @@ export default {
                 }
             }) // end-request
             return true
+        },
+        viewImage () {
+            let that = this
+            uni.previewImage({
+                urls: [that.trendurl],
+                indicator: 'none'
+            })
         }
     },
     onLoad () {
@@ -46,17 +53,11 @@ export default {
     .page-body {
         width: 100%;
         height: 100%;
-        display: flex;
-        flex-grow: 1;
-		overflow-x: hidden;
-        align-items: center;
-        justify-content: center;
         background-color: #fff;
     }
 
     .trend-image {
         height: 100%;
         width: 100%;
-        top: 0;
     }
 </style>
