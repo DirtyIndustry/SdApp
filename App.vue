@@ -408,6 +408,7 @@
 							provider: res.provider[0],
 							success: function (res2) {
 								console.log('[设备]: 已开启' + res.provider[0] + 'push接收')
+								console.log(res2.clientid)
 								that.listenTranMsg()
 							}
 						})
