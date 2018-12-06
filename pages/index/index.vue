@@ -168,6 +168,11 @@
 			showIndexGuide: {
 				get () { return this.$store.state.Infos.showindexguide },
 				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
+			},
+			// 推送信息
+			pushMessage: {
+				get () { return this.$store.state.Datas.pushmessage },
+				set (value) { this.$store.dispatch('setPushMessage', value) }
 			}
 		},
 		methods: {
@@ -395,6 +400,35 @@
 				this.showIndexGuide = false
 				// 写入本地缓存
 				utils.storeToLocal('showindexguide', false)
+			},
+			// 处理推送信息
+			checkPushMessage() {
+				if (this.pushMessage.filename !== '') {
+					let that = this
+					uni.request({
+						url: appsettings.hosturl + 'GetOceanAlarmUrl',
+						data: {name: 'admin', areaflg: '山东', filename: that.pushMessage.filename},
+						method: 'POST',
+						success: function (res) {
+							console.log('[服务器]: 返回 预警报地址')
+							if (!res.data.d | res.data.d === '您无权访问此端口' | res.data.d === '') { // 返回的值为空
+								console.log('[服务器]: 返回 预警报地址 返回值为空')
+								return false
+							}
+							// 清空pushMessage
+							that.pushMessage.filename = ''
+							that.pushMessage.name = ''
+							that.pushMessage.datetime = ''
+							that.pushMessage.Url = ''
+							that.pushMessage.message = ''
+							// 打开详细警报页面
+							console.log('[界面]: 跳转至 警报详情页面')
+							uni.navigateTo({
+								url: '../warningdetail/warningdetail?data=' + res.data.d
+							})
+						}
+					})
+				}
 			}
 		}, // end-methods
 		watch: {
@@ -405,6 +439,14 @@
 					if (newVal === 2) {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
+					}
+				}
+			},
+			pushMessage: {
+				handler(newVal, oldVal) {
+					if (newVal) {
+						// 检查推送信息
+						this.checkPushMessage()
 					}
 				}
 			}
@@ -420,6 +462,7 @@
 		},
 		onReady() {
 			console.log('index page ready.')
+			this.checkPushMessage()
 		},
 		mounted() {
 			console.log('index vue mounted.')

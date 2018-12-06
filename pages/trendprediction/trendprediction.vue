@@ -1,6 +1,7 @@
 <template>
     <view class="page-body">
-        <image class="trend-image" :src="trendurl" mode="widthFix" @tap="viewImage" />
+        <!-- <image class="trend-image" :src="trendurl" mode="widthFix" @tap="viewImage" /> -->
+        <web-view v-if="url" :src="url"></web-view>
     </view>    
 </template>
 
@@ -9,7 +10,8 @@ import appsettings from '../../utils/appsettings.js'
 export default {
     data () {
         return {
-            trendurl: ''
+            trendurl: '',
+            url: 'http://123.234.129.237:8001/TrendPrediction/TrendPrediction.html'
         }
     },
 
@@ -27,6 +29,8 @@ export default {
                         return false
                     }
                     that.trendurl = res.data.d
+                    that.url = 'http://123.234.129.237:8001/TrendPrediction/TrendPrediction.html?picpath=' 
+                        + that.trendurl
                 }, // end-success-request
                 fail: function (res) {
                     // 网络请求失败

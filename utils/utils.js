@@ -43,6 +43,7 @@ const setWeatherIcon = function (weather) {
         case '雪':
             return '../../static/Images/right_weather_snow.png'
         case '雨加雪':
+        case '雨夹雪':
             return '../../static/Images/right_weather_raisnow.png'
     }
 }

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>趋势预测</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5,user-scalable=yes" />
+        <link href="./css/mui.min.css" rel="stylesheet" />
+        <style>
+            body {
+                background-color: #fff;
+            }
+            .image {
+                width: 100vw;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="content">
+            <img class="image" id="image" src="./loading.png" />
+        </div>
+        <script src="./js/mui.min.js"></script>
+        <script type="text/javascript" src="./js/uni.webview.0.1.51.js"></script>
+        <script type="text/javascript">
+            mui.init()
+            mui.back = function () {
+                uni.navigateBack()
+            }
+            mui.plusReady(function() {
+                plus.webview.currentWebview().setStyle({
+                    scalable: true,
+                    scrollIndicator: 'none'
+                })
+                var path = getUrlParam("picpath")
+                console.log(path)
+                document.getElementById("image").src = path
+                try {
+                    var Webview = plus.android.importClass("android.webkit.WebView")
+                    var WebSettings = plus.android.importClass("android.webkit.WebSettings")
+                    var wv = plus.android.currentWebview()
+                    var setting = plus.android.invoke(wv, "getSettings")
+                    setting.setDisplayZoomControls(false)
+                } catch (error) {
+                    console.log(error)
+                }
+            })
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+                var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+                if (r != null)
+                    return unescape(r[2]);
+                return null; // 返回参数值
+            }
+        </script>
+    </body>
+
+</html>

@@ -241,6 +241,14 @@ var state = {
             WATERTEMP: '',
             option: {}
         }
+    },
+    // 推送信息
+    pushmessage: {
+        filename: '',
+        name: '',
+        datetime: '',
+        Url: '',
+        message: ''
     }
 }
 
@@ -268,6 +276,9 @@ const mutations = {
     },
     setweihai (state, value) {
         state.weihaidata = value
+    },
+    setpushmessage (state, value) {
+        state.pushmessage = value
     }
 }
 
@@ -295,6 +306,9 @@ const actions = {
     },
     setWeihaiData (context, weihaidata) {
         context.commit('setweihai', weihaidata)
+    },
+    setPushMessage (context, value) {
+        context.commit('setpushmessage', value)
     }
 }
 

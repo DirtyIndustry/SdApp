@@ -63,7 +63,12 @@
 			// 首页引导显示
 			showIndexGuide: {
 				get () { return this.$store.state.Infos.showindexguide },
-				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
+				set (value) { this.$store.dispatch('setShowIndexGuide', value) }
+			},
+			// 推送信息
+			pushMessage: {
+				get () { return this.$store.state.Datas.pushmessage },
+				set (value) { this.$store.dispatch('setPushMessage', value) }
 			}
 		},
 		watch: {
@@ -148,30 +153,6 @@
 											}
 										}
 									}
-									// for (let i = 0; i < result.length; i++) {
-									// 	let resversion = result[i].version
-									// 	let resappname = result[i].appname
-									// 	// 检查app名称是否相同
-									// 	if (resappname === appsettings.appname) {
-									// 		if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
-									// 			// 弹窗提示
-									// 			uni.showModal({
-									// 				title: '发现新版本',
-									// 				content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
-									// 				confirmText: '立即升级',
-									// 				cancelText: '取消',
-									// 				success: function (res) {
-									// 					if (res.confirm) {
-									// 						console.log('用户确认升级')
-									// 						plus.runtime.openURL(result[i].url)
-									// 					} else {
-									// 						console.log('用户取消升级')
-									// 					}
-									// 				}
-									// 			})
-									// 		}
-									// 	}
-									// }
 								}, // end-success
 								fail: function (res) {
 									// 无法成功连接服务器 弹出提示
@@ -402,13 +383,13 @@
 				uni.getProvider({
 					service: 'push',
 					success: function (res) {
-						console.log(res.provider)
+						// console.log(res.provider)
 						that.provider = res.provider
 						uni.subscribePush({
 							provider: res.provider[0],
 							success: function (res2) {
 								console.log('[设备]: 已开启' + res.provider[0] + 'push接收')
-								console.log(res2.clientid)
+								console.log('[设备]: ClientId: ' + res2.clientid)
 								that.listenTranMsg()
 							}
 						})
@@ -423,9 +404,11 @@
 						console.log('[设备]: 开始监听透传数据')
 					},
 					callback: (e) => {
-						uni.showToast({
-							title: e.data
-						})
+						console.log(e.data)
+						let pushdata = JSON.parse(e.data)
+						if (pushdata !== undefined) {
+							that.pushMessage = pushdata
+						}
 					}
 				})
 			}
