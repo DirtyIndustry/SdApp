@@ -97,7 +97,7 @@ export default {
 
 <style scoped>
 .page-body {
-    height: 100%;
+    height: 100vh;
     flex-grow: 1;
 	overflow-x: hidden;
 }

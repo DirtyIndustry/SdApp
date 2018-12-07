@@ -4,6 +4,7 @@
 	export default {
 		data() {
 			return {
+				completedRequestCount: 0,
 				provider: []
 			}
 		},
@@ -65,16 +66,33 @@
 				get () { return this.$store.state.Infos.showindexguide },
 				set (value) { this.$store.dispatch('setShowIndexGuide', value) }
 			},
+			// 警报信息
+			warningData: {
+				get () { return this.$store.state.Datas.warningdata },
+				set (value) { this.$store.dispatch('setWarningData', value) }
+			},
 			// 推送信息
 			pushMessage: {
 				get () { return this.$store.state.Datas.pushmessage },
 				set (value) { this.$store.dispatch('setPushMessage', value) }
+			},
+			// 推送提示音
+			pushBeep: {
+				get () { return this.$store.state.Infos.pushbeep },
+				set (value) { this.$store.dispatch('setPushBeep', value) }
+			},
+			// 推送震动
+			pushVibrate: {
+				get() { return this.$store.state.Infos.pushvibrate },
+				set(value) { this.$store.dispatch('setPushVibrate', value) }
 			}
 		},
 		watch: {
-			provider: {
+			completedRequestCount: {
 				handler (newVal, oldVal) {
-					// this.listenTranMsg()
+					if (newVal == 2) {
+						uni.hideLoading()
+					}
 				}
 			}
 		},
@@ -271,6 +289,24 @@
 						that.showIndexGuide = JSON.parse(res.data)
 					}
 				})
+				// 推送提示音
+				uni.getStorage({
+					key: 'pushbeep',
+					success: function (res) {
+						console.log('[缓存]: 获取 推送提示音')
+						// console.log(res.data)
+						that.pushBeep = res.data
+					}
+				})
+				// 推送震动
+				uni.getStorage({
+					key: 'pushvibrate',
+					success: function (res) {
+						console.log('[缓存]: 获取 推送震动')
+						// console.log(res.data)
+						that.pushVibrate = res.data
+					}
+				})
 			}, // end-getLocalStorage()
 			// 根据index切换城市 允许自动定位 不写入缓存
 			switchCityByIndex(index) {
@@ -305,6 +341,53 @@
 					}, // success-request
 					fail: function (res) {
 						console.log('[服务器]: 请求 山东预报数据 失败')
+					},
+					complete: function () {
+						that.completedRequestCount++
+					}
+				})
+			},
+			// 请求服务器警报数据
+			loadAlarmData () {
+				let that = this
+				uni.request({
+					url: appsettings.hosturl + 'GetAlarm ',
+					data: {name: 'admin', areaflg: '山东'},
+					method: 'POST',
+					success: function (res) {
+						console.log('[服务器]: 返回 警报数据')
+						// 判断返回数据有效性
+						if (!res.data.d | res.data.d === '无权访问该接口' | res.data.d === '无该地区数据') { // 返回的值为空
+							console.log('[服务器]: 返回 警报数据 返回值为空')
+							return false
+						}
+						let resdata = JSON.parse(res.data.d)
+						if (resdata.Typhoon.NUMBER !== '') {
+							console.log('[服务器]: 有台风警报')
+							let nowdate = new Date()
+							// that.warningData.typhoonWarning = resdata.Typhoon.NUMBER +
+							// 	'号台风"' +
+							// 	resdata.Typhoon.CHN_NAME +
+							// 	'"正在接近...'
+							that.warningData.typhoonWarning = resdata.Typhoon.message
+						}
+						if (resdata.Ocean.length > 0) {
+							console.log('[服务器]: 有海洋警报')
+							let name = resdata.Ocean[resdata.Ocean.length - 1].name
+							let date = new Date(resdata.Ocean[resdata.Ocean.length - 1].datetime)
+							let url = resdata.Ocean[resdata.Ocean.length - 1].Url
+							let filename = resdata.Ocean[resdata.Ocean.length - 1].filename
+							// that.warningData.waveWarning = (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':00发布' + name + '。'
+							that.warningData.waveWarning = resdata.Ocean[resdata.Ocean.length - 1].message
+							that.warningData.waveUrl = url
+							that.warningData.filename = filename
+						}
+					}, // end-success
+					fail: function () {
+						console.log('[服务器]: 请求 警报数据 失败')
+					},
+					complete: function () {
+						that.completedRequestCount++
 					}
 				})
 			},
@@ -404,10 +487,33 @@
 						console.log('[设备]: 开始监听透传数据')
 					},
 					callback: (e) => {
-						console.log(e.data)
-						let pushdata = JSON.parse(e.data)
-						if (pushdata !== undefined) {
-							that.pushMessage = pushdata
+						console.log('[设备]: 接收到透传数据')
+						that.loadAlarmData()
+						if (plus.os.name == 'Android') {
+							// console.log(e.data)
+							let pushdata = JSON.parse(e.data)
+							if (pushdata !== undefined) {
+								that.pushMessage = pushdata
+							}
+						} else {
+							// console.log(JSON.stringify(e.data))
+							if (e.data !== undefined) {
+								if (that.pushBeep === true) {
+									plus.device.beep()
+								}
+								if (that.pushVibrate === true) {
+									uni.vibrateLong()
+								}
+								uni.showModal({
+									title: '海洋警报',
+									content: '有一条新的海洋警报',
+									confirmText: '立即查看',
+									cancelText: '知道了',
+									success: function (res) {
+										that.pushMessage = e.data
+									}
+								})
+							}
 						}
 					}
 				})
@@ -415,10 +521,11 @@
 		}, // end-methods
 		onLaunch: function () {
 			console.log('App Launch')
-			// uni.showLoading({
-			// 	title: '加载中',
-			// 	mask: true
-			// })
+			this.completedRequestCount = 0
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			})
 			
 			//#ifdef APP-PLUS
 			/* 5+环境锁定屏幕方向 */
@@ -429,6 +536,7 @@
 			this.getSystemInfo()
 			this.getLocalStorage()
 			this.switchCityByIndex(this.cityIndex)
+			this.loadAlarmData()
 			this.openPush()
 		},
 		onShow: function () {

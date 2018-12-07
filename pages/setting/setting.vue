@@ -2,15 +2,37 @@
 	<view class="page-body" catchtouchmove>
 		<!-- 上端空白 -->
 		<view class="separator-vertical"></view>
-		<!-- 推送按钮 -->
-		<view class="stripbutton">
+		<!-- 安卓推送按钮 -->
+		<!-- <view class="stripbutton">
 			<view class="separator-horizontal"></view>
 			<view class="text text-gray">推送</view>
+		</view> -->
+		<!-- 苹果推送提示音 -->
+		<view class="stripbutton">
+			<view class="separator-horizontal"></view>
+			<view class="text text-gray">推送提示音</view>
+			<view class="right-column">
+				<switch v-model="pushBeep" @change="pushBeepChange" color="#0092d4"></switch>
+			</view>
+			<view class="separator-horizontal" />
+		</view>
+		<view class="separator-vertical"></view>
+		<!-- 苹果推送震动 -->
+		<view class="stripbutton">
+			<view class="separator-horizontal"></view>
+			<view class="text text-gray">推送震动</view>
+			<view class="right-column">
+				<switch v-model="pushVibrate" @change="pushVibrateChange" color="#0092d4"></switch>
+			</view>
+			<view class="separator-horizontal" />
 		</view>
 		<!-- 推送下方说明文字 -->
 		<view class="detail">
 			<view class="separator-horizontal"></view>
-			<view class="text-small text-gray">请在手机设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view>
+			<!-- 安卓文字 -->
+			<!-- <view class="text-small text-gray">请在设置 > 通知 > 通知管理中找到山东海洋预报，可关闭通知。关闭后不再接收到推送的消息。</view> -->
+			<!-- 苹果文字 -->
+			<view class="text-small text-gray">请在手机设置 > 通知中找到山东海洋预报，可关闭后台通知，关闭应用后不再接收到推送的消息。</view>
 			<view class="separator-horizontal"></view>
 		</view>
 		<!-- 欢迎页面 -->
@@ -75,6 +97,18 @@
 	export default {
 		data: {
 			cachesize: ''
+		},
+		computed: {
+			// 推送提示音
+			pushBeep: {
+				get () { return this.$store.state.Infos.pushbeep },
+				set (value) { this.$store.dispatch('setPushBeep', value) }
+			},
+			// 推送震动
+			pushVibrate: {
+				get() { return this.$store.state.Infos.pushvibrate },
+				set(value) { this.$store.dispatch('setPushVibrate', value) }
+			}
 		},
 		methods: {
 			// 获取当前缓存占用空间 单位kb
@@ -209,6 +243,14 @@
 						}
 					}
 				})
+			},
+			// 设置推送提示音
+			pushBeepChange(e) {
+				utils.storeToLocal('pushbeep', this.pushBeep)
+			},
+			// 设置推送震动
+			pushVibrateChange(e) {
+				utils.storeToLocal('pushvibrate', this.pushVibrate)
 			}
 		},
 		onLoad () {

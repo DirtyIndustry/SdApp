@@ -242,6 +242,13 @@ var state = {
             option: {}
         }
     },
+    // 警报信息
+    warningdata: {
+        typhoonWarning: '',
+        waveWarning: '',
+        waveUrl: '',
+        filename: ''
+    },
     // 推送信息
     pushmessage: {
         filename: '',
@@ -277,6 +284,9 @@ const mutations = {
     setweihai (state, value) {
         state.weihaidata = value
     },
+    setwarningdata (state, value) {
+        state.warningdata = value
+    },
     setpushmessage (state, value) {
         state.pushmessage = value
     }
@@ -309,6 +319,9 @@ const actions = {
     },
     setPushMessage (context, value) {
         context.commit('setpushmessage', value)
+    },
+    setWarningData (context, value) {
+        context.commit('setwarningdata', value)
     }
 }
 

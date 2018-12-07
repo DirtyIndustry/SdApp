@@ -108,12 +108,12 @@
 				completedRequestCount: 0,
 
 				// 警报数据
-				warningData: {
-					typhoonWarning: '',
-					waveWarning: '',
-					waveUrl: '',
-					filename: ''
-				}
+				// warningData: {
+				// 	typhoonWarning: '',
+				// 	waveWarning: '',
+				// 	waveUrl: '',
+				// 	filename: ''
+				// }
 			}
 		},
 		computed: {
@@ -168,6 +168,11 @@
 			showIndexGuide: {
 				get () { return this.$store.state.Infos.showindexguide },
 				set (value) { this.$store.dispatch('setShowIndexGuide', value)}
+			},
+			// 警报信息
+			warningData: {
+				get () { return this.$store.state.Datas.warningdata },
+				set (value) { this.$store.dispatch('setWarningData', value) }
 			},
 			// 推送信息
 			pushMessage: {
@@ -453,12 +458,12 @@
 		},
 		onLoad() {
 			console.log('index page onload.')
-			uni.showLoading({
-				title: '加载中',
-				mask: true
-			})
+			// uni.showLoading({
+			// 	title: '加载中',
+			// 	mask: true
+			// })
 			this.completedRequestCount = 1
-			this.loadAlarmData()
+			// this.loadAlarmData()
 		},
 		onReady() {
 			console.log('index page ready.')
