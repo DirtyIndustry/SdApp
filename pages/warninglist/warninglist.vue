@@ -166,7 +166,8 @@ export default {
                         return false
                     }
                     // 打开详细警报页面
-                    console.log('[界面]: 跳转至 警报详情页面')
+                    console.log('[界面]: 跳转至 警报详情页面 ' + res.data.d)
+                    res.data.d = 'http://123.234.129.237:8001/httl_JC//test.html'
                     uni.navigateTo({
                         url: '../warningdetail/warningdetail?data=' + res.data.d
                     })

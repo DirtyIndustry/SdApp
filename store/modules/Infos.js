@@ -4,7 +4,9 @@ var state = {
     cityindex: 0,
     showindexguide: true,
     pushbeep: true,
-    pushvibrate: true
+    pushvibrate: true,
+    forceupgrade: false,
+    needupgrade: false
 }
 
 const mutations = {
@@ -22,6 +24,12 @@ const mutations = {
     },
     setpushvibrate (state, value) {
         state.pushvibrate = value
+    },
+    setforceupgrade (state, value) {
+        state.forceupgrade = value
+    },
+    setneedupgrade (state, value) {
+        state.needupgrade = value
     }
 }
 
@@ -40,6 +48,12 @@ const actions = {
     },
     setPushVibrate (context, value) {
         context.commit('setpushvibrate', value)
+    },
+    setForceUpgrade (context, value) {
+        context.commit('setforceupgrade', value)
+    },
+    setNeedUpgrade (context, value) {
+        context.commit('setneedupgrade', value)
     }
 }
 

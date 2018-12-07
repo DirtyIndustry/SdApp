@@ -85,6 +85,16 @@
 			pushVibrate: {
 				get() { return this.$store.state.Infos.pushvibrate },
 				set(value) { this.$store.dispatch('setPushVibrate', value) }
+			},
+			// 强制升级
+			forceUpgrade: {
+				get() { return this.$store.state.Infos.forceupgrade },
+				set(value) { this.$store.dispatch('setForceUpgrade', value) }
+			},
+			// 需要升级
+			needUpgrade: {
+				get() { return this.$store.state.Infos.needupgrade },
+				set(value) { this.$store.dispatch('setNeedUpgrade', value) }
 			}
 		},
 		watch: {
@@ -143,16 +153,19 @@
 										let resurl = result[i].url
 										// 检查app名称是否相同
 										if (resappname === appsettings.appname) {
-											if (utils.needUpdate(forceupgradeversion, appsettings.appversion) & forceupgradeversion !== '') { // 强制升级
+											if (utils.needUpdate(forceupgradeversion, appsettings.appversion) == true && forceupgradeversion !== '') { // 强制升级
+												that.forceUpgrade = true
 												uni.showModal({
-													title: '当前版本已停用, 请升级',
+													title: '错误',
+													content: '当前版本已停用, 请立即升级',
 													showCancel: false,
 													confirmText: '立即升级',
-													complete: function (res) {
+													success: function (res) {
 														utils.doUpgrade()
 													}
 												})
 											} else if (utils.needUpdate(appsettings.appversion, resversion)) {	//	需要升级
+												that.needUpgrade = true
 												// 弹窗提示
 												uni.showModal({
 													title: '发现新版本',
@@ -294,7 +307,7 @@
 					key: 'pushbeep',
 					success: function (res) {
 						console.log('[缓存]: 获取 推送提示音')
-						// console.log(res.data)
+						// console.log(typeof(res.data) + ' ' + res.data)
 						that.pushBeep = res.data
 					}
 				})
@@ -510,6 +523,7 @@
 									confirmText: '立即查看',
 									cancelText: '知道了',
 									success: function (res) {
+										// console.log(JSON.stringify(e.data))
 										that.pushMessage = e.data
 									}
 								})
@@ -517,6 +531,13 @@
 						}
 					}
 				})
+				if (plus.os.name !== 'Android') {
+					plus.push.addEventListener('click', function(msg) {
+						console.log('[设备]: 点击推送消息')
+						// console.log(JSON.stringify(msg))
+						that.pushMessage = msg.payload
+					})
+				}
 			}
 		}, // end-methods
 		onLaunch: function () {

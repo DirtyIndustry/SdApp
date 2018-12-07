@@ -178,6 +178,16 @@
 			pushMessage: {
 				get () { return this.$store.state.Datas.pushmessage },
 				set (value) { this.$store.dispatch('setPushMessage', value) }
+			},
+			// 强制升级
+			forceUpgrade: {
+				get() { return this.$store.state.Infos.forceupgrade },
+				set(value) { this.$store.dispatch('setForceUpgrade', value) }
+			},
+			// 需要升级
+			needUpgrade: {
+				get() { return this.$store.state.Infos.needupgrade },
+				set(value) { this.$store.dispatch('setNeedUpgrade', value) }
 			}
 		},
 		methods: {
@@ -463,11 +473,41 @@
 			// 	mask: true
 			// })
 			this.completedRequestCount = 1
-			// this.loadAlarmData()
+			
 		},
 		onReady() {
 			console.log('index page ready.')
 			this.checkPushMessage()
+		},
+		onShow() {
+			console.log('index page onshow')
+			if (this.forceUpgrade == true) {
+				console.log('运行了这里')
+				uni.showModal({
+					title: '错误',
+					content: '当前版本已停用, 请立即升级',
+					showCancel: false,
+					confirmText: '立即升级',
+					success: function (res) {
+						utils.doUpgrade()
+					}
+				})
+			} else if (this.needUpgrade == true) {
+				uni.showModal({
+					title: '发现新版本',
+					content: appsettings.appversion + ' -> ' + resversion + '\n' + result[i].releasenote,
+					confirmText: '立即升级',
+					cancelText: '取消',
+					success: function (res) {
+						if (res.confirm) {
+							console.log('用户确认升级')
+							utils.doUpgrade()
+						} else {
+							console.log('用户取消升级')
+						}
+					}
+				})
+			}
 		},
 		mounted() {
 			console.log('index vue mounted.')
