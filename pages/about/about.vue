@@ -1,5 +1,5 @@
 <template>
-    <view class="page-body" catchtouchmove>
+    <view class="page-body" >
         <view class="section-top">
             <view style="height: 100upx;"></view>
             <view class="icon-container">

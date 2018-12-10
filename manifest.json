@@ -112,7 +112,7 @@
         "splashscreen" : {
             "waiting" : true,
             "autoclose" : true,
-            "delay" : ""
+            "delay" : 4000
         }
     },
     /* SDK配置 */

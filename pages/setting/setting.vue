@@ -1,5 +1,5 @@
 <template>
-	<view class="page-body" catchtouchmove>
+	<view class="page-body" >
 		<!-- 上端空白 -->
 		<view class="separator-vertical"></view>
 		<!-- 安卓推送按钮 -->
@@ -16,9 +16,9 @@
 			</view>
 			<view class="separator-horizontal" />
 		</view>
-		<view class="separator-vertical"></view>
+		<view v-if="!isAndroid" class="separator-vertical"></view>
 		<!-- 苹果推送震动 -->
-		<view class="stripbutton">
+		<view v-if="!isAndroid" class="stripbutton">
 			<view class="separator-horizontal"></view>
 			<view class="text text-gray">推送震动</view>
 			<view class="right-column">
@@ -77,14 +77,14 @@
 		<!-- 小分隔条 -->
 		<view class="separator-vertical-small"></view>
 		<!-- 检查更新 -->
-		<!-- <view class="stripbutton" @tap="checkupdateTap">
+		<view v-if="isAndroid" class="stripbutton" @tap="checkupdateTap">
 			<view class="separator-horizontal"></view>
 			<view class="text text-gray">检查更新</view>
 			<view class="right-column">
 				<view class="fa fa-angle-right font-icon text-gray"></view>
 			</view>
 			<view class="separator-horizontal"></view>
-		</view> -->
+		</view>
     </view>
 </template>
 
@@ -107,6 +107,11 @@
 			pushVibrate: {
 				get() { return this.$store.state.Infos.pushvibrate },
 				set(value) { this.$store.dispatch('setPushVibrate', value) }
+			},
+			// 安卓下载地址
+			androidupgradeurl: {
+				get() { return this.$store.state.Infos.androidupgradeurl },
+				set(value) { this.$store.dispatch('setAndroidUpgradeUrl', value) }
 			}
 		},
 		methods: {
@@ -210,6 +215,7 @@
 							let resappname = result[i].appname
 							let forceupgradeversion = result[i].forceupgradeversion
 							let resurl = result[i].url
+							that.androidupgradeurl = result[i].url
 							// 检查app名称是否相同
 							if (resappname === appsettings.appname) {
 								if (utils.needUpdate(forceupgradeversion, appsettings.appversion) & forceupgradeversion !== '') { // 强制升级
@@ -236,6 +242,11 @@
 												console.log('用户取消升级')
 											}
 										}
+									})
+								} else {	// 不需要升级
+									uni.showModal({
+										content: '当前已是最新版本',
+										showCancel: false
 									})
 								}
 							}

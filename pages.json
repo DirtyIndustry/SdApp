@@ -4,6 +4,7 @@
 			"path": "pages/bienvenu/bienvenu",
 			"style": {
 				"app-plus": {
+					"bounce": "none",
 					"titleNView": false
 				}
 			}
@@ -30,7 +31,10 @@
 		{
 			"path": "pages/menu/menu",
 			"style": {
-				"navigationBarTitleText": "菜单"
+				"navigationBarTitleText": "菜单",
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 		},
 		{
@@ -54,7 +58,10 @@
 		{
 			"path": "pages/setting/setting",
 			"style": {
-				"navigationBarTitleText": "设置"
+				"navigationBarTitleText": "设置",
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 		},
 		{
@@ -177,7 +184,10 @@
 		{
 			"path": "pages/about/about",
 			"style": {
-				"navigationBarTitleText": "关于"
+				"navigationBarTitleText": "关于",
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 		}
 	],

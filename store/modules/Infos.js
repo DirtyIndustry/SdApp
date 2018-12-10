@@ -6,7 +6,8 @@ var state = {
     pushbeep: true,
     pushvibrate: true,
     forceupgrade: false,
-    needupgrade: false
+    needupgrade: false,
+    androidupgradeurl: ''
 }
 
 const mutations = {
@@ -30,6 +31,9 @@ const mutations = {
     },
     setneedupgrade (state, value) {
         state.needupgrade = value
+    },
+    setandroidupgradeurl(state, value) {
+        state.androidupgradeurl = value
     }
 }
 
@@ -54,6 +58,9 @@ const actions = {
     },
     setNeedUpgrade (context, value) {
         context.commit('setneedupgrade', value)
+    },
+    setAndroidUpgradeUrl(context, value) {
+        context.commit('setandroidupgradeurl', value)
     }
 }
 

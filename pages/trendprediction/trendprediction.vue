@@ -11,7 +11,7 @@ export default {
     data () {
         return {
             trendurl: '',
-            url: 'http://123.234.129.237:8001/TrendPrediction/TrendPrediction.html'
+            url: 'http://123.234.129.238:8001/TrendPrediction/TrendPrediction.html'
         }
     },
 
@@ -29,8 +29,11 @@ export default {
                         return false
                     }
                     that.trendurl = res.data.d
-                    that.url = 'http://123.234.129.237:8001/TrendPrediction/TrendPrediction.html?picpath=' 
-                        + that.trendurl
+                    that.url = ''
+                    setTimeout(function () {
+                        that.url = 'http://123.234.129.238:8001/TrendPrediction/TrendPrediction.html?picpath=' 
+                            + that.trendurl
+                    }.bind(that), 100)
                 }, // end-success-request
                 fail: function (res) {
                     // 网络请求失败
@@ -47,7 +50,7 @@ export default {
             })
         }
     },
-    onLoad () {
+    onReady () {
         this.loadTrend()
     }
 }

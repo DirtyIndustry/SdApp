@@ -5,6 +5,7 @@ const setWeatherIcon = function (weather) {
     switch (weather) {
         case '晴':
         case '晴转多云':
+		case '未知':
             return '../../static/Images/right_weather_fine.png'
         case '多云':
         case '多云转晴':
@@ -17,6 +18,14 @@ const setWeatherIcon = function (weather) {
             return '../../static/Images/right_weather_sky.png'
         case '雾':
         case '雾转多云':
+		case '沙尘暴':
+		case '浮尘':
+		case '扬沙':
+		case '强沙尘暴':
+		case '飑':
+		case '龙卷风':
+		case '轻雾':
+		case '霾':
             return '../../static/Images/right_weather_fog.png'
         case '风':
             return '../../static/Images/right_weather_wind.png'
@@ -29,8 +38,16 @@ const setWeatherIcon = function (weather) {
         case '小雨-中雨转小雨':
         case '大雨':
         case '暴雨':
+        case '大暴雨':
+        case '特大暴雨':
         case '中到暴雨':
         case '小到暴雨':
+		case '冻雨':
+		case '小雨-中雨':
+		case '中雨-大雨':
+		case '大雨-暴雨':
+		case '暴雨-大暴雨':
+		case '大暴雨-特大暴雨':
             return '../../static/Images/right_weather_rainy.png'
         case '阵雨':
         case '阵雨转多云':
@@ -39,8 +56,18 @@ const setWeatherIcon = function (weather) {
             return '../../static/Images/right_weather_rainstorm.png'
         case '雷雨':
         case '雷阵雨':
+        case '雷阵雨并伴有冰雹':
             return '../../static/Images/right_weather_thunder.png'
+		case '阵雪':
+		case '小雪':
+		case '中雪':
+		case '大雪':
+		case '暴雪':
+		case '小雪-中雪':
+		case '中雪-大雪':
+		case '大雪-暴雪':
         case '雪':
+		case '若高吹雪':
             return '../../static/Images/right_weather_snow.png'
         case '雨加雪':
         case '雨夹雪':
@@ -612,17 +639,23 @@ const needUpdate = function (oldVal, newVal) {
     let newarr = newVal.split('.')
     for (let i = 0; i < oldarr.length; i++) {
         if (Number(oldarr[i]) > Number(newarr[i])) {
+            continue
+        } else if (Number(oldarr[i]) > Number(newarr[i])) {
             return false
+        } else if (Number(oldarr[i]) < Number(newarr[i])) {
+            return true
         }
     }
-    return true
+    return false
 }
 // 升级操作
 const doUpgrade = function () {
     if (plus.os.name == 'Android') {
+        console.log('[设备]: 开始下载安卓更新包 ' + store.state.Infos.androidupgradeurl)
         uni.downloadFile({
-            url: resurl,
+            url: store.state.Infos.androidupgradeurl,
             success: function (res) {
+                console.log('[设备]: 安卓更新包下载完成')
                 plus.runtime.openFile(res.tempFilePath)
             }
         })
