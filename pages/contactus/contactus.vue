@@ -11,7 +11,7 @@
             <view class="separator-vertical-small"></view>
             <!-- 联系方式 -->
             <view class="input-container">
-                <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm"/>
+                <input name="input_contact" class="input input-small" v-model="postercontact" placeholder="联系人电子邮箱地址" :focus="inputcontactFocus" @confirm="inputcontactConfirm" @input="checkEmail"/>
             </view>
             <!-- 分隔条 -->
             <view class="separator-vertical-small"></view>
@@ -189,6 +189,15 @@ methods: {
         } else {    // 不是同一天
             this.limited = false
             this.postcounter = 0
+        }
+    },
+    checkEmail() {
+        if (this.limited === true) {
+            this.buttonText = '已达到每日发送次数上限'
+        } else if (this.contactValid === false) {
+            this.buttonText = '邮箱格式不正确'
+        } else {
+            this.buttonText = '发送'
         }
     },
     // 验证邮箱有效性

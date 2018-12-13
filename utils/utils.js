@@ -638,7 +638,7 @@ const needUpdate = function (oldVal, newVal) {
     let oldarr = oldVal.split('.')
     let newarr = newVal.split('.')
     for (let i = 0; i < oldarr.length; i++) {
-        if (Number(oldarr[i]) > Number(newarr[i])) {
+        if (Number(oldarr[i]) === Number(newarr[i])) {
             continue
         } else if (Number(oldarr[i]) > Number(newarr[i])) {
             return false
