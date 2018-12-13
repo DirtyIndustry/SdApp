@@ -27,7 +27,7 @@
             <view class="separator-vertical"></view>
             <!-- 二维码 -->
             <view class="qrcode-container">
-                <image class="qrcode-img" src="../../static/Images/qrcode.jpg" mode="widthFix" />
+                <image class="qrcode-img" :src="qrcodeurl" mode="widthFix" />
             </view>
         </form>
     </view>
@@ -69,6 +69,7 @@ watch: {
     }
 },
 computed: {
+    qrcodeurl() { return appsettings.hosturl.substring(0, appsettings.hosturl.length - 18) + 'Pictures/QRCode/sdqrcode.jpg' },
     nameValid () { return this.postername.trim() !== '' },
     contactValid () { return this.validateEmail(this.postercontact) },
     contentValid () { return this.postcontent.trim() !== '' },
@@ -130,28 +131,39 @@ methods: {
             },
             method: 'POST',
             success: function (res) {
-                console.log('[服务器]: 提交用户留言成功')
+                console.log('[服务器]: 提交用户留言完成')
                 // 关闭loading toast
                 uni.hideLoading()
-                // 更新最后提交时间和提交计数器
-                that.lastpostdate = new Date()
-                that.postcounter++
-                // 写入本地缓存
-                utils.storeToLocal('lastpostdate', that.lastpostdate)
-                utils.storeToLocal('postcounter', that.postcounter)
-                // 弹出提示窗口
-                uni.showModal({
-					title: '成功',
-					content: '用户留言发送成功',
-                    showCancel: false,
-                    success: function (e) {
-                        if (e.confirm) {
-                            console.log('[界面]: 用户点击了确定')
-                            // 点击确定关闭页面
-                            uni.navigateBack()
+                if (res.data.d === true) {
+                    console.log('[服务器]: 提交用户留言成功')
+                    // 更新最后提交时间和提交计数器
+                    that.lastpostdate = new Date()
+                    that.postcounter++
+                    // 写入本地缓存
+                    utils.storeToLocal('lastpostdate', that.lastpostdate)
+                    utils.storeToLocal('postcounter', that.postcounter)
+                    // 弹出提示窗口
+                    uni.showModal({
+                        title: '成功',
+                        content: '用户留言发送成功',
+                        showCancel: false,
+                        success: function (e) {
+                            if (e.confirm) {
+                                console.log('[界面]: 用户点击了确定')
+                                // 点击确定关闭页面
+                                uni.navigateBack()
+                            }
                         }
-                    }
-				})
+                    })
+                } else {
+                    console.log('[服务器]: 提交用户留言失败')
+                    // 弹出提示窗口
+                    uni.showModal({
+                        title: '失败',
+                        content: '用户留言发送失败',
+                        showCancel: false
+                    })
+                }
             }, // end-success-request
             fail: function (res) {
                 console.log('[服务器]: 提交用户留言失败')
@@ -286,6 +298,7 @@ onShow () {
 }
 
 .qrcode-img {
-    width: 40%;
+    width: 40vw;
+    height: 40vw;
 }
 </style>

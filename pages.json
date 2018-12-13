@@ -178,7 +178,10 @@
 		{
 			"path": "pages/contactus/contactus",
 			"style": {
-				"navigationBarTitleText": "联系我们"
+				"navigationBarTitleText": "联系我们",
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 		},
 		{
