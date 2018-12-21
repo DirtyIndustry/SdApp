@@ -110,9 +110,9 @@
             }
         },
         "splashscreen" : {
-            "waiting" : true,
+            "waiting" : false,
             "autoclose" : true,
-            "delay" : 4000
+            "delay" : 1000
         }
     },
     /* SDK配置 */

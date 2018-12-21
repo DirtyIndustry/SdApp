@@ -13,7 +13,6 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "山东海洋预报",
-				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
 						"buttons": [
@@ -24,6 +23,10 @@
 								"color": "#ffffff"
 							}
 						]
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
 					}
 				}
 			}
@@ -68,7 +71,6 @@
 			"path": "pages/cityforecast/cityforecast",
 			"style": {
 				"navigationBarTitleText": "近海预报",
-				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
 						"buttons": [
@@ -79,6 +81,10 @@
 								"color": "#ffffff"
 							}
 						]
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
 					}
 				}
 			}
@@ -87,14 +93,24 @@
 			"path": "pages/warninglist/warninglist",
 			"style": {
 				"navigationBarTitleText": "海洋警报",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/fisheryforecast/fisheryforecast",
 			"style": {
 				"navigationBarTitleText": "渔场预报",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
@@ -108,7 +124,6 @@
 			"path": "pages/weatherforecast/weatherforecast",
 			"style": {
 				"navigationBarTitleText": "天气预报",
-				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
 						"buttons": [
@@ -119,6 +134,10 @@
 								"color": "#ffffff"
 							}
 						]
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
 					}
 				}
 			}
@@ -145,28 +164,48 @@
 			"path": "pages/weatherimg/weatherimg",
 			"style": {
 				"navigationBarTitleText": "天气图",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/satelliteimg/satelliteimg",
 			"style": {
 				"navigationBarTitleText": "卫星云图",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/radarimg/radarimg",
 			"style": {
 				"navigationBarTitleText": "雷达图",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/oceanforecast/oceanforecast",
 			"style": {
 				"navigationBarTitleText": "海区预报",
-				"enablePullDownRefresh": true
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"style": "default"
+					}
+				}
 			}
 		},
 		{
